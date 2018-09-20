@@ -1,0 +1,16 @@
+@import "~normalize.css/normalize";
+@import "~animate.css/animate";
+@import '~vuetify/dist/vuetify.min';
+@import url('//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons');
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+.application {
+  &.theme {
+    &--light {
+      background: white !important;
+    }
+  }
+}
