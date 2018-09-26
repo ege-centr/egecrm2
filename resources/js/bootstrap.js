@@ -1,5 +1,6 @@
 
 window._ = require('lodash');
+window.moment = require('moment');
 window.Popper = require('popper.js').default;
 
 /**
@@ -37,6 +38,8 @@ if (token) {
 } else {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
+
+window.apiUrl = (method) => `${process.env.MIX_API_URL}${method}`
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

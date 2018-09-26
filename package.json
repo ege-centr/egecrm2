@@ -23,6 +23,7 @@
         "@finpo/vue2-recaptcha-invisible": "^1.1.8",
         "animate.css": "^3.7.0",
         "js-cookie": "^2.2.0",
+        "moment": "^2.22.2",
         "normalize.css": "^8.0.0",
         "vue-router": "^3.0.1",
         "vuetify": "^1.2.4",

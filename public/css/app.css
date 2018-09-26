@@ -17013,7 +17013,26 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
-.application.theme--light {
+button {
+  outline: none;
+}
+
+.v-content__wrap {
   background: white !important;
+  color: black;
+}
+
+a {
+  cursor: pointer;
+}
+
+a.black-link {
+  color: black;
+  text-decoration: none;
+}
+
+.inline {
+  display: inline-block;
+  margin-right: 10px;
 }
 

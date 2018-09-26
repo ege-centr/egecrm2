@@ -1,9 +1,15 @@
-import Keywords from '@/pages/Keywords'
+import Requests from '@/pages/Requests'
+import Clients from '@/pages/Clients'
 
 export default [
   {
-    path: '/keywords',
-    name: 'Keywords',
-    component: Keywords
-  }
+    path: '/requests',
+    name: 'Requests',
+    component: Requests
+  },
+  {
+    path: '/clients',
+    name: 'Clients',
+    component: Clients
+  },
 ]

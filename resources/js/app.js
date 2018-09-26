@@ -5,7 +5,7 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-// require('./bootstrap');
+require('./bootstrap');
 
 window.Vue = require('vue');
 
@@ -18,9 +18,12 @@ window.Vue = require('vue');
 import Index from './Index'
 import store from './store'
 import router from './router'
+import filters from './filters'
 import Vuetify from 'vuetify'
 
 Vue.use(Vuetify)
+
+Object.entries(filters).forEach(entry => Vue.filter(entry[0], entry[1]))
 
 const app = new Vue({
     el: '#app',

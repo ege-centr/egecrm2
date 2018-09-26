@@ -72,6 +72,7 @@
 
       callback(token) {
         this.loading = true
+        console.log('here', {token, credentials: this.credentials})
         axios.post(apiUrl('login'), {
           credentials: this.credentials,
           token

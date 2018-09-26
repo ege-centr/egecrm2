@@ -5,26 +5,18 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Redis;
 use App\Utils\Sms;
+use DB;
 
 class User extends Model
 {
-    const SUPERUSER_RIGHT = 9999;
-
-    const ADMIN_SESSION_DURATION = 40;
-
-    protected $connection = 'egecrm';
     protected $table = 'admins';
 
-    public $timestamps = false;
+    protected $appends = ['photo_url'];
 
     const USER_TYPE    = 'ADMIN';
     const DEFAULT_COLOR = 'black';
 
-    # Fake system user
-    const SYSTEM_USER = [
-        'id'    => 0,
-        'login' => 'system',
-    ];
+    const UPLOAD_DIR = '/img/users/';
 
     public function getRightsAttribute($value)
     {
@@ -32,6 +24,14 @@ class User extends Model
             return explode(',', $value);
         }
         return [];
+    }
+
+    public function getPhotoUrlAttribute()
+    {
+        if ($this->has_photo_cropped) {
+            return self::UPLOAD_DIR . $this->id . '.' . $this->photo_extension;
+        }
+        return 'http://placekitten.com/300/300';
     }
 
     public function setPasswordAttribute($value)
@@ -56,7 +56,7 @@ class User extends Model
      */
     public static function login($data)
     {
-        $query = egecrm('users')->where('email', $data['login']);
+        $query = DB::table('users')->where('email', $data['login']);
 
          # проверка логина
         if ($query->exists()) {
@@ -157,14 +157,6 @@ class User extends Model
     }
 
     /**
-     * Вернуть системного пользователя
-     */
-    public static function getSystem()
-    {
-        return (object)static::SYSTEM_USER;
-    }
-
-    /**
 	 * Вернуть пароль, как в репетиторах
 	 *
 	 */
@@ -205,7 +197,7 @@ class User extends Model
      */
     public static function notChanged()
     {
-        return User::fromSession()->updated_at == egecrm('admins')->whereId(User::id())->value('updated_at');
+        return User::fromSession()->updated_at == DB::table('admins')->whereId(User::id())->value('updated_at');
     }
 
     /**
@@ -228,7 +220,7 @@ class User extends Model
         }
 
         $current_ip = ip2long($_SERVER['HTTP_X_REAL_IP']);
-        $admin_ips = egecrm('admin_ips')->where('id_admin', $this->id)->get();
+        $admin_ips = DB::table('admin_ips')->where('id_admin', $this->id)->get();
         foreach($admin_ips as $admin_ip) {
             $ip_from = ip2long(trim($admin_ip->ip_from));
             $ip_to = ip2long(trim($admin_ip->ip_to ?: $admin_ip->ip_from));

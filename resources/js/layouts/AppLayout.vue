@@ -1,15 +1,44 @@
 <template>
   <v-app id="inspire">
     <Menu></Menu>
-    <v-toolbar app fixed clipped-left>
+    <v-toolbar class='toolbar' app fixed clipped-left dark>
       <v-toolbar-side-icon @click.stop="$store.commit('toggleDrawer')"></v-toolbar-side-icon>
-      <v-toolbar-title>
-        <span v-if="$store.getters.campaign != null">{{ $store.getters.campaign.title }}</span>
-      </v-toolbar-title>
+      <v-avatar tile>
+          <img src='/img/svg/logo.svg'>
+      </v-avatar>
       <v-spacer></v-spacer>
-      <v-btn icon>
-        <v-icon medium>notifications</v-icon>
-      </v-btn>
+      <v-text-field
+        flat
+        solo-inverted
+        hide-details
+        prepend-inner-icon="search"
+        label="Поиск..."
+        class="hidden-sm-and-down"
+      ></v-text-field>
+      <v-spacer></v-spacer>
+      <v-menu left>
+          <v-avatar slot='activator'>
+              <img :src="$store.state.user.photo_url">
+          </v-avatar>
+          <v-list dense>
+            <v-list-tile @click=''>
+                <v-list-tile-action>
+                  <v-icon>edit</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>Редактировать</v-list-tile-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile @click=''>
+                <v-list-tile-action>
+                  <v-icon>exit_to_app</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>Выход</v-list-tile-title>
+                </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+      </v-menu>
     </v-toolbar>
     <v-content>
       <v-container fluid fill-height v-show="$store.state.loading">
@@ -18,7 +47,9 @@
         </v-layout>
       </v-container>
       <v-container fluid v-show="!$store.state.loading">
-        <router-view></router-view>
+        <transition name="fade">
+          <router-view></router-view>
+        </transition>
       </v-container>
     </v-content>
     <ListenToLogout></ListenToLogout>
@@ -31,5 +62,32 @@
 
   export default {
     components: { Menu, ListenToLogout },
+    async created() {
+      this.$store.commit('loading', true)
+      this.$store.dispatch('loadUsers')
+      await this.$store.dispatch('requireData', ['subject', 'grade', 'branch'])
+      this.$store.commit('loading', false)
+    }
   }
 </script>
+
+<style lang='scss' scoped>
+    @import '~sass/_variables';
+
+    nav {
+        background: $blue !important;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+      transition-property: opacity;
+      transition-duration: .2s;
+    }
+
+    .fade-enter-active {
+      transition-delay: .2s;
+    }
+
+    .fade-enter, .fade-leave-active {
+      opacity: 0
+    }
+</style>
