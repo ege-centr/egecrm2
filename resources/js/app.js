@@ -15,13 +15,15 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-import Index from './Index'
+import Index from '@/components/Index'
 import store from './store'
 import router from './router'
-import filters from './filters'
+import filters from '@/other/filters'
+import {GlobalPlugin} from '@/other/plugins'
+import VueTheMask from 'vue-the-mask'
 import Vuetify from 'vuetify'
 
-Vue.use(Vuetify)
+[Vuetify, GlobalPlugin, VueTheMask].forEach(use => Vue.use(use))
 
 Object.entries(filters).forEach(entry => Vue.filter(entry[0], entry[1]))
 

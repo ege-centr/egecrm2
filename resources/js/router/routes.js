@@ -1,5 +1,6 @@
 import Requests from '@/pages/Requests'
 import Clients from '@/pages/Clients'
+import Student from '@/pages/Student'
 
 export default [
   {
@@ -11,5 +12,10 @@ export default [
     path: '/clients',
     name: 'Clients',
     component: Clients
+  },
+  {
+    path: '/student/:id',
+    name: 'Student',
+    component: Student
   },
 ]

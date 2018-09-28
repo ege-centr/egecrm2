@@ -6,8 +6,8 @@
 </template>
 
 <script>
-  import AppLayout from './layouts/AppLayout'
-  import LoginLayout from './layouts/LoginLayout'
+  import AppLayout from '@/layouts/AppLayout'
+  import LoginLayout from '@/layouts/LoginLayout'
 
   export default {
     props: ['user'],

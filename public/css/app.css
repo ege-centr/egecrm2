@@ -17017,6 +17017,10 @@ button {
   outline: none;
 }
 
+.card-with-loader {
+  min-height: 132px;
+}
+
 .v-content__wrap {
   background: white !important;
   color: black;
@@ -17024,15 +17028,28 @@ button {
 
 a {
   cursor: pointer;
+  text-decoration: none;
 }
 
 a.black-link {
   color: black;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
-.inline {
-  display: inline-block;
-  margin-right: 10px;
+.v-card,
+.v-menu__content,
+.v-input__slot,
+.v-dialog {
+  border-radius: 8px !important;
+}
+
+.relative {
+  position: relative;
+}
+
+.flex-items {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 

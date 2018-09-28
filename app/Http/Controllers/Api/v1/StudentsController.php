@@ -4,32 +4,31 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Request as ClientRequest;
-use App\Http\Resources\Request\{Resource, Collection};
+use App\Models\Student;
+use App\Http\Resources\Student\{Resource, Collection};
 
-class RequestsController extends Controller
+class StudentsController extends Controller
 {
     public function index()
     {
-        $requests = ClientRequest::with('responsibleUser')->orderBy('id', 'desc')->paginate(30);
-        return resourceCollection($requests, Collection::class);
+        return resourceCollection(Student::orderBy('id', 'desc')->paginate(30), Collection::class);
     }
 
     public function store(Request $request)
     {
-        $new_model = ClientRequest::create($request->input());
+        $new_model = Student::create($request->input());
         $new_model->phones()->createMany($request->phones);
         return response($new_model, 201);
     }
 
     public function show($id)
     {
-        return new Resource(ClientRequest::find($id));
+        return new Resource(Student::find($id));
     }
 
     public function update(Request $request, $id)
     {
-        $model = ClientRequest::find($id);
+        $model = Student::find($id);
         $model->update($request->input());
 
         $model->phones()->delete();

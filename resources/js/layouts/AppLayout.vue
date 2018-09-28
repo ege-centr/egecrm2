@@ -41,12 +41,12 @@
       </v-menu>
     </v-toolbar>
     <v-content>
-      <v-container fluid fill-height v-show="$store.state.loading">
+      <v-container fluid fill-height v-show="$store.state.loading || !initialDataLoaded">
         <v-layout justify-center align-center>
           <v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular>
         </v-layout>
       </v-container>
-      <v-container fluid v-show="!$store.state.loading">
+      <v-container fluid v-show="!$store.state.loading" v-if='initialDataLoaded'>
         <transition name="fade">
           <router-view></router-view>
         </transition>
@@ -61,12 +61,14 @@
   import ListenToLogout from '@/components/ListenToLogout'
 
   export default {
-    components: { Menu, ListenToLogout },
     async created() {
-      this.$store.commit('loading', true)
-      this.$store.dispatch('loadUsers')
-      await this.$store.dispatch('requireData', ['subject', 'grade', 'branch'])
-      this.$store.commit('loading', false)
+      await this.$store.dispatch('loadInitial')
+    },
+    components: { Menu, ListenToLogout },
+    computed: {
+      initialDataLoaded() {
+        return this.$store.state.data.users !== null
+      }
     }
   }
 </script>
