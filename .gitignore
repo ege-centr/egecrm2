@@ -7,6 +7,8 @@
 /.vscode
 /.vagrant
 /public/img/users
+/public/js
+/public/css
 Homestead.json
 Homestead.yaml
 npm-debug.log
