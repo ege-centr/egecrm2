@@ -17039,8 +17039,12 @@ a.black-link {
 .v-card,
 .v-menu__content,
 .v-input__slot,
-.v-dialog {
+.v-dialog:not(.v-dialog--fullscreen) {
   border-radius: 8px !important;
+}
+
+.v-toolbar {
+  border-radius: 0 !important;
 }
 
 .relative {

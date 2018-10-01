@@ -18,6 +18,11 @@ class StudentsController extends Controller
     {
         $new_model = Student::create($request->input());
         $new_model->phones()->createMany($request->phones);
+        $new_model->passport()->create($request->passport);
+
+        $representative = $new_model->representative()->create($request->representative);
+        $representative->passport()->create($request->representative['passport']);
+
         return response($new_model, 201);
     }
 

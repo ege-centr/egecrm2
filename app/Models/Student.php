@@ -3,17 +3,22 @@
 namespace App\Models;
 
 use Shared\Model;
-use App\Traits\HasPhones;
+use App\Traits\{HasPhones, HasPassport};
 use App\Http\Resources\Request\Collection as RequestCollection;
 
 class Student extends Model
 {
-    use HasPhones;
+    use HasPhones, HasPassport;
 
     protected $fillable = [
         'first_name', 'last_name', 'middle_name', 'grade', 'year', 'branches'
     ];
     protected $commaSeparated = ['branches'];
+
+    public function representative()
+    {
+        return $this->hasOne(Representative::class);
+    }
 
     public function getRequests()
     {

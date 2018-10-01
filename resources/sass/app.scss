@@ -34,8 +34,12 @@ a.black-link {
   text-decoration: none !important;
 }
 
-.v-card, .v-menu__content, .v-input__slot, .v-dialog {
+.v-card, .v-menu__content, .v-input__slot, .v-dialog:not(.v-dialog--fullscreen) {
   border-radius: $border-radius !important;
+}
+
+.v-toolbar {
+  border-radius: 0 !important;
 }
 
 .relative {
