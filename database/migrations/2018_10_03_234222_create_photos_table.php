@@ -19,7 +19,7 @@ class CreatePhotosTable extends Migration
             $table->string('entity_type');
             $table->unsignedInteger('entity_id');
             $table->index(['entity_type', 'entity_id']);
-            $table->unique(['entity_type', 'entity_id']);
+            // $table->unique(['entity_type', 'entity_id']);
         });
     }
 
