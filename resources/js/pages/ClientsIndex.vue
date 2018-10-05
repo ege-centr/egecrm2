@@ -19,65 +19,76 @@
                 <v-flex md12 class='headline'>
                   Ученик
                 </v-flex>
-                <v-flex md3>
-                  <v-text-field v-model="dialog_model.student_first_name" label="Имя"></v-text-field>
-                </v-flex>
-                <v-flex md3>
-                  <v-text-field v-model="dialog_model.student_last_name" label="Фамилия"></v-text-field>
-                </v-flex>
-                <v-flex md3>
-                  <v-text-field v-model="dialog_model.student_middle_name" label="Отчество"></v-text-field>
-                </v-flex>
-                <v-flex md3>
-                  <v-select clearable
-                    v-model="dialog_model.grade"
-                    :items="$store.state.data.grades"
-                    item-value='id'
-                    item-text='title'
-                    label="Класс"
-                  ></v-select>
-                </v-flex>
-                <v-flex md3>
-                  <v-select clearable
-                    v-model="dialog_model.year"
-                    :items="$store.state.data.years"
-                    label="Год"
-                  ></v-select>
-                </v-flex>
-                <v-flex md3>
-                  <v-select multiple
-                    v-model="dialog_model.branches"
-                    :items="$store.state.data.branches"
-                    item-value='id'
-                    item-text='full'
-                    label="Филиалы"
-                  ></v-select>
-                </v-flex>
-                <v-flex md3>
-                  <v-text-field v-model="dialog_model.email.email" label="Email"></v-text-field>
-                </v-flex>
-                <v-flex md12 v-for="(phone, index) in dialog_model.phones" :key='index'>
-                  <v-layout>
+
+                <div class='mr-4 mb-5'>
+                  <v-flex>
+                    <AvatarLoader class-name='client' :entity-id='dialog_model.id' :photo='dialog_model.photo' @photoChanged='photoChanged' />
+                  </v-flex>
+                </div>
+
+                <v-flex d-flex md9>
+                  <v-layout row wrap>
                     <v-flex md3>
-                      <v-text-field
-                        placeholder='+7 (###) ###-##-##'
-                        v-mask="'+7 (###) ###-##-##'"
-                        v-model="dialog_model.phones[index].phone" :label="`Телефон ${index + 1}`"
-                      >
-                      </v-text-field>
+                      <v-text-field v-model="dialog_model.student_first_name" label="Имя"></v-text-field>
                     </v-flex>
                     <v-flex md3>
-                      <v-text-field v-model="dialog_model.phones[index].comment"
-                        :label="`Комментарий к телефону ${index + 1}`">
-                      </v-text-field>
+                      <v-text-field v-model="dialog_model.student_last_name" label="Фамилия"></v-text-field>
+                    </v-flex>
+                    <v-flex md3>
+                      <v-text-field v-model="dialog_model.student_middle_name" label="Отчество"></v-text-field>
+                    </v-flex>
+                    <v-flex md3>
+                      <v-select clearable
+                        v-model="dialog_model.grade"
+                        :items="$store.state.data.grades"
+                        item-value='id'
+                        item-text='title'
+                        label="Класс"
+                      ></v-select>
+                    </v-flex>
+                    <v-flex md3>
+                      <v-select clearable
+                        v-model="dialog_model.year"
+                        :items="$store.state.data.years"
+                        label="Год"
+                      ></v-select>
+                    </v-flex>
+                    <v-flex md3>
+                      <v-select multiple
+                        v-model="dialog_model.branches"
+                        :items="$store.state.data.branches"
+                        item-value='id'
+                        item-text='full'
+                        label="Филиалы"
+                      ></v-select>
+                    </v-flex>
+                    <v-flex md3>
+                      <v-text-field v-model="dialog_model.email.email" label="Email"></v-text-field>
+                    </v-flex>
+                    <v-flex md12 v-for="(phone, index) in dialog_model.phones" :key='index'>
+                      <v-layout>
+                        <v-flex md3>
+                          <v-text-field
+                            placeholder='+7 (###) ###-##-##'
+                            v-mask="'+7 (###) ###-##-##'"
+                            v-model="dialog_model.phones[index].phone" :label="`Телефон ${index + 1}`"
+                          >
+                          </v-text-field>
+                        </v-flex>
+                        <v-flex md3>
+                          <v-text-field v-model="dialog_model.phones[index].comment"
+                            :label="`Комментарий к телефону ${index + 1}`">
+                          </v-text-field>
+                        </v-flex>
+                      </v-layout>
+                    </v-flex>
+                    <v-flex md12 pt-0>
+                      <v-btn color="blue darken-1" class="ma-0 pl-1" flat @click="dialog_model.phones.push({phone: '', comment: ''})">
+                        <v-icon class="mr-1">add</v-icon>
+                        добавить телефон
+                      </v-btn>
                     </v-flex>
                   </v-layout>
-                </v-flex>
-                <v-flex md12 pt-0>
-                  <v-btn color="blue darken-1" class="ma-0 pl-1" flat @click="dialog_model.phones.push({phone: '', comment: ''})">
-                    <v-icon class="mr-1">add</v-icon>
-                    добавить телефон
-                  </v-btn>
                 </v-flex>
               </v-layout>
 
@@ -218,6 +229,8 @@
 
 <script>
 
+import AvatarLoader from '@/components/AvatarLoader'
+
 const MODEL_DEFAULTS = {
   phones: [{phone: '', comment: ''}],
   passport: {},
@@ -225,6 +238,8 @@ const MODEL_DEFAULTS = {
 }
 
 export default {
+  components: { AvatarLoader },
+
   data() {
     return {
       page: 1,
@@ -276,6 +291,10 @@ export default {
         this.collection = response.data
         this.loading.pagination = false
       })
+    },
+
+    photoChanged(new_photo) {
+      this.dialog_model.photo = new_photo
     }
   }
 }

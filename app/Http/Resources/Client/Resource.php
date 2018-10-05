@@ -22,7 +22,8 @@ class Resource extends JsonResource
             ]),
             'requests' => $this->getRequests(),
             'passport' => $this->passport,
-            'email' => $this->email
+            'email' => $this->email,
+            'photo' => $this->photo
         ]);
     }
 }

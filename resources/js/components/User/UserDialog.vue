@@ -1,34 +1,5 @@
 <template>
   <v-layout row justify-center>
-    <v-layout row justify-center>
-
-      <v-dialog v-model="crop_dialog" persistent max-width="1000px">
-        <v-card>
-          <v-card-text>
-              <vue-cropper v-if='dialog_model.photo'
-                ref="cropper" style='height: 600px'
-                :src="dialog_model.photo.url_original"
-                :zoomable='false'
-                :view-mode='1'
-                :min-crop-box-width='100'
-                :min-crop-box-height='100'
-                :min-container-height='600'
-                :min-container-width='968'
-                :aspect-ratio='1'
-                :responsive='false'
-              >
-              </vue-cropper>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click.native="crop_dialog = false">Отмена</v-btn>
-            <v-btn color="blue darken-1" flat @click.native="cropImage" :loading='cropping'>Сохранить</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-
-
-    </v-layout>
     <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card v-if='dialog_model !== null'>
         <v-toolbar dark color="primary">
@@ -48,30 +19,9 @@
                 Основное
               </v-flex>
 
-              <div class='mr-5 mb-5'>
+              <div class='mr-4 mb-5'>
                 <v-flex>
-                  <div v-if='dialog_model.photo'>
-                    <v-hover>
-                      <v-avatar slot-scope="{ hover }" :size='180' style='overflow: hidden'>
-                        <img :src='dialog_model.photo.url_version' />
-                        <v-slide-y-reverse-transition>
-                          <div class='photo-actions' v-show='hover  '>
-                            <div @click="selectFileToUpload">
-                              <v-icon>arrow_upward</v-icon>
-                              <span>загрузить новое</span>
-                            </div>
-                            <div @click="crop_dialog = true">
-                              <v-icon>fullscreen</v-icon>
-                              <span>изменить</span>
-                            </div>
-                          </div>
-                        </v-slide-y-reverse-transition>
-                      </v-avatar>
-                    </v-hover>
-                  </div>
-                  <div v-else class='image-upload' @click="selectFileToUpload">
-                    загрузить фото
-                  </div>
+                  <AvatarLoader class-name='admin' :entity-id='dialog_model.id' :photo='dialog_model.photo' @photoChanged='photoChanged' />
                 </v-flex>
               </div>
 
@@ -181,6 +131,7 @@
 
 import { model_defaults } from './data'
 import VueCropper from 'vue-cropperjs'
+import AvatarLoader from '@/components/AvatarLoader'
 
 export default {
   data() {
@@ -194,20 +145,11 @@ export default {
     }
   },
 
+  components: { AvatarLoader },
+
   created() {
     axios.get(apiUrl('rights')).then(r => {
       this.rights = r.data
-    })
-
-    this.$upload.on('photo', {
-       url: apiUrl('photo/upload'),
-       onSuccess(e, response) {
-         this.dialog_model.photo = null
-         Vue.nextTick(() => {
-           this.dialog_model.photo = response.data
-           this.crop_dialog = true
-         })
-       }
     })
   },
 
@@ -233,26 +175,8 @@ export default {
         this.dialog = true
       })
     },
-    selectFileToUpload() {
-      this.$upload.option('photo', 'body', {
-        class: 'admin',
-        entity_id: this.dialog_model.id
-      })
-      this.$upload.select('photo')
-    },
-
-    cropImage() {
-      this.cropping = true
-      this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
-        const formData = new FormData()
-        formData.append('file', blob)
-        formData.append('photo_id', this.dialog_model.photo.id)
-        axios.post(apiUrl('photo/crop'), formData).then(r => {
-          this.dialog_model.photo = r.data
-          this.crop_dialog = false
-          setTimeout(() => this.cropping = false, 300)
-        })
-      })
+    photoChanged(new_photo) {
+      this.dialog_model.photo = new_photo
     }
   }
 }
@@ -263,50 +187,6 @@ export default {
   .ip-item {
     & > * {
       display: inline-block;
-    }
-  }
-
-  .photo-actions {
-    position: absolute;
-    background: rgba(29,32,34,.7);
-    color: white;
-    height: 36%;
-    width: 100%;
-    bottom: 0;
-    padding-top: 5px;
-    & .v-icon {
-      color: white;
-      height: 16px;
-      font-size: 18px;
-    }
-    & > div {
-      opacity: .8;
-      cursor: pointer;
-      margin-bottom: 4px;
-      &:hover {
-        opacity: 1;
-      }
-    }
-  }
-
-  .image-upload {
-    border-radius: 50%;
-    border: 3px #c5c5c5 dashed;
-    width: 180px;
-    height: 180px;
-    -webkit-box-flex: 0 !important;
-    -ms-flex: none !important;
-    flex: none !important;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #c5c5c5;
-    cursor: pointer;
-    transition: all .2s linear;
-    &:hover {
-      border-color: #0088ec;
-      color: #0088ec;
-      background: #e5f1fd;
     }
   }
 </style>

@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use Shared\Model;
-use App\Traits\{HasPhones, HasEmail};
+use App\Traits\{HasPhones, HasEmail, HasPhoto};
 use App\Http\Resources\Request\Collection as RequestCollection;
 
 class Client extends Model
 {
-    use HasPhones, HasEmail;
+    use HasPhones, HasEmail, HasPhoto;
 
     protected $fillable = [
         'student_first_name', 'student_last_name', 'student_middle_name',

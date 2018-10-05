@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use App\Models\Factory\{Branch, Subject, Grade};
 use App\Models\Admin;
-use App\Http\Resources\Admin\Resource as AdminResource;
+use App\Http\Resources\Admin\Collection as AdminCollection;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +42,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
             'years' => array_map(function($year) {
                 return ['value' => $year, 'text' => $year . '–' . ($year + 1) . ' уч. г.'];
             }, [2015, 2016, 2017, 2018]),
-            'admins' => AdminResource::collection(Admin::all())
+            'admins' => AdminCollection::collection(Admin::all())
         ]);
     });
 

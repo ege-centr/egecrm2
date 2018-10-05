@@ -15,6 +15,7 @@ class Resource extends JsonResource
     public function toArray($request)
     {
         return array_merge(parent::toArray($request), [
+            'name' => implode(' ', [$this->last_name, $this->first_name]),
             'phones' => $this->phones,
             'photo' => $this->photo,
             'email' => $this->email,

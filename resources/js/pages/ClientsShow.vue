@@ -9,9 +9,7 @@
         <v-layout wrap v-if='client !== null'>
           <v-flex>
             <div class='flex-items'>
-              <v-avatar :size="100" class='mr-4'>
-                <img src="http://placekitten.com/g/530/530">
-              </v-avatar>
+              <Avatar :size='100' class='mr-4' :photo='client.photo' />
               <div>
                 <div class='grey--text text--darken-2 font-weight-medium caption'>Ученик</div>
                 <div class='font-weight-bold'>
@@ -34,6 +32,9 @@
                   {{ phone.comment }}
                 </div>
               </div>
+            </div>
+            <div v-if='client.email'>
+              {{ client.email.email }}
             </div>
           </v-flex>
           <v-spacer></v-spacer>
@@ -109,6 +110,7 @@
 <script>
 
 import RequestList from '@/components/Request/RequestList'
+import Avatar from '@/components/UI/Avatar'
 
 export default {
   data() {
@@ -119,7 +121,7 @@ export default {
     }
   },
 
-  components: { RequestList },
+  components: { RequestList, Avatar },
 
   created() {
     this.loadData()

@@ -17,9 +17,7 @@
       ></v-text-field>
       <v-spacer></v-spacer>
       <v-menu left>
-          <v-avatar slot='activator'>
-              <img :src="($store.state.user.photo && $store.state.user.photo.has_cropped) ? $store.state.user.photo.url_version : '/img/users/no-profile-img.jpg' ">
-          </v-avatar>
+          <Avatar slot='activator' :photo='$store.state.user.photo' :version='true' :size='50' />
           <v-list dense>
             <v-list-tile @click='editProfile'>
                 <v-list-tile-action>
@@ -59,6 +57,7 @@
 
 <script>
   import Menu from '@/components/UI/Menu'
+  import Avatar from '@/components/UI/Avatar'
   import ListenToLogout from '@/components/ListenToLogout'
   import UserDialog from '@/components/User/UserDialog'
 
@@ -66,7 +65,7 @@
     async created() {
       await this.$store.dispatch('loadInitial')
     },
-    components: { Menu, ListenToLogout, UserDialog },
+    components: { Menu, ListenToLogout, UserDialog, Avatar },
     computed: {
       initialDataLoaded() {
         return this.$store.state.data.users !== null

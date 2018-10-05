@@ -38,9 +38,7 @@
           </v-flex>
           <v-flex style='width: 30%'>
             <div v-if='item.responsibleAdmin' class='request-info'>
-              <v-avatar :size="54">
-                <img :src="item.responsibleAdmin.photo_url">
-              </v-avatar>
+              <Avatar :size='54' :photo='item.responsibleAdmin.photo' />
               <div>
                 <b class='d-block'>{{ item.responsibleAdmin.name }}</b>
                 <span>ответственный</span>
@@ -68,8 +66,10 @@
 <script>
 
 import { request_statuses } from './data'
+import Avatar from '@/components/UI/Avatar'
 
 export default {
+  components: { Avatar },
   data() {
     return {
       request_statuses
