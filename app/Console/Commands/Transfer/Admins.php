@@ -3,7 +3,7 @@
 namespace App\Console\Commands\Transfer;
 
 use Illuminate\Console\Command;
-use App\Models\{Admin, AdminIp, Email};
+use App\Models\{Admin, AdminIp, Email, Phone};
 use DB;
 
 class Admins extends Command
@@ -42,6 +42,7 @@ class Admins extends Command
         DB::table('admins')->delete();
         DB::table('admin_ips')->delete();
         Email::where('entity_type', Admin::class)->delete();
+        Phone::where('entity_type', Admin::class)->delete();
 
         $egecrm_admins = dbEgecrm('admins')->get();
 
@@ -54,6 +55,7 @@ class Admins extends Command
                 ->where('type', 'ADMIN')
                 ->where('id_entity', $admin->id)
                 ->first();
+
             if ($user && $user->email) {
                 $new_admin->email()->create(['email' => $user->email]);
             } else {
@@ -66,6 +68,11 @@ class Admins extends Command
                 $new_admin->ips()->createMany($admin_ips->map(function($e) {
                     return (array)$e;
                 })->all());
+            }
+
+            // переносим челефон
+            if ($user->phone) {
+                $new_admin->phones()->create(['phone' => $user->phone]);
             }
 
             $bar->advance();
