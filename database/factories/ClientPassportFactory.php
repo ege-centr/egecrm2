@@ -5,6 +5,9 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Models\ClientPassport::class, function (Faker $faker) {
     return [
+        'first_name' => $faker->firstNameFemale,
+        'last_name' => $faker->lastName,
+        'middle_name' => $faker->randomElement(['Николаевна', 'Игоревна', 'Эдуардовна']),
         'code' => $faker->randomNumber(3),
         'series' => $faker->randomNumber(4),
         'number' => $faker->randomNumber(6),

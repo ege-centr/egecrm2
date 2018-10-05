@@ -16,13 +16,9 @@ class CreateClientsTable extends Migration
         Schema::create('clients', function (Blueprint $table) {
             $table->increments('id');
 
-            $table->string('student_first_name');
-            $table->string('student_last_name');
-            $table->string('student_middle_name');
-
-            $table->string('representative_first_name');
-            $table->string('representative_last_name');
-            $table->string('representative_middle_name');
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('middle_name');
 
             $table->unsignedInteger('head_tutor_id')->nullable()->default(null);
             $table->unsignedTinyInteger('grade')->nullable()->default(null);

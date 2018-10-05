@@ -18,6 +18,7 @@ class ClientsController extends Controller
     {
         $new_model = Client::create($request->input());
         $new_model->phones()->createMany($request->phones);
+        $new_model->markers()->createMany($request->markers);
         $new_model->passport()->create($request->passport);
         $new_model->email()->create($request->email);
 
@@ -36,6 +37,9 @@ class ClientsController extends Controller
 
         $model->phones()->delete();
         $model->phones()->createMany($request->phones);
+
+        $model->markers()->delete();
+        $model->markers()->createMany($request->markers);
 
         $model->passport()->update($request->passport);
         $model->email()->update($request->email);

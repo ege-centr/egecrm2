@@ -10,7 +10,7 @@ class Collection extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => implode(' ', [$this->student_last_name, $this->student_first_name])
+            'name' => implode(' ', [$this->last_name, $this->first_name])
         ];
     }
 }

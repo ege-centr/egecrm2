@@ -23,19 +23,23 @@
                 <div class='mr-4 mb-5'>
                   <v-flex>
                     <AvatarLoader class-name='client' :entity-id='dialog_model.id' :photo='dialog_model.photo' @photoChanged='photoChanged' />
+                    <div class='mt-5 flex-items align-center link' @click='openMap'>
+                      <v-icon color='primary' class='mr-1'>location_on</v-icon>
+                      <span>Метки ({{ dialog_model.markers.length }})</span>
+                    </div>
                   </v-flex>
                 </div>
 
                 <v-flex d-flex md9>
                   <v-layout row wrap>
                     <v-flex md3>
-                      <v-text-field v-model="dialog_model.student_first_name" label="Имя"></v-text-field>
+                      <v-text-field v-model="dialog_model.first_name" label="Имя"></v-text-field>
                     </v-flex>
                     <v-flex md3>
-                      <v-text-field v-model="dialog_model.student_last_name" label="Фамилия"></v-text-field>
+                      <v-text-field v-model="dialog_model.last_name" label="Фамилия"></v-text-field>
                     </v-flex>
                     <v-flex md3>
-                      <v-text-field v-model="dialog_model.student_middle_name" label="Отчество"></v-text-field>
+                      <v-text-field v-model="dialog_model.middle_name" label="Отчество"></v-text-field>
                     </v-flex>
                     <v-flex md3>
                       <v-select clearable
@@ -97,13 +101,13 @@
                   Представитель
                 </v-flex>
                 <v-flex md3>
-                  <v-text-field v-model="dialog_model.representative_first_name" label="Имя"></v-text-field>
+                  <v-text-field v-model="dialog_model.passport.first_name" label="Имя"></v-text-field>
                 </v-flex>
                 <v-flex md3>
-                  <v-text-field v-model="dialog_model.representative_last_name" label="Фамилия"></v-text-field>
+                  <v-text-field v-model="dialog_model.passport.last_name" label="Фамилия"></v-text-field>
                 </v-flex>
                 <v-flex md3>
-                  <v-text-field v-model="dialog_model.representative_middle_name" label="Отчество"></v-text-field>
+                  <v-text-field v-model="dialog_model.passport.middle_name" label="Отчество"></v-text-field>
                 </v-flex>
                 <v-flex md12 class='headline'>
                   Паспорт
@@ -182,6 +186,33 @@
       </v-dialog>
     </v-layout>
 
+    <v-layout row justify-center v-if='dialog_model'>
+      <v-dialog v-model="map_dialog" persistent max-width="1000px">
+        <v-card>
+          <v-card-text>
+            <GmapMap ref='map' @click='mapClick'
+                :center="{lat: 55.7387, lng: 37.6032}"
+                :zoom="12"
+                :options="{
+                  disableDefaultUI: true
+                }"
+                style="width: 100%; height: 600px"
+              >
+              <GmapMarker
+                v-for="(m, index) in dialog_model.markers"
+                :key="index"
+                :position="{lat: m.lat, lng: m.lng}"
+                :clickable="true"
+                @dblclick='deleteMarker(index)'
+              />
+            </GmapMap>
+          </v-card-text>
+          <v-card-actions class='justify-center'>
+            <v-btn color="blue darken-1" flat @click.native="map_dialog = false">Сохранить</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-layout>
 
     <v-layout>
       <v-flex xs12 class="text-xs-right">
@@ -207,7 +238,7 @@
               </td>
               <td class='text-md-right'>
                 <v-btn flat icon color="black" class='ma-0' @click='showModel(item.id)'>
-                  <v-icon>more_horiz</v-icon>
+                    <v-icon>more_horiz</v-icon>
                 </v-btn>
               </td>
             </template>
@@ -232,6 +263,7 @@
 import AvatarLoader from '@/components/AvatarLoader'
 
 const MODEL_DEFAULTS = {
+  markers: [],
   phones: [{phone: '', comment: ''}],
   passport: {},
   email: {}
@@ -245,6 +277,9 @@ export default {
       page: 1,
       dialog: false,
       dialog_model: null,
+
+      map_dialog: false,
+
       loading: {
         dialog: false,
         pagination: false
@@ -264,6 +299,22 @@ export default {
   },
 
   methods: {
+    openMap() {
+      this.map_dialog = true
+      Vue.nextTick(() => {
+        this.$refs.map.resize()
+      })
+    },
+    
+    deleteMarker(index) {
+      this.dialog_model.markers.splice(index, 1)
+    },
+    mapClick(event) {
+      this.dialog_model.markers.push({
+        lat: event.latLng.lat(),
+        lng: event.latLng.lng()
+      })
+    },
     openDialog() {
       this.dialog = true
       this.dialog_model = _.clone(MODEL_DEFAULTS)

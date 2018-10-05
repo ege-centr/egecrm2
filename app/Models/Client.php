@@ -11,8 +11,7 @@ class Client extends Model
     use HasPhones, HasEmail, HasPhoto;
 
     protected $fillable = [
-        'student_first_name', 'student_last_name', 'student_middle_name',
-        'representative_first_name', 'representative_last_name', 'representative_middle_name',
+        'first_name', 'last_name', 'middle_name',
         'grade', 'year', 'branches'
     ];
 
@@ -21,6 +20,11 @@ class Client extends Model
     public function passport()
     {
         return $this->hasOne(ClientPassport::class);
+    }
+
+    public function markers()
+    {
+        return $this->hasMany(Marker::class);
     }
 
     public function getRequests()

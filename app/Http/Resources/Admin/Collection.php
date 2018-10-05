@@ -16,7 +16,7 @@ class Collection extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => implode(' ', [$this->last_name, $this->first_name])
+            'name' => getName($this)
         ];
     }
 }

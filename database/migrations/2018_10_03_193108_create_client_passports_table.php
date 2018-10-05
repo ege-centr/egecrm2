@@ -15,6 +15,11 @@ class CreateClientPassportsTable extends Migration
     {
         Schema::create('client_passports', function (Blueprint $table) {
             $table->increments('id');
+
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('middle_name');
+
             $table->string('series', 100);
             $table->string('number', 100);
             $table->date('birthday')->nullable()->default(null);

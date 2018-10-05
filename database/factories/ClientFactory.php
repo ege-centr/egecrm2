@@ -5,13 +5,9 @@ use App\Models\Factory\{Branch, Grade};
 
 $factory->define(App\Models\Client::class, function (Faker $faker) {
     return [
-        'student_first_name' => $faker->firstNameMale,
-        'student_last_name' => $faker->lastName,
-        'student_middle_name' => $faker->randomElement(['Александрович', 'Васильевич', 'Иванович']),
-
-        'representative_first_name' => $faker->firstNameFemale,
-        'representative_last_name' => $faker->lastName,
-        'representative_middle_name' => $faker->randomElement(['Николаевна', 'Игоревна', 'Эдуардовна']),
+        'first_name' => $faker->firstNameMale,
+        'last_name' => $faker->lastName,
+        'middle_name' => $faker->randomElement(['Александрович', 'Васильевич', 'Иванович']),
 
         'grade' => Grade::inRandomOrder()->value('id'),
         'year' => $faker->randomElement([2016, 2017, 2018]),

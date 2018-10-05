@@ -23,9 +23,18 @@ import filters from '@/other/filters'
 import {GlobalPlugin} from '@/other/plugins'
 import VueTheMask from 'vue-the-mask'
 import Vuetify from 'vuetify'
-import vueUpload from '@websanova/vue-upload';
+import vueUpload from '@websanova/vue-upload'
+import * as VueGoogleMaps from 'vue2-google-maps'
 
 [Vuetify, GlobalPlugin, VueTheMask, vueUpload].forEach(use => Vue.use(use))
+
+Vue.use(VueGoogleMaps, {
+  load: {
+    key: 'AIzaSyAXXZZwXMG5yNxFHN7yR4GYJgSe9cKKl7o',
+    libraries: 'places',
+    language: 'ru'
+  },
+})
 
 Object.entries(filters).forEach(entry => Vue.filter(entry[0], entry[1]))
 

@@ -1,5 +1,31 @@
 <template>
   <div>
+    <v-layout row justify-center v-if='client !== null'>
+      <v-dialog v-model="map_dialog" persistent max-width="1000px">
+        <v-card>
+          <v-card-text>
+            <GmapMap ref='map' @click='mapClick'
+                :center="{lat: 55.7387, lng: 37.6032}"
+                :zoom="12"
+                :options="{
+                  disableDefaultUI: true
+                }"
+                style="width: 100%; height: 600px"
+              >
+              <GmapMarker
+                v-for="(m, index) in client.markers"
+                :key="index"
+                :position="{lat: m.lat, lng: m.lng}"
+              />
+            </GmapMap>
+          </v-card-text>
+          <v-card-actions class='justify-center'>
+            <v-btn color="blue darken-1" flat @click.native="map_dialog = false">Закрыть</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </v-layout>
+
     <div class='headline mb-4'>
       Клиент {{ $route.params.id }}
     </div>
@@ -13,11 +39,16 @@
               <div>
                 <div class='grey--text text--darken-2 font-weight-medium caption'>Ученик</div>
                 <div class='font-weight-bold'>
-                  {{ client.student_full_name }} ({{ getData('grades', client.grade).title }})
+                  {{ client.first_name }}
+                  {{ client.last_name }}
+                  {{ client.middle_name }}
+                  ({{ getData('grades', client.grade).title }})
                 </div>
                 <div class='grey--text text--darken-2 font-weight-medium caption mt-3'>Представитель</div>
                 <div class='font-weight-bold'>
-                  {{ client.representative_full_name }}
+                  {{ client.passport.first_name }}
+                  {{ client.passport.last_name }}
+                  {{ client.passport.middle_name }}
                 </div>
               </div>
             </div>
@@ -35,6 +66,9 @@
             </div>
             <div v-if='client.email'>
               {{ client.email.email }}
+            </div>
+            <div v-if='client.markers.length'>
+              <a @click='openMap'>метки ({{ client.markers.length }})</a>
             </div>
           </v-flex>
           <v-spacer></v-spacer>
@@ -117,7 +151,8 @@ export default {
     return {
       tabs: null,
       loading: true,
-      client: null
+      client: null,
+      map_dialog: false
     }
   },
 
@@ -128,6 +163,13 @@ export default {
   },
 
   methods: {
+    openMap() {
+      this.map_dialog = true
+      Vue.nextTick(() => {
+        this.$refs.map.resize()
+      })
+    },
+
     loadData() {
       axios.get(apiUrl(`clients/${this.$route.params.id}`)).then(r => {
         this.client = r.data
