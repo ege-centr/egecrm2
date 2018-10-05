@@ -20,10 +20,10 @@
               </v-flex>
               <v-flex md4>
                 <v-select clearable
-                  v-model="dialog_model.responsible_user_id"
-                  :items="$store.state.data.users"
+                  v-model="dialog_model.responsible_admin_id"
+                  :items="$store.state.data.admins"
                   item-value='id'
-                  item-text='login'
+                  item-text='name'
                   label="Ответственный"
                 ></v-select>
               </v-flex>
@@ -41,7 +41,7 @@
                   v-model="dialog_model.subjects"
                   :items="$store.state.data.subjects"
                   item-value='id'
-                  item-text='title'
+                  item-text='name'
                   label="Предмет"
                 ></v-select>
               </v-flex>
@@ -50,7 +50,7 @@
                   v-model="dialog_model.branches"
                   :items="$store.state.data.branches"
                   item-value='id'
-                  item-text='title'
+                  item-text='full'
                   label="Филиалы"
                 ></v-select>
               </v-flex>

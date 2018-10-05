@@ -21,10 +21,12 @@
     },
     "dependencies": {
         "@finpo/vue2-recaptcha-invisible": "^1.1.8",
+        "@websanova/vue-upload": "^1.2.3-beta",
         "animate.css": "^3.7.0",
         "js-cookie": "^2.2.0",
         "moment": "^2.22.2",
         "normalize.css": "^8.0.0",
+        "vue-cropperjs": "^2.2.2",
         "vue-router": "^3.0.1",
         "vue-the-mask": "^0.11.1",
         "vuetify": "^1.2.4",

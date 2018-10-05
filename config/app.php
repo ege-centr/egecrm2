@@ -15,6 +15,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'faker_locale' => 'ru_RU',
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -107,6 +109,8 @@ return [
     'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
+
+    'password_salt' => env('PASSWORD_SALT'),
 
     /*
     |--------------------------------------------------------------------------

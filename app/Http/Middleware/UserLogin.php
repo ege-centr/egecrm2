@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use Closure;
 use App\Models\User;
-use App\Service\SessionService;
 
 class UserLogin
 {
@@ -17,10 +16,8 @@ class UserLogin
      */
     public function handle($request, Closure $next)
     {
-        if (! User::loggedIn()) {
-            return redirect(config('sso.server') . '?url=' . url()->current());
+        if (User::loggedIn()) {
+            return $next($request);
         }
-        SessionService::action();
-        return $next($request);
     }
 }

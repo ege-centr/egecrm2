@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Request;
 
-use App\Http\Resources\User\Resource as UserResource;
+use App\Http\Resources\Admin\Resource as AdminResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class Collection extends JsonResource
@@ -13,7 +13,7 @@ class Collection extends JsonResource
             'comment'
         ]), [
             'phones' => $this->phones,
-            'responsibleUser' => new UserResource($this->responsibleUser)
+            'responsibleAdmin' => new AdminResource($this->responsibleAdmin)
         ]);
     }
 }

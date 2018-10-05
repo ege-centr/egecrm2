@@ -1,6 +1,8 @@
 import Requests from '@/pages/Requests'
-import Clients from '@/pages/Clients'
-import Student from '@/pages/Student'
+import Users from '@/pages/Users'
+
+import ClientsIndex from '@/pages/ClientsIndex'
+import ClientsShow from '@/pages/ClientsShow'
 
 export default [
   {
@@ -9,13 +11,18 @@ export default [
     component: Requests
   },
   {
-    path: '/clients',
-    name: 'Clients',
-    component: Clients
+    path: '/users',
+    name: 'Users',
+    component: Users
   },
   {
-    path: '/student/:id',
-    name: 'Student',
-    component: Student
+    path: '/clients',
+    name: 'ClientsIndex',
+    component: ClientsIndex
+  },
+  {
+    path: '/clients/:id',
+    name: 'ClientsShow',
+    component: ClientsShow
   },
 ]

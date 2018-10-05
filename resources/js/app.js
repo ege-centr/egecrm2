@@ -5,9 +5,10 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-require('./bootstrap');
+require('./bootstrap')
 
-window.Vue = require('vue');
+window.Vue = require('vue')
+window.Vue.http = axios
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -22,8 +23,9 @@ import filters from '@/other/filters'
 import {GlobalPlugin} from '@/other/plugins'
 import VueTheMask from 'vue-the-mask'
 import Vuetify from 'vuetify'
+import vueUpload from '@websanova/vue-upload';
 
-[Vuetify, GlobalPlugin, VueTheMask].forEach(use => Vue.use(use))
+[Vuetify, GlobalPlugin, VueTheMask, vueUpload].forEach(use => Vue.use(use))
 
 Object.entries(filters).forEach(entry => Vue.filter(entry[0], entry[1]))
 

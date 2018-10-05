@@ -24,7 +24,7 @@
                     {{ getData('grades', item.grade).title }},
                   </span>
                   <span v-for='(subject_id, index) in item.subjects' :key='subject_id'>
-                    {{ getData('subjects', subject_id).title }}{{ index == (item.subjects.length - 1) ? '.' : ',' }}
+                    {{ getData('subjects', subject_id).name }}{{ index == (item.subjects.length - 1) ? '.' : ',' }}
                   </span>
                   <span>
                     {{ item.name }}
@@ -37,12 +37,12 @@
             </div>
           </v-flex>
           <v-flex style='width: 30%'>
-            <div v-if='item.responsibleUser' class='request-info'>
+            <div v-if='item.responsibleAdmin' class='request-info'>
               <v-avatar :size="54">
-                <img :src="item.responsibleUser.photo_url">
+                <img :src="item.responsibleAdmin.photo_url">
               </v-avatar>
               <div>
-                <b class='d-block'>{{ item.responsibleUser.name }}</b>
+                <b class='d-block'>{{ item.responsibleAdmin.name }}</b>
                 <span>ответственный</span>
               </div>
             </div>

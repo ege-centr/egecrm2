@@ -80,12 +80,13 @@ class Sms
     /**
      *
      */
-    public static function verify($user)
+    public static function verify($admin)
     {
         $code = mt_rand(10000, 99999);
-        Redis::set("ydirect:codes:{$user->id}", $code, 'EX', 120);
-        Sms::send($user->phone, $code . ' – код для входа в ЛК', false);
-        // cache(["codes:{$user_id}" => $code], 3);
+        Redis::set(cacheKey('codes', $admin->id), $code, 'EX', 120);
+        foreach($admin->phones as $phone) {
+            Sms::send($phone->phone_clean, $code . ' – код для входа в ЛК', false);
+        }
         return $code;
     }
 }

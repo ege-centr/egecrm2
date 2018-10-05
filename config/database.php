@@ -50,8 +50,28 @@ return [
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',
             'prefix' => '',
-            'strict' => true,
+            'strict' => false,
             'engine' => null,
+        ],
+
+        'egecrm' => [
+            'driver'    => 'mysql',
+            'host'      => env('DB_HOST_EGECRM'),
+            'database'  => env('DB_DATABASE_EGECRM'),
+            'username'  => env('DB_USERNAME_EGECRM'),
+            'password'  => env('DB_PASSWORD_EGECRM'),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+        ],
+
+        'factory' => [
+            'driver'    => 'mysql',
+            'host'      => env('DB_HOST_FACTORY'),
+            'database'  => env('DB_DATABASE_FACTORY'),
+            'username'  => env('DB_USERNAME_FACTORY'),
+            'password'  => env('DB_PASSWORD_FACTORY'),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
         ],
 
         'pgsql' => [

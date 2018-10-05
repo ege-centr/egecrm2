@@ -1,9 +1,9 @@
 <?php
 
 use Illuminate\Http\Request;
-use App\Models\Data\{Branch, Subject, Grade};
-use App\Models\User;
-use App\Http\Resources\User\Resource as UserResource;
+use App\Models\Factory\{Branch, Subject, Grade};
+use App\Models\Admin;
+use App\Http\Resources\Admin\Resource as AdminResource;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,9 +24,14 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         Route::post('static', 'DataController@static');
     });
 
-    Route::apiResource('users', 'UsersController');
+    Route::apiResource('admins', 'AdminsController');
     Route::apiResource('requests', 'RequestsController');
-    Route::apiResource('students', 'StudentsController');
+    Route::apiResource('clients', 'ClientsController');
+
+    Route::prefix('photo')->group(function() {
+        Route::post('upload', 'PhotosController@upload');
+        Route::post('crop', 'PhotosController@crop');
+    });
 
     # Load initial data
     Route::get('load-initial', function() {
@@ -37,7 +42,14 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
             'years' => array_map(function($year) {
                 return ['value' => $year, 'text' => $year . '–' . ($year + 1) . ' уч. г.'];
             }, [2015, 2016, 2017, 2018]),
-            'users' => UserResource::collection(User::all())
+            'admins' => AdminResource::collection(Admin::all())
+        ]);
+    });
+
+    Route::get('rights', function() {
+        return response()->json([
+            'all' => \Shared\Rights::$all,
+            'groups' => \Shared\Rights::$groups
         ]);
     });
 });

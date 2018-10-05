@@ -3,14 +3,14 @@
 namespace App\Models;
 
 use Shared\Model;
-use App\Traits\HasPhones;
+use App\Traits\{Enumable, HasPhones};
 
 class Request extends Model
 {
-    use HasPhones;
+    use Enumable, HasPhones;
 
     protected $fillable = [
-        'name', 'grade', 'comment', 'branches', 'responsible_user_id', 'subjects',
+        'name', 'grade', 'comment', 'branches', 'responsible_admin_id', 'subjects',
         'google_id', 'status'
     ];
 
@@ -18,9 +18,9 @@ class Request extends Model
 
     protected $commaSeparated = ['subjects', 'branches'];
 
-    public function responsibleUser()
+    public function responsibleAdmin()
     {
-        return $this->belongsTo(User::class, 'responsible_user_id');
+        return $this->belongsTo(Admin::class, 'responsible_admin_id');
     }
 
     public static function boot()
@@ -29,7 +29,7 @@ class Request extends Model
 
         static::creating(function($model) {
             if (User::loggedIn()) {
-                $model->created_user_id = User::id();
+                $model->created_admin_id = User::id();
             }
         });
     }

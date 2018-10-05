@@ -49,3 +49,15 @@ a.black-link {
 .flex-items {
   display: flex;
 }
+
+.cropper-crop-box, .cropper-view-box {
+    border-radius: 50%;
+}
+
+.cropper-view-box {
+    outline: 0;
+}
+
+// .cropper-container {
+//   width: 100% !important;
+// }

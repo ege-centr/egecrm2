@@ -6,6 +6,10 @@
   version "1.1.8"
   resolved "https://registry.yarnpkg.com/@finpo/vue2-recaptcha-invisible/-/vue2-recaptcha-invisible-1.1.8.tgz#112a9a73508bbc34d59ec5a608b4a23d2ec91c9b"
 
+"@websanova/vue-upload@^1.2.3-beta":
+  version "1.2.3-beta"
+  resolved "https://registry.yarnpkg.com/@websanova/vue-upload/-/vue-upload-1.2.3-beta.tgz#e043b32cf07588ac603a416a84919992f02ddaaa"
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -1419,6 +1423,10 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     ripemd160 "^2.0.0"
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
+
+cropperjs@^1.1.3:
+  version "1.4.1"
+  resolved "https://registry.yarnpkg.com/cropperjs/-/cropperjs-1.4.1.tgz#41d9fcd87f9d9cd2e1dcf27c36680cac7a48cd6b"
 
 cross-env@^5.1:
   version "5.2.0"
@@ -5623,6 +5631,12 @@ vm-browserify@0.0.4:
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-0.0.4.tgz#5d7ea45bbef9e4a6ff65f95438e0a87c357d5a73"
   dependencies:
     indexof "0.0.1"
+
+vue-cropperjs@^2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/vue-cropperjs/-/vue-cropperjs-2.2.2.tgz#5b897b3bbe6ed28ba6ae3654d0e35e53caf56ad2"
+  dependencies:
+    cropperjs "^1.1.3"
 
 vue-hot-reload-api@^2.2.0:
   version "2.3.0"

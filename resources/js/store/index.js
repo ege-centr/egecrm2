@@ -11,7 +11,7 @@ const store = new Vuex.Store({
     drawer: true,
     user: null,
     data: {
-      users: null,
+      admins: null,
       subjects: null,
       branches: null,
       grades: null,

@@ -30,3 +30,12 @@ function fullName($entity)
 {
     return implode(' ', [$entity->first_name, $entity->last_name, $entity->middle_name]);
 }
+
+
+/**
+ * old egecrm connections
+ */
+function dbEgecrm($table)
+{
+    return \DB::connection('egecrm')->table($table);
+}

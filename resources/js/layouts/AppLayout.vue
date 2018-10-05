@@ -18,10 +18,10 @@
       <v-spacer></v-spacer>
       <v-menu left>
           <v-avatar slot='activator'>
-              <img :src="$store.state.user.photo_url">
+              <img :src="($store.state.user.photo && $store.state.user.photo.has_cropped) ? $store.state.user.photo.url_version : '/img/users/no-profile-img.jpg' ">
           </v-avatar>
           <v-list dense>
-            <v-list-tile @click=''>
+            <v-list-tile @click='editProfile'>
                 <v-list-tile-action>
                   <v-icon>edit</v-icon>
                 </v-list-tile-action>
@@ -52,22 +52,29 @@
         </transition>
       </v-container>
     </v-content>
-    <ListenToLogout></ListenToLogout>
+    <!-- <ListenToLogout></ListenToLogout> -->
+    <!-- <UserDialog ref='UserDialog'></UserDialog> -->
   </v-app>
 </template>
 
 <script>
   import Menu from '@/components/UI/Menu'
   import ListenToLogout from '@/components/ListenToLogout'
+  import UserDialog from '@/components/User/UserDialog'
 
   export default {
     async created() {
       await this.$store.dispatch('loadInitial')
     },
-    components: { Menu, ListenToLogout },
+    components: { Menu, ListenToLogout, UserDialog },
     computed: {
       initialDataLoaded() {
         return this.$store.state.data.users !== null
+      }
+    },
+    methods: {
+      editProfile() {
+        this.$refs.UserDialog.show(this.$store.state.user.id)
       }
     }
   }

@@ -4,101 +4,59 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Redis;
+use App\Http\Resources\Admin\Resource as AdminResource;
 use App\Utils\Sms;
 use DB;
 
 class User extends Model
 {
-    protected $table = 'admins';
-
-    protected $appends = ['photo_url'];
-
-    const USER_TYPE    = 'ADMIN';
-    const DEFAULT_COLOR = 'black';
-
-    const UPLOAD_DIR = '/img/users/';
-
-    public function getRightsAttribute($value)
-    {
-        if ($value) {
-            return explode(',', $value);
-        }
-        return [];
-    }
-
-    public function getPhotoUrlAttribute()
-    {
-        if ($this->has_photo_cropped) {
-            return self::UPLOAD_DIR . $this->id . '.' . $this->photo_extension;
-        }
-        return 'http://placekitten.com/300/300';
-    }
-
-    public function setPasswordAttribute($value)
-    {
-        $this->attributes['password'] = static::_password($value);
-    }
-
-    /**
-     * Если пользователь заблокирован,то его цвет должен быть черным
-     */
-    public function getColorAttribute()
-    {
-        if ($this->allowed(\Shared\Rights::EC_BANNED)) {
-            return static::DEFAULT_COLOR;
-        } else {
-            return $this->attributes['color'];
-        }
-    }
-
     /**
      * Вход пользователя
      */
     public static function login($data)
     {
-        $query = DB::table('users')->where('email', $data['login']);
+        $query = Email::where('entity_type', Admin::class)->where('email', $data['login']);
 
          # проверка логина
-        if ($query->exists()) {
-            $user_id = $query->value('id_entity');
-        } else {
+        if (! $query->exists()) {
             return self::errorResponse('неверный логин');
         }
 
         # проверка пароля
-        $query->where('password', static::_password($data['password']));
+        $query->where('password', Email::toPassword($data['password']));
         if (! $query->exists()) {
             return self::errorResponse('неверный пароль');
         }
 
-        $user = self::find($query->value('id_entity'));
+        $admin_id = $query->value('entity_id');
+        $admin = Admin::find($query->value('entity_id'));
 
         # забанен ли?
-        if ($user->isBanned()) {
+        if ($admin->isBanned()) {
             return self::errorResponse('пользователь заблокирован');
         } else {
-            $allowed_to_login = $user->allowedToLogin();
+            $allowed_to_login = $admin->allowedToLogin();
 
             # из офиса или есть доступ вне офиса
             if ($allowed_to_login) {
                 # дополнительная СМС-проверка, если пользователь логинится если не из офиса
                 if ($allowed_to_login->confirm_by_sms) {
-                    $sent_code = Redis::get("ydirect:codes:{$user_id}");
+                    $sent_code = Redis::get(cacheKey('codes', $admin_id));
                     // если уже был отправлен – проверяем
                     if (! empty($sent_code)) {
                         if (@$data['code'] != $sent_code) {
                             return self::errorResponse('неверный смс-код');
                         } else {
-                            Redis::del("egerep:codes:{$user_id}");
+                            Redis::del(cacheKey('codes', $admin_id));
                         }
                     } else {
                         // иначе отправляем код
-                        Sms::verify($user);
+                        Sms::verify($admin);
                         return (object)['data' => null, 'status' => 202];
                     }
                 }
-                $user->toSession();
-                return (object)['data' => $user, 'status' => 200];
+                $_SESSION['user'] = $admin;
+                return (object)['data' => $admin, 'status' => 200];
             } else {
                 return self::errorResponse('нет прав доступа для данного IP');
             }
@@ -123,114 +81,29 @@ class User extends Model
             && User::notChanged();      						// и данные по пользователю не изменились
 	}
 
-    /*
-	 * Пользователь из сессии
-	 * @boolean $init – инициализировать ли соединение с БД пользователя
-	 * @boolean $update – обновлять данные из БД
-	 */
-	public static function fromSession($upadte = false)
-	{
-		// Если обновить данные из БД, то загружаем пользователя
-		if ($upadte) {
-			$User = User::find($_SESSION["user"]->id);
-			$User->toSession();
-		} else {
-			// Получаем пользователя из СЕССИИ
-			$User = $_SESSION['user'];
-		}
-
-		// Возвращаем пользователя
-		return $User;
-	}
-
-    public static function id()
-    {
-        return User::fromSession()->id;
-    }
-
-    /**
-     * Текущего пользователя в сессию
-     */
-    public function toSession()
-    {
-        $_SESSION['user'] = $this;
-    }
-
-    /**
-	 * Вернуть пароль, как в репетиторах
-	 *
-	 */
-	public static function _password($password)
-	{
-		$password = md5($password."_rM");
-        $password = md5($password."Mr");
-
-		return $password;
-	}
-
-    /**
-     * Get real users
-     *
-     */
-    public static function scopeReal($query)
-    {
-        return $query->where('type', static::USER_TYPE);
-    }
-
-    /**
-     * Get real users
-     *
-     */
-    public static function scopeActive($query)
-    {
-        return $query->whereRaw('NOT FIND_IN_SET(' . \Shared\Rights::EC_BANNED . ', rights)');
-    }
-
-    public function isBanned()
-    {
-        return $this->allowed(\Shared\Rights::EC_BANNED);
-    }
-
     /**
      * Данные по пользователю не изменились
      * если поменяли в настройках хоть что-то, сразу выкидывает, чтобы перезайти
      */
     public static function notChanged()
     {
-        return User::fromSession()->updated_at == DB::table('admins')->whereId(User::id())->value('updated_at');
+        return User::fromSession()->updated_at == Admin::whereId(User::id())->value('updated_at');
     }
 
-    /**
-     * User has rights to perform the action
-     */
-    public function allowed($right)
+    /*
+     * Пользователь из сессии
+    */
+    public static function fromSession()
     {
-        return in_array($right, $this->rights);
+        // @todo: намана доллар сделай
+        return Admin::with('photo')->find($_SESSION['user']->id);
+        // return new AdminResource(Admin::find($_SESSION['user']->id));
     }
 
-    /**
-	 * Можно ли логиниться с этого IP?
-	 */
-	public function allowedToLogin()
-	{
-        if (app('env') === 'local') {
-            return (object)[
-                'confirm_by_sms' => false
-            ];
-        }
-
-        $current_ip = ip2long($_SERVER['HTTP_X_REAL_IP']);
-        $admin_ips = DB::table('admin_ips')->where('id_admin', $this->id)->get();
-        foreach($admin_ips as $admin_ip) {
-            $ip_from = ip2long(trim($admin_ip->ip_from));
-            $ip_to = ip2long(trim($admin_ip->ip_to ?: $admin_ip->ip_from));
-            if ($current_ip >= $ip_from && $current_ip <= $ip_to) {
-                return $admin_ip;
-            }
-        }
-
-        return false;
-	}
+    public static function id()
+    {
+        return User::fromSession()->id;
+    }
 
     private static function errorResponse($error_message)
     {
