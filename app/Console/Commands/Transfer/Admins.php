@@ -71,8 +71,8 @@ class Admins extends Command
             }
 
             // переносим челефон
-            if ($user->phone) {
-                $new_admin->phones()->create(['phone' => $user->phone]);
+            if ($admin->phone) {
+                $new_admin->phones()->create(['phone' => $admin->phone]);
             }
 
             $bar->advance();
