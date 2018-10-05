@@ -57,7 +57,8 @@ class Admins extends Command
                 ->first();
 
             if ($user && $user->email) {
-                $new_admin->email()->create(['email' => $user->email]);
+                $email = $new_admin->email()->create(['email' => $user->email]);
+                DB::table('emails')->whereId($email->id)->update(['password' => $user->password]);
             } else {
                 $new_admin->email()->create(['email' => 'empty@email.ru']);
             }
