@@ -21,7 +21,7 @@
 
               <div class='mr-4 mb-5'>
                 <v-flex>
-                  <AvatarLoader class-name='admin' :entity-id='dialog_model.id' :photo='dialog_model.photo' @photoChanged='photoChanged' />
+                  <AvatarLoader class-name='Admin\Admin' :entity-id='dialog_model.id' :photo='dialog_model.photo' @photoChanged='photoChanged' />
                 </v-flex>
               </div>
 
