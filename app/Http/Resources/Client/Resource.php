@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Client;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Contract\Resource as ContractResource;
 
 class Resource extends JsonResource
 {
@@ -13,6 +14,7 @@ class Resource extends JsonResource
             'name' => getName($this),
             'requests' => $this->getRequests(),
             'markers' => $this->markers,
+            'contracts' => ContractResource::collection($this->contracts),
             'passport' => $this->passport,
             'email' => $this->email,
             'photo' => $this->photo

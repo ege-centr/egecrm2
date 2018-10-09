@@ -39,3 +39,16 @@ function dbEgecrm($table)
 {
     return \DB::connection('egecrm')->table($table);
 }
+
+function getModelClass($class) : string
+{
+    return '\\App\\Models\\' . $class;
+}
+
+/**
+ * Get model by class & id
+ */
+function getMorphModel($class, $entity_id) {
+    $class = getModelClass($class);
+    return $class::find($entity_id);
+}

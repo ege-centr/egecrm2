@@ -3,6 +3,7 @@ import Users from '@/pages/Users'
 
 import ClientsIndex from '@/pages/ClientsIndex'
 import ClientsShow from '@/pages/ClientsShow'
+import ClientForm from '@/pages/Client/ClientForm'
 
 export default [
   {
@@ -24,5 +25,15 @@ export default [
     path: '/clients/:id',
     name: 'ClientsShow',
     component: ClientsShow
+  },
+  {
+    path: '/clients/:id/edit',
+    name: 'ClientEdit',
+    component: ClientForm
+  },
+  {
+    path: '/clients/create',
+    name: 'ClientCreate',
+    component: ClientForm
   },
 ]

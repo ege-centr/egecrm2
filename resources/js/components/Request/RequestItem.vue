@@ -58,6 +58,8 @@
             </v-layout>
           </v-flex>
         </v-layout>
+
+        <Comments class-name='Request' :entity-id='item.id' />
       </v-card-text>
     </v-card>
   </v-hover>
@@ -67,9 +69,10 @@
 
 import { request_statuses } from './data'
 import Avatar from '@/components/UI/Avatar'
+import Comments from '@/components/Comments'
 
 export default {
-  components: { Avatar },
+  components: { Avatar, Comments },
   data() {
     return {
       request_statuses

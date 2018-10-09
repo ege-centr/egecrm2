@@ -41,6 +41,10 @@ if (token) {
 
 window.apiUrl = (method) => `${process.env.MIX_API_URL}${method}`
 
+window.clone = (obj) => {
+  return JSON.parse(JSON.stringify(obj))
+}
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

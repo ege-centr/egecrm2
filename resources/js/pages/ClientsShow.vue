@@ -74,9 +74,11 @@
           <v-spacer></v-spacer>
           <v-flex class='text-md-right' align-end d-flex>
             <div>
-              <v-btn flat icon color="black" class='ma-0' @click='showModel(request.id)'>
-                <v-icon>more_horiz</v-icon>
-              </v-btn>
+              <router-link :to="{ name: 'ClientEdit', params: { id: client.id }}">
+                <v-btn flat icon color="black" class='ma-0'>
+                  <v-icon>more_horiz</v-icon>
+                </v-btn>
+              </router-link>
             </div>
           </v-flex>
         </v-layout>
@@ -110,9 +112,56 @@
             <RequestList :items='client.requests' />
         </v-tab-item>
         <v-tab-item>
-          <div class='headline'>
-            Договоры
-          </div>
+          <v-layout wrap>
+            <v-flex md12 v-if='client.contracts.length'>
+              <v-data-table
+                :items="client.contracts"
+                class="elevation-1"
+                hide-actions
+                hide-headers
+              >
+                <template slot='items' slot-scope="{ item }">
+                  <td>
+                    <span v-if='item.id'>
+                      №{{ item.number }} версия {{ item.version }}
+                    </span>
+                  </td>
+                  <td>
+                    от {{ item.date | date }}
+                  </td>
+                  <td>
+                    {{ item.sum }} руб.
+                  </td>
+                  <td>
+                    <span v-if='item.payments.length'>
+                      {{ item.payments.length }} платежа
+                    </span>
+                    <span v-else>
+                      платежей нет
+                    </span>
+                  </td>
+                  <td>
+                    {{ getData('grades', item.grade).title }}
+                  </td>
+                  <td>
+                    <span v-for='subject in item.subjects' :class="{
+                      'error--text': subject.status == subject_statuses[2],
+                      'orange--text': subject.status == subject_statuses[1]
+                    }">
+                      {{ getData('subjects', subject.subject_id).three_letters }}
+                      <span class='grey--text'>{{ subject.lessons }}</span>
+                    </span>
+                  </td>
+                  <td class='text-md-right'>
+                    <span v-if='item.id'>
+                      {{ getData('admins', item.created_admin_id).name }}
+                      {{ item.created_at | date-time }}
+                    </span>
+                  </td>
+                </template>
+              </v-data-table>
+            </v-flex>
+          </v-layout>
         </v-tab-item>
         <v-tab-item>
           <div class='headline'>
@@ -125,9 +174,7 @@
           </div>
         </v-tab-item>
         <v-tab-item>
-          <div class='headline'>
-            Комментарии
-          </div>
+          <Comments class-name='Client\Client' :entity-id='client.id' />
         </v-tab-item>
         <v-tab-item>
           <div class='headline'>
@@ -145,6 +192,8 @@
 
 import RequestList from '@/components/Request/RequestList'
 import Avatar from '@/components/UI/Avatar'
+import { subject_statuses } from '@/components/Contract/data'
+import Comments from '@/components/Comments'
 
 export default {
   data() {
@@ -152,11 +201,12 @@ export default {
       tabs: null,
       loading: true,
       client: null,
-      map_dialog: false
+      map_dialog: false,
+      subject_statuses
     }
   },
 
-  components: { RequestList, Avatar },
+  components: { RequestList, Avatar, Comments },
 
   created() {
     this.loadData()
@@ -186,7 +236,7 @@ export default {
 <style scoped lang='scss'>
   .v-tabs__items {
     width: calc(100% + 20px);
-    padding: 0 10px;
+    padding: 10px;
     margin-left: -10px;
   }
 </style>

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Redis;
 use App\Http\Resources\Admin\Resource as AdminResource;
 use App\Utils\Sms;
+use App\Models\Admin\Admin;
 use DB;
 
 class User extends Model

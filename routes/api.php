@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use App\Models\Factory\{Branch, Subject, Grade};
-use App\Models\Admin;
+use App\Models\Admin\Admin;
 use App\Http\Resources\Admin\Collection as AdminCollection;
 
 /*
@@ -24,9 +24,13 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         Route::post('static', 'DataController@static');
     });
 
-    Route::apiResource('admins', 'AdminsController');
-    Route::apiResource('requests', 'RequestsController');
-    Route::apiResource('clients', 'ClientsController');
+    Route::apiResources([
+        'admins' => 'AdminsController',
+        'requests' => 'RequestsController',
+        'clients' => 'ClientsController',
+        'contracts' => 'ContractsController',
+        'comments' => 'CommentsController',
+    ]);
 
     Route::prefix('photo')->group(function() {
         Route::post('upload', 'PhotosController@upload');

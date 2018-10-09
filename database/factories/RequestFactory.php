@@ -2,7 +2,7 @@
 
 use Faker\Generator as Faker;
 use App\Models\Factory\{Branch, Subject, Grade};
-use App\Models\{Request, Admin};
+use App\Models\{Request, Admin\Admin};
 
 $factory->define(App\Models\Request::class, function (Faker $faker) {
     return [

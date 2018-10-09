@@ -186,7 +186,7 @@
       </v-dialog>
     </v-layout>
 
-    <v-layout row justify-center v-if='dialog_model'>
+    <v-layout row justify-center v-if='dialog_model' @shown="refreshMap">
       <v-dialog v-model="map_dialog" persistent max-width="1000px">
         <v-card>
           <v-card-text>
@@ -216,12 +216,12 @@
 
     <v-layout>
       <v-flex xs12 class="text-xs-right">
-        <a class='black-link' @click='openDialog'>
+        <router-link :to="{ name: 'ClientCreate' }" class='black-link'>
           <v-btn small fab color="primary">
             <v-icon dark>add</v-icon>
           </v-btn>
           добавить клиента
-        </a>
+        </router-link>
       </v-flex>
     </v-layout>
 
@@ -237,9 +237,11 @@
                 </router-link>
               </td>
               <td class='text-md-right'>
-                <v-btn flat icon color="black" class='ma-0' @click='showModel(item.id)'>
-                    <v-icon>more_horiz</v-icon>
-                </v-btn>
+                <router-link :to="{ name: 'ClientEdit', params: { id: item.id }}">
+                  <v-btn flat icon color="black" class='ma-0'>
+                      <v-icon>more_horiz</v-icon>
+                  </v-btn>
+                </router-link>
               </td>
             </template>
           </v-data-table>
@@ -301,11 +303,14 @@ export default {
   methods: {
     openMap() {
       this.map_dialog = true
-      Vue.nextTick(() => {
-        this.$refs.map.resize()
-      })
+      setTimeout(() => {
+        Vue.$gmapDefaultResizeBus.$emit('resize')
+        console.log('RESIZE')
+      }, 1000)
     },
-    
+    refreshMap() {
+      Vue.$gmapDefaultResizeBus.$emit('resize')
+    },
     deleteMarker(index) {
       this.dialog_model.markers.splice(index, 1)
     },

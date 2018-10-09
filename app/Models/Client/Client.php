@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Client;
 
 use Shared\Model;
-use App\Traits\{HasPhones, HasEmail, HasPhoto};
+use App\Traits\{HasPhones, HasEmail, HasPhoto, Commentable};
 use App\Http\Resources\Request\Collection as RequestCollection;
+use App\Models\{Request, Phone, Contract\Contract};
 
 class Client extends Model
 {
-    use HasPhones, HasEmail, HasPhoto;
+    use HasPhones, HasEmail, HasPhoto, Commentable;
 
     protected $fillable = [
         'first_name', 'last_name', 'middle_name',
@@ -24,7 +25,12 @@ class Client extends Model
 
     public function markers()
     {
-        return $this->hasMany(Marker::class);
+        return $this->hasMany(ClientMarker::class);
+    }
+
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class);
     }
 
     public function getRequests()

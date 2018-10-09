@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Admin;
 
 use Shared\Model;
 use App\Traits\{HasEmail, HasPhoto, HasPhones};

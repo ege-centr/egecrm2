@@ -3,7 +3,7 @@
 namespace App\Console\Commands\Transfer;
 
 use Illuminate\Console\Command;
-use App\Models\{Admin, AdminIp, Email, Phone};
+use App\Models\{Admin\Admin, Admin\AdminIp, Email, Phone};
 use DB;
 
 class Admins extends Command

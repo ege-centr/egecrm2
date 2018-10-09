@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Client;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Marker extends Model
+class ClientMarker extends Model
 {
     public $timestamps = false;
     protected $fillable = ['lat', 'lng'];

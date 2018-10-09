@@ -3,7 +3,7 @@
 use Faker\Generator as Faker;
 
 
-$factory->define(App\Models\ClientPassport::class, function (Faker $faker) {
+$factory->define(App\Models\Client\ClientPassport::class, function (Faker $faker) {
     return [
         'first_name' => $faker->firstNameFemale,
         'last_name' => $faker->lastName,

@@ -13,7 +13,7 @@ class CreateMarkersTable extends Migration
      */
     public function up()
     {
-        Schema::create('markers', function (Blueprint $table) {
+        Schema::create('client_markers', function (Blueprint $table) {
             $table->increments('id');
             $table->float('lat');
             $table->float('lng');
@@ -29,6 +29,6 @@ class CreateMarkersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('markers');
+        Schema::dropIfExists('client_markers');
     }
 }

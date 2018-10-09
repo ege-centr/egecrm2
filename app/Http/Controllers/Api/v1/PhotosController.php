@@ -10,8 +10,7 @@ class PhotosController extends Controller
 {
     public function upload(Request $request)
     {
-        $class = '\\App\\Models\\' . ucfirst($request->class);
-        $model = $class::find($request->entity_id);
+        $model = getMorphModel($request->class, $request->entity_id);
 
         // @todo: delete actual file
         $model->photo()->delete();

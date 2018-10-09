@@ -3,7 +3,7 @@
 use Faker\Generator as Faker;
 use App\Models\Factory\{Branch, Grade};
 
-$factory->define(App\Models\Client::class, function (Faker $faker) {
+$factory->define(App\Models\Client\Client::class, function (Faker $faker) {
     return [
         'first_name' => $faker->firstNameMale,
         'last_name' => $faker->lastName,
