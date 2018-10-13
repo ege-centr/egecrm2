@@ -28,8 +28,9 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         'admins' => 'AdminsController',
         'requests' => 'RequestsController',
         'clients' => 'ClientsController',
-        'contracts' => 'ContractsController',
+        'groups' => 'GroupsController',
         'comments' => 'CommentsController',
+        'teachers' => 'TeachersController',
     ]);
 
     Route::prefix('photo')->group(function() {

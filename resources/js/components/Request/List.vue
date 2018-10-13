@@ -1,26 +1,12 @@
 <template>
   <div>
-    <UserDialog ref='UserDialog' @saved='loadData' />
-    <v-container grid-list-md fluid class="px-0" v-if='data !== null'>
+    <RequestDialog ref='RequestDialog' @saved='loadData' />
+    <v-container grid-list-md fluid class="px-0" v-if='requests !== null'>
       <v-layout row wrap class='relative'>
         <Loader v-if='loading' />
-        <v-flex xs12>
-          <v-data-table :items='data' :item-key='id' hide-headers hide-actions>
-            <template slot="items" slot-scope="{ item }">
-              <td>
-                  {{ item.name }}
-              </td>
-              <td class='text-md-right'>
-                <v-btn flat icon color="black" class='ma-0' @click='show(item.id)'>
-                  <v-icon>more_horiz</v-icon>
-                </v-btn>
-              </td>
-            </template>
-          </v-data-table>
+        <v-flex xs12 v-for='request in requests' :key='request.id'>
+          <RequestItem :item='request' @show='show' />
         </v-flex>
-        <!-- <v-flex xs12 v-for='item in data' :key='item.id'>
-          <UserItem :item='item' @show='show' />
-        </v-flex> -->
       </v-layout>
       <div class="text-xs-center mt-4">
         <v-pagination
@@ -37,10 +23,11 @@
 
 <script>
 
-import UserDialog from '@/components/User/UserDialog'
+import RequestItem from '@/components/Request/Item'
+import RequestDialog from '@/components/Request/Dialog'
 
 export default {
-  components: { UserDialog },
+  components: { RequestItem, RequestDialog },
 
   data() {
     return {
@@ -69,18 +56,18 @@ export default {
   methods: {
     loadData() {
       this.loading = true
-      axios.get(apiUrl(`admins?page=${this.page}`)).then(response => {
+      axios.get(apiUrl(`requests?page=${this.page}`)).then(response => {
         this.collection = response.data
         this.loading = false
       })
     },
     show(id) {
-      this.$refs.UserDialog.show(id)
+      this.$refs.RequestDialog.show(id)
     }
   },
 
   computed: {
-    data() {
+    requests() {
       return this.items || (this.collection !== null ? this.collection.data : null)
     }
   },

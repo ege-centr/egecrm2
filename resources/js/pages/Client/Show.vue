@@ -1,31 +1,6 @@
 <template>
   <div>
-    <v-layout row justify-center v-if='client !== null'>
-      <v-dialog v-model="map_dialog" persistent max-width="1000px">
-        <v-card>
-          <v-card-text>
-            <GmapMap ref='map' @click='mapClick'
-                :center="{lat: 55.7387, lng: 37.6032}"
-                :zoom="12"
-                :options="{
-                  disableDefaultUI: true
-                }"
-                style="width: 100%; height: 600px"
-              >
-              <GmapMarker
-                v-for="(m, index) in client.markers"
-                :key="index"
-                :position="{lat: m.lat, lng: m.lng}"
-              />
-            </GmapMap>
-          </v-card-text>
-          <v-card-actions class='justify-center'>
-            <v-btn color="blue darken-1" flat @click.native="map_dialog = false">Закрыть</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
-    </v-layout>
-
+    <ClientMap ref='ClientMap' v-if='client !== null' :items='client.markers' />
     <div class='headline mb-4'>
       Клиент {{ $route.params.id }}
     </div>
@@ -112,56 +87,7 @@
             <RequestList :items='client.requests' />
         </v-tab-item>
         <v-tab-item>
-          <v-layout wrap>
-            <v-flex md12 v-if='client.contracts.length'>
-              <v-data-table
-                :items="client.contracts"
-                class="elevation-1"
-                hide-actions
-                hide-headers
-              >
-                <template slot='items' slot-scope="{ item }">
-                  <td>
-                    <span v-if='item.id'>
-                      №{{ item.number }} версия {{ item.version }}
-                    </span>
-                  </td>
-                  <td>
-                    от {{ item.date | date }}
-                  </td>
-                  <td>
-                    {{ item.sum }} руб.
-                  </td>
-                  <td>
-                    <span v-if='item.payments.length'>
-                      {{ item.payments.length }} платежа
-                    </span>
-                    <span v-else>
-                      платежей нет
-                    </span>
-                  </td>
-                  <td>
-                    {{ getData('grades', item.grade).title }}
-                  </td>
-                  <td>
-                    <span v-for='subject in item.subjects' :class="{
-                      'error--text': subject.status == subject_statuses[2],
-                      'orange--text': subject.status == subject_statuses[1]
-                    }">
-                      {{ getData('subjects', subject.subject_id).three_letters }}
-                      <span class='grey--text'>{{ subject.lessons }}</span>
-                    </span>
-                  </td>
-                  <td class='text-md-right'>
-                    <span v-if='item.id'>
-                      {{ getData('admins', item.created_admin_id).name }}
-                      {{ item.created_at | date-time }}
-                    </span>
-                  </td>
-                </template>
-              </v-data-table>
-            </v-flex>
-          </v-layout>
+          <ContractList :items='client.contracts' />
         </v-tab-item>
         <v-tab-item>
           <div class='headline'>
@@ -183,17 +109,17 @@
         </v-tab-item>
       </v-tabs-items>
     </div>
-
-
   </div>
 </template>
 
 <script>
 
-import RequestList from '@/components/Request/RequestList'
+import RequestList from '@/components/Request/List'
 import Avatar from '@/components/UI/Avatar'
 import { subject_statuses } from '@/components/Contract/data'
 import Comments from '@/components/Comments'
+import ContractList from '@/components/Contract/List'
+import ClientMap from '@/components/Client/Map'
 
 export default {
   data() {
@@ -206,7 +132,7 @@ export default {
     }
   },
 
-  components: { RequestList, Avatar, Comments },
+  components: { RequestList, Avatar, Comments, ContractList, ClientMap },
 
   created() {
     this.loadData()
@@ -214,20 +140,13 @@ export default {
 
   methods: {
     openMap() {
-      this.map_dialog = true
-      Vue.nextTick(() => {
-        this.$refs.map.resize()
-      })
+      this.$refs.ClientMap.openMap()
     },
-
     loadData() {
       axios.get(apiUrl(`clients/${this.$route.params.id}`)).then(r => {
         this.client = r.data
         this.loading = false
       })
-    },
-    loadTabs() {
-
     },
   }
 }

@@ -59,7 +59,7 @@
   import Menu from '@/components/UI/Menu'
   import Avatar from '@/components/UI/Avatar'
   import ListenToLogout from '@/components/ListenToLogout'
-  import UserDialog from '@/components/User/UserDialog'
+  import UserDialog from '@/components/User/Dialog'
 
   export default {
     async created() {

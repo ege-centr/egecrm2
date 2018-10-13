@@ -170,93 +170,7 @@
           <v-flex md12 class='headline'>
             Договоры
           </v-flex>
-          <v-flex md12 v-if='client.contracts.length'>
-            <v-data-table
-              :items="client.contracts"
-              class="elevation-1"
-              hide-actions
-              hide-headers
-            >
-              <template slot='items' slot-scope="{ item }">
-                <td>
-                  <span v-if='item.id'>
-                    №{{ item.number }} версия {{ item.version }}
-                  </span>
-                </td>
-                <td>
-                  от {{ item.date | date }}
-                </td>
-                <td>
-                  {{ item.sum }} руб.
-                </td>
-                <td>
-                  <span v-if='item.payments.length'>
-                    {{ item.payments.length }} платежа
-                  </span>
-                  <span v-else>
-                    платежей нет
-                  </span>
-                </td>
-                <td>
-                  {{ getData('grades', item.grade).title }}
-                </td>
-                <td>
-                  <span v-for='subject in item.subjects' :class="{
-                    'error--text': subject.status == subject_statuses[2],
-                    'orange--text': subject.status == subject_statuses[1]
-                  }">
-                    {{ getData('subjects', subject.subject_id).three_letters }}
-                    <span class='grey--text'>{{ subject.lessons }}</span>
-                  </span>
-                </td>
-                <td>
-                  <span v-if='item.id'>
-                    {{ getData('admins', item.created_admin_id).name }}
-                    {{ item.created_at | date-time }}
-                  </span>
-                </td>
-                <td class='text-md-right'>
-                  <v-menu left>
-                    <v-btn slot='activator' flat icon color="black" class='ma-0'>
-                      <v-icon>more_horiz</v-icon>
-                    </v-btn>
-                    <v-list dense>
-                      <v-list-tile @click='openContract(item)'>
-                          <v-list-tile-action>
-                            <v-icon>edit</v-icon>
-                          </v-list-tile-action>
-                          <v-list-tile-content>
-                            <v-list-tile-title>Редактировать</v-list-tile-title>
-                          </v-list-tile-content>
-                      </v-list-tile>
-                      <v-list-tile @click='addContractVersion(item)'>
-                          <v-list-tile-action>
-                            <v-icon>file_copy</v-icon>
-                          </v-list-tile-action>
-                          <v-list-tile-content>
-                            <v-list-tile-title>Добавить версию</v-list-tile-title>
-                          </v-list-tile-content>
-                      </v-list-tile>
-                      <v-list-tile @click='openContract(item)'>
-                          <v-list-tile-action>
-                            <v-icon>print</v-icon>
-                          </v-list-tile-action>
-                          <v-list-tile-content>
-                            <v-list-tile-title>Печать</v-list-tile-title>
-                          </v-list-tile-content>
-                      </v-list-tile>
-                    </v-list>
-                  </v-menu>
-                </td>
-              </template>
-            </v-data-table>
-          </v-flex>
-          <v-flex md12 py-0>
-            <v-btn color="blue darken-1" class="ma-0 pl-1" flat @click='openContract()'>
-              <v-icon class="mr-1">add</v-icon>
-              добавить
-            </v-btn>
-          </v-flex>
+          <ContractList :items='client.contracts' :editable='true' />
         </v-layout>
 
         <v-layout>
@@ -268,36 +182,7 @@
         </v-layout>
       </v-container>
 
-      <v-layout row justify-center @shown="refreshMap">
-        <v-dialog v-model="map_dialog" persistent max-width="1200px">
-          <v-card>
-            <v-card-text>
-              <GmapMap ref='map' @click='mapClick'
-                  :center="{lat: 55.7387, lng: 37.6032}"
-                  :zoom="12"
-                  :options="{
-                    disableDefaultUI: true
-                  }"
-                  style="width: 100%; height: 700px"
-                >
-                <GmapMarker
-                  v-for="(m, index) in client.markers"
-                  :key="index"
-                  :position="{lat: m.lat, lng: m.lng}"
-                  :clickable="true"
-                  @dblclick='deleteMarker(index)'
-                />
-              </GmapMap>
-            </v-card-text>
-            <v-card-actions class='justify-center'>
-              <v-btn color="blue darken-1" flat @click.native="map_dialog = false">Закрыть</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-layout>
-
-      <ContractDialog ref='ContractDialog' :item='contract' @saved='contractSaved' />
-
+      <ClientMap :items='client.markers' :editable='true' ref='ClientMap' />
     </div>
   </div>
 </template>
@@ -305,9 +190,9 @@
 <script>
 
 import AvatarLoader from '@/components/AvatarLoader'
-import ContractDialog from '@/components/Contract/ContractDialog'
-import { model_defaults as contract_model_defaults, subject_statuses } from '@/components/Contract/data'
-import { model_defaults as client_model_defaults } from '@/components/Client/data'
+import ContractList from '@/components/Contract/List'
+import ClientMap from '@/components/Client/Map'
+import { model_defaults } from '@/components/Client/data'
 
 export default {
   data() {
@@ -316,70 +201,28 @@ export default {
       saving: false,
       client: null,
       map_dialog: false,
-      contract: contract_model_defaults,
-      subject_statuses
     }
   },
 
-  components: {  AvatarLoader, ContractDialog },
+  components: {  AvatarLoader, ContractList, ClientMap },
 
   created() {
     if (this.$route.params.id) {
       this.loadData()
     } else {
-      this.client = client_model_defaults
+      this.client = model_defaults
     }
   },
 
   methods: {
-    openMap() {
-      this.map_dialog = true
-      setTimeout(() => {
-        Vue.$gmapDefaultResizeBus.$emit('resize')
-        console.log('RESIZE')
-      }, 1000)
-    },
-    refreshMap() {
-      Vue.$gmapDefaultResizeBus.$emit('resize')
-    },
-    deleteMarker(index) {
-      this.client.markers.splice(index, 1)
-    },
-    mapClick(event) {
-      this.client.markers.push({
-        lat: event.latLng.lat(),
-        lng: event.latLng.lng()
-      })
-    },
     loadData() {
       axios.get(apiUrl(`clients/${this.$route.params.id}`)).then(r => {
         this.client = r.data
         this.loading = false
       })
     },
-    openContract(contract) {
-      if (contract === undefined) {
-        contract = clone(contract_model_defaults)
-      }
-      this.contract = clone(contract)
-      this.$refs.ContractDialog.dialog = true
-    },
-    addContractVersion(contract) {
-      this.openContract({
-        ...clone(contract),
-        id: undefined
-      })
-    },
     photoChanged(new_photo) {
       this.client.photo = new_photo
-    },
-    contractSaved(contract) {
-      if (contract.id) {
-        const index = this.client.contracts.findIndex(e => e.id == contract.id)
-        Vue.set(this.client.contracts, index, contract)
-      } else {
-        this.client.contracts.push(contract)
-      }
     },
     async storeOrUpdate() {
       this.saving = true
@@ -394,6 +237,9 @@ export default {
       }
       this.saving = false
     },
+    openMap() {
+      this.$refs.ClientMap.openMap()
+    }
   }
 }
 </script>

@@ -16,7 +16,7 @@
 
 <script>
 
-import RequestList from '@/components/Request/RequestList'
+import RequestList from '@/components/Request/List'
 
 export default {
   components: { RequestList },

@@ -16,7 +16,7 @@
 
 <script>
 
-import UserList from '@/components/User/UserList'
+import UserList from '@/components/User/List'
 
 export default {
   components: { UserList },

@@ -74,6 +74,16 @@ return [
             'collation' => 'utf8_unicode_ci',
         ],
 
+        'egerep' => [
+            'driver'    => 'mysql',
+            'host'      => env('DB_HOST_EGEREP'),
+            'database'  => env('DB_DATABASE_EGEREP'),
+            'username'  => env('DB_USERNAME_EGEREP'),
+            'password'  => env('DB_PASSWORD_EGEREP'),
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', '127.0.0.1'),

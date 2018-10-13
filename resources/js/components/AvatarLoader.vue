@@ -61,7 +61,6 @@ export default {
   props: ['className', 'entityId', 'photo'],
 
   data() {
-    console.log(this.className, this.entityId, this.photo)
     return {
       dialog: false,
       cropping: false

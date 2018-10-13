@@ -26,9 +26,14 @@ function without($array, $without)
 }
 
 
-function getName($entity)
+function getName($entity, $full_name = false)
 {
-    return implode(' ', [$entity->first_name, $entity->last_name]);
+    if ($full_name) {
+        $name_array = [$entity->last_name, $entity->first_name, $entity->middle_name];
+    } else {
+        $name_array = [$entity->first_name, $entity->last_name];
+    }
+    return implode(' ', $name_array);
 }
 
 

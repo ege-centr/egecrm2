@@ -1,13 +1,17 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import routes from './routes'
 import store from '@/store'
 
 Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
-  routes
+  routes: [
+    ...require('./requests').default,
+    ...require('./users').default,
+    ...require('./clients').default,
+    ...require('./groups').default
+  ]
 })
 
 // router.beforeEach((to, from, next) => {
