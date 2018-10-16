@@ -9,8 +9,11 @@ use App\Http\Resources\Client\{Resource, Collection};
 
 class ClientsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if (isset($request->get_all) && $request->get_all) {
+            return resourceCollection(Client::orderByName()->get(), Collection::class);
+        }
         return resourceCollection(Client::orderBy('id', 'desc')->paginate(30), Collection::class);
     }
 

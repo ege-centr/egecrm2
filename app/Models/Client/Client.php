@@ -3,13 +3,13 @@
 namespace App\Models\Client;
 
 use Shared\Model;
-use App\Traits\{HasPhones, HasEmail, HasPhoto, Commentable};
+use App\Traits\{HasPhones, HasEmail, HasPhoto, HasName, Commentable};
 use App\Http\Resources\Request\Collection as RequestCollection;
-use App\Models\{Request, Phone, Contract\Contract};
+use App\Models\{Request, Phone, Contract\Contract, Group\Group, Group\GroupClient};
 
 class Client extends Model
 {
-    use HasPhones, HasEmail, HasPhoto, Commentable;
+    use HasPhones, HasEmail, HasPhoto, HasName, Commentable;
 
     protected $fillable = [
         'first_name', 'last_name', 'middle_name',
@@ -31,6 +31,11 @@ class Client extends Model
     public function contracts()
     {
         return $this->hasMany(Contract::class);
+    }
+
+    public function groups()
+    {
+        return $this->hasManyThrough(Group::class, GroupClient::class, 'client_id', 'id', 'id', 'group_id');
     }
 
     public function getRequests()

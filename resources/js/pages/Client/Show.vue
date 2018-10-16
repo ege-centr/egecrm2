@@ -90,9 +90,7 @@
           <ContractList :items='client.contracts' />
         </v-tab-item>
         <v-tab-item>
-          <div class='headline'>
-            Группы
-          </div>
+          <GroupList :items='client.groups' />
         </v-tab-item>
         <v-tab-item>
           <div class='headline'>
@@ -119,6 +117,7 @@ import Avatar from '@/components/UI/Avatar'
 import { subject_statuses } from '@/components/Contract/data'
 import Comments from '@/components/Comments'
 import ContractList from '@/components/Contract/List'
+import GroupList from '@/components/Group/List'
 import ClientMap from '@/components/Client/Map'
 
 export default {
@@ -132,7 +131,7 @@ export default {
     }
   },
 
-  components: { RequestList, Avatar, Comments, ContractList, ClientMap },
+  components: { RequestList, Avatar, Comments, ContractList, ClientMap, GroupList },
 
   created() {
     this.loadData()

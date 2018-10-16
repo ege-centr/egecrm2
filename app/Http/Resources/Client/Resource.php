@@ -4,6 +4,7 @@ namespace App\Http\Resources\Client;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Contract\Resource as ContractResource;
+use App\Http\Resources\Group\Collection as GroupCollection;
 
 class Resource extends JsonResource
 {
@@ -15,6 +16,7 @@ class Resource extends JsonResource
             'requests' => $this->getRequests(),
             'markers' => $this->markers,
             'contracts' => ContractResource::collection($this->contracts),
+            'groups' => GroupCollection::collection($this->groups),
             'passport' => $this->passport,
             'email' => $this->email,
             'photo' => $this->photo

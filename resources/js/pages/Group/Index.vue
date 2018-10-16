@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-layout>
+    <v-layout class='mb-4'>
       <v-flex xs12 class="text-xs-right">
         <router-link :to="{ name: 'GroupCreate' }" class='black-link'>
           <v-btn small fab color="primary">

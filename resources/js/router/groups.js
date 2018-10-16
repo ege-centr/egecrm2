@@ -12,4 +12,9 @@ export default [
     name: 'GroupCreate',
     component: GroupForm
   },
+  {
+    path: '/groups/:id/edit',
+    name: 'GroupEdit',
+    component: GroupForm
+  },
 ]

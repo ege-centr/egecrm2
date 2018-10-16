@@ -36,6 +36,11 @@ function getName($entity, $full_name = false)
     return implode(' ', $name_array);
 }
 
+function shortName($entity)
+{
+    return $entity->last_name . ' ' . mb_substr($entity->first_name, 0, 1) . '. ' . mb_substr($entity->middle_name, 0, 1) . '.';
+}
+
 
 /**
  * old egecrm connections

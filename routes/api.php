@@ -31,6 +31,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         'groups' => 'GroupsController',
         'comments' => 'CommentsController',
         'teachers' => 'TeachersController',
+        'cabinets' => 'CabinetsController',
     ]);
 
     Route::prefix('photo')->group(function() {
