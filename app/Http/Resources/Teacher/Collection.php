@@ -10,8 +10,7 @@ class Collection extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => getName($this, true),
-            'name_short' => shortName($this)
+            'names' => $this->names
         ];
     }
 }

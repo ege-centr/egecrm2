@@ -67,6 +67,24 @@ a.black-link {
   flex: 1 !important;
 }
 
+.bg-avatar {
+  background-size: cover;
+  background-position: center center;
+}
+
+.item-label {
+  @extend .grey--text; 
+  @extend .text--darken-2;
+  @extend .font-weight-medium;
+  @extend .caption;
+}
+
+.full-width {
+  position: relative;
+  left: -16px;
+  width: calc(100% + 32px);
+}
+
 // .cropper-container {
 //   width: 100% !important;
 // }

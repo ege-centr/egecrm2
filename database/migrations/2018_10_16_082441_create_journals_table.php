@@ -40,7 +40,7 @@ class CreateJournalsTable extends Migration
             $table->boolean('is_unplanned')->default(false);
 
             $table->date('lesson_date');
-            $table->time('lesson_time');
+            $table->time('lesson_time')->nullable();
 
             $table->unsignedInteger('created_email_id');
             $table->timestamps();

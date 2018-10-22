@@ -13,6 +13,14 @@ class Teacher extends Model
     protected $connection = 'egerep';
     protected $table = 'tutors';
 
+    public function getPhotoUrlAttribute()
+    {
+        if (dbEgerep('tutor_data')->where('tutor_id', $this->id)->value('photo_exists')) {
+            return 'http://static.a-perspektiva.ru/img/tutors/' . $this->id . '.' . $this->photo_extension;
+        }
+        return '/img/no-profile-img.jpg';
+    }
+
     public static function boot()
     {
         parent::boot();

@@ -2,7 +2,7 @@
   <div>
     <ClientMap ref='ClientMap' v-if='client !== null' :items='client.markers' />
     <div class='headline mb-4'>
-      Клиент {{ $route.params.id }}
+      Клиент {{ clientId || $route.params.id }}
     </div>
     <v-card class='elevation-3 mb-4'>
       <v-card-text class='relative card-with-loader'>
@@ -14,15 +14,15 @@
               <div>
                 <div class='grey--text text--darken-2 font-weight-medium caption'>Ученик</div>
                 <div class='font-weight-bold'>
-                  {{ client.first_name }}
                   {{ client.last_name }}
+                  {{ client.first_name }}
                   {{ client.middle_name }}
                   ({{ getData('grades', client.grade).title }})
                 </div>
                 <div class='grey--text text--darken-2 font-weight-medium caption mt-3'>Представитель</div>
                 <div class='font-weight-bold'>
-                  {{ client.passport.first_name }}
                   {{ client.passport.last_name }}
+                  {{ client.passport.first_name }}
                   {{ client.passport.middle_name }}
                 </div>
               </div>
@@ -113,7 +113,6 @@
 <script>
 
 import RequestList from '@/components/Request/List'
-import Avatar from '@/components/UI/Avatar'
 import { subject_statuses } from '@/components/Contract/data'
 import Comments from '@/components/Comments'
 import ContractList from '@/components/Contract/List'
@@ -121,6 +120,8 @@ import GroupList from '@/components/Group/List'
 import ClientMap from '@/components/Client/Map'
 
 export default {
+  props: ['clientId'],
+
   data() {
     return {
       tabs: null,
@@ -131,7 +132,7 @@ export default {
     }
   },
 
-  components: { RequestList, Avatar, Comments, ContractList, ClientMap, GroupList },
+  components: { RequestList, Comments, ContractList, ClientMap, GroupList },
 
   created() {
     this.loadData()
@@ -142,7 +143,7 @@ export default {
       this.$refs.ClientMap.openMap()
     },
     loadData() {
-      axios.get(apiUrl(`clients/${this.$route.params.id}`)).then(r => {
+      axios.get(apiUrl(`clients/${this.clientId || this.$route.params.id}`)).then(r => {
         this.client = r.data
         this.loading = false
       })

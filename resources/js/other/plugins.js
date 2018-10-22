@@ -1,4 +1,5 @@
 import Loader from '@/components/UI/Loader'
+import Avatar from '@/components/UI/Avatar'
 
 export const GlobalPlugin = {
   install(Vue, options) {
@@ -18,5 +19,6 @@ export const GlobalPlugin = {
     // }
 
     Vue.component('Loader', Loader)
+    Vue.component('Avatar', Avatar)
   }
 }

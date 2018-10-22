@@ -18,7 +18,7 @@
             <template slot="items" slot-scope="{ item }">
               <td>
                 <router-link :to="{ name: 'ClientShow', params: { id: item.id }}">
-                  {{ item.name }}
+                  {{ item.names.short }}
                 </router-link>
               </td>
               <td class='text-md-right'>

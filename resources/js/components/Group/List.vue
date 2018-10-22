@@ -8,7 +8,9 @@
     >
     <template slot='items' slot-scope="{ item }">
       <td>
-        Группа {{ item.id }}
+        <router-link :to="{ name: 'GroupShow', params: {id: item.id}}">
+          Группа {{ item.id }}
+        </router-link>
       </td>
       <td>
         {{ getData('subjects', item.subject_id).three_letters }}–{{ item.grade_id }}
@@ -23,6 +25,9 @@
           {{ item.clients_count }} ученика
         </span>
         <span v-else>нет учеников</span>
+      </td>
+      <td>
+        {{ item.lessons_count }} занятий
       </td>
       <td>
         {{ item.teacher_name }}

@@ -50,6 +50,11 @@ function dbEgecrm($table)
     return \DB::connection('egecrm')->table($table);
 }
 
+function dbEgerep($table)
+{
+    return \DB::connection('egerep')->table($table);
+}
+
 function getModelClass($class) : string
 {
     return '\\App\\Models\\' . $class;
