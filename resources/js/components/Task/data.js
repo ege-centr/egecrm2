@@ -8,7 +8,7 @@ export const statuses = [
 ]
 export const model_defaults = {
   text: '',
-  status: statuses[0]
+  status: statuses[0].value
 }
 export const TaskDialog = require('./Dialog')
 export const TaskItem = require('./Item')
