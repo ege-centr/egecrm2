@@ -39,30 +39,7 @@
                   <v-flex md3>
                     <v-text-field v-model="dialog_model.email.email" label="Email"></v-text-field>
                   </v-flex>
-
-                  <v-flex md12 v-for="(phone, index) in dialog_model.phones" :key='index'>
-                    <v-layout>
-                      <v-flex md3>
-                        <v-text-field
-                          placeholder='+7 (###) ###-##-##'
-                          v-mask="'+7 (###) ###-##-##'"
-                          v-model="dialog_model.phones[index].phone" :label="`Телефон ${index + 1}`"
-                        >
-                        </v-text-field>
-                      </v-flex>
-                      <v-flex md3>
-                        <v-text-field v-model="dialog_model.phones[index].comment"
-                          :label="`Комментарий к телефону ${index + 1}`">
-                        </v-text-field>
-                      </v-flex>
-                    </v-layout>
-                  </v-flex>
-                  <v-flex md12 class='py-0'>
-                    <v-btn color="blue darken-1" class="ma-0 pl-1" flat @click="dialog_model.phones.push({phone: '', comment: ''})">
-                      <v-icon class="mr-1">add</v-icon>
-                      добавить телефон
-                    </v-btn>
-                  </v-flex>
+                  <Phones :item='dialog_model' />
                 </v-layout>
               </v-flex>
 
@@ -88,7 +65,7 @@
                 </div>
               </v-flex>
               <v-flex md12>
-                <v-btn color="blue darken-1" class="ma-0 pl-1" flat @click="dialog_model.ips.push({})">
+                <v-btn color='blue white--text darken-1' small class='ma-0' @click="dialog_model.ips.push({})">
                   <v-icon class="mr-1">add</v-icon>
                   добавить IP
                 </v-btn>
@@ -132,6 +109,7 @@
 import { model_defaults } from './data'
 import VueCropper from 'vue-cropperjs'
 import AvatarLoader from '@/components/AvatarLoader'
+import Phones from '@/components/Phones'
 
 export default {
   data() {
@@ -145,7 +123,7 @@ export default {
     }
   },
 
-  components: { AvatarLoader },
+  components: { AvatarLoader, Phones },
 
   created() {
     axios.get(apiUrl('rights')).then(r => {

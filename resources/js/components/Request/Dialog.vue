@@ -54,29 +54,7 @@
                   label="Филиалы"
                 ></v-select>
               </v-flex>
-              <v-flex md12 v-for="(phone, index) in dialog_model.phones" :key='index'>
-                <v-layout>
-                  <v-flex md4>
-                    <v-text-field
-                      placeholder='+7 (###) ###-##-##'
-                      v-mask="'+7 (###) ###-##-##'"
-                      v-model="dialog_model.phones[index].phone" :label="`Телефон ${index + 1}`"
-                    >
-                    </v-text-field>
-                  </v-flex>
-                  <v-flex md4>
-                    <v-text-field v-model="dialog_model.phones[index].comment"
-                      :label="`Комментарий к телефону ${index + 1}`">
-                    </v-text-field>
-                  </v-flex>
-                </v-layout>
-              </v-flex>
-              <v-flex md12>
-                <v-btn color="blue darken-1" class="ma-0 pl-1" flat @click="dialog_model.phones.push({phone: '', comment: ''})">
-                  <v-icon class="mr-1">add</v-icon>
-                  добавить телефон
-                </v-btn>
-              </v-flex>
+              <Phones :item='dialog_model' />
               <v-flex md12>
                 <v-textarea v-model="dialog_model.comment" label="Комментарий"></v-textarea>
               </v-flex>
@@ -89,7 +67,7 @@
           <v-btn color="blue darken-1" flat @click.native="dialog = false">Отмена</v-btn>
           <v-btn color="blue darken-1" flat @click.native="storeOrUpdate" :loading='loading'>{{ dialog_model.id ? 'Сохранить' : 'Добавить' }}</v-btn>
         </v-card-actions>
-      </v-card>
+      </v-card> 
     </v-dialog>
   </v-layout>
 </template>
@@ -97,8 +75,11 @@
 <script>
 
 import { request_statuses, model_defaults } from './data'
+import Phones from '@/components/Phones'
 
 export default {
+  components: { Phones },
+
   data() {
     return {
       dialog: false,

@@ -39,7 +39,7 @@ if (token) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
-window.apiUrl = (method) => `${process.env.MIX_API_URL}${method}`
+window.apiUrl = (...paths) => process.env.MIX_API_URL + paths.join('/')
 
 window.clone = (obj) => {
   return JSON.parse(JSON.stringify(obj))

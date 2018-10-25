@@ -124,7 +124,7 @@
                   </v-layout>
                 </div>
                 <div>
-                  <v-btn color="blue darken-1" class="ma-0 pl-1" flat @click='addPayment'>
+                  <v-btn color='blue white--text darken-1' small class='ma-0' @click='addPayment'>
                     <v-icon class="mr-1">add</v-icon>
                     добавить платеж
                   </v-btn>

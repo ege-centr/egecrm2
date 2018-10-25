@@ -3,21 +3,22 @@
 namespace App\Utils;
 
 use Illuminate\Support\Facades\Redis;
+use App\Models\Sms as SmsModel;
 
 class Sms
 {
-	public static function sendToNumbers($numbers, $message, $mass) {
+	public static function sendToNumbers($numbers, $message) {
 		foreach ($numbers as $number) {
-			self::send($number, $message, $mass);
+			self::send($number, $message);
 		}
 	}
 
 
-	public static function send($to, $message, $mass)
+	public static function send($to, $message)
 	{
 		$to = explode(",", $to);
 		foreach ($to as $number) {
-			$number = cleanNumber($number);
+			$number = \App\Utils\Phone::clean($number);
 			$number = trim($number);
 			if (!preg_match('/[0-9]{10}/', $number)) {
 				continue;
@@ -31,14 +32,22 @@ class Sms
 				"mes"		=> $message,
 				"sender"    => "EGE-Repetit",
 			);
-			$result = self::exec(config('sms.host'), $params);
+			$external_id = self::exec(config('sms.host'), $params);
+
+            $sms = SmsModel::create([
+                'text' => $message,
+                'phone' => $number,
+                'external_id' => $external_id
+            ]);
 		}
 
-
-		return $result;
+		return $sms;
 	}
 
-	protected static function exec($url, $params, $mass = false)
+    /**
+     * return external_id
+     */
+	protected static function exec($url, $params)
 	{
 		$ch = curl_init($url);
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -46,6 +55,11 @@ class Sms
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
 		$result = curl_exec($ch);
 		curl_close($ch);
+
+        // Сохраняем отправленную смс
+		$info = explode(",", $result);
+
+        return $info[0];
 	}
 
 

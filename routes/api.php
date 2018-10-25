@@ -32,7 +32,13 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         'comments' => 'CommentsController',
         'teachers' => 'TeachersController',
         'cabinets' => 'CabinetsController',
+        'tasks' => 'TasksController',
     ]);
+
+    Route::prefix('sms')->group(function() {
+        Route::get('/', 'SmsController@index');
+        Route::post('send', 'SmsController@send');
+    });
 
     Route::prefix('photo')->group(function() {
         Route::post('upload', 'PhotosController@upload');

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-slide-y-transition :group='true'>
+    <!-- <v-slide-y-transition :group='true'> -->
       <div class='flex-items align-flex-start mb-3' v-for='comment in comments' :key='comment.id'>
         <Avatar :photo='comment.createdAdmin.photo' :size='50' class='mr-3' />
         <div>
@@ -13,7 +13,7 @@
           </div>
         </div>
       </div>
-    </v-slide-y-transition>
+    <!-- </v-slide-y-transition> -->
     <a v-show='!commenting' class='grey--text' @click='startCommenting'>комментировать</a>
     <div class='flex-items align-center' v-show='commenting'>
       <div>

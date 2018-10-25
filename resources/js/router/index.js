@@ -10,7 +10,8 @@ const router = new Router({
     ...require('./requests').default,
     ...require('./users').default,
     ...require('./clients').default,
-    ...require('./groups').default
+    ...require('./groups').default,
+    ...require('./tasks').default
   ]
 })
 

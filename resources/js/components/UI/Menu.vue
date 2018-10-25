@@ -39,22 +39,22 @@
               <v-list-tile-title>Пользователи</v-list-tile-title>
           </v-list-tile-content>
       </v-list-tile>
-      <v-list-tile @click="">
+      <v-list-tile @click="goTo('TaskIndex')">
+          <v-list-tile-action>
+              <v-icon>check_circle</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+              <v-list-tile-title>Задачи</v-list-tile-title>
+          </v-list-tile-content>
+      </v-list-tile>
+      <!-- <v-list-tile @click="">
           <v-list-tile-action>
               <v-icon>mail</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
               <v-list-tile-title>SMS</v-list-tile-title>
           </v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile @click="">
-          <v-list-tile-action>
-              <v-icon>folder</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-              <v-list-tile-title>Версии договоров</v-list-tile-title>
-          </v-list-tile-content>
-      </v-list-tile>
+      </v-list-tile> -->
     </v-list>
   </v-navigation-drawer>
 </template>

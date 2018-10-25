@@ -83,7 +83,7 @@
     </v-data-table>
 
     <v-flex md12 px-0 v-if='editable'>
-      <v-btn color="blue darken-1" class="ma-0 pl-1" flat @click='openContract()'>
+      <v-btn color='blue white--text darken-1' small class='ma-0' @click='openContract()'>
         <v-icon class="mr-1">add</v-icon>
         добавить
       </v-btn>

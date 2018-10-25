@@ -56,28 +56,8 @@
               <v-flex md3>
                 <v-text-field v-model="client.email.email" label="Email"></v-text-field>
               </v-flex>
-              <v-flex md12 v-for="(phone, index) in client.phones" :key='index'>
-                <v-layout>
-                  <v-flex md3>
-                    <v-text-field
-                      placeholder='+7 (###) ###-##-##'
-                      v-mask="'+7 (###) ###-##-##'"
-                      v-model="client.phones[index].phone" :label="`Телефон ${index + 1}`"
-                    >
-                    </v-text-field>
-                  </v-flex>
-                  <v-flex md3>
-                    <v-text-field v-model="client.phones[index].comment"
-                      :label="`Комментарий к телефону ${index + 1}`">
-                    </v-text-field>
-                  </v-flex>
-                </v-layout>
-              </v-flex>
-              <v-flex md12 pt-0>
-                <v-btn color="blue darken-1" class="ma-0 pl-1" flat @click="client.phones.push({phone: '', comment: ''})">
-                  <v-icon class="mr-1">add</v-icon>
-                  добавить телефон
-                </v-btn>
+              <v-flex md12>
+                <Phones :item='client' />
               </v-flex>
             </v-layout>
           </v-flex>
@@ -192,6 +172,7 @@
 import AvatarLoader from '@/components/AvatarLoader'
 import ContractList from '@/components/Contract/List'
 import ClientMap from '@/components/Client/Map'
+import Phones from '@/components/Phones'
 import { model_defaults } from '@/components/Client/data'
 
 export default {
@@ -204,7 +185,7 @@ export default {
     }
   },
 
-  components: {  AvatarLoader, ContractList, ClientMap },
+  components: {  AvatarLoader, ContractList, ClientMap, Phones },
 
   created() {
     if (this.$route.params.id) {

@@ -36,4 +36,9 @@ class Group extends Model
     {
         return $this->hasMany(Journal::class);
     }
+
+    public function getSchedule()
+    {
+
+    }
 }

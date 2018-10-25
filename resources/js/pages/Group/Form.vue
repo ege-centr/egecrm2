@@ -219,12 +219,27 @@
               <v-container grid-list-xl class="pa-0 ma-0" fluid>
                 <v-layout>
                   <v-flex md7>
-                    <v-date-picker class='mr-3'
-                      v-model="dates"
-                      full-width
-                      landscape
-                      multiple
-                    ></v-date-picker>
+                    <div v-for="date in [
+                      '2018-09-01',
+                      '2018-10-01',
+                      '2018-11-01',
+                      '2018-12-01',
+                      '2019-01-01',
+                      '2019-02-01',
+                      '2019-03-01',
+                      '2019-04-01',
+                      '2019-05-01',
+                      '2019-06-01'
+                    ]">
+                      <v-date-picker class='mr-3' style='box-shadow: none'
+                        v-model="dates"
+                        :picker-date="date"
+                        no-title
+                        full-width
+                        landscape
+                        multiple
+                      ></v-date-picker>
+                    </div>
                   </v-flex>
                   <v-flex md5>
                     <div class="headline">{{ item.lessons.length }} занятий</div>
@@ -354,3 +369,13 @@ export default {
   }
 }
 </script>
+
+<style lang='scss'>
+  .v-picker--landscape {
+    & .v-date-picker-header {
+      & button {
+        display: none;
+      }
+    }
+  }
+</style>
