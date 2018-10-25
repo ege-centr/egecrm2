@@ -15,6 +15,7 @@ class TasksController extends Controller
 
     public function store(Request $request)
     {
+        $request->merge(['status' => $request->status['value']]);
         return Task::create($request->all());
     }
 
@@ -25,6 +26,7 @@ class TasksController extends Controller
 
     public function update(Request $request, $id)
     {
+        $request->merge(['status' => $request->status['value']]);
         Task::find($id)->update($request->all());
     }
 

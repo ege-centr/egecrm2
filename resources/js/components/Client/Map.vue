@@ -1,8 +1,8 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" persistent max-width="1200px">
+    <v-dialog v-model="dialog" max-width="1200px">
       <v-card>
-        <v-card-text>
+        <v-card-text class='pa-0'>
           <GmapMap ref='map' @click='mapClick'
               :center="{lat: 55.7387, lng: 37.6032}"
               :zoom="12"
@@ -20,9 +20,6 @@
             />
           </GmapMap>
         </v-card-text>
-        <v-card-actions class='justify-center'>
-          <v-btn color="blue darken-1" flat @click.native="dialog = false">Закрыть</v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-layout>
