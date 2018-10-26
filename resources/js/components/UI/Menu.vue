@@ -7,54 +7,14 @@
     dark
   >
     <v-list dense>
-      <v-list-tile @click="goTo('Requests')">
-        <v-list-tile-action>
-          <v-icon>view_list</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-          <v-list-tile-title>Заявки</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile @click="goTo('ClientIndex')">
+      <v-list-tile v-for='(m, index) in menu' :key='index' @click="goTo(m.route)">
           <v-list-tile-action>
-              <v-icon>person</v-icon>
+              <v-icon>{{ m.icon }}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-              <v-list-tile-title>Клиенты</v-list-tile-title>
+              <v-list-tile-title>{{ m.label }}</v-list-tile-title>
           </v-list-tile-content>
       </v-list-tile>
-      <v-list-tile @click="goTo('GroupIndex')">
-          <v-list-tile-action>
-              <v-icon>calendar_today</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-              <v-list-tile-title>Группы</v-list-tile-title>
-          </v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile @click="goTo('Users')">
-          <v-list-tile-action>
-              <v-icon>people</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-              <v-list-tile-title>Пользователи</v-list-tile-title>
-          </v-list-tile-content>
-      </v-list-tile>
-      <v-list-tile @click="goTo('TaskIndex')">
-          <v-list-tile-action>
-              <v-icon>check_circle</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-              <v-list-tile-title>Задачи</v-list-tile-title>
-          </v-list-tile-content>
-      </v-list-tile>
-      <!-- <v-list-tile @click="">
-          <v-list-tile-action>
-              <v-icon>mail</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-              <v-list-tile-title>SMS</v-list-tile-title>
-          </v-list-tile-content>
-      </v-list-tile> -->
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -64,6 +24,38 @@
 export default {
   data: () => ({
     drawer: true,
+    menu: [
+      {
+        icon: 'view_list',
+        route: 'Requests',
+        label: 'Заявки'
+      },
+      {
+        icon: 'person',
+        route: 'ClientIndex',
+        label: 'Клиенты'
+      },
+      {
+        icon: 'calendar_today',
+        route: 'GroupIndex',
+        label: 'Группы'
+      },
+      {
+        icon: 'people',
+        route: 'Users',
+        label: 'Пользователи'
+      },
+      {
+        icon: 'check_circle',
+        route: 'TaskIndex',
+        label: 'Задачи'
+      },
+      {
+        icon: 'history',
+        route: 'LogIndex',
+        label: 'Логи'
+      },
+    ]
   }),
   methods: {
     goTo(route) {

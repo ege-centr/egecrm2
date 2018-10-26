@@ -55,7 +55,7 @@ function dbEgerep($table)
     return \DB::connection('egerep')->table($table);
 }
 
-function getModelClass($class) : string
+function getModelClass(string $class) : string
 {
     return '\\App\\Models\\' . $class;
 }

@@ -8,7 +8,7 @@ class Journal extends Model
 {
     protected $table = 'journal';
     protected $fillable = [
-        'teacher_id', 'cabinet_id', 'lesson_date', 'lesson_time', 
+        'teacher_id', 'cabinet_id', 'lesson_date', 'lesson_time',
         'is_cancelled', 'is_unplanned'
     ];
 

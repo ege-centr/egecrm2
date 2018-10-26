@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import store from '@/store'
 
 Vue.use(Router)
 
@@ -11,13 +10,9 @@ const router = new Router({
     ...require('./users').default,
     ...require('./clients').default,
     ...require('./groups').default,
-    ...require('./tasks').default
+    ...require('./tasks').default,
+    ...require('./logs').default,
   ]
 })
-
-// router.beforeEach((to, from, next) => {
-//   if (store.)
-//   next()
-// })
 
 export default router

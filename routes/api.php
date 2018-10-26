@@ -33,6 +33,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         'teachers' => 'TeachersController',
         'cabinets' => 'CabinetsController',
         'tasks' => 'TasksController',
+        'logs' => 'LogsController'
     ]);
 
     Route::prefix('sms')->group(function() {

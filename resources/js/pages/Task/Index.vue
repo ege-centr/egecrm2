@@ -15,7 +15,8 @@
 
     <v-container grid-list-xl fluid px-0>
       <v-layout wrap>
-        <v-flex md12 v-for='item in items' :key='item.id'>
+        <Loader v-if='!items' />
+        <v-flex v-else md12 v-for='item in items' :key='item.id'>
           <TaskItem :item='item' @edit='edit' />
         </v-flex>
       </v-layout>
@@ -34,7 +35,7 @@ export default {
   data() {
     return {
       loading: false,
-      items: []
+      items: null
     }
   },
 

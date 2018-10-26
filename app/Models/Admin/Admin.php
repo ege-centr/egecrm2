@@ -38,7 +38,7 @@ class Admin extends Model
 	 */
 	public function allowedToLogin()
 	{
-        if (app('env') === 'local') {
+        if (app('env') === 'local' || app('env') == 'testing') {
             return (object)[
                 'confirm_by_sms' => false
             ];
