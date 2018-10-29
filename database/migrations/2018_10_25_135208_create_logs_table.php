@@ -18,7 +18,9 @@ class CreateLogsTable extends Migration
             $table->string('table')->index();
             $table->integer('row_id')->index();
             $table->integer('email_id')->index();
-            $table->json('data')->nullable();
+            // @todo:  update mysql version
+            // $table->json('data')->nullable();
+            $table->text('data')->nullable();
             $table->enum('type', ['create', 'update', 'delete'])->index();
             $table->timestamps();
         });
