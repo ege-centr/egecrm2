@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\{Client\Client, Contract\Contract};
+use App\Models\{Payment, Client\Client, Contract\Contract};
 use App\Http\Resources\Client\{Resource, Collection};
 
 class ClientsController extends Controller
@@ -64,6 +64,14 @@ class ClientsController extends Controller
             $contract->subjects()->createMany($c['subjects']);
             $contract->payments()->delete();
             $contract->payments()->createMany($c['payments']);
+        }
+
+        foreach($request->payments as $item) {
+            if (isset($item['id'])) {
+                Payment::find($item['id'])->update($item);
+            } else {
+                $model->payments()->create($item);
+            }
         }
 
         return new Resource($model);

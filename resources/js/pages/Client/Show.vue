@@ -72,7 +72,7 @@
           Группы
         </v-tab>
         <v-tab>
-          Посещаемость
+          Платежи
         </v-tab>
         <v-tab>
           Комментарии
@@ -93,9 +93,7 @@
           <GroupList :items='client.groups' />
         </v-tab-item>
         <v-tab-item>
-          <div class='headline'>
-            Посещаемость
-          </div>
+          <PaymentList :items='client.payments' />
         </v-tab-item>
         <v-tab-item>
           <Comments class-name='Client\Client' :entity-id='client.id' />
@@ -117,6 +115,7 @@ import { subject_statuses } from '@/components/Contract/data'
 import Comments from '@/components/Comments'
 import ContractList from '@/components/Contract/List'
 import GroupList from '@/components/Group/List'
+import PaymentList from '@/components/Payment/List'
 import ClientMap from '@/components/Client/Map'
 
 export default {
@@ -132,7 +131,7 @@ export default {
     }
   },
 
-  components: { RequestList, Comments, ContractList, ClientMap, GroupList },
+  components: { RequestList, Comments, ContractList, ClientMap, GroupList, PaymentList },
 
   created() {
     this.loadData()

@@ -1,11 +1,11 @@
 <template>
   <div>
     <UserDialog ref='UserDialog' @saved='loadData' />
+    <Loader v-if='loading' />
     <v-container grid-list-md fluid class="px-0" v-if='data !== null'>
       <v-layout row wrap class='relative'>
-        <Loader v-if='loading' />
         <v-flex xs12>
-          <v-data-table :items='data' :item-key='id' hide-headers hide-actions>
+          <v-data-table :items='data' item-key='id' hide-headers hide-actions>
             <template slot="items" slot-scope="{ item }">
               <td>
                   {{ item.name }}

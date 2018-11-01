@@ -153,6 +153,13 @@
           <ContractList :items='client.contracts' :editable='true' />
         </v-layout>
 
+        <v-layout wrap>
+          <v-flex md12 class='headline'>
+            Платежи
+          </v-flex>
+        </v-layout>
+        <PaymentList :items='client.payments' :editable='true' />
+
         <v-layout>
           <v-flex md12 justify-center class='text-md-center'>
             <v-btn @click='storeOrUpdate' :loading='saving'>
@@ -171,6 +178,7 @@
 
 import AvatarLoader from '@/components/AvatarLoader'
 import ContractList from '@/components/Contract/List'
+import PaymentList from '@/components/Payment/List'
 import ClientMap from '@/components/Client/Map'
 import Phones from '@/components/Phones'
 import { model_defaults } from '@/components/Client/data'
@@ -185,7 +193,7 @@ export default {
     }
   },
 
-  components: {  AvatarLoader, ContractList, ClientMap, Phones },
+  components: {  AvatarLoader, ContractList, ClientMap, Phones, PaymentList },
 
   created() {
     if (this.$route.params.id) {

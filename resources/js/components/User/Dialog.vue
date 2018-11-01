@@ -1,15 +1,15 @@
 <template>
   <v-layout row justify-center>
     <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-      <v-card v-if='dialog_model !== null'>
+      <v-card v-if='item !== null'>
         <v-toolbar dark color="primary">
           <v-btn icon dark @click.native="dialog = false">
             <v-icon>close</v-icon>
           </v-btn>
-          <v-toolbar-title>{{ dialog_model.id ? 'Редактирование' : 'Добавление' }} пользователя</v-toolbar-title>
+          <v-toolbar-title>{{ item.id ? 'Редактирование' : 'Добавление' }} пользователя</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark flat @click.native="storeOrUpdate" :loading='loading.dialog'>{{ dialog_model.id ? 'Сохранить' : 'Добавить' }}</v-btn>
+            <v-btn dark flat @click.native="storeOrUpdate" :loading='loading.dialog'>{{ item.id ? 'Сохранить' : 'Добавить' }}</v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-card-text>
@@ -21,25 +21,25 @@
 
               <div class='mr-4 mb-5'>
                 <v-flex>
-                  <AvatarLoader class-name='Admin\Admin' :entity-id='dialog_model.id' :photo='dialog_model.photo' @photoChanged='photoChanged' />
+                  <AvatarLoader class-name='Admin\Admin' :entity-id='item.id' :photo='item.photo' @photoChanged='photoChanged' />
                 </v-flex>
               </div>
 
               <v-flex d-flex md8>
                 <v-layout row wrap>
                   <v-flex md3>
-                    <v-text-field v-model="dialog_model.first_name" label="Имя"></v-text-field>
+                    <v-text-field v-model="item.first_name" label="Имя"></v-text-field>
                   </v-flex>
                   <v-flex md3>
-                    <v-text-field v-model="dialog_model.last_name" label="Фамилия"></v-text-field>
+                    <v-text-field v-model="item.last_name" label="Фамилия"></v-text-field>
                   </v-flex>
                   <v-flex md3>
-                    <v-text-field v-model="dialog_model.first_name" label="Отчество"></v-text-field>
+                    <v-text-field v-model="item.first_name" label="Отчество"></v-text-field>
                   </v-flex>
-                  <v-flex md3>
-                    <v-text-field v-model="dialog_model.email.email" label="Email"></v-text-field>
-                  </v-flex>
-                  <Phones :item='dialog_model' />
+                  <!-- <v-flex md3>
+                    <v-text-field v-model="item.email.email" label="Email"></v-text-field>
+                  </v-flex> -->
+                  <Phones :item='item' />
                 </v-layout>
               </v-flex>
 
@@ -48,8 +48,8 @@
                 IP адреса
               </v-flex>
               <v-flex md12 py-0>
-                  <div v-for="(ip, index) in dialog_model.ips" :key='ip.id' class='ip-item'>
-                    <v-btn flat icon color="red" class='ma-0 mr-3' @click='dialog_model.ips.splice(index, 1)'>
+                  <div v-for="(ip, index) in item.ips" :key='ip.id' class='ip-item'>
+                    <v-btn flat icon color="red" class='ma-0 mr-3' @click='item.ips.splice(index, 1)'>
                       <v-icon>remove</v-icon>
                     </v-btn>
                     <v-text-field v-model="ip.ip_from"
@@ -65,7 +65,7 @@
                 </div>
               </v-flex>
               <v-flex md12>
-                <v-btn color='blue white--text darken-1' small class='ma-0' @click="dialog_model.ips.push({})">
+                <v-btn color='blue white--text darken-1' small class='ma-0' @click="item.ips.push({})">
                   <v-icon class="mr-1">add</v-icon>
                   добавить IP
                 </v-btn>
@@ -81,7 +81,7 @@
                    :label="rights.all[right]"
                    color="success"
                    hide-details
-                   :input-value='dialog_model.rights.indexOf(right) !== -1'
+                   :input-value='item.rights.indexOf(right) !== -1'
                  ></v-switch>
                 </div>
               </v-flex>
@@ -92,7 +92,7 @@
                    :label="rights.all[right]"
                    color="success"
                    hide-details
-                   :input-value='dialog_model.rights.indexOf(right) !== -1'
+                   :input-value='item.rights.indexOf(right) !== -1'
                  ></v-switch>
                 </div>
               </v-flex>
@@ -117,7 +117,7 @@ export default {
       dialog: false,
       crop_dialog: false,
       cropping: false,
-      dialog_model: {},
+      item: {},
       loading: false,
       rights: null
     }
@@ -134,14 +134,14 @@ export default {
   methods: {
     add() {
       this.dialog = true
-      this.dialog_model = {...model_defaults}
+      this.item = {...model_defaults}
     },
     async storeOrUpdate() {
       this.loading = true
-      if (this.dialog_model.id) {
-        await axios.put(apiUrl(`admins/${this.dialog_model.id}`), this.dialog_model)
+      if (this.item.id) {
+        await axios.put(apiUrl(`admins/${this.item.id}`), this.item)
       } else {
-        await axios.post(apiUrl('admins'), this.dialog_model)
+        await axios.post(apiUrl('admins'), this.item)
       }
       this.$emit('saved')
       this.loading = false
@@ -149,12 +149,12 @@ export default {
     },
     show(id) {
       axios.get(apiUrl(`admins/${id}`)).then(r => {
-        this.dialog_model = r.data
+        this.item = r.data
         this.dialog = true
       })
     },
     photoChanged(new_photo) {
-      this.dialog_model.photo = new_photo
+      this.item.photo = new_photo
     }
   }
 }

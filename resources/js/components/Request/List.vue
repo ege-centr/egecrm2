@@ -1,9 +1,10 @@
 <template>
   <div>
     <RequestDialog ref='RequestDialog' @saved='loadData' />
+    <Loader v-if='loading' />
+    <Filters :items='filters' @updated='loadData' />
     <v-container grid-list-md fluid class="px-0" v-if='requests !== null'>
       <v-layout row wrap class='relative'>
-        <Loader v-if='loading' />
         <v-flex xs12 v-for='request in requests' :key='request.id'>
           <RequestItem :item='request' @show='show' />
         </v-flex>
@@ -25,15 +26,18 @@
 
 import RequestItem from '@/components/Request/Item'
 import RequestDialog from '@/components/Request/Dialog'
+import Filters from '@/components/Filters'
+import { filters } from './data'
 
 export default {
-  components: { RequestItem, RequestDialog },
+  components: { RequestItem, RequestDialog, Filters },
 
   data() {
     return {
       page: 1,
       loading: false,
-      collection: null
+      collection: null,
+      filters
     }
   },
 
@@ -54,9 +58,9 @@ export default {
   },
 
   methods: {
-    loadData() {
+    loadData(filters = '') {
       this.loading = true
-      axios.get(apiUrl(`requests?page=${this.page}`)).then(response => {
+      axios.get(apiUrl(`requests?page=${this.page}${filters}`)).then(response => {
         this.collection = response.data
         this.loading = false
       })

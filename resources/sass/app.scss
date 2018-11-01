@@ -105,6 +105,13 @@ textarea {
   padding: 16px !important;
 }
 
+.pointer {
+  cursor: pointer !important;
+  & > * {
+    cursor: pointer !important;
+  }
+}
+
 // .v-dialog--scrollable {
 //   & .v-card__text {
 //     &:before {

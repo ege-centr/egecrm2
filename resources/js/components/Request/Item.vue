@@ -1,6 +1,5 @@
 <template>
-  <v-hover>
-    <v-card slot-scope="{ hover }" :class="`elevation-${hover ? 8 : 3}`" class='mb-3'>
+    <v-card class="elevation-3 mb-3">
       <v-card-text>
         <v-layout row>
           <v-flex style='width: 60%'>
@@ -62,7 +61,6 @@
         <Comments class-name='Request' :entity-id='item.id' />
       </v-card-text>
     </v-card>
-  </v-hover>
 </template>
 
 <script>

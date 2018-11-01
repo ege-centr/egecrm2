@@ -9,11 +9,11 @@ class Resource extends JsonResource
 {
     public function toArray($request)
     {
-        return array_merge([
+        return [
             'id' => $this->id,
             'text' => $this->text,
             'createdAdmin' => new AdminResource($this->createdAdmin),
             'created_at' => $this->created_at->toDateTimeString(),
-        ]);
+        ];
     }
 }

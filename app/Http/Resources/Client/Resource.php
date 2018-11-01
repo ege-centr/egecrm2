@@ -15,6 +15,7 @@ class Resource extends JsonResource
             'name' => getName($this),
             'requests' => $this->getRequests(),
             'markers' => $this->markers,
+            'payments' => $this->payments,
             'contracts' => ContractResource::collection($this->contracts),
             'groups' => GroupCollection::collection($this->groups),
             'passport' => $this->passport,

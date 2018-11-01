@@ -27,6 +27,5 @@ class LoginController extends Controller
     public function logout()
     {
         User::logout();
-        return redirect('/');
     }
 }

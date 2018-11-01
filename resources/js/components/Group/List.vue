@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Loader v-if='loading' />
     <v-data-table v-if='getItems && getItems.length'
       class="elevation-1"
       hide-actions

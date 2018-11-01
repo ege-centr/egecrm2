@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
-use App\Models\Factory\{Branch, Subject, Grade};
+use App\Models\Factory\{Branch, Subject, Grade, Year};
 use App\Models\Admin\Admin;
 use App\Http\Resources\Admin\Collection as AdminCollection;
 
@@ -17,7 +17,9 @@ use App\Http\Resources\Admin\Collection as AdminCollection;
 */
 
 Route::namespace('Api\v1')->prefix('v1')->group(function() {
+
     Route::post('login', 'LoginController@login');
+    Route::get('logout', 'LoginController@logout');
 
     Route::prefix('data')->group(function() {
         Route::post('enum', 'DataController@enum');
@@ -33,8 +35,11 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         'teachers' => 'TeachersController',
         'cabinets' => 'CabinetsController',
         'tasks' => 'TasksController',
-        'logs' => 'LogsController'
+        'logs' => 'LogsController',
+        'payments' => 'PaymentsController',
     ]);
+
+    Route::resource('settings', 'SettingsController')->only(['index', 'store']);
 
     Route::prefix('sms')->group(function() {
         Route::get('/', 'SmsController@index');
@@ -52,9 +57,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
             'branches' => Branch::all(),
             'subjects' => Subject::all(),
             'grades' => Grade::all(),
-            'years' => array_map(function($year) {
-                return ['value' => $year, 'text' => $year . '–' . ($year + 1) . ' уч. г.'];
-            }, [2015, 2016, 2017, 2018]),
+            'years' => Year::all(),
             'admins' => AdminCollection::collection(Admin::all())
         ]);
     });

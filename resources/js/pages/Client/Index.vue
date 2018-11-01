@@ -1,5 +1,6 @@
 <template lang="html">
   <div>
+    <Loader v-if='loading' />
     <v-layout>
       <v-flex xs12 class="text-xs-right">
         <router-link :to="{ name: 'ClientCreate' }" class='black-link'>
@@ -12,9 +13,8 @@
     </v-layout>
     <v-container grid-list-md fluid class="px-0" v-if='collection !== null'>
       <v-layout row wrap class='relative'>
-        <Loader v-if='loading' />
         <v-flex xs12>
-          <v-data-table :items='collection.data' :item-key='id' hide-headers hide-actions>
+          <v-data-table :items='collection.data' item-key='id' hide-headers hide-actions>
             <template slot="items" slot-scope="{ item }">
               <td>
                 <router-link :to="{ name: 'ClientShow', params: { id: item.id }}">

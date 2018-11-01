@@ -5,7 +5,7 @@ namespace App\Models\Client;
 use Shared\Model;
 use App\Traits\{HasPhones, HasEmail, HasPhoto, HasName, Commentable};
 use App\Http\Resources\Request\Collection as RequestCollection;
-use App\Models\{Request, Phone, Contract\Contract, Group\Group, Group\GroupClient};
+use App\Models\{Request, Phone, Payment, Contract\Contract, Group\Group, Group\GroupClient};
 
 class Client extends Model
 {
@@ -36,6 +36,11 @@ class Client extends Model
     public function groups()
     {
         return $this->hasManyThrough(Group::class, GroupClient::class, 'client_id', 'id', 'id', 'group_id');
+    }
+
+    public function payments()
+    {
+        return $this->morphMany(Payment::class, 'entity');
     }
 
     public function getRequests()

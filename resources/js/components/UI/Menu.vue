@@ -51,6 +51,16 @@ export default {
         label: 'Задачи'
       },
       {
+        icon: 'attach_money',
+        route: 'PaymentIndex',
+        label: 'Платежи'
+      },
+      {
+        icon: 'multiline_chart',
+        route: 'RecommendedPrices',
+        label: 'Рекомендованные цены'
+      },
+      {
         icon: 'history',
         route: 'LogIndex',
         label: 'Логи'
