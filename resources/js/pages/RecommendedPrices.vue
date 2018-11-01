@@ -11,7 +11,7 @@
       <div class='mt-3' style='width: 300px' v-for='grade in [9, 10, 11, 14]' :key='grade'>
           <v-text-field
             hide-details
-            :label="getData('grades', grade).title"
+            :label="grade == 14 ? 'экстернат' : grade + ' класс'"
             v-model='data[selected_year][grade]'></v-text-field>
       </div>
     </div>
