@@ -282,4 +282,13 @@ class Clients extends Command
             case 3: return 'active';
         }
     }
+
+    public function getAdminId($value)
+    {
+        // TODO: проверить связи
+        if (\App\Models\Admin\Admin::whereId($value)->exists()) {
+            return $value;
+        }
+        return 69;
+    }
 }
