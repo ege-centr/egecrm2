@@ -60,7 +60,7 @@ class Requests extends Command
                 'responsible_admin_id' => $item->id_user ?: null,
                 'created_admin_id' => $item->id_user_created ?: null,
                 'google_id' => $item->id_google,
-                'name' => $item->name,
+                'name' => $item->name ?: '',
                 'branches' => $item->branches,
                 'subjects' => $item->subjects,
                 'comment' => $item->comment ?: '',
