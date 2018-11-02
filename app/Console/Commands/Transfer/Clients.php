@@ -182,7 +182,7 @@ class Clients extends Command
                     'bill_number' => $payment->document_number ?: null,
                     'created_at' => $payment->first_save_date,
                     'updated_at' => $payment->first_save_date,
-                    'created_admin_id' => $payment->id_user,
+                    'created_admin_id' => $this->getAdminId($payment->id_user),
                     'entity_type' => Client::class,
                     'entity_id' => $id,
                 ]);
@@ -196,7 +196,7 @@ class Clients extends Command
                 foreach($versions as $index => $version) {
                     $contract_id = DB::table('contracts')->insertGetId([
                         'client_id' => $id,
-                        'created_admin_id' => $version->id_user,
+                        'created_admin_id' => $this->getAdminId($version->id_user),
                         'year' => $contract->year,
                         'grade' => $contract->grade,
                         'sum' => $version->sum,
@@ -236,7 +236,7 @@ class Clients extends Command
                 $comments = dbEgecrm('comments')->where('place', 'STUDENT')->where('id_place', $item->id)->get();
                 foreach($comments as $comment) {
                     DB::table('comments')->insert([
-                        'created_admin_id' => $comment->id_user,
+                        'created_admin_id' => $this->getAdminId($comment->id_user),
                         'text' => $comment->comment,
                         'entity_type' => Client::class,
                         'entity_id' => $id,
