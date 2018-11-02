@@ -10,10 +10,13 @@
         <v-layout wrap v-if='item !== null'>
           <v-flex md12>
             <div class='flex-items'>
-              <v-avatar :size='100' class='bg-avatar mr-4' :style="{backgroundImage: `url(${item.teacher.photo_url})`}"></v-avatar>
+              <v-avatar v-if='item.teacher' :size='100' class='bg-avatar mr-4' :style="{backgroundImage: `url(${item.teacher.photo_url})`}"></v-avatar>
+              <v-avatar v-else size='100' class='mr-4'>
+                <img src="/img/no-profile-img.jpg">
+              </v-avatar>
               <div class='mr-5 pr-5'>
                 <div class='item-label'>Преподаватель</div>
-                {{ item.teacher.names.full }}
+                {{ item.teacher ? item.teacher.names.full : 'Не установлен' }}
               </div>
               <div class='mr-5 pr-5'>
                 <div class='item-label'>Предмет и класс</div>
@@ -32,7 +35,8 @@
                 <div class='item-label'>Статус</div>
                 <span>{{ item.is_archived ? 'Заархивирована' : 'Активная' }}</span>
                 <div class='mt-3 item-label'>Уровень</div>
-                <span>Сильная</span>
+                <span v-if='item.level' class='text-capitalize'>{{ levels.find(e => e.value == item.level).text }}</span>
+                <span v-else>Не установлен</span>
               </div>
               <div class='f-1 text-md-right align-center d-flex'>
                 <router-link :to="{name: 'GroupEdit', params: { id: item.id }}">
@@ -82,7 +86,7 @@
 
 <script>
 
-import { url } from '@/components/Group/data'
+import { url, levels } from '@/components/Group/data'
 import ClientShow from '@/pages/Client/Show'
 
 export default {
@@ -92,6 +96,7 @@ export default {
     return {
       loading: true,
       item: null,
+      levels,
       opened_clients: []
     }
   },
@@ -99,7 +104,7 @@ export default {
   created() {
     this.loadData()
   },
-  
+
   methods: {
     loadData() {
       axios.get(apiUrl(`${url}/${this.$route.params.id}`)).then(r => {

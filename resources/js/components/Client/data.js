@@ -1,3 +1,5 @@
+export const API_URL = 'clients'
+
 export const model_defaults = {
   markers: [],
   contracts: [],

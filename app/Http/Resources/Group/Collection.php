@@ -13,9 +13,9 @@ class Collection extends JsonResource
             'grade_id' => $this->grade_id,
             'subject_id' => $this->subject_id,
             'cabinet' => $this->cabinet,
-            'teacher_name' => $this->teacher->names->abbreviation,
+            'teacher_name' => $this->teacher_id ? $this->teacher->names->abbreviation : 'не установлен',
             'clients_count' => count($this->clients),
-            'lessons_count' => count($this->lessons) 
+            'lessons_count' => count($this->lessons)
         ];
     }
 }

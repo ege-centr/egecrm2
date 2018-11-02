@@ -47,6 +47,8 @@
 
 <script>
 
+import { API_URL } from '@/components/Client/data'
+
 export default {
   data() {
     return {
@@ -69,7 +71,7 @@ export default {
   methods: {
     loadData() {
       this.loading = true
-      axios.get(apiUrl(`clients?page=${this.page}`)).then(response => {
+      axios.get(apiUrl(`${API_URL}?page=${this.page}`)).then(response => {
         this.collection = response.data
         this.loading = false
       })

@@ -5,12 +5,20 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Task;
+use App\Http\Resources\Task\Resource as TaskResource;
 
 class TasksController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return Task::orderBy('id', 'desc')->get()->all();
+        $query = Task::orderBy('id', 'desc');
+        if (isset($request->status)) {
+            $query->whereStatus($request->status);
+        }
+        if (isset($request->text)) {
+            $query->where('text', 'like', '%' . $request->text . '%');
+        }
+        return TaskResource::collection($query->paginate(10));
     }
 
     public function store(Request $request)

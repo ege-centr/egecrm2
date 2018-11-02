@@ -9,7 +9,7 @@ class Group extends Model
 {
     protected $fillable = [
         'teacher_id', 'head_teacher_id', 'subject_id', 'grade_id', 'teacher_price',
-        'duration', 'year', 'is_archived', 'is_ready_to_start', 'cabinet_id'
+        'duration', 'year', 'is_archived', 'is_ready_to_start', 'cabinet_id', 'level'
     ];
 
     public function clients()

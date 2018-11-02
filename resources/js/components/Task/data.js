@@ -10,5 +10,9 @@ export const model_defaults = {
   text: '',
   status: statuses[0].value
 }
+export const filters = [
+  {label: 'Статус', field: 'status', type: 'select', options: statuses},
+  {label: 'Текст задачи', field: 'text', type: 'text'}
+]
 export const TaskDialog = require('./Dialog')
 export const TaskItem = require('./Item')

@@ -20,7 +20,7 @@ class CreateClientsTable extends Migration
             $table->string('last_name');
             $table->string('middle_name');
 
-            $table->unsignedInteger('head_tutor_id')->nullable()->default(null);
+            $table->unsignedInteger('head_teacher_id')->nullable()->default(null);
             $table->unsignedTinyInteger('grade')->nullable()->default(null);
             $table->unsignedSmallInteger('year')->nullable()->default(null);
             $table->string('branches');

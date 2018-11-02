@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Loader v-if='loading' />
     <v-layout>
       <v-flex xs12 class="text-xs-right">
         <a class='black-link' @click='add'>
@@ -11,36 +12,54 @@
       </v-flex>
     </v-layout>
 
+    <Filters :items='filters' @updated='loadData' />
+
     <TaskDialog ref='TaskDialog' @updated='loadData' />
 
-    <v-container grid-list-xl fluid px-0>
+    <v-container grid-list-xl fluid px-0  v-if='collection !== null'>
       <v-layout wrap>
-        <Loader v-if='!items' />
-        <v-flex v-else md12 v-for='item in items' :key='item.id'>
+        <v-flex md12 v-for='item in collection.data' :key='item.id'>
           <TaskItem :item='item' @edit='edit' />
         </v-flex>
       </v-layout>
+      <div class="text-xs-center mt-4">
+        <v-pagination
+          v-if='collection.meta.last_page > 1'
+          v-model="page"
+          :length="collection.meta.last_page"
+          :total-visible="7"
+          circle
+        ></v-pagination>
+     </div>
     </v-container>
   </div>
 </template>
 
 <script>
 
-import { TaskDialog, TaskItem, url } from '@/components/Task/data'
-
+import { TaskDialog, TaskItem, url, filters } from '@/components/Task/data'
+import Filters from '@/components/Filters'
 
 export default {
-  components: { TaskDialog, TaskItem },
+  components: { TaskDialog, TaskItem, Filters },
 
   data() {
     return {
+      page: 1,
       loading: false,
-      items: null
+      collection: null,
+      filters
     }
   },
 
   created() {
     this.loadData()
+  },
+
+  watch: {
+    page() {
+        this.loadData()
+    }
   },
 
   methods: {
@@ -51,10 +70,10 @@ export default {
       this.$refs.TaskDialog.item = item
       this.$refs.TaskDialog.dialog = true
     },
-    loadData() {
+    loadData(filters = '') {
       this.loading = true
-      axios.get(apiUrl(`${url}`)).then(response => {
-        this.items = response.data
+      axios.get(apiUrl(`${url}?page=${this.page}${filters}`)).then(response => {
+        this.collection = response.data
         this.loading = false
       })
     }
