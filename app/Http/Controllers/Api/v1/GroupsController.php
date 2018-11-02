@@ -11,7 +11,7 @@ class GroupsController extends Controller
 {
     public function index()
     {
-        return GroupCollection::collection(Group::paginate(30));
+        return GroupCollection::collection(Group::orderBy('id', 'desc')->paginate(30));
     }
 
     public function store(Request $request)
