@@ -44,9 +44,8 @@ class Journal extends Command
 
         $egecrm_items = dbEgecrm('visit_journal')
             ->when($take != 'all', function ($query) use ($take) {
-                return $query->take($take);
+                return $query->take($take)->orderBy('id', 'desc');
             })
-            ->orderBy('id', 'desc')
             ->get();
 
         $bar = $this->output->createProgressBar(count($egecrm_items));

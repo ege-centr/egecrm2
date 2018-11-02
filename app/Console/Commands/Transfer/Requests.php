@@ -47,9 +47,8 @@ class Requests extends Command
         $egecrm_items = dbEgecrm('requests')
             ->where('id_status', '<>', 4)
             ->when($take != 'all', function ($query) use ($take) {
-                return $query->take($take);
+                return $query->take($take)->orderBy('id', 'desc');
             })
-            ->orderBy('id', 'desc')
             ->get();
 
         $bar = $this->output->createProgressBar(count($egecrm_items));

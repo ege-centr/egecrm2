@@ -55,9 +55,8 @@ class Clients extends Command
         $egecrm_items = dbEgecrm('students')
             ->whereNotNull('first_name')
             ->when($take != 'all', function ($query) use ($take) {
-                return $query->take($take);
+                return $query->take($take)->orderBy('id', 'desc');
             })
-            ->orderBy('id', 'desc')
             ->get();
 
         $bar = $this->output->createProgressBar(count($egecrm_items));
