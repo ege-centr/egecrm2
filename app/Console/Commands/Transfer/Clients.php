@@ -70,7 +70,7 @@ class Clients extends Command
                 'head_teacher_id' => $item->id_head_teacher ?: null,
                 'grade' => $item->grade,
                 'year' => $item->year,
-                'branches' => $item->branches,
+                'branches' => $item->branches ?: '',
                 'old_student_id' => $item->id,
                 'created_at' => getCurrentTime(),
                 'updated_at' => getCurrentTime()
@@ -215,7 +215,7 @@ class Clients extends Command
                             'contract_id' => $contract_id,
                             'subject_id' => $cs->id_subject,
                             'lessons' => $cs->count,
-                            'lessons_planned' => $cs->count_program,
+                            'lessons_planned' => $cs->count_program ?: 0,
                             'status' => $this->getSubjectStatus($cs->status),
                         ]);
                     }

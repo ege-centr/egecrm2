@@ -21,8 +21,8 @@ class CreateContractSubjectsTable extends Migration
 
             $table->smallInteger('subject_id')->unsigned();
 
-            $table->smallInteger('lessons')->unsigned();
-            $table->smallInteger('lessons_planned')->unsigned();
+            $table->smallInteger('lessons')->unsigned()->nullable();
+            $table->smallInteger('lessons_planned')->unsigned()->nullable();
 
             $table->enum('status', ['active', 'to_be_terminated', 'terminated'])->default('active');
         });
