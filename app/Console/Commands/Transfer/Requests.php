@@ -56,8 +56,8 @@ class Requests extends Command
             // $new_item = Request::create((array)$egecrm_item);
             $id = DB::table('requests')->insertGetId([
                 'status' => $this->getStatus($item->id_status),
-                'responsible_admin_id' => $item->id_user ?: null,
-                'created_admin_id' => $item->id_user_created ?: null,
+                'responsible_admin_id' => $item->id_user ? $this->getAdminId($item->id_user) : null,
+                'created_admin_id' => $item->id_user_created ? $this->getAdminId($item->id_user_created) : null,
                 'google_id' => $item->id_google,
                 'name' => $item->name ?: '',
                 'branches' => $item->branches ?: '',
@@ -83,7 +83,7 @@ class Requests extends Command
             $comments = dbEgecrm('comments')->where('place', 'REQUEST')->where('id_place', $item->id)->get();
             foreach($comments as $comment) {
                 DB::table('comments')->insert([
-                    'created_admin_id' => $comment->id_user,
+                    'created_admin_id' => $this->getAdminId($comment->id_user),
                     'text' => $comment->comment,
                     'entity_type' => Request::class,
                     'entity_id' => $id,
@@ -112,5 +112,14 @@ class Requests extends Command
             case 2: case 7: case 5: return 'finished';
             default: return 'new';
         }
+    }
+
+    public function getAdminId($value)
+    {
+        // TODO: проверить связи
+        if (\App\Models\Admin\Admin::whereId($value)->exists()) {
+            return $value;
+        }
+        return 69;
     }
 }
