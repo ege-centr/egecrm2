@@ -84,7 +84,7 @@ class Groups extends Command
             $comments = dbEgecrm('comments')->where('place', 'GROUP')->where('id_place', $item->id)->get();
             foreach($comments as $comment) {
                 DB::table('comments')->insert([
-                    'created_admin_id' => $comment->id_user,
+                    'created_admin_id' => $this->getAdminId($comment->id_user),
                     'text' => $comment->comment,
                     'entity_type' => Group::class,
                     'entity_id' => $id,
@@ -107,5 +107,14 @@ class Groups extends Command
             case 4: return 'special';
             default: return null;
         }
+    }
+
+    public function getAdminId($value)
+    {
+        // TODO: проверить связи
+        if (\App\Models\Admin\Admin::whereId($value)->exists()) {
+            return $value;
+        }
+        return 69;
     }
 }
