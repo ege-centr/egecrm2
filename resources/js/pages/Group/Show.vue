@@ -23,7 +23,7 @@
                 <span class='text-capitalize'>{{ getData('subjects', item.subject_id).name }}</span>
                 <span v-if='item.grade_id'>, {{ getData('grades', item.grade_id).title }}</span>
                 <div class='mt-3 item-label'>Расписание</div>
-                <span>ПН 16:30</span>
+                <span>{{ item.schedule.label }}</span>
               </div>
               <div class='mr-5 pr-5'>
                 <div class='item-label'>Учебный год</div>
@@ -47,17 +47,17 @@
               </div>
             </div>
           </v-flex>
-          <v-flex md12 class='mt-5'>
+          <v-flex md12 class='mt-5' v-if='item.clients.length'>
             <v-data-table
               class="full-width"
               hide-actions
               hide-headers
               :items='item.clients'
             >
-              <template slot='items' slot-scope="{ item }">
+              <template slot='items' slot-scope="props">
                 <td width='200'>
-                  <a @click='openClient(item.id)'>
-                    {{ item.names.short }}
+                  <a @click='openClient(props.item.id)'>
+                    {{ props.item.names.short }}
                   </a>
                 </td>
                 <td width='200'>
@@ -68,6 +68,9 @@
                 </td>
                 <td width='200'>
                   ТУР
+                </td>
+                <td>
+                  <Bars :group-bars='item.schedule.bars' :client-bars='props.item.bars' />
                 </td>
                 <td class='text-md-right' style='padding-right: 16px'>
                   <v-btn flat icon color="black" class='ma-0'>
@@ -88,9 +91,10 @@
 
 import { url, levels } from '@/components/Group/data'
 import ClientShow from '@/pages/Client/Show'
+import Bars from '@/components/Group/Bars'
 
 export default {
-  components: { ClientShow },
+  components: { ClientShow, Bars },
 
   data() {
     return {

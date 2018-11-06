@@ -58,4 +58,24 @@ class Client extends Model
             ->get();
         return resourceCollection($requests, RequestCollection::class);
     }
+
+    public function getBars()
+    {
+        $client_bars = null;
+        foreach($this->groups as $group) {
+            $group_bars = $group->getSchedule()['bars'];
+            if ($client_bars === null) {
+                $client_bars = $group_bars;
+            } else {
+                foreach($group_bars as $i => $bars) {
+                    foreach($bars as $j => $bar) {
+                        if ($bar !== null && $client_bars[$i][$j] === null) {
+                            $client_bars[$i][$j] = $bar;
+                        }
+                    }
+                }
+            }
+        }
+        return $client_bars;
+    }
 }

@@ -219,21 +219,11 @@
               <v-container grid-list-xl class="pa-0 ma-0" fluid>
                 <v-layout>
                   <v-flex md7>
-                    <div v-for="date in [
-                      '2018-09-01',
-                      '2018-10-01',
-                      '2018-11-01',
-                      '2018-12-01',
-                      '2019-01-01',
-                      '2019-02-01',
-                      '2019-03-01',
-                      '2019-04-01',
-                      '2019-05-01',
-                      '2019-06-01'
-                    ]">
+                    <div v-for="date in calendar_months">
                       <v-date-picker class='mr-3' style='box-shadow: none'
                         v-model="dates"
                         :picker-date="date"
+                        first-day-of-week='1'
                         no-title
                         full-width
                         landscape
@@ -354,6 +344,7 @@ export default {
       this.item.lessons.splice(this.editing_lesson_index, 1, this.lesson)
     }
   },
+
   watch: {
     dates(newVal, oldVal) {
       if (this.item) {
@@ -365,6 +356,23 @@ export default {
           this.item.lessons = this.item.lessons.filter(e => e.lesson_date != deleted_date)
         }
       }
+    }
+  },
+
+  computed: {
+    calendar_months() {
+      return [
+        `${this.item.year}-09-01`,
+        `${this.item.year}-10-01`,
+        `${this.item.year}-11-01`,
+        `${this.item.year}-12-01`,
+        `${this.item.year + 1}-01-01`,
+        `${this.item.year + 1}-02-01`,
+        `${this.item.year + 1}-03-01`,
+        `${this.item.year + 1}-04-01`,
+        `${this.item.year + 1}-05-01`,
+        `${this.item.year + 1}-06-01`
+      ]
     }
   }
 }
