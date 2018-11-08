@@ -30,7 +30,7 @@
               </v-flex>
               <v-flex md3>
                 <v-select clearable
-                  v-model="client.grade"
+                  v-model="client.grade_id"
                   :items="$store.state.data.grades"
                   item-value='id'
                   item-text='title'
@@ -146,20 +146,6 @@
           </v-flex>
         </v-layout>
 
-        <v-layout wrap>
-          <v-flex md12 class='headline'>
-            Договоры
-          </v-flex>
-          <ContractList :items='client.contracts' :editable='true' />
-        </v-layout>
-
-        <v-layout wrap>
-          <v-flex md12 class='headline'>
-            Платежи
-          </v-flex>
-        </v-layout>
-        <PaymentList :items='client.payments' :editable='true' />
-
         <v-layout>
           <v-flex md12 justify-center class='text-md-center'>
             <v-btn @click='storeOrUpdate' :loading='saving'>
@@ -177,11 +163,9 @@
 <script>
 
 import AvatarLoader from '@/components/AvatarLoader'
-import ContractList from '@/components/Contract/List'
-import PaymentList from '@/components/Payment/List'
 import ClientMap from '@/components/Client/Map'
 import Phones from '@/components/Phones'
-import { model_defaults } from '@/components/Client/data'
+import { MODEL_DEFAULTS } from '@/components/Client/data'
 
 export default {
   data() {
@@ -193,13 +177,13 @@ export default {
     }
   },
 
-  components: {  AvatarLoader, ContractList, ClientMap, Phones, PaymentList },
+  components: {  AvatarLoader, ClientMap, Phones },
 
   created() {
     if (this.$route.params.id) {
       this.loadData()
     } else {
-      this.client = model_defaults
+      this.client = MODEL_DEFAULTS
     }
   },
 

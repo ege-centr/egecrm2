@@ -13,7 +13,7 @@ class Client extends Model
 
     protected $fillable = [
         'first_name', 'last_name', 'middle_name',
-        'grade', 'year', 'branches'
+        'grade_id', 'year', 'branches'
     ];
 
     protected $commaSeparated = ['branches'];

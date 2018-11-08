@@ -9,17 +9,22 @@ use App\Http\Resources\Group\{Collection as GroupCollection, Resource as GroupRe
 
 class GroupsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return GroupCollection::collection(Group::orderBy('id', 'desc')->paginate(9999));
+        $query = Group::take(100)->orderBy('id', 'desc');
+
+        foreach(['year', 'grade_id', 'subject_id'] as $field) {
+            if (isset($request->{$field})) {
+                $query->where($field, $request->{$field});
+            }
+        }
+
+        return GroupCollection::collection($query->get());
     }
 
     public function store(Request $request)
     {
         $model = Group::create($request->input());
-        foreach ($request->clients as $client) {
-            $model->groupClients()->create(['client_id' => $client['id']]);
-        }
         $model->lessons()->createMany($request->lessons);
     }
 
@@ -32,12 +37,8 @@ class GroupsController extends Controller
     {
         $model = Group::find($id);
         $model->update($request->all());
-        $model->groupClients()->delete();
-        foreach ($request->clients as $client) {
-            $model->groupClients()->create(['client_id' => $client['id']]);
-        }
 
-        // @todo
+        // TODO
         $model->lessons()->delete();
         $model->lessons()->createMany($request->lessons);
 

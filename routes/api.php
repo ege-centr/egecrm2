@@ -31,12 +31,14 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         'requests' => 'RequestsController',
         'clients' => 'ClientsController',
         'groups' => 'GroupsController',
+        'group-clients' => 'GroupClientsController',
         'comments' => 'CommentsController',
         'teachers' => 'TeachersController',
         'cabinets' => 'CabinetsController',
         'tasks' => 'TasksController',
         'logs' => 'LogsController',
         'payments' => 'PaymentsController',
+        'contracts' => 'ContractsController',
     ]);
 
     Route::resource('settings', 'SettingsController')->only(['index', 'store']);

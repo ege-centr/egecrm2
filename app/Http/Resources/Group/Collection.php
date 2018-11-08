@@ -13,6 +13,7 @@ class Collection extends JsonResource
             'grade_id' => $this->grade_id,
             'subject_id' => $this->subject_id,
             'cabinet' => $this->cabinet,
+            'year' => $this->year,
             // 'teacher_name' => $this->teacher_id ? optional($this->teacher)->names->abbreviation : 'не установлен',
             'teacher_name' => 'не установлен',
             'clients_count' => count($this->clients),

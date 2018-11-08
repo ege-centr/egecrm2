@@ -2,7 +2,7 @@
   <div>
     <RequestDialog ref='RequestDialog' @saved='loadData' />
     <Loader v-if='loading' />
-    <Filters :items='filters' @updated='loadData' />
+    <Filters :items='filters' @updated='loadData' v-if='!items' />
     <v-container grid-list-md fluid class="px-0" v-if='requests !== null'>
       <v-layout row wrap class='relative'>
         <v-flex xs12 v-for='request in requests' :key='request.id'>

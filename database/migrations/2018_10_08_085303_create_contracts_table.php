@@ -25,7 +25,7 @@ class CreateContractsTable extends Migration
             $table->foreign('created_admin_id')->references('id')->on('admins')->onDelete('set null');
 
             $table->smallInteger('year')->unsigned()->nullable();
-            $table->smallInteger('grade')->unsigned()->nullable();
+            $table->smallInteger('grade_id')->unsigned()->nullable();
 
 
             $table->unsignedInteger('sum')->nullable();

@@ -11,21 +11,21 @@
               <v-flex md3>
                 <v-select clearable
                   v-model="item.method"
-                  :items="enums.methods"
+                  :items="ENUMS.methods"
                   label="Cпособ оплаты"
                 ></v-select>
               </v-flex>
               <v-flex md3>
                 <v-select clearable
                   v-model="item.type"
-                  :items="enums.types"
+                  :items="ENUMS.types"
                   label="Тип"
                 ></v-select>
               </v-flex>
               <v-flex md3>
                 <v-select clearable
                   v-model="item.category"
-                  :items="enums.categories"
+                  :items="ENUMS.categories"
                   label="Категория"
                 ></v-select>
               </v-flex>
@@ -72,7 +72,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click.native="dialog = false">Отмена</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="save">{{ item.id ? 'Сохранить' : 'Добавить' }}</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="storeOrUpdate" :loading='saving'>{{ item.id ? 'Сохранить' : 'Добавить' }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -81,30 +81,55 @@
 
 <script>
 
-import { url, enums, model_defaults } from './data'
+import { API_URL, ENUMS, MODEL_DEFAULTS } from './data'
 
 export default {
-  data() {
-    return {
-      dialog: false,
-      saving: false,
-      destroying: false,
-      item: null,
-      enums
+  props: {
+    className: {
+      type: String
+    },
+    entityId: {
+      type: Number
     }
   },
+
+  data() {
+    return {
+      ENUMS,
+      dialog: false,
+      saving: false,
+      item: null,
+    }
+  },
+
   methods: {
     open(item) {
-      if (item === undefined) {
-        this.item = model_defaults
+      if (item === null) {
+        this.item = {
+          class: this.className,
+          entity_id: this.entityId,
+          ...MODEL_DEFAULTS
+        }
       } else {
         this.item = clone(item)
       }
       this.dialog = true
     },
-    save() {
-      this.$emit('saved', this.item)
+    async storeOrUpdate() {
+      this.saving = true
+      if (this.item.id) {
+        await axios.put(apiUrl(`${API_URL}/${this.item.id}`), this.item).then(r => {
+          this.item = r.data
+          this.$emit('updated', this.item)
+        })
+      } else {
+        await axios.post(apiUrl(API_URL), this.item).then(r => {
+          this.item = r.data
+          this.$emit('stored', this.item)
+        })
+      }
       this.dialog = false
+      setTimeout(() => this.saving = false, 300)
     }
   }
 }

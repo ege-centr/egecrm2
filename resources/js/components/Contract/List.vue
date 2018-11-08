@@ -1,6 +1,9 @@
 <template>
   <v-flex md12>
-    <ContractDialog ref='ContractDialog' :item='contract' @saved='contractSaved' />
+    <Dialog ref='Dialog' v-if='clientId'
+      :client-id='clientId'
+      @updated='updated'
+      @stored='stored' />
     <v-data-table
       v-if='items.length'
       :items="items"
@@ -29,30 +32,30 @@
           </span>
         </td>
         <td>
-          {{ getData('grades', item.grade).title }}
+          {{ getData('grades', item.grade_id).title }}
         </td>
         <td>
           <span v-for='subject in item.subjects' :class="{
-            'error--text': subject.status == subject_statuses[2],
-            'orange--text': subject.status == subject_statuses[1]
+            'error--text': subject.status == SUBJECT_STATUSES[2],
+            'orange--text': subject.status == SUBJECT_STATUSES[1]
           }">
             {{ getData('subjects', subject.subject_id).three_letters }}
             <span class='grey--text'>{{ subject.lessons }}</span>
           </span>
         </td>
-        <td :class="{'text-md-right': !editable}">
+        <td :class="{'text-md-right': !clientId}">
           <span v-if='item.id'>
             {{ getData('admins', item.created_admin_id).name }}
             {{ item.created_at | date-time }}
           </span>
         </td>
-        <td class='text-md-right' v-if='editable'>
+        <td class='text-md-right' v-if='clientId'>
           <v-menu left>
             <v-btn slot='activator' flat icon color="black" class='ma-0'>
               <v-icon>more_horiz</v-icon>
             </v-btn>
             <v-list dense>
-              <v-list-tile @click='openContract(item)'>
+              <v-list-tile @click='openDialog(item)'>
                   <v-list-tile-action>
                     <v-icon>edit</v-icon>
                   </v-list-tile-action>
@@ -68,7 +71,7 @@
                     <v-list-tile-title>Добавить версию</v-list-tile-title>
                   </v-list-tile-content>
               </v-list-tile>
-              <v-list-tile @click='openContract(item)'>
+              <v-list-tile @click='openDialog(item)'>
                   <v-list-tile-action>
                     <v-icon>print</v-icon>
                   </v-list-tile-action>
@@ -82,8 +85,8 @@
       </template>
     </v-data-table>
 
-    <v-flex md12 px-0 v-if='editable'>
-      <v-btn color='blue white--text darken-1' small class='ma-0' @click='openContract()'>
+    <v-flex md12 px-0 mt-3 v-if='clientId'>
+      <v-btn color='blue white--text darken-1' small class='ma-0' @click='openDialog(null)'>
         <v-icon class="mr-1">add</v-icon>
         добавить
       </v-btn>
@@ -94,8 +97,8 @@
 
 <script>
 
-import ContractDialog from './Dialog'
-import { model_defaults, subject_statuses } from './data'
+import Dialog from './Dialog'
+import { MODEL_DEFAULTS, SUBJECT_STATUSES } from './data'
 
 export default {
   props: {
@@ -103,39 +106,40 @@ export default {
       type: Array,
       required: true
     },
-    editable: {
-      type: Boolean,
-      default: false
+    clientId: {
+      type: Number,
+      required: false,
+      default: null
     }
   },
-  components: { ContractDialog },
+  components: { Dialog },
   data() {
     return {
-      contract: model_defaults,
-      subject_statuses
+      contract: MODEL_DEFAULTS,
+      SUBJECT_STATUSES
     }
   },
   methods: {
-    openContract(contract) {
-      if (contract === undefined) {
-        contract = clone(model_defaults)
-      }
-      this.contract = clone(contract)
-      this.$refs.ContractDialog.dialog = true
+    openDialog(item) {
+      this.$refs.Dialog.open(item)
     },
-    addContractVersion(contract) {
-      this.openContract({
-        ...clone(contract),
+    addContractVersion(item) {
+      this.openDialog({
+        ...clone(item),
         id: undefined
       })
     },
-    contractSaved(contract) {
-      if (contract.id) {
-        const index = this.items.findIndex(e => e.id == contract.id)
-        Vue.set(this.items, index, contract)
-      } else {
-        this.items.push(contract)
-      }
+    destroy(item) {
+      const index = this.items.findIndex(e => e.id == item.id)
+      this.items.splice(index, 1)
+      axios.delete(apiUrl(API_URL, item.id))
+    },
+    updated(item) {
+      const index = this.items.findIndex(e => e.id == item.id)
+      Vue.set(this.items, index, item)
+    },
+    stored(item) {
+      this.items.push(item)
     },
   }
 }

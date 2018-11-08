@@ -1,5 +1,5 @@
 <template>
-  <v-layout row justify-center>
+  <v-layout row justify-center v-if='item !== null'>
     <v-dialog v-model="dialog" persistent max-width="1200px">
       <v-card>
         <v-card-title>
@@ -38,7 +38,7 @@
               <v-flex md6>
                 <div>
                   <v-select clearable
-                    v-model="item.grade"
+                    v-model="item.grade_id"
                     :items="$store.state.data.grades"
                     item-value='id'
                     item-text='title'
@@ -58,7 +58,7 @@
                 <div>
                   <v-select clearable
                     v-model="item.discount"
-                    :items="discounts"
+                    :items="DISCOUNTS"
                     label="Скидка"
                   ></v-select>
                 </div>
@@ -136,7 +136,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn color="blue darken-1" flat @click.native="dialog = false">Отмена</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="save">{{ item.id ? 'Сохранить' : 'Добавить' }}</v-btn>
+          <v-btn color="blue darken-1" flat @click.native="storeOrUpdate" :loading='saving'>{{ item.id ? 'Сохранить' : 'Добавить' }}</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -145,19 +145,44 @@
 
 <script>
 
-import { discounts, subject_defaults, subject_statuses } from './data'
+import {
+  API_URL,
+  MODEL_DEFAULTS,
+  DISCOUNTS,
+  SUBJECT_STATUSES,
+  SUBJECT_DEFAULTS,
+  SUBJECT_STATUS_TO_BE_TERMINATED,
+  SUBJECT_STATUS_TERMINATED
+} from './data'
 
 export default {
-  props: ['item'],
+  props: {
+    clientId: {
+      type: Number
+    }
+  },
+
   data() {
     return {
+      DISCOUNTS,
+      SUBJECT_STATUSES,
       dialog: false,
-      loading: false,
-      discounts,
-      subject_statuses
+      saving: false,
+      item: null,
     }
   },
   methods: {
+    open(item) {
+      if (item === null) {
+        this.item = {
+          client_id: this.clientId,
+          ...MODEL_DEFAULTS
+        }
+      } else {
+        this.item = clone(item)
+      }
+      this.dialog = true
+    },
     addPayment() {
       this.item.payments.push({})
     },
@@ -166,7 +191,7 @@ export default {
       if (index === -1) {
         this.item.subjects.push({
           subject_id: subject.id,
-          ...subject_defaults
+          ...SUBJECT_DEFAULTS
         })
       } else {
         this.item.subjects.splice(index, 1)
@@ -177,26 +202,38 @@ export default {
     },
     toggleEnum(subject) {
       const index = this.item.subjects.findIndex(e => e.subject_id == subject.id)
-      status = subject_statuses.indexOf(this.item.subjects[index].status)
+      status = SUBJECT_STATUSES.indexOf(this.item.subjects[index].status)
       status++
-      if (status >= subject_statuses.length) {
+      if (status >= SUBJECT_STATUSES.length) {
         status = 0
       }
-      Vue.set(this.item.subjects, index, {...this.item.subjects[index], status: subject_statuses[status]})
+      Vue.set(this.item.subjects, index, {...this.item.subjects[index], status: SUBJECT_STATUSES[status]})
     },
     getSubjectColor(s) {
       const subject = this.findSubject(s)
       if (subject) {
         switch(subject.status) {
-          case subject_statuses[2]: return 'error'
-          case subject_statuses[1]: return 'orange'
+          case SUBJECT_STATUS_TERMINATED: return 'error'
+          case SUBJECT_STATUS_TO_BE_TERMINATED: return 'orange'
         }
       }
       return 'success'
     },
-    save() {
-      this.$emit('saved', this.item)
+    async storeOrUpdate() {
+      this.saving = true
+      if (this.item.id) {
+        await axios.put(apiUrl(`${API_URL}/${this.item.id}`), this.item).then(r => {
+          this.item = r.data
+          this.$emit('updated', this.item)
+        })
+      } else {
+        await axios.post(apiUrl(API_URL), this.item).then(r => {
+          this.item = r.data
+          this.$emit('stored', this.item)
+        })
+      }
       this.dialog = false
+      setTimeout(() => this.saving = false, 300)
     }
   }
 }

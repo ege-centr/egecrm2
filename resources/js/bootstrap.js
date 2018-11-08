@@ -45,6 +45,10 @@ window.clone = (obj) => {
   return JSON.parse(JSON.stringify(obj))
 }
 
+window.queryString = (obj) => Object.entries(obj).map(e => e[0] + '=' + e[1]).join('&')
+
+
+
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
  * for events that are broadcast by Laravel. Echo and event broadcasting

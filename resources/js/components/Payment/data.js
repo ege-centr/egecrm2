@@ -1,6 +1,6 @@
-export const url = 'payments'
+export const API_URL = 'payments'
 
-export const enums = {
+export const ENUMS = {
   methods: [
     {text: 'карта', value: 'card'},
     {text: 'наличные', value: 'cash'},
@@ -18,6 +18,4 @@ export const enums = {
   ]
 }
 
-export const model_defaults = {
-  category: 'study',
-}
+export const MODEL_DEFAULTS = {}

@@ -10,7 +10,7 @@
         </router-link>
       </v-flex>
     </v-layout>
-    <GroupList />
+    <GroupList :editable='true' />
   </div>
 </template>
 

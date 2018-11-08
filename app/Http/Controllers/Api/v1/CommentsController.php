@@ -12,7 +12,7 @@ class CommentsController extends Controller
     public function index(Request $request)
     {
         return CommentResource::collection(Comment::where([
-            'entity_type' => trim(getModelClass($request->class), '\\'),
+            'entity_type' => getModelClass($request->class, true),
             'entity_id' => $request->entity_id
         ])->get());
     }

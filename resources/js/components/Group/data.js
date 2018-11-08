@@ -1,4 +1,6 @@
-export const url = 'groups'
+export const API_URL = 'groups'
+
+export const GROUP_CLIENTS_API_URL = 'group-clients'
 
 export const model_defaults = {
   is_ready_to_start: false,

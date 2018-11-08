@@ -2,7 +2,12 @@
   <v-layout row wrap>
     <Loader v-if='loading' />
     <v-flex md12 class='relative'>
-      <Dialog ref='Dialog' :item='item' @saved='saved' />
+      <Dialog ref='Dialog' v-if='entityId'
+        :item='item'
+        :entity-id='entityId'
+        :class-name='className'
+        @updated='updated'
+        @stored='stored' />
       <v-data-table v-if='getItems && getItems.length'
         class="elevation-1"
         hide-actions
@@ -11,13 +16,13 @@
       >
         <template slot='items' slot-scope="{ item, index }">
           <td>
-            {{ enums.types.find(e => e.value == item.type).text }}
+            {{ ENUMS.types.find(e => e.value == item.type).text }}
           </td>
           <td>
-            {{ enums.methods.find(e => e.value == item.method).text }}
+            {{ ENUMS.methods.find(e => e.value == item.method).text }}
           </td>
           <td>
-            {{ enums.categories.find(e => e.value == item.category).text }}
+            {{ ENUMS.categories.find(e => e.value == item.category).text }}
           </td>
           <td>
             {{ item.sum }} руб.
@@ -25,13 +30,13 @@
           <td>
             {{ item.date | date }}
           </td>
-          <td :class="{'text-md-right': !editable}">
+          <td :class="{'text-md-right': !entityId}">
             <span v-if='item.id'>
               {{ getData('admins', item.created_admin_id).name }}
               {{ item.created_at | date-time }}
             </span>
           </td>
-          <td class='text-md-right' v-if='editable'>
+          <td class='text-md-right' v-if='entityId'>
             <v-menu left>
               <v-btn slot='activator' flat icon color="black" class='ma-0'>
                 <v-icon>more_horiz</v-icon>
@@ -45,7 +50,7 @@
                       <v-list-tile-title>Редактировать</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile @click='getItems.splice(index, 1)'>
+                <v-list-tile @click='destroy(item)'>
                     <v-list-tile-action>
                       <v-icon>remove</v-icon>
                     </v-list-tile-action>
@@ -58,8 +63,8 @@
           </td>
         </template>
       </v-data-table>
-      <v-flex md12 px-0 v-if='editable'>
-        <v-btn color='blue white--text darken-1' small class='ma-0' @click='openDialog'>
+      <v-flex md12 px-0 mt-3 v-if='entityId'>
+        <v-btn color='blue white--text darken-1' small class='ma-0' @click='openDialog(null)'>
           <v-icon class="mr-1">add</v-icon>
           добавить
         </v-btn>
@@ -78,7 +83,7 @@
 </template>
 <script>
 
-import { url, enums } from './data'
+import { API_URL, ENUMS } from './data'
 import Dialog from './Dialog'
 
 export default {
@@ -88,9 +93,14 @@ export default {
       default: null,
       required: false
     },
-    editable: {
-      type: Boolean,
-      default: false
+    className: {
+      type: String,
+      required: false
+    },
+    entityId: {
+      type: Number,
+      required: false,
+      default: null
     }
   },
 
@@ -102,7 +112,7 @@ export default {
       loading: false,
       collection: null,
       item: null,
-      enums
+      ENUMS
     }
   },
 
@@ -122,20 +132,21 @@ export default {
     openDialog(item) {
       this.$refs.Dialog.open(item)
     },
-    remove(index) {
-      console.log('remove', index)
+    destroy(item) {
+      const index = this.items.findIndex(e => e.id == item.id)
+      this.items.splice(index, 1)
+      axios.delete(apiUrl(API_URL, item.id))
     },
-    saved(item) {
-      if (item.id) {
-        const index = this.items.findIndex(e => e.id == item.id)
-        Vue.set(this.items, index, item)
-      } else {
-        this.items.push(item)
-      }
+    updated(item) {
+      const index = this.items.findIndex(e => e.id == item.id)
+      Vue.set(this.items, index, item)
+    },
+    stored(item) {
+      this.items.push(item)
     },
     loadData() {
       this.loading = true
-      axios.get(apiUrl(`${url}?page=${this.page}`)).then(response => {
+      axios.get(apiUrl(`${API_URL}?page=${this.page}`)).then(response => {
         this.collection = response.data
         this.loading = false
       })

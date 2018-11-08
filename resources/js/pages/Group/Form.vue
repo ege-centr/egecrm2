@@ -90,31 +90,16 @@
           ></v-switch>
         </v-layout>
 
-        <v-layout wrap>
+        <v-layout wrap v-if='item.clients.length'>
           <v-flex md12 class='headline mt-3'>
             Состав группы:
           </v-flex>
           <v-flex md12>
-            <v-slide-x-transition :group='true'>
-              <div v-for="(client, index) in item.clients" :key="client.id" class='flex-items align-center'>
-                <v-btn flat icon color="red" class='ma-0 mr-3' @click='item.clients.splice(index, 1)'>
-                  <v-icon>remove</v-icon>
-                </v-btn>
-                <div>
-                  {{ client.names.short }}
-                </div>
+            <div v-for="(client, index) in item.clients" :key="client.id" class='flex-items align-center'>
+              <div>
+                {{ client.names.short }}
               </div>
-            </v-slide-x-transition>
-          </v-flex>
-          <v-flex md3 class='py-0'>
-            <v-select
-              :items='clients'
-              item-value='id'
-              item-text='names.short'
-              label='Добавить ученика'
-              v-model='selected_client'
-              @change='selectClient'
-            />
+            </div>
           </v-flex>
         </v-layout>
 
@@ -272,15 +257,13 @@
 
 <script>
 
-import { model_defaults, url } from '@/components/Group/data'
+import { model_defaults, API_URL } from '@/components/Group/data'
 
 export default {
   data() {
     return {
       item: model_defaults,
-      selected_client: null,
       teachers: [],
-      clients: [],
       cabinets: [],
       loading: true,
       saving: false,
@@ -299,36 +282,25 @@ export default {
       await axios.get(apiUrl('teachers')).then(r => {
         this.teachers = r.data
       })
-      await axios.get(apiUrl('clients?get_all=1')).then(r => {
-        this.clients = r.data
-      })
       await axios.get(apiUrl('cabinets')).then(r => {
         this.cabinets = r.data
       })
       if (this.$route.params.id) {
-        await axios.get(apiUrl(`${url}/${this.$route.params.id}`)).then(r => {
+        await axios.get(apiUrl(`${API_URL}/${this.$route.params.id}`)).then(r => {
           this.dates = r.data.lessons.map(e => e.lesson_date)
           Vue.nextTick(() => this.item = r.data)
         })
       }
       this.loading = false
     },
-    selectClient(client_id) {
-      if (client_id && !this.item.clients.find(e => e.id == client_id)) {
-        this.item.clients.push(this.clients.find(e => e.id == client_id))
-      }
-      Vue.nextTick(() => {
-        this.selected_client = null
-      })
-    },
     async storeOrUpdate() {
       this.saving = true
       if (this.item.id) {
-        await axios.put(apiUrl(`${url}/${this.item.id}`), this.item).then(r => {
+        await axios.put(apiUrl(`${API_URL}/${this.item.id}`), this.item).then(r => {
           this.item = r.data
         })
       } else {
-        await axios.post(apiUrl(url), this.item).then(r => {
+        await axios.post(apiUrl(API_URL), this.item).then(r => {
           this.$router.push({ name: 'GroupEdit', params: { id: r.data }})
         })
       }

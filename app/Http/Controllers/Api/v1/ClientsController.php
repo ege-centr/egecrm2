@@ -25,12 +25,6 @@ class ClientsController extends Controller
         $new_model->passport()->create($request->passport);
         $new_model->email()->create($request->email);
 
-        foreach($request->contracts as $contract) {
-            $new_contract = $new_model->contracts()->create($contract);
-            $new_contract->subjects()->createMany($contract['subjects']);
-            $new_contract->payments()->createMany($contract['payments']);
-        }
-
         return response($new_model->id, 201);
     }
 
@@ -52,27 +46,6 @@ class ClientsController extends Controller
 
         $model->passport()->update($request->passport);
         $model->email()->update($request->email);
-
-        foreach($request->contracts as $c) {
-            if (isset($c['id'])) {
-                $contract = Contract::find($c['id']);
-                $contract->update($c);
-            } else {
-                $contract = $model->contracts()->create($c);
-            }
-            $contract->subjects()->delete();
-            $contract->subjects()->createMany($c['subjects']);
-            $contract->payments()->delete();
-            $contract->payments()->createMany($c['payments']);
-        }
-
-        foreach($request->payments as $item) {
-            if (isset($item['id'])) {
-                Payment::find($item['id'])->update($item);
-            } else {
-                $model->payments()->create($item);
-            }
-        }
 
         return new Resource($model);
     }

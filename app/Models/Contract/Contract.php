@@ -7,7 +7,7 @@ use App\Models\{User, Admin\Admin};
 
 class Contract extends Model
 {
-    protected $fillable = ['year', 'grade', 'sum', 'date', 'discount', 'number'];
+    protected $fillable = ['year', 'grade_id', 'sum', 'date', 'discount', 'number', 'client_id'];
 
     public function subjects()
     {
@@ -24,9 +24,21 @@ class Contract extends Model
         return $this->belongsTo(Admin::class, 'created_admin_id');
     }
 
-    private function setPosition()
+    /**
+     * Активная (текущая) версия договора
+     * должна быть последняя в цепи версий
+     */
+    public function isActive()
     {
-        $this->version = self::where('number', $this->number)->max('version') + 1;
+        return $this->version == self::chain($this->number)->max('version');
+    }
+
+    /**
+     * Цепочка договоров
+     */
+    public function scopeChain($query, $number)
+    {
+        return $query->whereNumber($number);
     }
 
     public static function boot()
@@ -42,5 +54,10 @@ class Contract extends Model
             }
             $model->setPosition();
         });
+    }
+
+    private function setPosition()
+    {
+        $this->version = self::chain($this->number)->max('version') + 1;
     }
 }

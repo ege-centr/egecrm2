@@ -17,7 +17,7 @@
                   {{ client.last_name }}
                   {{ client.first_name }}
                   {{ client.middle_name }}
-                  ({{ getData('grades', client.grade).title }})
+                  ({{ getData('grades', client.grade_id).title }})
                 </div>
                 <div class='grey--text text--darken-2 font-weight-medium caption mt-3'>Представитель</div>
                 <div class='font-weight-bold'>
@@ -87,16 +87,24 @@
             <RequestList :items='client.requests' />
         </v-tab-item>
         <v-tab-item>
-          <ContractList :items='client.contracts' />
+          <ContractList
+            :items='client.contracts'
+            :client-id='client.id'
+          />
         </v-tab-item>
         <v-tab-item>
           <GroupList :items='client.groups' />
+          <GroupNotAssignedList :groups='client.groups' :contracts='client.contracts' @assigned='loadData' />
         </v-tab-item>
         <v-tab-item>
-          <PaymentList :items='client.payments' />
+          <PaymentList
+            :items='client.payments'
+            :entity-id='client.id'
+            :class-name='CLASS_NAME'
+          />
         </v-tab-item>
         <v-tab-item>
-          <Comments class-name='Client\Client' :entity-id='client.id' />
+          <Comments :class-name='CLASS_NAME' :entity-id='client.id' />
         </v-tab-item>
         <v-tab-item>
           <div class='headline'>
@@ -111,27 +119,26 @@
 <script>
 
 import RequestList from '@/components/Request/List'
-import { subject_statuses } from '@/components/Contract/data'
 import Comments from '@/components/Comments'
 import ContractList from '@/components/Contract/List'
 import GroupList from '@/components/Group/List'
 import PaymentList from '@/components/Payment/List'
-import ClientMap from '@/components/Client/Map'
+import { API_URL, CLASS_NAME, ClientMap, GroupNotAssignedList } from '@/components/Client/data'
 
 export default {
   props: ['clientId'],
 
   data() {
     return {
+      CLASS_NAME,
       tabs: null,
       loading: true,
       client: null,
       map_dialog: false,
-      subject_statuses
     }
   },
 
-  components: { RequestList, Comments, ContractList, ClientMap, GroupList, PaymentList },
+  components: { RequestList, Comments, ContractList, ClientMap, GroupList, GroupNotAssignedList, PaymentList },
 
   created() {
     this.loadData()
@@ -142,7 +149,7 @@ export default {
       this.$refs.ClientMap.openMap()
     },
     loadData() {
-      axios.get(apiUrl(`clients/${this.clientId || this.$route.params.id}`)).then(r => {
+      axios.get(apiUrl(`${API_URL}/${this.clientId || this.$route.params.id}`)).then(r => {
         this.client = r.data
         this.loading = false
       })

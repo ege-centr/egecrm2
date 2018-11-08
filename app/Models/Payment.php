@@ -9,7 +9,7 @@ class Payment extends Model
 {
     use HasCreatedAdmin;
 
-    protected $fillable = ['category', 'type', 'method', 'date', 'sum', 'year'];
+    protected $fillable = ['category', 'type', 'method', 'date', 'sum', 'year', 'entity_type', 'entity_id'];
 
     public static function boot()
     {

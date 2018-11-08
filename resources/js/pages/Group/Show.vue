@@ -89,7 +89,7 @@
 
 <script>
 
-import { url, levels } from '@/components/Group/data'
+import { API_URL, levels } from '@/components/Group/data'
 import ClientShow from '@/pages/Client/Show'
 import Bars from '@/components/Group/Bars'
 
@@ -111,7 +111,7 @@ export default {
 
   methods: {
     loadData() {
-      axios.get(apiUrl(`${url}/${this.$route.params.id}`)).then(r => {
+      axios.get(apiUrl(`${API_URL}/${this.$route.params.id}`)).then(r => {
         this.item = r.data
         this.loading = false
       })
