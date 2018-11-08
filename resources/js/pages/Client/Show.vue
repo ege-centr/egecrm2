@@ -84,7 +84,7 @@
 
       <v-tabs-items v-model="tabs">
         <v-tab-item>
-            <RequestList :items='client.requests' />
+            <RequestList :items='client.requests' :phones='client.phones' @updated='loadData' />
         </v-tab-item>
         <v-tab-item>
           <ContractList

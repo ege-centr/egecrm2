@@ -65,7 +65,7 @@
                 </div>
               </v-flex>
               <v-flex md12>
-                <v-btn color='blue white--text darken-1' small class='ma-0' @click="item.ips.push({})">
+                <v-btn color='primary' small class='ma-0' @click="item.ips.push({})">
                   <v-icon class="mr-1">add</v-icon>
                   добавить IP
                 </v-btn>

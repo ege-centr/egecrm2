@@ -1,6 +1,10 @@
 <template>
   <div>
-    <RequestDialog ref='RequestDialog' @saved='loadData' />
+    <v-btn v-if='phones !== null' color='primary' small class='ma-0' @click='add'>
+      <v-icon class="mr-1">add</v-icon>
+      добавить
+    </v-btn>
+    <RequestDialog ref='RequestDialog' :phones='phones' @saved='saved' />
     <Loader v-if='loading' />
     <Filters :items='filters' @updated='loadData' v-if='!items' />
     <v-container grid-list-md fluid class="px-0" v-if='requests !== null'>
@@ -30,6 +34,15 @@ import Filters from '@/components/Filters'
 import { filters } from './data'
 
 export default {
+  props: {
+    items: null,
+    phones: {
+      type: Array,
+      default: null,
+      required: false
+    }
+  },
+
   components: { RequestItem, RequestDialog, Filters },
 
   data() {
@@ -53,10 +66,6 @@ export default {
     }
   },
 
-  props: {
-    items: null,
-  },
-
   methods: {
     loadData(filters = '') {
       this.loading = true
@@ -65,9 +74,22 @@ export default {
         this.loading = false
       })
     },
+
     show(id) {
       this.$refs.RequestDialog.show(id)
-    }
+    },
+
+    add() {
+      this.$refs.RequestDialog.add()
+    },
+
+    saved() {
+      if (! this.items) {
+        this.loadData()
+      } else {
+        this.$emit('updated')
+      }
+    },
   },
 
   computed: {

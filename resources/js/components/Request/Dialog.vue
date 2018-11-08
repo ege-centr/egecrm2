@@ -54,7 +54,7 @@
                   label="Филиалы"
                 ></v-select>
               </v-flex>
-              <Phones :item='dialog_model' />
+              <Phones :item='dialog_model' :editable='phones === null' />
               <v-flex md12>
                 <v-textarea v-model="dialog_model.comment" label="Комментарий"></v-textarea>
               </v-flex>
@@ -67,7 +67,7 @@
           <v-btn color="blue darken-1" flat @click.native="dialog = false">Отмена</v-btn>
           <v-btn color="blue darken-1" flat @click.native="storeOrUpdate" :loading='loading'>{{ dialog_model.id ? 'Сохранить' : 'Добавить' }}</v-btn>
         </v-card-actions>
-      </v-card> 
+      </v-card>
     </v-dialog>
   </v-layout>
 </template>
@@ -78,10 +78,19 @@ import { request_statuses, model_defaults } from './data'
 import Phones from '@/components/Phones'
 
 export default {
+  props: {
+    phones: {
+      type: Array,
+      default: null,
+      required: false
+    }
+  },
+
   components: { Phones },
 
   data() {
     return {
+      model_defaults,
       dialog: false,
       dialog_model: {},
       loading: false,
@@ -89,10 +98,16 @@ export default {
     }
   },
 
+  created() {
+    if (this.phones) {
+      this.model_defaults = {...model_defaults, phones: this.phones}
+    }
+  },
+
   methods: {
     add() {
       this.dialog = true
-      this.dialog_model = _.clone(model_defaults)
+      this.dialog_model = clone(this.model_defaults)
     },
     async storeOrUpdate() {
       this.loading = true
