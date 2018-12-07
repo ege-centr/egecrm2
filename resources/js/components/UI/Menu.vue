@@ -15,6 +15,25 @@
               <v-list-tile-title>{{ m.label }}</v-list-tile-title>
           </v-list-tile-content>
       </v-list-tile>
+      <v-list-group
+        prepend-icon="settings"
+        value="true"
+      >
+      <v-list-tile slot="activator">
+        <v-list-tile-title>Настройки</v-list-tile-title>
+      </v-list-tile>
+
+      <v-list subgroup>
+        <v-list-tile v-for='(m, index) in admin_menu' :key='index' @click="goTo(m.route)">
+            <v-list-tile-action>
+                <v-icon>{{ m.icon }}</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+                <v-list-tile-title>{{ m.label }}</v-list-tile-title>
+            </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </v-list-group>
     </v-list>
   </v-navigation-drawer>
 </template>
@@ -41,31 +60,38 @@ export default {
         label: 'Группы'
       },
       {
-        icon: 'people',
-        route: 'Users',
-        label: 'Пользователи'
-      },
-      {
-        icon: 'check_circle',
-        route: 'TaskIndex',
-        label: 'Задачи'
-      },
-      {
         icon: 'attach_money',
         route: 'PaymentIndex',
         label: 'Платежи'
       },
+    ],
+    admin_menu: [
       {
         icon: 'multiline_chart',
         route: 'RecommendedPrices',
         label: 'Рекомендованные цены'
       },
       {
+        icon: 'event',
+        route: 'SpecialDates',
+        label: 'Праздники и экзамены'
+      },
+      {
         icon: 'history',
         route: 'LogIndex',
         label: 'Логи'
       },
-    ]
+      {
+        icon: 'people',
+        route: 'Users',
+        label: 'Пользователи'
+      },
+      {
+        icon: 'assignment_turned_in',
+        route: 'TaskIndex',
+        label: 'Задачи'
+      },
+    ],
   }),
   methods: {
     goTo(route) {

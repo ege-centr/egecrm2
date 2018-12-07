@@ -39,6 +39,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         'logs' => 'LogsController',
         'payments' => 'PaymentsController',
         'contracts' => 'ContractsController',
+        'special-dates' => 'SpecialDatesController',
     ]);
 
     Route::resource('settings', 'SettingsController')->only(['index', 'store']);

@@ -182,10 +182,10 @@
                 </v-container>
               </v-card-text>
               <v-card-actions>
-                <v-btn color="red darken-1" flat @click.native="edit_lesson_dialog = false">Удалить</v-btn>
+                <v-btn color="red darken-1" flat @click.native="deleteLesson" v-show='editing_lesson_index !== null'>Удалить</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" flat @click.native="edit_lesson_dialog = false">Отмена</v-btn>
-                <v-btn color="blue darken-1" flat @click.native='saveLesson'>Сохранить</v-btn>
+                <v-btn color="blue darken-1" flat @click.native='saveLesson'>{{ editing_lesson_index === null ? 'Добавить' : 'Сохранить' }}</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -203,23 +203,16 @@
             <v-card-text>
               <v-container grid-list-xl class="pa-0 ma-0" fluid>
                 <v-layout>
-                  <v-flex md7>
-                    <div v-for="date in calendar_months">
-                      <v-date-picker class='mr-3' style='box-shadow: none'
-                        v-model="dates"
-                        :picker-date="date"
-                        first-day-of-week='1'
-                        no-title
-                        full-width
-                        landscape
-                        multiple
-                      ></v-date-picker>
-                    </div>
-                  </v-flex>
                   <v-flex md5>
-                    <div class="headline">{{ item.lessons.length }} занятий</div>
-                    <v-data-table hide-actions hide-headers :items='item.lessons' class='mt-3'>
+                    <Calendar :year='item.year' :lessons='item.lessons' />
+                  </v-flex>
+                  <v-spacer></v-spacer>
+                  <v-flex md6>
+                    <v-data-table hide-actions hide-headers :items='item.lessons' :pagination.sync="lessonSortingOptions" class='mt-3'>
                       <template slot='items' slot-scope="{ index, item }">
+                        <td width='10' class='pr-0 grey--text'>
+                          <span v-if='!item.is_cancelled'>{{ indexSkippingCancelledLessons(index) }}</span>
+                        </td>
                         <td>
                           {{ item.lesson_date | date }}
                         </td>
@@ -237,12 +230,19 @@
                           </span>
                         </td>
                         <td class='text-md-right'>
-                          <v-btn flat icon color="black" class='ma-0' @click='editLesson(index)'>
+                          <v-btn flat icon color="black" class='ma-0' @click='editLesson(item)'>
                             <v-icon>more_horiz</v-icon>
                           </v-btn>
                         </td>
                       </template>
                     </v-data-table>
+                    <div class='mt-3'>
+                      <v-btn color='primary' small class='ma-0 mr-3' @click='addLesson'>
+                        <v-icon class="mr-1">add</v-icon>
+                        добавить занятие
+                      </v-btn>
+                      <a @click='fillSchedule' v-if='item.lessons.length > 0'>проставить до 1 июня текущего года</a>
+                    </div>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -258,8 +258,11 @@
 <script>
 
 import { model_defaults, API_URL } from '@/components/Group/data'
+import Calendar from '@/components/Calendar/Calendar'
 
 export default {
+  components: { Calendar },
+
   data() {
     return {
       item: model_defaults,
@@ -271,7 +274,11 @@ export default {
       edit_lesson_dialog: false,
       dates: [],
       lesson: {},
-      editing_lesson_index: false
+      editing_lesson_index: null,
+      lessonSortingOptions: {
+        rowsPerPage: -1,
+        sortBy: 'lesson_date'
+      }
     }
   },
   async created() {
@@ -293,6 +300,7 @@ export default {
       }
       this.loading = false
     },
+
     async storeOrUpdate() {
       this.saving = true
       if (this.item.id) {
@@ -306,47 +314,50 @@ export default {
       }
       this.saving = false
     },
-    editLesson(index) {
+
+    addLesson() {
+      this.lesson = {}
+      this.editing_lesson_index = null
       this.edit_lesson_dialog = true
-      this.editing_lesson_index = index
-      this.lesson = clone(this.item.lessons[index])
     },
+
+    editLesson(lesson) {
+      this.edit_lesson_dialog = true
+      this.editing_lesson_index = this.item.lessons.findIndex(e => e === lesson)
+      this.lesson = clone(lesson)
+    },
+
+    deleteLesson() {
+      this.item.lessons.splice(this.editing_lesson_index, 1)
+      this.edit_lesson_dialog = false
+    },
+
     saveLesson() {
       this.edit_lesson_dialog = false
-      this.item.lessons.splice(this.editing_lesson_index, 1, this.lesson)
-    }
-  },
-
-  watch: {
-    dates(newVal, oldVal) {
-      if (this.item) {
-        if (newVal.length > oldVal.length) {
-          const added_date = _.difference(newVal, oldVal)[0]
-          this.item.lessons.push({lesson_date: added_date})
-        } else {
-          const deleted_date = _.difference(oldVal, newVal)[0]
-          this.item.lessons = this.item.lessons.filter(e => e.lesson_date != deleted_date)
-        }
+      if (this.editing_lesson_index === null) {
+        this.item.lessons.push(this.lesson)
+      } else {
+        this.item.lessons.splice(this.editing_lesson_index, 1, this.lesson)
       }
-    }
-  },
+    },
 
-  computed: {
-    calendar_months() {
-      return [
-        `${this.item.year}-09-01`,
-        `${this.item.year}-10-01`,
-        `${this.item.year}-11-01`,
-        `${this.item.year}-12-01`,
-        `${this.item.year + 1}-01-01`,
-        `${this.item.year + 1}-02-01`,
-        `${this.item.year + 1}-03-01`,
-        `${this.item.year + 1}-04-01`,
-        `${this.item.year + 1}-05-01`,
-        `${this.item.year + 1}-06-01`
-      ]
-    }
-  }
+    indexSkippingCancelledLessons(index) {
+      const cancelled_lessons_count = _.chain(this.item.lessons).sortBy('lesson_date').take(index + 1).filter({is_cancelled: 1}).value().length
+      return index + 1 - cancelled_lessons_count
+    },
+
+    fillSchedule() {
+      const last_lesson = _.sortBy(this.item.lessons, 'lesson_date').reverse()[0]
+      let lesson_date = last_lesson.lesson_date
+      while (true) {
+        lesson_date = moment(lesson_date).add(1, 'week').format('YYYY-MM-DD')
+        if (moment(lesson_date).format('M') == 6) {
+          return
+        }
+        this.item.lessons.push({...last_lesson, lesson_date})
+      }
+    },
+  },
 }
 </script>
 

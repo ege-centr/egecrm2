@@ -12,8 +12,10 @@ class Resource extends JsonResource
         return [
             'id' => $this->id,
             'text' => $this->text,
+            'edited' => $this->edited,
             'createdAdmin' => new AdminResource($this->createdAdmin),
             'created_at' => $this->created_at->toDateTimeString(),
+            'updated_at' => $this->updated_at->toDateTimeString(),
         ];
     }
 }

@@ -6,6 +6,7 @@ Vue.use(Router)
 const router = new Router({
   mode: 'history',
   routes: [
+    ...require('./special-dates').default,
     ...require('./payments').default,
     ...require('./requests').default,
     ...require('./users').default,

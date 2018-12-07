@@ -31,11 +31,13 @@ class CommentsController extends Controller
 
     public function update(Request $request, $id)
     {
-        //
+        $model = Comment::find($id);
+        $model->update($request->all());
+        return new CommentResource($model);
     }
 
     public function destroy($id)
     {
-        //
+        Comment::find($id)->delete();
     }
 }

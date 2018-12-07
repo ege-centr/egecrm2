@@ -39,7 +39,7 @@
           </v-list-tile>
           <v-list-tile @click='item.phones.splice(index, 1)'>
               <v-list-tile-action>
-                <v-icon>remove</v-icon>
+                <v-icon>close</v-icon>
               </v-list-tile-action>
               <v-list-tile-content>
                 <v-list-tile-title>Удалить</v-list-tile-title>
