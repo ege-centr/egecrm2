@@ -66,11 +66,11 @@
           </v-flex>
         </v-layout>
 
-        <v-layout>
+        <!-- <v-layout>
           <v-flex pt-0>
             <a @click='schedule_dialog = true'>расписание ({{ item.lessons.length }})</a>
           </v-flex>
-        </v-layout>
+        </v-layout> -->
 
         <v-layout>
           <v-switch class='ml-3 mt-0'
@@ -182,10 +182,10 @@
                 </v-container>
               </v-card-text>
               <v-card-actions>
-                <v-btn color="red darken-1" flat @click.native="deleteLesson" v-show='editing_lesson_index !== null'>Удалить</v-btn>
+                <v-btn color="red darken-1" flat @click.native="deleteLesson" v-show='editing_lesson_index !== null' :loading='lesson_deleting'>Удалить</v-btn>
                 <v-spacer></v-spacer>
                 <v-btn color="blue darken-1" flat @click.native="edit_lesson_dialog = false">Отмена</v-btn>
-                <v-btn color="blue darken-1" flat @click.native='saveLesson'>{{ editing_lesson_index === null ? 'Добавить' : 'Сохранить' }}</v-btn>
+                <v-btn color="blue darken-1" flat @click.native='saveLesson' :loading='lesson_saving'>{{ editing_lesson_index === null ? 'Добавить' : 'Сохранить' }}</v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -207,7 +207,7 @@
                     <Calendar :year='item.year' :lessons='item.lessons' />
                   </v-flex>
                   <v-spacer></v-spacer>
-                  <v-flex md6>
+                  <v-flex md7>
                     <v-data-table hide-actions hide-headers :items='item.lessons' :pagination.sync="lessonSortingOptions" class='mt-3'>
                       <template slot='items' slot-scope="{ index, item }">
                         <td width='10' class='pr-0 grey--text'>
@@ -228,6 +228,9 @@
                           <span v-if='item.teacher_id'>
                             {{ teachers.find(e => e.id == item.teacher_id).names.abbreviation }}
                           </span>
+                        </td>
+                        <td class='grey--text'>
+                          {{ item.createdAdmin.name }} {{ item.created_at | date-time }}
                         </td>
                         <td class='text-md-right'>
                           <v-btn flat icon color="black" class='ma-0' @click='editLesson(item)'>
@@ -259,6 +262,7 @@
 
 import { model_defaults, API_URL } from '@/components/Group/data'
 import Calendar from '@/components/Calendar/Calendar'
+const LESSONS_API_URL = 'lessons'
 
 export default {
   components: { Calendar },
@@ -270,6 +274,8 @@ export default {
       cabinets: [],
       loading: true,
       saving: false,
+      lesson_saving: false,
+      lesson_deleting: false,
       schedule_dialog: false,
       edit_lesson_dialog: false,
       dates: [],
@@ -316,7 +322,10 @@ export default {
     },
 
     addLesson() {
-      this.lesson = {}
+      this.lesson = {
+        group_id: this.item.id,
+        year: this.item.year,
+      }
       this.editing_lesson_index = null
       this.edit_lesson_dialog = true
     },
@@ -327,18 +336,28 @@ export default {
       this.lesson = clone(lesson)
     },
 
-    deleteLesson() {
+    async deleteLesson() {
+      this.lesson_deleting = true
+      await axios.delete(apiUrl(LESSONS_API_URL, this.lesson.id))
       this.item.lessons.splice(this.editing_lesson_index, 1)
       this.edit_lesson_dialog = false
+      this.lesson_deleting = false
     },
 
-    saveLesson() {
-      this.edit_lesson_dialog = false
+    async saveLesson() {
+      this.lesson_saving = true
       if (this.editing_lesson_index === null) {
-        this.item.lessons.push(this.lesson)
+        // this.item.lessons.push(this.lesson)
+        await axios.post(apiUrl(LESSONS_API_URL), this.lesson).then(r => {
+          this.item.lessons.push(r.data)
+        })
       } else {
-        this.item.lessons.splice(this.editing_lesson_index, 1, this.lesson)
+        await axios.put(apiUrl(LESSONS_API_URL, this.lesson.id), this.lesson).then(r => {
+          this.item.lessons.splice(this.editing_lesson_index, 1, r.data)
+        })
       }
+      this.edit_lesson_dialog = false
+      this.lesson_saving = false
     },
 
     indexSkippingCancelledLessons(index) {

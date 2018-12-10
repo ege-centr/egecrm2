@@ -15,3 +15,5 @@ export const levels = [
   {text: 'высокий', value: 'high'},
   {text: 'спец. группа', value: 'special'}
 ]
+
+export const GroupSchedule = require('./Schedule')

@@ -15,9 +15,10 @@
             <td v-for='day in days_by_weeks' class='font-weight-medium calendar-day'
               :class="{
                 'calendar-day_active calendar-day_has-lesson': lessonCount(day) > 0,
+                'calendar-day_active calendar-day_has-lesson': lessonCount(day) > 0,
                 'calendar-day_has-lesson_multiple': lessonCount(day) > 1,
-                'calendar-day_active calendar-day_has-exam': hasSpecial(day, 'exam'),
-                'calendar-day_active calendar-day_has-vacation': hasSpecial(day, 'vacation'),
+                'red--text font-weight-bold': hasSpecial(day), // праздник или экзамен
+                'calendar-day_active calendar-day_has-current-exam': hasCurrentExam(day),
               }">
               <span v-if='day !== null'>{{ day.getDate() }}</span>
             </td>
@@ -51,7 +52,16 @@ export default {
         return []
       },
       required: false,
-    }
+    },
+    withSpecialDates: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+    group: {
+      default: null,
+      required: false
+    },
   },
 
   data() {
@@ -87,9 +97,18 @@ export default {
 
   created() {
     this.getDaysByMonthsAndWeeks()
+    if (this.withSpecialDates) {
+      this.loadSpecialDates()
+    }
   },
 
   methods: {
+    loadSpecialDates() {
+      axios.get(apiUrl('special-dates')).then(r => {
+        this.specialDates = r.data
+      })
+    },
+
     getDaysByMonthsAndWeeks() {
       CALENDAR_MONTHS.forEach(m => {
         const month_date = moment(`${this.getYear(m)}-${m}`, 'YYYY-MM')
@@ -121,19 +140,32 @@ export default {
 
     lessonCount(day) {
       const date = moment(day).format('YYYY-MM-DD')
-      return this.lessons.filter(e => e.lesson_date === date).length
+      return this.lessons.filter(e => e.lesson_date === date && !e.is_cancelled).length
     },
 
-    hasSpecial(day, type) {
-      return this.specialDates.findIndex(e => (e.date === moment(day).format('YYYY-MM-DD') && e.type === type)) !== -1
+    hasSpecial(day, type = null) {
+      return this.specialDates.findIndex(e => (e.date === moment(day).format('YYYY-MM-DD') && (type === null || e.type === type))) !== -1
     },
+
+    hasCurrentExam(day) {
+      if (this.group !== null) {
+        const date = moment(day).format('YYYY-MM-DD')
+        return this.specialDates.findIndex(e =>
+          e.date === date &&
+          e.type === 'exam' &&
+          e.grade_id === this.group.grade_id
+          && e.subject_id === this.group.subject_id
+        ) !== -1
+      }
+      return false
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
   .calendar {
-    width: 500px;
+    width: 450px;
 
     &__month-title {
       text-align: center;
@@ -188,6 +220,12 @@ export default {
             &_has-vacation {
               & span {
                 background: #d02200;
+              }
+            }
+            &_has-current-exam {
+              & span {
+                color: #f44336;
+                background: rgba(#f44336, .1);
               }
             }
           }

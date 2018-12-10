@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Comment;
+namespace App\Http\Resources\Journal;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Admin\Light as AdminResource;
@@ -9,12 +9,10 @@ class Resource extends JsonResource
 {
     public function toArray($request)
     {
-        return [
-            'id' => $this->id,
-            'text' => $this->text,
+        return array_merge(parent::toArray($request), [
             'createdAdmin' => new AdminResource($this->createdAdmin),
-            'created_at' => $this->created_at->toDateTimeString(),
-            'updated_at' => $this->updated_at->toDateTimeString(),
-        ];
+            'is_planned' => $this->is_planned,
+            'is_conducted' => $this->is_conducted,
+        ]);
     }
 }

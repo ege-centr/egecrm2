@@ -25,7 +25,6 @@ class GroupsController extends Controller
     public function store(Request $request)
     {
         $model = Group::create($request->input());
-        $model->lessons()->createMany($request->lessons);
     }
 
     public function show($id)
@@ -37,10 +36,6 @@ class GroupsController extends Controller
     {
         $model = Group::find($id);
         $model->update($request->all());
-
-        // TODO
-        $model->lessons()->delete();
-        $model->lessons()->createMany($request->lessons);
 
         return new GroupResource($model);
     }

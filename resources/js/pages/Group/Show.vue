@@ -83,23 +83,46 @@
         </v-layout>
       </v-card-text>
     </v-card>
+    <div v-if='item !== null'>
+      <v-tabs fixed-tabs v-model='tabs' class='mb-4'>
+        <v-tab>
+          Расписание
+        </v-tab>
+        <v-tab>
+          Вкладка
+        </v-tab>
+        <v-tab>
+          Вкладка
+        </v-tab>
+      </v-tabs>
+      <v-tabs-items v-model="tabs">
+        <v-tab-item>
+          <GroupSchedule v-if='item !== null' :group='item' />
+        </v-tab-item>
+        <v-tab-item>
+        </v-tab-item>
+        <v-tab-item>
+        </v-tab-item>
+      </v-tabs-items>
+    </div>
     <ClientShow v-for='client_id in opened_clients' :client-id='client_id' :key='client_id' />
   </div>
 </template>
 
 <script>
 
-import { API_URL, levels } from '@/components/Group/data'
+import { API_URL, levels, GroupSchedule } from '@/components/Group/data'
 import ClientShow from '@/pages/Client/Show'
 import Bars from '@/components/Group/Bars'
 
 export default {
-  components: { ClientShow, Bars },
+  components: { ClientShow, GroupSchedule, Bars },
 
   data() {
     return {
       loading: true,
       item: null,
+      tabs: null,
       levels,
       opened_clients: []
     }
