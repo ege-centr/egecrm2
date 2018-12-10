@@ -12,7 +12,7 @@
         </thead>
         <tbody>
           <tr v-for='days_by_weeks in days_by_months_and_weeks[month]'>
-            <td v-for='day in days_by_weeks' class='font-weight-medium calendar-day'
+            <td v-for='day in days_by_weeks' class='font-weight-medium calendar-day' :title="hasSpecial(day, 'exam') ? 'экзамен' : (hasSpecial(day, 'vacation') ? 'праздник' : '')"
               :class="{
                 'calendar-day_active calendar-day_has-lesson': lessonCount(day) > 0,
                 'calendar-day_active calendar-day_has-lesson': lessonCount(day) > 0,
