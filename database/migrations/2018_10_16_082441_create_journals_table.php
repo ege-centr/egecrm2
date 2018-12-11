@@ -39,8 +39,8 @@ class CreateLessonsTable extends Migration
             $table->boolean('is_cancelled')->default(false);
             $table->boolean('is_unplanned')->default(false);
 
-            $table->date('lesson_date');
-            $table->time('lesson_time')->nullable();
+            $table->date('date');
+            $table->time('time')->nullable();
 
             $table->unsignedInteger('created_email_id');
             $table->timestamps();
@@ -54,6 +54,6 @@ class CreateLessonsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('journal');
+        Schema::dropIfExists('lessons');
     }
 }

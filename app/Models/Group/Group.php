@@ -3,7 +3,7 @@
 namespace App\Models\Group;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{Cabinet, Teacher, Journal, Client\Client};
+use App\Models\{Cabinet, Teacher, Lesson, Client\Client};
 use App\Utils\Time;
 use DB;
 
@@ -36,7 +36,7 @@ class Group extends Model
 
     public function lessons()
     {
-        return $this->hasMany(Journal::class);
+        return $this->hasMany(Lesson::class);
     }
 
     public function getSchedule()
@@ -59,16 +59,16 @@ class Group extends Model
         foreach(Time::WEEKDAYS as $weekday => $label) {
             $intervals = $weekday >= 6 ? $weekend_intervals : $weekday_intervals;
             foreach($intervals as $interval) {
-                $lesson_time = Journal::whereRaw("
+                $time = Lesson::whereRaw("
                     is_unplanned=0 AND
                     group_id={$this->id} AND
                     year={$this->year} AND
-                    lesson_time BETWEEN '{$interval[0]}:00:00' AND '{$interval[1]}:00:00' AND
-                    DATE_FORMAT(lesson_date, '%w') = " . ($weekday == 7 ? 0 : $weekday))
-                    ->value('lesson_time');
-                $bars[$weekday][] = $lesson_time;
-                if ($lesson_time) {
-                    $labels[] = "{$label} в {$lesson_time}";
+                    time BETWEEN '{$interval[0]}:00:00' AND '{$interval[1]}:00:00' AND
+                    DATE_FORMAT(date, '%w') = " . ($weekday == 7 ? 0 : $weekday))
+                    ->value('time');
+                $bars[$weekday][] = $time;
+                if ($time) {
+                    $labels[] = "{$label} в {$time}";
                 }
             }
         }

@@ -4,34 +4,34 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Journal;
-use App\Http\Resources\Journal\Resource as JournalResource;
+use App\Models\Lesson;
+use App\Http\Resources\Lesson\Resource as LessonResource;
 
 class LessonsController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Journal::query();
+        $query = Lesson::query();
         if (isset($request->group_id)) {
             $query->whereGroupId($request->group_id);
         }
-        return JournalResource::collection($query->get());
+        return LessonResource::collection($query->get());
     }
 
     public function store(Request $request)
     {
-        return new JournalResource(Journal::create($request->all()));
+        return new LessonResource(Lesson::create($request->all()));
     }
 
     public function update(Request $request, $id)
     {
-        $model = Journal::find($id);
+        $model = Lesson::find($id);
         $model->update($request->all());
-        return new JournalResource($model);
+        return new LessonResource($model);
     }
 
     public function destroy($id)
     {
-        Journal::find($id)->delete();
+        Lesson::find($id)->delete();
     }
 }

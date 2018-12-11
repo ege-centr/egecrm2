@@ -4,11 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Journal extends Model
+class Lesson extends Model
 {
-    protected $table = 'journal';
     protected $fillable = [
-        'teacher_id', 'cabinet_id', 'lesson_date', 'lesson_time',
+        'teacher_id', 'cabinet_id', 'date', 'time',
         'is_cancelled', 'is_unplanned', 'group_id', 'year'
     ];
 
@@ -31,10 +30,10 @@ class Journal extends Model
         return $this->belongsTo(Admin\Admin::class, 'created_email_id');
     }
 
-    public function getLessonTimeAttribute()
+    public function getTimeAttribute()
     {
-        if ($this->attributes['lesson_time']) {
-            return mb_strimwidth($this->attributes['lesson_time'], 0, 5);
+        if ($this->attributes['time']) {
+            return mb_strimwidth($this->attributes['time'], 0, 5);
         }
     }
 

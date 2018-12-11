@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Journal;
+namespace App\Http\Resources\Lesson;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Admin\Light as AdminResource;

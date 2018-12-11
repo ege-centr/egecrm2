@@ -6,14 +6,14 @@ use Illuminate\Console\Command;
 use App\Models\{Teacher, Client\Client};
 use DB;
 
-class Journal extends Command
+class Lessons extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'transfer:journal {take}';
+    protected $signature = 'transfer:lessons {take}';
 
     /**
      * The console command description.
@@ -40,7 +40,7 @@ class Journal extends Command
     public function handle()
     {
         $take = $this->argument('take');
-        DB::table('journal')->delete();
+        DB::table('lessons')->delete();
 
         $egecrm_items = dbEgecrm('visit_journal')
             ->when($take != 'all', function ($query) use ($take) {
@@ -65,8 +65,8 @@ class Journal extends Command
                     'entity_type' => $item->type_entity == 'TEACHER' ? Teacher::class : Client::class,
                     'entity_id' => $item->type_entity == 'STUDENT' ? $client_id : $item->id_entity,
                     'group_id' => $group_id,
-                    'lesson_date' => $item->lesson_date,
-                    'lesson_time' => $item->lesson_time,
+                    'date' => $item->lesson_date,
+                    'time' => $item->lesson_time,
                     'cabinet_id' => $item->cabinet,
                     'group_grade_id' => $item->grade,
                     'client_grade_id' => $item->grade,

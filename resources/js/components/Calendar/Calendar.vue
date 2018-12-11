@@ -140,7 +140,7 @@ export default {
 
     lessonCount(day) {
       const date = moment(day).format('YYYY-MM-DD')
-      return this.lessons.filter(e => e.lesson_date === date && !e.is_cancelled).length
+      return this.lessons.filter(e => e.date === date && !e.is_cancelled).length
     },
 
     hasSpecial(day, type = null) {

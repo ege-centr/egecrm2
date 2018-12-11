@@ -21,10 +21,10 @@
                   <span v-if='!item.is_cancelled'>{{ indexSkippingCancelledLessons(index) }}</span>
                 </td>
                 <td>
-                  {{ item.lesson_date | date }}
+                  {{ item.date | date }}
                 </td>
                 <td>
-                  {{ item.lesson_time }}
+                  {{ item.time }}
                 </td>
                 <td>
                   <span v-if='item.cabinet_id'>
@@ -71,7 +71,7 @@
                     ref="date"
                     :close-on-content-click="false"
                     :nudge-right="40"
-                    :return-value.sync="dialog_item.lesson_date"
+                    :return-value.sync="dialog_item.date"
                     lazy
                     transition="scale-transition"
                     offset-y
@@ -80,19 +80,19 @@
                     >
                     <v-text-field
                     slot="activator"
-                    v-model="dialog_item.lesson_date"
+                    v-model="dialog_item.date"
                     label="Дата занятия"
                     prepend-icon="event"
                     readonly
                     ></v-text-field>
                     <v-date-picker
-                    v-model="dialog_item.lesson_date"
-                    @input="$refs.date.save(dialog_item.lesson_date)">
+                    v-model="dialog_item.date"
+                    @input="$refs.date.save(dialog_item.date)">
                   </v-date-picker>
                 </v-menu>
               </v-flex>
               <v-flex md12>
-                <v-text-field v-model='dialog_item.lesson_time' label='Время занятия' v-mask="'##:##'"></v-text-field>
+                <v-text-field v-model='dialog_item.time' label='Время занятия' v-mask="'##:##'"></v-text-field>
               </v-flex>
               <v-flex md12>
                 <v-select clearable
@@ -166,7 +166,7 @@ export default {
       dialog_item: {},
       sortingOptions: {
         rowsPerPage: -1,
-        sortBy: 'lesson_date'
+        sortBy: 'date'
       },
     }
   },
@@ -236,27 +236,27 @@ export default {
     },
 
     indexSkippingCancelledLessons(index) {
-      const cancelled_lessons_count = _.chain(this.items).sortBy('lesson_date').take(index + 1).filter({is_cancelled: 1}).value().length
+      const cancelled_lessons_count = _.chain(this.items).sortBy('date').take(index + 1).filter({is_cancelled: 1}).value().length
       return index + 1 - cancelled_lessons_count
     },
 
     async fillSchedule() {
       this.filling = true
-      const last_lesson = _.sortBy(this.items, 'lesson_date').reverse()[0]
-      let lesson_date = last_lesson.lesson_date
+      const last_lesson = _.sortBy(this.items, 'date').reverse()[0]
+      let date = last_lesson.date
       while (true) {
-        lesson_date = moment(lesson_date).add(1, 'week').format('YYYY-MM-DD')
-        if (moment(lesson_date).format('M') == 6) {
+        date = moment(date).add(1, 'week').format('YYYY-MM-DD')
+        if (moment(date).format('M') == 6) {
           this.filling = false
           return
         }
-        await this.store({...last_lesson, lesson_date})
+        await this.store({...last_lesson, date})
       }
     },
 
     lessonCount(lesson) {
-      const date = moment(lesson.lesson_date).format('YYYY-MM-DD')
-      return this.items.filter(e => e.lesson_date === date && !e.is_cancelled).length
+      const date = moment(lesson.date).format('YYYY-MM-DD')
+      return this.items.filter(e => e.date === date && !e.is_cancelled).length
     },
   }
 }

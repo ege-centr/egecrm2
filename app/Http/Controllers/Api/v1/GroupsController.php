@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\{Group\Group, Journal};
+use App\Models\{Group\Group, Lesson};
 use App\Http\Resources\Group\{Collection as GroupCollection, Resource as GroupResource};
 
 class GroupsController extends Controller

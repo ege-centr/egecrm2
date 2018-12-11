@@ -136,7 +136,7 @@ export default {
       })
       if (this.$route.params.id) {
         await axios.get(apiUrl(`${API_URL}/${this.$route.params.id}`)).then(r => {
-          this.dates = r.data.lessons.map(e => e.lesson_date)
+          this.dates = r.data.lessons.map(e => e.date)
           Vue.nextTick(() => this.item = r.data)
         })
       }

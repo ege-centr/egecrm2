@@ -168,7 +168,7 @@ export default {
       dialog_item: null,
       sortingOptions: {
         rowsPerPage: -1,
-        sortBy: 'lesson_date'
+        sortBy: 'date'
       }
     }
   },

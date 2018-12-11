@@ -5,7 +5,7 @@ namespace App\Http\Resources\Group;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Teacher\Resource as TeacherResource;
 use App\Http\Resources\Client\GroupCollection as ClientCollection;
-use App\Http\Resources\Journal\Resource as JournalResource;
+use App\Http\Resources\Lesson\Resource as LessonResource;
 
 class Resource extends JsonResource
 {
@@ -13,7 +13,7 @@ class Resource extends JsonResource
     {
         return array_merge(parent::toArray($request), [
             'clients' => ClientCollection::collection($this->clients),
-            'lessons' => JournalResource::collection($this->lessons),
+            'lessons' => LessonResource::collection($this->lessons),
             'teacher' => new TeacherResource($this->teacher),
             'schedule' => $this->getSchedule()
         ]);
