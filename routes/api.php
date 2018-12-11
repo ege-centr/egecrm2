@@ -26,6 +26,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         Route::post('static', 'DataController@static');
     });
 
+
     Route::apiResources([
         'admins' => 'AdminsController',
         'requests' => 'RequestsController',

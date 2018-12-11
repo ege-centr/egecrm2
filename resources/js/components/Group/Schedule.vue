@@ -51,7 +51,10 @@
                 <v-icon class="mr-1">add</v-icon>
                 добавить занятие
               </v-btn>
-              <a @click='fillSchedule' v-if='items.length > 0'>проставить до 1 июня текущего года</a>
+              <v-btn color='primary' small flat @click='fillSchedule' :loading='filling' v-if='items.length > 0'>
+                проставить до 1 июня текущего года
+              </v-btn>
+              <!-- <a @click='fillSchedule' v-if='items.length > 0'>проставить до 1 июня текущего года</a> -->
             </div>
           </v-flex>
         </v-layout>
@@ -159,6 +162,7 @@ export default {
       items: null,
       saving: false,
       destroying: false,
+      filling: false,
       dialog_item: {},
       sortingOptions: {
         rowsPerPage: -1,
@@ -216,12 +220,19 @@ export default {
           this.items.splice(this.items.findIndex(e => e.id === this.dialog_item.id), 1, r.data)
         })
       } else {
-        await axios.post(apiUrl(API_URL), this.dialog_item).then(r => {
-          this.items.push(r.data)
-        })
+        await this.store(this.dialog_item)
+        // await axios.post(apiUrl(API_URL), this.dialog_item).then(r => {
+        //   this.items.push(r.data)
+        // })
       }
       this.dialog = false
       this.saving = false
+    },
+
+    async store(item) {
+      await axios.post(apiUrl(API_URL), item).then(r => {
+        this.items.push(r.data)
+      })
     },
 
     indexSkippingCancelledLessons(index) {
@@ -229,15 +240,17 @@ export default {
       return index + 1 - cancelled_lessons_count
     },
 
-    fillSchedule() {
+    async fillSchedule() {
+      this.filling = true
       const last_lesson = _.sortBy(this.items, 'lesson_date').reverse()[0]
       let lesson_date = last_lesson.lesson_date
       while (true) {
         lesson_date = moment(lesson_date).add(1, 'week').format('YYYY-MM-DD')
         if (moment(lesson_date).format('M') == 6) {
+          this.filling = false
           return
         }
-        this.items.push({...last_lesson, lesson_date})
+        await this.store({...last_lesson, lesson_date})
       }
     },
 
