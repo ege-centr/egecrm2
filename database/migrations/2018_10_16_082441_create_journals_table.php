@@ -42,7 +42,7 @@ class CreateLessonsTable extends Migration
             $table->date('date');
             $table->time('time')->nullable();
 
-            $table->unsignedInteger('created_email_id');
+            $table->unsignedInteger('conducted_email_id');
             $table->timestamps();
         });
     }

@@ -75,7 +75,7 @@ class Lessons extends Command
                     'is_absent' => $item->type_entity == 'STUDENT' ? ($item->presence == 1 ? false : true) : null,
                     'is_cancelled' => $item->cancelled,
                     'is_unplanned' => false,
-                    'created_email_id' => 69,
+                    'conducted_email_id' => 69,
                     'created_at' => $item->date,
                     'updated_at' => $item->date,
                 ]);

@@ -14,10 +14,13 @@
           <tr v-for='days_by_weeks in days_by_months_and_weeks[month]'>
             <td v-for='day in days_by_weeks' class='font-weight-medium calendar-day' :title="hasSpecial(day, 'exam') ? 'экзамен' : (hasSpecial(day, 'vacation') ? 'праздник' : '')"
               :class="{
-                'calendar-day_active calendar-day_has-lesson': lessonCount(day) > 0,
-                'calendar-day_active calendar-day_has-lesson': lessonCount(day) > 0,
-                'calendar-day_has-lesson_multiple': lessonCount(day) > 1,
-                'red--text font-weight-bold': hasSpecial(day), // праздник или экзамен
+                'calendar-day_active calendar-day_has-lesson-conducted': lessonCount(day, true) > 0,
+                'calendar-day_has-lesson-conducted_multiple': lessonCount(day, true) > 1,
+                'calendar-day_active calendar-day_has-lesson-planned': lessonCount(day, false) > 0,
+                'calendar-day_has-lesson-planned_multiple': lessonCount(day, false) > 1,
+                'calendar-day_has-multiple': lessonCount(day) > 1,
+                'red--text font-weight-bold': hasSpecial(day, 'vacation'), // праздник
+                'calendar-day_active calendar-day_has-exam': hasSpecial(day, 'exam'),
                 'calendar-day_active calendar-day_has-current-exam': hasCurrentExam(day),
               }">
               <span v-if='day !== null'>{{ day.getDate() }}</span>
@@ -138,9 +141,9 @@ export default {
       return month < 7 ? this.year + 1 : this.year
     },
 
-    lessonCount(day) {
+    lessonCount(day, is_conducted = null) {
       const date = moment(day).format('YYYY-MM-DD')
-      return this.lessons.filter(e => e.date === date && !e.is_cancelled).length
+      return this.lessons.filter(e => e.date === date && !e.is_cancelled && (is_conducted === null || e.is_conducted === is_conducted)).length
     },
 
     hasSpecial(day, type = null) {
@@ -165,7 +168,7 @@ export default {
 
 <style lang="scss" scoped>
   .calendar {
-    width: 400px;
+    width: 270px;
 
     &__month-title {
       text-align: center;
@@ -177,44 +180,45 @@ export default {
       font-size: 12px;
       & tr {
         & td {
-          $size: 34px;
+          $size: 30px;
           height: $size;
           width: $size;
           text-align: center;
+          line-height: 14px;
           &.calendar-day {
             &_active {
               & span {
                 height: $size;
                 width: $size;
                 display: inline-block;
-                color: white;
                 padding: 8px;
                 border-radius: 50%;
                 position: relative;
               }
             }
-            &_has-lesson {
+            &_has-lesson-planned {
               & span {
-                background: #82b1ff;
+                background: #BBDEFB;
+              }
+              &_multiple, &.calendar-day_has-multiple {
+                & span {
+                  background: #64B5F6 !important;
+                }
+              }
+            }
+            &_has-lesson-conducted {
+              & span {
+                background: #C8E6C9;
               }
               &_multiple {
-                  & span {
-                    &:after {
-                      content: '';
-                      height: 10px;
-                      width: 10px;
-                      position: absolute;
-                      border-radius: 50%;
-                      background: #557fc6 !important;
-                      right: 0;
-                      top: 0;
-                    }
-                  }
+                & span {
+                  background: #81C784;
+                }
               }
             }
             &_has-exam {
               & span {
-                background: #652db7;
+                color: #9E9D24;
               }
             }
             &_has-vacation {
@@ -224,8 +228,8 @@ export default {
             }
             &_has-current-exam {
               & span {
-                color: #f44336;
-                background: rgba(#f44336, .1);
+                background: #E6EE9C;
+                color: #9E9D24;
               }
             }
           }

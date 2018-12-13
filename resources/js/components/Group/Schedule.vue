@@ -11,35 +11,34 @@
           <v-flex>
             <v-data-table hide-actions hide-headers :items='items' :pagination.sync="sortingOptions" class='mt-3'>
               <template slot='items' slot-scope="{ index, item }">
-                <td width='10' class='pr-0 grey--text relative'>
+                <td width='10' class='pr-0 grey--text relative' :class="{'purple lighten-5': item.is_unplanned}">
                   <div class='lesson-status' :class="{
                     'blue': item.is_planned,
                     'green': item.is_conducted,
                     'grey': item.is_cancelled,
-                    'darken-4': lessonCount(item) > 1,
                   }"></div>
                   <span v-if='!item.is_cancelled'>{{ indexSkippingCancelledLessons(index) }}</span>
                 </td>
-                <td>
+                <td :class="{'purple lighten-5': item.is_unplanned}">
                   {{ item.date | date }}
                 </td>
-                <td>
+                <td :class="{'purple lighten-5': item.is_unplanned}">
                   {{ item.time }}
                 </td>
-                <td>
+                <td :class="{'purple lighten-5': item.is_unplanned}">
                   <span v-if='item.cabinet_id'>
                     {{ cabinets.find(e => e.id == item.cabinet_id).text }}
                   </span>
                 </td>
-                <td>
+                <td :class="{'purple lighten-5': item.is_unplanned}">
                   <span v-if='item.teacher_id'>
                     {{ teachers.find(e => e.id == item.teacher_id).names.abbreviation }}
                   </span>
                 </td>
-                <td class='grey--text'>
-                  {{ item.createdAdmin.name }} {{ item.created_at | date-time }}
+                <td class='grey--text' :class="{'purple lighten-5': item.is_unplanned}">
+                  <span v-if='item.createdAdmin'>{{ item.createdAdmin.name }} {{ item.created_at | date-time }}</span>
                 </td>
-                <td class='text-md-right'>
+                <td class='text-md-right' :class="{'purple lighten-5': item.is_unplanned}">
                   <v-btn flat icon color="black" class='ma-0' @click='edit(item)'>
                     <v-icon>more_horiz</v-icon>
                   </v-btn>
@@ -236,7 +235,7 @@ export default {
     },
 
     indexSkippingCancelledLessons(index) {
-      const cancelled_lessons_count = _.chain(this.items).sortBy('date').take(index + 1).filter({is_cancelled: 1}).value().length
+      const cancelled_lessons_count = _.chain(this.items).sortBy('date').take(index + 1).filter(e => e.is_cancelled).value().length
       return index + 1 - cancelled_lessons_count
     },
 
@@ -252,11 +251,6 @@ export default {
         }
         await this.store({...last_lesson, date})
       }
-    },
-
-    lessonCount(lesson) {
-      const date = moment(lesson.date).format('YYYY-MM-DD')
-      return this.items.filter(e => e.date === date && !e.is_cancelled).length
     },
   }
 }

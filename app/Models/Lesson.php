@@ -27,7 +27,7 @@ class Lesson extends Model
 
     public function createdAdmin()
     {
-        return $this->belongsTo(Admin\Admin::class, 'created_email_id');
+        return $this->belongsTo(Admin\Admin::class, 'conducted_email_id');
     }
 
     public function getTimeAttribute()
@@ -41,8 +41,8 @@ class Lesson extends Model
     {
         parent::boot();
 
-        static::creating(function ($model) {
-            $model->created_email_id = User::id();
-        });
+        // static::creating(function ($model) {
+        //     $model->created_email_id = User::id();
+        // });
     }
 }
