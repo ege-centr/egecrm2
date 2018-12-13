@@ -77,7 +77,7 @@ class User extends Model
 	 */
 	public static function loggedIn()
 	{
-        if (isset($_SESSION["user"])) {
+        if (isset($_SESSION["user"]) && $_SESSION["user"]) {
             $user = User::fromSession();
             return !$user->isBanned()
                 && $user->allowedToLogin() !== false
