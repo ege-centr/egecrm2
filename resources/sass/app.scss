@@ -17,8 +17,13 @@ button {
 }
 
 .v-content__wrap {
-    background: white !important;
+    // background: white !important;
+    background: #f2f2f2 !important;
     color: black;
+}
+
+.v-tabs__container {
+  background: #f2f2f2 !important;
 }
 
 a {

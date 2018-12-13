@@ -3,9 +3,10 @@
 namespace App\Models\Admin;
 
 use Shared\Model;
+use App\Interfaces\UserInterface;
 use App\Traits\{HasEmail, HasPhoto, HasPhones};
 
-class Admin extends Model
+class Admin extends Model implements UserInterface
 {
     use HasEmail, HasPhoto, HasPhones;
 
@@ -31,6 +32,14 @@ class Admin extends Model
     public function allowed($right)
     {
         return in_array($right, $this->rights);
+    }
+
+    /**
+     * Если данные изменились, должен перезалогиниться (решили в целях безопасности)
+     */
+    public function wasUpdated()
+    {
+        return $this->updated_at != self::whereId($this->id)->value('updated_at');
     }
 
     /**

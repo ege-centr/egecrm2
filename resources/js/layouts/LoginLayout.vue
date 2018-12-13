@@ -35,6 +35,7 @@
   import Cookies from 'js-cookie';
 
   const TMP_CREDENTIALS_KEY = 'tmp-credentials'
+  const API_URL = 'login'
 
   export default {
     components: { gRecaptcha },
@@ -73,7 +74,7 @@
       callback(token) {
         this.loading = true
         console.log('here', {token, credentials: this.credentials})
-        axios.post(apiUrl('login'), {
+        axios.post(apiUrl(API_URL), {
           credentials: this.credentials,
           token
         }).then(response => {

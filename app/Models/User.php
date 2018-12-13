@@ -16,11 +16,11 @@ class User extends Model
      */
     public static function login($data)
     {
-        $query = Email::where('entity_type', Admin::class)->where('email', $data['login']);
+        $query = Email::where('email', $data['login']);
 
          # проверка логина
         if (! $query->exists()) {
-            return self::errorResponse('неверный логин');
+            return self::errorResponse('неверный email');
         }
 
         # проверка пароля
@@ -29,35 +29,36 @@ class User extends Model
             return self::errorResponse('неверный пароль');
         }
 
-        $admin_id = $query->value('entity_id');
-        $admin = Admin::find($query->value('entity_id'));
+        $entity_id = $query->value('entity_id');
+        $class = $query->value('entity_type');
+        $user = $class::find($entity_id);
 
         # забанен ли?
-        if ($admin->isBanned()) {
+        if ($user->isBanned()) {
             return self::errorResponse('пользователь заблокирован');
         } else {
-            $allowed_to_login = $admin->allowedToLogin();
+            $allowed_to_login = $user->allowedToLogin();
 
             # из офиса или есть доступ вне офиса
-            if ($allowed_to_login) {
+            if ($allowed_to_login !== false) {
                 # дополнительная СМС-проверка, если пользователь логинится если не из офиса
-                if ($allowed_to_login->confirm_by_sms) {
-                    $sent_code = Redis::get(cacheKey('codes', $admin_id));
+                if ($allowed_to_login !== true && $allowed_to_login->confirm_by_sms) {
+                    $sent_code = Redis::get(cacheKey('codes', $entity_id));
                     // если уже был отправлен – проверяем
                     if (! empty($sent_code)) {
                         if (@$data['code'] != $sent_code) {
                             return self::errorResponse('неверный смс-код');
                         } else {
-                            Redis::del(cacheKey('codes', $admin_id));
+                            Redis::del(cacheKey('codes', $entity_id));
                         }
                     } else {
                         // иначе отправляем код
-                        Sms::verify($admin);
+                        Sms::verify($user);
                         return (object)['data' => null, 'status' => 202];
                     }
                 }
-                $_SESSION['user'] = $admin;
-                return (object)['data' => $admin, 'status' => 200];
+                $_SESSION['user'] = compact('entity_id', 'class');
+                return (object)['data' => $user, 'status' => 200];
             } else {
                 return self::errorResponse('нет прав доступа для данного IP');
             }
@@ -76,28 +77,26 @@ class User extends Model
 	 */
 	public static function loggedIn()
 	{
-        return isset($_SESSION["user"]) && $_SESSION["user"] 	// пользователь залогинен
-            && ! User::fromSession()->isBanned()      			// и не заблокирован
-            && User::fromSession()->allowedToLogin() 			// и можно входить
-            && User::notChanged();      						// и данные по пользователю не изменились
+        if (isset($_SESSION["user"])) {
+            $user = User::fromSession();
+            return !$user->isBanned()
+                && $user->allowedToLogin() !== false
+                // если админ, надо проверить, что данные по пользователю не менялись
+                && (get_class($user) !== Admin::class || !$user->wasUpdated());
+        }
+        return false;
 	}
-
-    /**
-     * Данные по пользователю не изменились
-     * если поменяли в настройках хоть что-то, сразу выкидывает, чтобы перезайти
-     */
-    public static function notChanged()
-    {
-        return User::fromSession()->updated_at == Admin::whereId(User::id())->value('updated_at');
-    }
-
     /*
      * Пользователь из сессии
     */
     public static function fromSession()
     {
+        $class = $_SESSION['user']['class'];
+        $entity_id = $_SESSION['user']['entity_id'];
+        // dd([$class, $entity_id]);
+        // info('loading admin...');
         // @todo: намана доллар сделай
-        return Admin::with('photo')->find($_SESSION['user']->id);
+        return Admin::with('photo')->find($entity_id);
         // return new AdminResource(Admin::find($_SESSION['user']->id));
     }
 

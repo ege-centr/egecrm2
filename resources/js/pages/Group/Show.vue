@@ -97,7 +97,11 @@
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <v-tab-item>
-          <GroupSchedule v-if='item !== null' :group='item' />
+          <v-card class='elevation-3'>
+            <v-card-text class='relative'>
+              <GroupSchedule v-if='item !== null' :group='item' />
+            </v-card-text>
+          </v-card>
         </v-tab-item>
         <v-tab-item>
         </v-tab-item>
@@ -148,3 +152,11 @@ export default {
   }
 }
 </script>
+
+<style scoped lang='scss'>
+  .v-tabs__items {
+    width: calc(100% + 20px);
+    padding: 10px;
+    margin-left: -10px;
+  }
+</style>

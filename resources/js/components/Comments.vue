@@ -74,7 +74,22 @@
   const API_URL = 'comments';
 
   export default {
-    props: ['className', 'entityId'],
+    props: {
+      className: {
+        type: String,
+        required: true,
+      },
+      entityId: {
+        type: Number,
+        required: true,
+      },
+      items: {
+        type: Array,
+        required: false,
+        default: null,
+      },
+    },
+
     data() {
       return {
         adding: false,
@@ -87,7 +102,11 @@
       }
     },
     created() {
-      this.loadData()
+      if (this.items === null) {
+        this.loadData()
+      } else {
+        this.comments = this.items
+      }
     },
     components: { Avatar },
     methods: {

@@ -3,11 +3,12 @@
 namespace App\Models\Client;
 
 use Shared\Model;
+use App\Interfaces\UserInterface;
 use App\Traits\{HasPhones, HasEmail, HasPhoto, HasName, Commentable};
 use App\Http\Resources\Request\Collection as RequestCollection;
 use App\Models\{Request, Phone, Payment, Contract\Contract, Group\Group, Group\GroupClient};
 
-class Client extends Model
+class Client extends Model implements UserInterface
 {
     use HasPhones, HasEmail, HasPhoto, HasName, Commentable;
 
@@ -41,6 +42,16 @@ class Client extends Model
     public function payments()
     {
         return $this->morphMany(Payment::class, 'entity');
+    }
+
+    public function isBanned()
+    {
+        return false;
+    }
+
+    public function allowedToLogin()
+    {
+        return true;
     }
 
     public function getRequests()

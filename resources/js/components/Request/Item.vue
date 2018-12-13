@@ -58,7 +58,7 @@
           </v-flex>
         </v-layout>
 
-        <Comments class-name='Request' :entity-id='item.id' />
+        <Comments class-name='Request' :entity-id='item.id' :items='item.comments' />
       </v-card-text>
     </v-card>
 </template>
