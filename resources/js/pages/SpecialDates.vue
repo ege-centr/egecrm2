@@ -1,7 +1,7 @@
 <template lang="html">
   <div>
     <Loader v-if='loading' />
-    <div class='mb-5 flex-items'>
+    <div class='mb-3 flex-items'>
       <div>
         <v-chip v-for="year in $store.state.data.years" class='pointer ml-0 mr-3'
         :class="{'primary white--text': year.value == selected_year}"
@@ -90,41 +90,45 @@
           </v-card>
         </v-dialog>
       </v-layout>
-      <v-container grid-list-xl class="pa-0 ma-0" fluid>
-        <v-layout>
-          <v-flex md5>
-            <Calendar :year='selected_year' :special-dates='current_year_items' />
-          </v-flex>
-          <v-spacer></v-spacer>
-          <v-flex md6>
-            <v-data-table hide-actions hide-headers :items='current_year_items' :pagination.sync="sortingOptions" class='mt-3'>
-              <template slot='items' slot-scope="{ item }">
-                <td>
-                  {{ item.date | date }}
-                </td>
-                <td>
-                  {{ types.find(e => e.value === item.type).text }}
-                </td>
-                <td>
-                  <span v-if="item.type === TYPE_EXAM">{{ getData('subjects', item.subject_id).three_letters }}–{{ item.grade_id }}</span>
-                </td>
-                <td class='text-md-right'>
-                  <v-btn flat icon color="black" class='ma-0' @click='edit(item)'>
-                    <v-icon>more_horiz</v-icon>
+      <v-card>
+        <v-card-text>
+          <v-container grid-list-xl class="pa-0 ma-0" fluid>
+            <v-layout>
+              <v-flex md5>
+                <Calendar :year='selected_year' :special-dates='current_year_items' />
+              </v-flex>
+              <v-spacer></v-spacer>
+              <v-flex md6>
+                <v-data-table hide-actions hide-headers :items='current_year_items' :pagination.sync="sortingOptions" class='mt-3'>
+                  <template slot='items' slot-scope="{ item }">
+                    <td>
+                      {{ item.date | date }}
+                    </td>
+                    <td>
+                      {{ types.find(e => e.value === item.type).text }}
+                    </td>
+                    <td>
+                      <span v-if="item.type === TYPE_EXAM">{{ getData('subjects', item.subject_id).three_letters }}–{{ item.grade_id }}</span>
+                    </td>
+                    <td class='text-md-right'>
+                      <v-btn flat icon color="black" class='ma-0' @click='edit(item)'>
+                        <v-icon>more_horiz</v-icon>
+                      </v-btn>
+                    </td>
+                  </template>
+                </v-data-table>
+                <div class='mt-3'>
+                  <v-btn color='primary' small class='ma-0 mr-3' @click='add'>
+                    <v-icon class="mr-1">add</v-icon>
+                    добавить дату
+                    <!-- добавить {{ type === TYPE_EXAM ? 'экзамен' : 'праздник'}} -->
                   </v-btn>
-                </td>
-              </template>
-            </v-data-table>
-            <div class='mt-3'>
-              <v-btn color='primary' small class='ma-0 mr-3' @click='add'>
-                <v-icon class="mr-1">add</v-icon>
-                добавить дату
-                <!-- добавить {{ type === TYPE_EXAM ? 'экзамен' : 'праздник'}} -->
-              </v-btn>
-            </div>
-          </v-flex>
-        </v-layout>
-      </v-container>
+                </div>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-text>
+      </v-card>
     </div>
 
 

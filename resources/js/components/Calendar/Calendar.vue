@@ -165,7 +165,7 @@ export default {
 
 <style lang="scss" scoped>
   .calendar {
-    width: 450px;
+    width: 400px;
 
     &__month-title {
       text-align: center;
@@ -177,7 +177,7 @@ export default {
       font-size: 12px;
       & tr {
         & td {
-          $size: 36px;
+          $size: 34px;
           height: $size;
           width: $size;
           text-align: center;
