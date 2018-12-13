@@ -185,6 +185,8 @@ export default {
           width: $size;
           text-align: center;
           line-height: 14px;
+          padding-top: 1px;
+          padding-bottom: 1px;
           &.calendar-day {
             &_active {
               & span {

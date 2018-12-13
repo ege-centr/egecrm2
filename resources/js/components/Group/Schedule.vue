@@ -11,7 +11,7 @@
           <v-flex>
             <v-data-table hide-actions hide-headers :items='items' :pagination.sync="sortingOptions" class='mt-3'>
               <template slot='items' slot-scope="{ index, item }">
-                <td width='10' class='pr-0 grey--text relative' :class="{'purple lighten-5': item.is_unplanned}">
+                <td width='10' class='pr-0 grey--text' :class="{'purple lighten-5': item.is_unplanned}">
                   <div class='lesson-status' :class="{
                     'blue': item.is_planned,
                     'green': item.is_conducted,
@@ -259,10 +259,18 @@ export default {
 <style lang="scss">
   .lesson-status {
     border-radius: 50%;
-    height: 10px;
-    width: 10px;
+    height: 8px;
+    width: 8px;
     position: absolute;
-    left: 5px;
-    top: 18px;
+    left: 6px;
+    top: 20px;
+  }
+
+  .v-datatable {
+    & tr {
+      & td {
+        position: relative;
+      }
+    }
   }
 </style>
