@@ -35,7 +35,7 @@
                 <div class='item-label'>Статус</div>
                 <span>{{ item.is_archived ? 'Заархивирована' : 'Активная' }}</span>
                 <div class='mt-3 item-label'>Уровень</div>
-                <span v-if='item.level' class='text-capitalize'>{{ levels.find(e => e.value == item.level).text }}</span>
+                <span v-if='item.level' class='text-capitalize'>{{ LEVELS.find(e => e.value == item.level).text }}</span>
                 <span v-else>Не установлен</span>
               </div>
               <div class='f-1 text-md-right align-center d-flex'>
@@ -89,7 +89,7 @@
           Расписание
         </v-tab>
         <v-tab>
-          Вкладка
+          Посещаемость
         </v-tab>
         <v-tab>
           Вкладка
@@ -97,13 +97,18 @@
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <v-tab-item>
-          <v-card class='elevation-3'>
+          <v-card class='elevation-0'>
             <v-card-text class='relative'>
               <GroupSchedule v-if='item !== null' :group='item' />
             </v-card-text>
           </v-card>
         </v-tab-item>
         <v-tab-item>
+          <v-card class='elevation-0'>
+            <v-card-text class='relative'>
+              <Visits :lessons='item.lessons' />
+            </v-card-text>
+          </v-card>
         </v-tab-item>
         <v-tab-item>
         </v-tab-item>
@@ -115,19 +120,20 @@
 
 <script>
 
-import { API_URL, levels, GroupSchedule } from '@/components/Group/data'
+import { API_URL, LEVELS, GroupSchedule } from '@/components/Group/data'
 import ClientShow from '@/pages/Client/Show'
 import Bars from '@/components/Group/Bars'
+import Visits from '@/components/Group/Visits'
 
 export default {
-  components: { ClientShow, GroupSchedule, Bars },
+  components: { ClientShow, GroupSchedule, Bars, Visits },
 
   data() {
     return {
+      LEVELS,
       loading: true,
       item: null,
       tabs: null,
-      levels,
       opened_clients: []
     }
   },
@@ -154,9 +160,9 @@ export default {
 </script>
 
 <style scoped lang='scss'>
-  .v-tabs__items {
-    width: calc(100% + 20px);
-    padding: 10px;
-    margin-left: -10px;
-  }
+  // .v-tabs__items {
+  //   width: calc(100% + 20px);
+  //   padding: 10px;
+  //   margin-left: -10px;
+  // }
 </style>

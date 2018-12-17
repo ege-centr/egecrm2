@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Lesson;
+use App\Models\{Lesson\Lesson, Lesson\ClientLesson, Teacher};
 use App\Http\Resources\Lesson\Resource as LessonResource;
 
 class LessonsController extends Controller
@@ -27,6 +27,9 @@ class LessonsController extends Controller
     {
         $model = Lesson::find($id);
         $model->update($request->all());
+        foreach($request->clientLessons as $clientLesson) {
+            ClientLesson::find($clientLesson['id'])->update($clientLesson);
+        }
         return new LessonResource($model);
     }
 

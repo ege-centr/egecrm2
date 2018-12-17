@@ -9,7 +9,7 @@ export const model_defaults = {
   lessons: []
 }
 
-export const levels = [
+export const LEVELS = [
   {text: 'низкий', value: 'low'},
   {text: 'средний', value: 'mid'},
   {text: 'высокий', value: 'high'},

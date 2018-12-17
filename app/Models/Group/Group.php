@@ -3,7 +3,7 @@
 namespace App\Models\Group;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{Cabinet, Teacher, Lesson, Client\Client};
+use App\Models\{Cabinet, Teacher, Lesson\Lesson, Client\Client};
 use App\Utils\Time;
 use DB;
 
