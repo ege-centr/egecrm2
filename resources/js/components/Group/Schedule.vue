@@ -175,6 +175,7 @@
                         <v-text-field
                           slot="input"
                           v-model="item.comment"
+                          single-line
                           label="Комментарий"
                         ></v-text-field>
                       </v-edit-dialog>
