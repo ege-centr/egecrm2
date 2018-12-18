@@ -1,6 +1,5 @@
 <template>
   <div>
-    <ClientMap ref='ClientMap' v-if='client !== null' :items='client.markers' />
     <div class='headline mb-4'>
       Клиент {{ clientId || $route.params.id }}
     </div>
@@ -17,13 +16,13 @@
                   {{ client.last_name }}
                   {{ client.first_name }}
                   {{ client.middle_name }}
-                  ({{ getData('grades', client.grade_id).title }})
+                  <span v-if='client.grade_id !== null'>({{ getData('grades', client.grade_id).title }})</span>
                 </div>
                 <div class='grey--text text--darken-2 font-weight-medium caption mt-3'>Представитель</div>
                 <div class='font-weight-bold'>
-                  {{ client.passport.last_name }}
-                  {{ client.passport.first_name }}
-                  {{ client.passport.middle_name }}
+                  {{ client.representative.last_name }}
+                  {{ client.representative.first_name }}
+                  {{ client.representative.middle_name }}
                 </div>
               </div>
             </div>
@@ -41,9 +40,6 @@
             </div>
             <div v-if='client.email'>
               {{ client.email.email }}
-            </div>
-            <div v-if='client.markers.length'>
-              <a @click='openMap'>метки ({{ client.markers.length }})</a>
             </div>
           </v-flex>
           <v-spacer></v-spacer>

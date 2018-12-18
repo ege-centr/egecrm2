@@ -50,7 +50,7 @@ to: resources/js/pages/<%= Name %>/Index.vue
 
 <script>
 
-import { url } from '@/components/<%= Name %>/data'
+import { API_URL } from '@/components/<%= Name %>/data'
 
 export default {
   data() {
@@ -74,7 +74,7 @@ export default {
   methods: {
     loadData() {
       this.loading = true
-      axios.get(apiUrl(`${url}?page=${this.page}`)).then(response => {
+      axios.get(apiUrl(`${API_URL}?page=${this.page}`)).then(response => {
         this.collection = response.data
         this.loading = false
       })

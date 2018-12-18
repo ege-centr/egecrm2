@@ -41,8 +41,7 @@ class Clients extends Command
     {
         $take = $this->argument('take');
         DB::table('clients')->delete();
-        DB::table('client_passports')->delete();
-        DB::table('client_markers')->delete();
+        DB::table('representatives')->delete();
         DB::table('contracts')->delete();
         DB::table('contract_payments')->delete();
         DB::table('contract_subjects')->delete();
@@ -82,7 +81,7 @@ class Clients extends Command
                 $passport = dbEgecrm('passports')->whereId($representative->id_passport)->first();
                 if ($passport) {
                     $passport_exists = true;
-                    DB::table('client_passports')->insert([
+                    DB::table('representatives')->insert([
                         'first_name' => $representative->first_name,
                         'last_name' => $representative->last_name,
                         'middle_name' => $representative->middle_name,
@@ -99,17 +98,7 @@ class Clients extends Command
             }
             // Добавляем пустой паспорт при отсутствии
             if (! $passport_exists) {
-                DB::table('client_passports')->insert([
-                    'client_id' => $id,
-                ]);
-            }
-
-            // Markers
-            $markers = dbEgecrm('markers')->whereOwner('STUDENT')->whereType('home')->where('id_owner', $id)->get();
-            foreach($markers as $marker) {
-                DB::table('client_markers')->insert([
-                    'lat' => $marker->lat,
-                    'lng' => $marker->lng,
+                DB::table('representatives')->insert([
                     'client_id' => $id,
                 ]);
             }

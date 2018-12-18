@@ -14,11 +14,10 @@ class Resource extends JsonResource
             'phones' => $this->phones,
             'name' => getName($this),
             'requests' => $this->getRequests(),
-            'markers' => $this->markers,
             'payments' => $this->payments,
             'contracts' => ContractResource::collection($this->contracts),
             'groups' => GroupCollection::collection($this->groups),
-            'passport' => $this->passport,
+            'representative' => new Representative($this->representative),
             'email' => $this->email,
             'photo' => $this->photo
         ]);

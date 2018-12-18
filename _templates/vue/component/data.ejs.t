@@ -1,8 +1,8 @@
 ---
 to: resources/js/components/<%= Name %>/data.js
 ---
-export const url = '<%= name %>s'
+export const API_URL = '<%= name %>s'
 
-export const model_defaults = {
+export const MODEL_DEFAULTS = {
 
 }

@@ -7,59 +7,50 @@
             Ученик
           </v-flex>
 
-          <div class='mr-4 mb-5'>
-            <v-flex>
-              <AvatarLoader class-name='Client\Client' :entity-id='client.id' :photo='client.photo' @photoChanged='photoChanged' />
-              <div class='mt-5 flex-items align-center link' @click='openMap'>
-                <v-icon color='primary' class='mr-1'>location_on</v-icon>
-                <span>Метки ({{ client.markers.length }})</span>
+          <v-flex md12>
+            <div class='vertical-inputs'>
+              <div class='vertical-inputs__input'>
+                <v-text-field v-model="client.first_name" label="Имя" hide-details></v-text-field>
+                <!-- <div class='vertical-inputs__input__message'>123</div> -->
               </div>
-            </v-flex>
-          </div>
-
-          <v-flex d-flex md9>
-            <v-layout row wrap>
-              <v-flex md3>
-                <v-text-field v-model="client.first_name" label="Имя"></v-text-field>
-              </v-flex>
-              <v-flex md3>
-                <v-text-field v-model="client.last_name" label="Фамилия"></v-text-field>
-              </v-flex>
-              <v-flex md3>
-                <v-text-field v-model="client.middle_name" label="Отчество"></v-text-field>
-              </v-flex>
-              <v-flex md3>
-                <v-select clearable
+              <div class='vertical-inputs__input'>
+                <v-text-field v-model="client.last_name" label="Фамилия" hide-details></v-text-field>
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-text-field v-model="client.middle_name" label="Отчество" hide-details></v-text-field>
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-select hide-details
                   v-model="client.grade_id"
-                  :items="$store.state.data.grades"
+                  :items="withNullOption($store.state.data.grades, 'id', 'title')"
                   item-value='id'
                   item-text='title'
                   label="Класс"
                 ></v-select>
-              </v-flex>
-              <v-flex md3>
-                <v-select clearable
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-select hide-details
                   v-model="client.year"
-                  :items="$store.state.data.years"
+                  :items="withNullOption($store.state.data.years)"
                   label="Год"
                 ></v-select>
-              </v-flex>
-              <v-flex md3>
-                <v-select multiple
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-select multiple hide-details
                   v-model="client.branches"
                   :items="$store.state.data.branches"
                   item-value='id'
                   item-text='full'
                   label="Филиалы"
                 ></v-select>
-              </v-flex>
-              <v-flex md3>
+              </div>
+              <div class='vertical-inputs__input'>
                 <EmailField :entity='client' />
-              </v-flex>
-              <v-flex md12>
+              </div>
+              <div>
                 <Phones :item='client' />
-              </v-flex>
-            </v-layout>
+              </div>
+            </div>
           </v-flex>
         </v-layout>
 
@@ -67,82 +58,90 @@
           <v-flex md12 class='headline'>
             Представитель
           </v-flex>
-          <v-flex md3>
-            <v-text-field v-model="client.passport.first_name" label="Имя"></v-text-field>
-          </v-flex>
-          <v-flex md3>
-            <v-text-field v-model="client.passport.last_name" label="Фамилия"></v-text-field>
-          </v-flex>
-          <v-flex md3>
-            <v-text-field v-model="client.passport.middle_name" label="Отчество"></v-text-field>
-          </v-flex>
-          <v-flex md12 class='headline'>
-            Паспорт
-          </v-flex>
-          <v-flex>
-            <v-text-field v-model="client.passport.series" label="Серия"></v-text-field>
-          </v-flex>
-          <v-flex>
-            <v-text-field v-model="client.passport.number" label="Номер"></v-text-field>
-          </v-flex>
-          <v-flex>
-            <v-text-field v-model="client.passport.code" label="Код подразделения"></v-text-field>
-          </v-flex>
-          <v-flex>
-            <v-menu
-              ref="birthday"
-              :close-on-content-click="false"
-              :nudge-right="40"
-              :return-value.sync="client.passport.birthday"
-              lazy
-              transition="scale-transition"
-              offset-y
-              full-width
-              min-width="290px"
-            >
-            <v-text-field
-              slot="activator"
-              v-model="client.passport.birthday"
-              label="Дата рождения"
-              prepend-icon="event"
-              readonly
-            ></v-text-field>
-            <v-date-picker
-              v-model="client.passport.birthday"
-              @input="$refs.birthday.save(client.passport.birthday)">
-            </v-date-picker>
-            </v-menu>
-          </v-flex>
-          <v-flex>
-            <v-menu
-              ref="issued_date"
-              :close-on-content-click="false"
-              :nudge-right="40"
-              :return-value.sync="client.passport.issued_date"
-              lazy
-              transition="scale-transition"
-              offset-y
-              full-width
-              min-width="290px"
-            >
-            <v-text-field
-              slot="activator"
-              v-model="client.passport.issued_date"
-              label="Дата выдачи"
-              prepend-icon="event"
-              readonly
-            ></v-text-field>
-            <v-date-picker
-              v-model="client.passport.issued_date"
-              @input="$refs.issued_date.save(client.passport.issued_date)">
-            </v-date-picker>
-            </v-menu>
-          </v-flex>
           <v-flex md12>
-            <v-text-field v-model="client.passport.issued_by" label="Выдан"></v-text-field>
-          </v-flex>
-          <v-flex md12>
-            <v-textarea v-model="client.passport.address" label="Адрес"></v-textarea>
+            <div class='vertical-inputs'>
+              <div class='vertical-inputs__input'>
+                <v-text-field v-model="client.representative.first_name" label="Имя" hide-details></v-text-field>
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-text-field v-model="client.representative.last_name" label="Фамилия" hide-details></v-text-field>
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-text-field v-model="client.representative.middle_name" label="Отчество" hide-details></v-text-field>
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-text-field v-model="client.representative.series" label="Серия" hide-details></v-text-field>
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-text-field v-model="client.representative.number" label="Номер" hide-details></v-text-field>
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-text-field v-model="client.representative.code" label="Код подразделения" hide-details></v-text-field>
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-menu
+                  ref="birthday"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  :return-value.sync="client.representative.birthday"
+                  lazy
+                  transition="scale-transition"
+                  offset-y
+                  full-width
+                  min-width="290px"
+                >
+                  <v-text-field hide-details
+                    slot="activator"
+                    v-model="client.representative.birthday"
+                    label="Дата рождения"
+                    prepend-icon="event"
+                    readonly
+                  ></v-text-field>
+                  <v-date-picker
+                    v-model="client.representative.birthday"
+                    @input="$refs.birthday.save(client.representative.birthday)">
+                  </v-date-picker>
+                </v-menu>
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-menu
+                  ref="issued_date"
+                  :close-on-content-click="false"
+                  :nudge-right="40"
+                  :return-value.sync="client.representative.issued_date"
+                  lazy
+                  transition="scale-transition"
+                  offset-y
+                  full-width
+                  min-width="290px"
+                >
+                  <v-text-field hide-details
+                    slot="activator"
+                    v-model="client.representative.issued_date"
+                    label="Дата выдачи"
+                    prepend-icon="event"
+                    readonly
+                  ></v-text-field>
+                  <v-date-picker
+                    v-model="client.representative.issued_date"
+                    @input="$refs.issued_date.save(client.representative.issued_date)">
+                  </v-date-picker>
+                </v-menu>
+              </div>
+              <div class='vertical-inputs__input vertical-inputs__input_wide'>
+                <v-text-field v-model="client.representative.issued_by" label="Выдан" hide-details></v-text-field>
+              </div>
+              <div class='vertical-inputs__input vertical-inputs__input_wide'>
+                <v-textarea v-model="client.representative.address" label="Адрес" hide-details></v-textarea>
+              </div>
+              <div class='vertical-inputs__input'>
+                <EmailField :entity='client.representative' />
+                <div class='vertical-inputs__input__message blue--text accent-1'>данный email используется в качестве логина</div>
+              </div>
+              <div>
+                <Phones :item='client.representative' />
+              </div>
+            </div>
           </v-flex>
         </v-layout>
 
@@ -154,8 +153,6 @@
           </v-flex>
         </v-layout>
       </v-container>
-
-      <ClientMap :items='client.markers' :editable='true' ref='ClientMap' />
     </div>
   </div>
 </template>

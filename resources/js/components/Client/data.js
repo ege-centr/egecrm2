@@ -3,9 +3,11 @@ export const API_URL = 'clients'
 export const CLASS_NAME = 'Client\\Client'
 
 export const MODEL_DEFAULTS = {
-  markers: [],
   contracts: [],
-  passport: {},
+  representative: {
+    email: {},
+    phones: [{phone: '', comment: ''}] 
+  },
   email: {},
   phones: [{phone: '', comment: ''}]
 }

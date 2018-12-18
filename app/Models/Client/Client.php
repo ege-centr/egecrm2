@@ -19,14 +19,9 @@ class Client extends Model implements UserInterface
 
     protected $commaSeparated = ['branches'];
 
-    public function passport()
+    public function representative()
     {
-        return $this->hasOne(ClientPassport::class);
-    }
-
-    public function markers()
-    {
-        return $this->hasMany(ClientMarker::class);
+        return $this->hasOne(Representative::class);
     }
 
     public function contracts()

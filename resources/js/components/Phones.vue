@@ -1,8 +1,8 @@
 <template>
   <div>
     <div v-for="(phone, index) in item.phones" :key='index' class='flex-items align-center' style='width: 100%'>
-      <div class='mr-3' style='width: 200px'>
-        <v-text-field
+      <div class='mr-3 vertical-input'>
+        <v-text-field hide-details
           :disabled='!editable'
           placeholder='+7 (###) ###-##-##'
           v-mask="'+7 (###) ###-##-##'"
@@ -10,8 +10,8 @@
         >
         </v-text-field>
       </div>
-      <div class='mr-3' style='width: 200px'>
-        <v-text-field v-model="item.phones[index].comment"
+      <div class='mr-3 vertical-input'>
+        <v-text-field v-model="item.phones[index].comment" hide-details
           :disabled='!editable'
           :label="`Комментарий`">
         </v-text-field>
@@ -49,9 +49,8 @@
       </v-menu>
     </div>
     <div v-if='editable'>
-      <v-btn color='primary' small class='ma-0' @click="item.phones.push({phone: '', comment: ''})">
-        <v-icon class="mr-1">add</v-icon>
-        добавить телефон
+      <v-btn fab dark small color="red" @click="item.phones.push({phone: '', comment: ''})">
+        <v-icon dark>add</v-icon>
       </v-btn>
     </div>
     <Sms ref='Sms' />
@@ -81,3 +80,4 @@ export default {
   }
 }
 </script>
+

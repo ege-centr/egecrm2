@@ -8,6 +8,9 @@ class Email extends Model
 {
     public $timestamps = false;
     protected $fillable = ['email', 'password'];
+    protected $attributes = [
+        'email' => ''
+    ];
 
     public function setPasswordProperty($value)
     {

@@ -7,6 +7,13 @@ export const GlobalPlugin = {
       return this.$store.state.data[field].find(e => e.id == id)
     }
 
+    Vue.prototype.withNullOption = function(items, value = 'value', text = 'text') {
+      return [
+        {[value]: null, [text]: 'не установлено'},
+        ...items
+      ]
+    }
+
     // Vue.prototype.toggleEnum = function(obj, field, statuses) {
     //   let status = statuses.indexOf(obj[field])
     //   console.log('from', statuses[status], status)

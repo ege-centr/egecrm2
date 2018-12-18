@@ -64,6 +64,11 @@ export default {
         route: 'PaymentIndex',
         label: 'Платежи'
       },
+      {
+        icon: 'people',
+        route: 'TeacherIndex',
+        label: 'Преподаватели'
+      },
     ],
     admin_menu: [
       {

@@ -3,9 +3,12 @@
 namespace App\Models\Client;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Traits\{HasName, HasPhones, HasEmail};
 
-class ClientPassport extends Model
+class Representative extends Model
 {
+    use HasName, HasPhones, HasEmail;
+
     public $timestamps = false;
 
     protected $fillable = [
