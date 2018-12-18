@@ -45,7 +45,7 @@ class Sms
             'phone' => $number,
             'get_messages' => 1,
             'fmt' => 3,
-            'start' => (new \DateTime())->modify('-2 months')->format('d.m.Y'),
+            'start' => (new \DateTime())->modify('-6 months')->format('d.m.Y'),
             'cnt' => $cnt,
         ]);
         $all_sms = json_decode($result);
