@@ -8,20 +8,25 @@
         <v-card-text class='messages'>
           <Loader v-if='messages === null' />
           <div v-else>
-            <div v-for='(message, index) in messages' :key='index' class="mb-3 display-flex">
-              <Avatar :photo='message.createdAdmin.photo' :size='50' class='mr-3' />
+            <div v-for='message in messages' :key='message.id' class="mb-3 display-flex">
+              <Avatar :photo='message.model ? message.model.createdAdmin.photo : null' :size='50' class='mr-3' />
               <v-card class='messages__item elevate-3 grey lighten-4'>
                 <v-card-text class='py-2 px-3'>
                   <div class='display-flex align-center'>
-                    <span class='font-weight-medium'>{{ message.createdAdmin.name }}</span>
+                    <span class='font-weight-medium'>{{ message.model ? message.model.createdAdmin.name : 'Неизвестный отправитель' }}</span>
                     <span class='ml-2 caption grey--text'>{{ message.created_at | date-time }}</span>
                   </div>
-                  {{ message.text }}
+                  {{ message.message }}
                 </v-card-text>
               </v-card>
               <v-tooltip bottom style='align-self: center' class='ml-2'>
-                <v-icon small slot="activator">done</v-icon>
-                <span>в пути</span>
+                <v-icon small slot="activator" :class="{
+                  'green--text': message.status == 1,
+                  'red--text': message.status < -1 || message.status > 2
+                }">
+                  {{ message.status == 1 ? 'done_all' : ((message.status < -1 || message.status > 2) ? 'error' : 'done') }}
+                </v-icon>
+                <span>{{ message.status_name }}</span>
               </v-tooltip>
             </div>
           </div>
@@ -43,7 +48,7 @@
 
 <script>
 
-const url = 'sms'
+const API_URL = 'sms'
 
 export default {
   data() {
@@ -62,19 +67,20 @@ export default {
       this.text = ''
       this.dialog = true
       Vue.nextTick(() => this.$refs.textarea.focus())
-      axios.get(apiUrl(`${url}?phone=${this.phone}`)).then(r => {
+      axios.get(apiUrl(`${API_URL}?phone=${this.phone}`)).then(r => {
         this.messages = r.data
       })
     },
+
     send() {
       this.sending = true
-      axios.post(apiUrl(url, 'send'), {
+      axios.post(apiUrl(API_URL, 'send'), {
         text: this.text,
         phone: this.phone
       }).then(r => {
         console.log(r.data)
         this.sending = false
-        this.messages.push(r.data)
+        this.messages.unshift(r.data)
         this.text = ''
       })
     }

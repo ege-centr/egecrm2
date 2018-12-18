@@ -22,44 +22,60 @@ class Sms
 			$number = trim($number);
 			if (!preg_match('/[0-9]{10}/', $number)) {
 				continue;
-			}
+            }
 			$params = array(
-				"login"		=> config('sms.login'),
-				"psw"		=> config('sms.psw'),
                 "fmt"       => 1, // 1 – вернуть ответ в виде чисел: ID и количество SMS через запятую (1234,1)
-                "charset"   => "utf-8",
 				"phones"	=> $number,
 				"mes"		=> $message,
 				"sender"    => "EGE-Repetit",
-			);
-			$external_id = self::exec(config('sms.host'), $params);
+            );
+
+			$result = self::exec('send', $params);
 
             $sms = SmsModel::create([
-                'text' => $message,
-                'phone' => $number,
-                'external_id' => $external_id
+                'id' => explode(",", $result)[0],
             ]);
 		}
+    }
 
-		return $sms;
-	}
+    public static function get($number, $cnt = 999)
+    {
+        $number = Phone::clean($number);
+        $result = self::exec('get', [
+            'phone' => $number,
+            'get_messages' => 1,
+            'fmt' => 3,
+            'start' => (new \DateTime())->modify('-2 months')->format('d.m.Y'),
+            'cnt' => $cnt,
+        ]);
+        $all_sms = json_decode($result);
+        $result = [];
+        if (!isset($all_sms->error)) {
+            foreach($all_sms as $sms) {
+                $result[] = [
+                    'message' => $sms->message,
+                    'status' => $sms->status,
+                    'status_name' => $sms->status_name,
+                    'model' => SmsModel::find($sms->id),
+                    'created_at' => date('Y-m-d H:i:s', $sms->send_timestamp),
+                ];
+            }
+        }
+        return $result;
+    }
 
-    /**
-     * return external_id
-     */
-	protected static function exec($url, $params)
+	protected static function exec($method, $params)
 	{
-		$ch = curl_init($url);
+        $params['login'] = config('sms.login');
+        $params['psw'] = config('sms.psw');
+        $params['charset'] = 'utf-8';
+        $ch = curl_init(config('sms.host') . $method . '.php');
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
 		$result = curl_exec($ch);
 		curl_close($ch);
-
-        // Сохраняем отправленную смс
-		$info = explode(",", $result);
-
-        return $info[0];
+        return $result;
 	}
 
 
@@ -89,7 +105,7 @@ class Sms
 			case 207: return "недопустимый номер";
 			default:  return "неизвестно";
 		}
-	}
+    }
 
     /**
      *

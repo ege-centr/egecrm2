@@ -10,14 +10,16 @@ class Sms extends Model
 {
     use HasCreatedAdmin;
 
-    protected $fillable = ['text', 'code', 'phone', 'external_id'];
+    const DISABLE_LOGS = true;
+
+    protected $fillable = ['id', 'is_secret'];
+    public $timestamps = false;
 
     public function toArray()
     {
         return [
             'createdAdmin' => new AdminResource($this->createdAdmin),
-            'text' => $this->text,
-            'created_at' => $this->created_at->toDateTimeString()
+            'is_secret' => $this->is_secret,
         ];
     }
 }

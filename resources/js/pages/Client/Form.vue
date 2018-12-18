@@ -54,7 +54,7 @@
                 ></v-select>
               </v-flex>
               <v-flex md3>
-                <v-text-field v-model="client.email.email" label="Email"></v-text-field>
+                <EmailField :entity='client' />
               </v-flex>
               <v-flex md12>
                 <Phones :item='client' />
@@ -166,6 +166,7 @@ import AvatarLoader from '@/components/AvatarLoader'
 import ClientMap from '@/components/Client/Map'
 import Phones from '@/components/Phones'
 import { MODEL_DEFAULTS } from '@/components/Client/data'
+import EmailField from '@/components/UI/EmailField'
 
 export default {
   data() {
@@ -177,7 +178,7 @@ export default {
     }
   },
 
-  components: {  AvatarLoader, ClientMap, Phones },
+  components: {  AvatarLoader, ClientMap, Phones, EmailField },
 
   created() {
     if (this.$route.params.id) {
