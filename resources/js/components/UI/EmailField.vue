@@ -88,11 +88,11 @@ export default {
 }
 </script>
 
-<style lang='scss'>
+<style lang='scss' scoped>
   .v-input__append-inner {
     align-self: flex-end !important;
     & i {
-      font-size: 34px;
+      font-size: 24px;
       margin-bottom: 18px;
     }
   }
