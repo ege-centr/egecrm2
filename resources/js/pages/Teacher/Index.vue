@@ -4,7 +4,7 @@
       <v-layout row wrap class='relative'>
         <Loader v-if='loading' />
         <v-flex xs12 v-else>
-          <Filters :items='FILTERS' @updated='loadData' />
+          <Filters :items='FILTERS' @updated='loadData' class="mb-3" />
           <v-data-table :items='teachers' item-key='id' hide-headers hide-actions>
             <template slot="items" slot-scope="{ item }">
               <td>
