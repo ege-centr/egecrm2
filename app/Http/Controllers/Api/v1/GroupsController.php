@@ -13,6 +13,10 @@ class GroupsController extends Controller
     {
         $query = Group::take(100)->orderBy('id', 'desc');
 
+        if (isset($request->level) && $request->level) {
+            $query->where('level', $request->level);
+        }
+
         foreach(['year', 'grade_id', 'subject_id'] as $field) {
             if (isset($request->{$field})) {
                 $query->where($field, $request->{$field});

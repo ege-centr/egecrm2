@@ -11,10 +11,16 @@ class ClientsController extends Controller
 {
     public function index(Request $request)
     {
+        $query = Client::query();
         if (isset($request->get_all) && $request->get_all) {
-            return resourceCollection(Client::orderByName()->get(), Collection::class);
+            return resourceCollection($query->orderByName()->get(), Collection::class);
         }
-        return resourceCollection(Client::orderBy('id', 'desc')->paginate(30), Collection::class);
+        if (isset($request->name)) {
+            $query->where('first_name', 'like', '%' . $request->name . '%')
+                ->orWhere('last_name', 'like', '%' . $request->name . '%')
+                ->orWhere('middle_name', 'like', '%' . $request->name . '%');
+        }
+        return resourceCollection($query->orderBy('id', 'desc')->paginate($request->show_by ?: 9999), Collection::class);
     }
 
     public function store(Request $request)

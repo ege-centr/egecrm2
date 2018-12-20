@@ -18,4 +18,10 @@ export const ENUMS = {
   ]
 }
 
+export const FILTERS = [
+  {label: 'Метод', field: 'methods', type: 'select', options: ENUMS.methods},
+  {label: 'Категория', field: 'category', type: 'select', options: ENUMS.categories},
+]
+
+
 export const MODEL_DEFAULTS = {}

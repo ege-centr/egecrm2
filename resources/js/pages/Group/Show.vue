@@ -56,9 +56,9 @@
             >
               <template slot='items' slot-scope="props">
                 <td width='200'>
-                  <a @click='openClient(props.item.id)'>
+                  <router-link :to="{name: 'ClientShow', params: { id: props.item.id }}">
                     {{ props.item.names.short }}
-                  </a>
+                  </router-link>
                 </td>
                 <td width='200'>
                   30%
@@ -114,19 +114,17 @@
         </v-tab-item>
       </v-tabs-items>
     </div>
-    <ClientShow v-for='client_id in opened_clients' :client-id='client_id' :key='client_id' />
   </div>
 </template>
 
 <script>
 
 import { API_URL, LEVELS, GroupSchedule } from '@/components/Group/data'
-import ClientShow from '@/pages/Client/Show'
 import Bars from '@/components/Group/Bars'
 import Visits from '@/components/Group/Visits'
 
 export default {
-  components: { ClientShow, GroupSchedule, Bars, Visits },
+  components: { GroupSchedule, Bars, Visits },
 
   data() {
     return {
@@ -134,7 +132,6 @@ export default {
       loading: true,
       item: null,
       tabs: null,
-      opened_clients: []
     }
   },
 
@@ -149,12 +146,6 @@ export default {
         this.loading = false
       })
     },
-    openClient(client_id) {
-      if (this.opened_clients.indexOf(client_id) === -1) {
-        this.opened_clients.push(client_id)
-        Vue.nextTick(() => window.scrollTo(0,document.body.scrollHeight))
-      }
-    }
   }
 }
 </script>

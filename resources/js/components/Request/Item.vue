@@ -2,63 +2,46 @@
     <v-card class="elevation-3 mb-3">
       <v-card-text>
         <v-layout row>
-          <v-flex style='width: 60%'>
-            <div class='request-info'>
-              <v-avatar :size="54">
-                <img src="http://placekitten.com/g/200/200">
-              </v-avatar>
-              <div>
-                <div>
-                  <b class='d-inline-block mr-2'>
-                    {{ item.created_user_id ? getData('users', item.created_user_id).login : 'system' }}
-                    | заявка {{ item.id }}
-                  </b>
-                  <span class='grey--text lighten-2'>{{ item.created_at | date-time }}</span>
-                </div>
-                <div>
-                  <span v-for='branch_id in item.branches' :key='branch_id'>
-                    {{ getData('branches', branch_id).short }},
-                  </span>
-                  <span v-if='item.grade'>
-                    {{ getData('grades', item.grade).title }},
-                  </span>
-                  <span v-for='(subject_id, index) in item.subjects' :key='subject_id'>
-                    {{ getData('subjects', subject_id).name }}{{ index == (item.subjects.length - 1) ? '.' : ',' }}
-                  </span>
-                  <span>
-                    {{ item.name }}
-                  </span>
-                </div>
-                <div v-for='(phone, index) in item.phones' :key='index'>
-                  {{ phone.phone }}
-                </div>
-              </div>
+          <v-flex style='width: 80%; border-right: 1px solid #9e9e9e'>
+            <div class='mb-5'>
+              <div class='item-label'>Комментарий</div>
+              {{ item.comment }} 
+              <span v-for='(phone, index) in item.phones' :key='index'><a>{{ phone.phone }}</a>{{ index === item.phones.length - 1 ? '' : ', ' }}</span>
+              <span class='grey--text'>{{ item.name }}</span>
             </div>
+            <Comments class-name='Request' :entity-id='item.id' :items='item.comments' />
           </v-flex>
-          <v-flex style='width: 30%'>
-            <div v-if='item.responsibleAdmin' class='request-info'>
-              <Avatar :size='54' :photo='item.responsibleAdmin.photo' />
-              <div>
-                <b class='d-block'>{{ item.responsibleAdmin.name }}</b>
-                <span>ответственный</span>
-              </div>
+          <v-flex style='width: 20%' class='ml-3'>
+            <div class='mb-3'>
+              <div class='item-label'>Статус</div>
+              {{ request_statuses.find(e => e.value == item.status).text }}
             </div>
-          </v-flex>
-          <v-flex style='width: 10%'>
-            <v-layout column>
-              <v-flex>
-                {{ request_statuses.find(e => e.value == item.status).text }}
-              </v-flex>
-              <v-flex class='text-md-right'>
-                <v-btn flat icon color="black" class='ma-0 mt-5' @click="$emit('show', item.id)">
-                  <v-icon>more_horiz</v-icon>
-                </v-btn>
-              </v-flex>
-            </v-layout>
+            <div class='mb-3'>
+              <div class='item-label'>Ответственный</div>
+              {{ item.responsibleAdmin.name }}
+            </div>
+            <div class='mb-3'>
+              <div class='item-label'>Филиалы</div>
+              <span v-for='(branch_id, index) in item.branches' :key='branch_id'>
+                <span :style="{color: getData('branches', branch_id).color}">{{ getData('branches', branch_id).short }}{{ index === item.branches.length - 1 ? '' : ', ' }}</span>
+              </span>
+            </div>
+            <div class='mb-3'>
+              <div class='item-label'>Предметы и класс</div>
+              <span v-for='(subject_id, index) in item.subjects' :key='subject_id'>{{ getData('subjects', subject_id).three_letters }}{{ index == (item.subjects.length - 1) ? '' : '+' }}</span>
+              <span v-if='item.grade'>
+                ({{ getData('grades', item.grade).title }})
+              </span>
+            </div>
+            <div class='mb-3'>
+              <div class='item-label'>Реквизиты заявки</div>
+              {{ item.created_user_id ? getData('users', item.created_user_id).login : 'system' }} {{ item.created_at | date-time }}
+            </div>
+             <v-btn flat icon color="black" class='ma-0 mt-5 edit-request-button' @click="$emit('show', item.id)" >
+                <v-icon>more_horiz</v-icon>
+              </v-btn>
           </v-flex>
         </v-layout>
-
-        <Comments class-name='Request' :entity-id='item.id' :items='item.comments' />
       </v-card-text>
     </v-card>
 </template>
@@ -86,5 +69,11 @@ export default {
     & > div {
       margin-right: 14px;
     }
+  }
+
+  .edit-request-button {
+    position: absolute; 
+    bottom: 5px; 
+    right: 10px;
   }
 </style>

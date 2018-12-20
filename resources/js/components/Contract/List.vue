@@ -86,9 +86,8 @@
     </v-data-table>
 
     <v-flex md12 px-0 mt-3 v-if='clientId'>
-      <v-btn color='primary' small class='ma-0' @click='openDialog(null)'>
-        <v-icon class="mr-1">add</v-icon>
-        добавить
+      <v-btn fab dark small color="red" @click='openDialog(null)'>
+        <v-icon dark>add</v-icon>
       </v-btn>
     </v-flex>
 

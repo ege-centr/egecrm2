@@ -1,6 +1,7 @@
 <template>
   <v-layout row wrap>
     <Loader v-if='loading' />
+    <Filters class='mb-3' :items='FILTERS' @updated='loadData' />
     <v-flex md12 class='relative'>
       <Dialog ref='Dialog' v-if='entityId'
         :item='item'
@@ -64,27 +65,35 @@
         </template>
       </v-data-table>
       <v-flex md12 px-0 mt-3 v-if='entityId'>
-        <v-btn color='primary' small class='ma-0' @click='openDialog(null)'>
-          <v-icon class="mr-1">add</v-icon>
-          добавить
+        <v-btn fab dark small color="red" @click='openDialog(null)'>
+          <v-icon dark>add</v-icon>
         </v-btn>
       </v-flex>
-      <div class="text-xs-center mt-4" v-if='items === null && collection !== null'>
-        <v-pagination
-          v-if='collection.meta.last_page > 1'
-          v-model="page"
-          :length="collection.meta.last_page"
-          :total-visible="7"
-          circle
-        ></v-pagination>
-     </div>
+      <v-layout row class='mt-4' align-center v-if='items === null && collection !== null'>
+        <v-flex md4>
+        </v-flex>
+        <v-flex md4>
+          <v-pagination
+            v-if='collection.meta.last_page > 1'
+            v-model="page"
+            :length="collection.meta.last_page"
+            :total-visible="7"
+            circle
+          ></v-pagination>
+        </v-flex>
+        <v-flex class='text-md-right'>
+          <ShowBy :value='show_by' @changed='showByChanged' />
+        </v-flex>
+     </v-layout>
    </v-flex>
  </v-layout>
 </template>
 <script>
 
-import { API_URL, ENUMS } from './data'
+import { API_URL, ENUMS, FILTERS } from './data'
 import Dialog from './Dialog'
+import ShowBy from '@/components/UI/ShowBy'
+import Filters from '@/components/Filters'
 
 export default {
   props: {
@@ -104,15 +113,17 @@ export default {
     }
   },
 
-  components: { Dialog },
+  components: { Dialog, ShowBy, Filters },
 
   data() {
     return {
+      ENUMS,
+      FILTERS,
       page: 1,
       loading: false,
       collection: null,
       item: null,
-      ENUMS
+      show_by: 30,
     }
   },
 
@@ -144,12 +155,16 @@ export default {
     stored(item) {
       this.items.push(item)
     },
-    loadData() {
+    loadData(filters = '') {
       this.loading = true
-      axios.get(apiUrl(`${API_URL}?page=${this.page}`)).then(response => {
+      axios.get(apiUrl(`${API_URL}?page=${this.page}&show_by=${this.show_by}${filters}`)).then(response => {
         this.collection = response.data
         this.loading = false
       })
+    },
+    showByChanged(option) {
+      this.show_by = option
+      this.loadData()
     },
   },
 

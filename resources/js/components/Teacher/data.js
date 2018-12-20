@@ -1,5 +1,7 @@
 export const API_URL = 'teachers'
 
+export const CLASS_NAME = 'Teacher'
+
 export const MODEL_DEFAULTS = {}
 
 export const FILTERS = [

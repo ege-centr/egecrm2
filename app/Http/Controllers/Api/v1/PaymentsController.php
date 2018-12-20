@@ -11,7 +11,14 @@ class PaymentsController extends Controller
 {
     public function index(Request $request)
     {
-        return PaymentCollection::collection(Payment::paginate(30));
+        $query = Payment::query();
+        if (isset($request->category) && $request->category) {
+            $query->where('category', $request->category);
+        }
+        if (isset($request->method) && $request->method) {
+            $query->where('method', $request->method);
+        }
+        return PaymentCollection::collection($query->paginate($request->show_by ?: 9999));
     }
 
     public function update(Request $request, $id)

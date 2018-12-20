@@ -10,9 +10,7 @@ class Collection extends JsonResource
 {
     public function toArray($request)
     {
-        return array_merge(without(parent::toArray($request), [
-            'comment'
-        ]), [
+        return array_merge(parent::toArray($request), [
             'comments' => CommentResource::collection($this->comments),
             'phones' => $this->phones,
             'responsibleAdmin' => new AdminResource($this->responsibleAdmin)

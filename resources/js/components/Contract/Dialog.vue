@@ -1,24 +1,31 @@
 <template>
   <v-layout row justify-center v-if='item !== null'>
-    <v-dialog v-model="dialog" persistent max-width="1200px">
+    <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card>
-        <v-card-title>
-          <span class="headline">{{ item.id ? 'Редактирование' : 'Добавление' }} договора</span>
-        </v-card-title>
+        <v-toolbar dark color="primary">
+          <v-btn icon dark @click.native="dialog = false">
+            <v-icon>close</v-icon>
+          </v-btn>
+          <v-toolbar-title>{{ item.id ? 'Редактирование' : 'Добавление' }} договора</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-toolbar-items>
+            <v-btn flat @click.native="storeOrUpdate" :loading='saving'>{{ item.id ? 'Сохранить' : 'Добавить' }}</v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
         <v-card-text>
           <v-container grid-list-xl class="pa-0 ma-0">
-            <v-layout>
+            <v-layout class='mb-3'>
               <v-flex md7>
                 <v-layout wrap align-center v-for='subject in $store.state.data.subjects' :key='subject.id'>
-                  <v-flex md5 py-0 @click='toggleSubject(subject)'>
-                    <v-switch
-                      :label="subject.name"
-                      :color="getSubjectColor(subject)"
-                      :input-value='findSubject(subject)'
+                  <v-flex style='max-width: 150px'>
+                    <v-slider min='0' max='3' @change='subjectStatusHandler(subject.id)' :color="getSubjectColor(subject)"
+                      class='ma-0'
+                      :label="getData('subjects', subject.id).three_letters"
+                      v-model="slider[subject.id]"
                       hide-details
-                    ></v-switch>
+                    ></v-slider>
                   </v-flex>
-                  <v-flex md7>
+                  <v-flex class='ml-4' style='max-width: 246px'>
                     <v-layout align-center v-if='findSubject(subject)'>
                       <v-flex class='py-0 f-1'>
                         <v-text-field class='pa-0 ma-0' v-model="findSubject(subject).lessons" placeholder="уроков" hide-details></v-text-field>
@@ -26,69 +33,72 @@
                       <v-flex class='py-0 f-1'>
                         <v-text-field class='pa-0 ma-0' v-model="findSubject(subject).lessons_planned" placeholder="программа" hide-details></v-text-field>
                       </v-flex>
-                      <v-flex class='py-0 f-1'>
-                        <v-btn icon @click="toggleEnum(subject)" class='ma-0'>
-                          <v-icon>cached</v-icon>
-                        </v-btn>
-                      </v-flex>
                     </v-layout>
                   </v-flex>
                 </v-layout>
               </v-flex>
-              <v-flex md6>
-                <div>
-                  <v-select clearable
-                    v-model="item.grade_id"
-                    :items="$store.state.data.grades"
-                    item-value='id'
-                    item-text='title'
-                    label="Класс"
-                  ></v-select>
+            </v-layout>
+            <v-layout>
+              <v-flex md12>
+                <div class='vertical-inputs mb-5'>
+                  <div class='vertical-inputs__input'>
+                    <v-select hide-details
+                      v-model="item.grade_id"
+                      :items="withNullOption($store.state.data.grades, 'id', 'title')"
+                      item-value='id'
+                      item-text='title'
+                      label="Класс"
+                    ></v-select>
+                  </div>
+                  <div class='vertical-inputs__input'>
+                    <v-select
+                      v-model="item.year"
+                      :items="withNullOption($store.state.data.years)"
+                      label="Год"
+                    ></v-select>
+                  </div>
+                  <div class='vertical-inputs__input'>
+                    <v-text-field v-model="item.sum" label="Cумма" hide-details></v-text-field>
+                  </div>
+                  <div class='vertical-inputs__input'>
+                    <v-select
+                      v-model="item.discount"
+                      :items="withNullOption(DISCOUNTS)"
+                      label="Скидка"
+                    ></v-select>
+                  </div>
+                  <div class='vertical-inputs__input'>
+                    <v-menu
+                      ref="date"
+                      :close-on-content-click="false"
+                      :nudge-right="40"
+                      :return-value.sync="item.date"
+                      lazy
+                      transition="scale-transition"
+                      offset-y
+                      full-width
+                      min-width="290px"
+                    >
+                      <v-text-field
+                        slot="activator"
+                        v-model="item.date"
+                        label="Дата"
+                        prepend-icon="event"
+                        readonly
+                      ></v-text-field>
+                      <v-date-picker
+                        v-model="item.date"
+                        @input="$refs.date.save(item.date)">
+                      </v-date-picker>
+                    </v-menu>
+                  </div>
                 </div>
-                <div>
-                  <v-select clearable
-                    v-model="item.year"
-                    :items="$store.state.data.years"
-                    label="Год"
-                  ></v-select>
-                </div>
-                <div>
-                  <v-text-field v-model="item.sum" label="Cумма"></v-text-field>
-                </div>
-                <div>
-                  <v-select clearable
-                    v-model="item.discount"
-                    :items="DISCOUNTS"
-                    label="Скидка"
-                  ></v-select>
-                </div>
-                <div>
-                  <v-menu
-                    ref="date"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    :return-value.sync="item.date"
-                    lazy
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    min-width="290px"
-                  >
-                    <v-text-field
-                      slot="activator"
-                      v-model="item.date"
-                      label="Дата"
-                      prepend-icon="event"
-                      readonly
-                    ></v-text-field>
-                    <v-date-picker
-                      v-model="item.date"
-                      @input="$refs.date.save(item.date)">
-                    </v-date-picker>
-                  </v-menu>
-                </div>
-                <v-subheader class='pa-0'>Платежи</v-subheader>
-                <div v-for='(payment, index) in item.payments'>
+
+
+                
+                
+                <!-- <v-subheader class='pa-0'>Платежи</v-subheader> -->
+                <div class='contract-payment' v-for='(payment, index) in item.payments' :key='index'>
                   <v-layout>
                     <v-flex>
                       <v-text-field v-model="payment.sum" label="Cумма"></v-text-field>
@@ -124,20 +134,14 @@
                   </v-layout>
                 </div>
                 <div>
-                  <v-btn color='primary' small class='ma-0' @click='addPayment'>
-                    <v-icon class="mr-1">add</v-icon>
-                    добавить платеж
+                  <v-btn fab dark small color="red" @click='addPayment'>
+                    <v-icon dark>add</v-icon>
                   </v-btn>
                 </div>
               </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="dialog = false">Отмена</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="storeOrUpdate" :loading='saving'>{{ item.id ? 'Сохранить' : 'Добавить' }}</v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-layout>
@@ -152,7 +156,8 @@ import {
   SUBJECT_STATUSES,
   SUBJECT_DEFAULTS,
   SUBJECT_STATUS_TO_BE_TERMINATED,
-  SUBJECT_STATUS_TERMINATED
+  SUBJECT_STATUS_TERMINATED,
+SUBJECT_STATUS_ACTIVE
 } from './data'
 
 export default {
@@ -169,10 +174,40 @@ export default {
       dialog: false,
       saving: false,
       item: null,
+      slider: {},
     }
   },
+
   methods: {
+    subjectStatusHandler(subject_id) {
+      const status = this.slider[subject_id]
+      let index = this.item.subjects.findIndex(e => e.subject_id == subject_id)
+      if (status > 0) {
+        if (index === -1) {
+          index = this.item.subjects.push({
+            subject_id: subject_id,
+            ...SUBJECT_DEFAULTS
+          }) - 1
+        }
+        switch (status) {
+          case 1: {
+            this.item.subjects[index].status = SUBJECT_STATUS_TERMINATED
+            break
+          }
+          case 2: {
+            this.item.subjects[index].status = SUBJECT_STATUS_TO_BE_TERMINATED
+            break
+          }
+          default: {
+            this.item.subjects[index].status = SUBJECT_STATUS_ACTIVE
+          }
+        }
+      } else {
+        this.item.subjects.splice(index, 1)
+      }
+    },
     open(item) {
+      this.slider = {}
       if (item === null) {
         this.item = {
           client_id: this.clientId,
@@ -180,34 +215,17 @@ export default {
         }
       } else {
         this.item = clone(item)
+        this.item.subjects.forEach(subject => {
+          this.slider[subject.subject_id] = subject.status === SUBJECT_STATUS_TO_BE_TERMINATED ? 1 : (subject.status === SUBJECT_STATUS_TO_BE_TERMINATED ? 2 : 3)
+        })
       }
       this.dialog = true
     },
     addPayment() {
       this.item.payments.push({})
     },
-    toggleSubject(subject) {
-      const index = this.item.subjects.findIndex(e => e.subject_id == subject.id)
-      if (index === -1) {
-        this.item.subjects.push({
-          subject_id: subject.id,
-          ...SUBJECT_DEFAULTS
-        })
-      } else {
-        this.item.subjects.splice(index, 1)
-      }
-    },
     findSubject(subject) {
       return this.item.subjects.find(e => e.subject_id == subject.id)
-    },
-    toggleEnum(subject) {
-      const index = this.item.subjects.findIndex(e => e.subject_id == subject.id)
-      status = SUBJECT_STATUSES.indexOf(this.item.subjects[index].status)
-      status++
-      if (status >= SUBJECT_STATUSES.length) {
-        status = 0
-      }
-      Vue.set(this.item.subjects, index, {...this.item.subjects[index], status: SUBJECT_STATUSES[status]})
     },
     getSubjectColor(s) {
       const subject = this.findSubject(s)
@@ -238,3 +256,18 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  $vertical-input-width: 500px;
+
+  .vertical-inputs__input {
+    width: $vertical-input-width;
+     & .v-input {
+      width: $vertical-input-width;
+     }
+  }
+
+  .contract-payment {
+    width: $vertical-input-width;
+  }
+</style>

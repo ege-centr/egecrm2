@@ -1,6 +1,7 @@
 <template>
   <div>
     <Loader v-if='loading' />
+    <Filters class='mb-3' :items='FILTERS' @updated='loadData' />
     <v-data-table v-if='getItems && getItems.length'
       class="elevation-1"
       hide-actions
@@ -46,9 +47,12 @@
 </template>
 <script>
 
-import { API_URL } from './data'
+import { API_URL, FILTERS } from './data'
+import Filters from '@/components/Filters'
 
 export default {
+  components: { Filters },
+
   props: {
     items: {
       type: Array,
@@ -64,6 +68,7 @@ export default {
 
   data() {
     return {
+      FILTERS,
       page: 1,
       loading: false,
       server_items: null,
@@ -83,9 +88,9 @@ export default {
   },
 
   methods: {
-    loadData() {
+    loadData(filters = '') {
       this.loading = true
-      axios.get(apiUrl(API_URL)).then(response => {
+      axios.get(apiUrl(API_URL + '?a=1' + filters)).then(response => {
         this.server_items = response.data
         this.loading = false
       })

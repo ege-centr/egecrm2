@@ -11,6 +11,9 @@
         </router-link>
       </v-flex>
     </v-layout>
+    
+    <Filters :items='FILTERS' @updated='loadData' />
+
     <v-container grid-list-md fluid class="px-0" v-if='collection !== null'>
       <v-layout row wrap class='relative'>
         <v-flex xs12>
@@ -32,27 +35,40 @@
           </v-data-table>
         </v-flex>
       </v-layout>
-      <div class="text-xs-center mt-4">
-        <v-pagination
-          v-if='collection.meta.last_page > 1'
-          v-model="page"
-          :length="collection.meta.last_page"
-          :total-visible="7"
-          circle
-        ></v-pagination>
-     </div>
+      <v-layout row class='mt-4' align-center>
+        <v-flex md4>
+        </v-flex>
+        <v-flex md4>
+          <v-pagination
+            v-if='collection.meta.last_page > 1'
+            v-model="page"
+            :length="collection.meta.last_page"
+            :total-visible="7"
+            circle
+          ></v-pagination>
+        </v-flex>
+        <v-flex class='text-md-right'>
+          <ShowBy :value='show_by' @changed='showByChanged' />
+        </v-flex>
+     </v-layout>
     </v-container>
   </div>
 </template>
 
 <script>
 
-import { API_URL } from '@/components/Client/data'
+import { API_URL, FILTERS } from '@/components/Client/data'
+import ShowBy from '@/components/UI/ShowBy'
+import Filters from '@/components/Filters'
 
 export default {
+  components: { Filters, ShowBy },
+
   data() {
     return {
+      FILTERS,
       page: 1,
+      show_by: 30,
       loading: false,
       collection: null
     }
@@ -64,18 +80,23 @@ export default {
 
   watch: {
     page() {
-        this.loadData()
+      this.loadData()
     }
   },
 
   methods: {
-    loadData() {
+    loadData(filters = '') {
       this.loading = true
-      axios.get(apiUrl(`${API_URL}?page=${this.page}`)).then(response => {
+      axios.get(apiUrl(`${API_URL}?page=${this.page}&show_by=${this.show_by}${filters}`)).then(response => {
         this.collection = response.data
         this.loading = false
       })
-    }
+    },
+
+    showByChanged(option) {
+      this.show_by = option
+      this.loadData()
+    },
   }
 }
 </script>

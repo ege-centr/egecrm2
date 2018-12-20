@@ -16,4 +16,8 @@ export const LEVELS = [
   {text: 'спец. группа', value: 'special'}
 ]
 
+export const FILTERS = [
+  {label: 'Уровень', field: 'status', type: 'select', options: LEVELS},
+];
+
 export const GroupSchedule = require('./Schedule')
