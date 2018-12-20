@@ -13,6 +13,7 @@ class Collection extends JsonResource
         return array_merge(parent::toArray($request), [
             'comments' => CommentResource::collection($this->comments),
             'phones' => $this->phones,
+            'client_ids' => $this->getClientIds(),
             'responsibleAdmin' => new AdminResource($this->responsibleAdmin)
         ]);
     }
