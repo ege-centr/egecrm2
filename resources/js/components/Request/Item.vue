@@ -37,7 +37,7 @@
               <div class='item-label'>Реквизиты заявки</div>
               {{ item.created_user_id ? getData('users', item.created_user_id).login : 'system' }} {{ item.created_at | date-time }}
             </div>
-            <div class='mb-3'>
+            <div class='mb-3' v-if='item.client_ids.length'>
               <div class='item-label'>Клиенты</div>
               <div v-for='client_id in item.client_ids' :key='client_id'>
                 <router-link :to="{ name: 'ClientShow', params: {id: client_id}}">
