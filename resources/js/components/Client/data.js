@@ -17,4 +17,5 @@ export const MODEL_DEFAULTS = {
 }
 
 export const ClientMap = require('./Map')
+export const ClientDialog = require('./Dialog')
 export const GroupNotAssignedList = require('./GroupNotAssignedList')

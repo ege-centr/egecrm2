@@ -39,7 +39,7 @@
                   <!-- <v-flex md3>
                     <v-text-field v-model="item.email.email" label="Email"></v-text-field>
                   </v-flex> -->
-                  <Phones :item='item' />
+                  <PhoneEdit :item='item' />
                 </v-layout>
               </v-flex>
 
@@ -109,7 +109,7 @@
 import { model_defaults } from './data'
 import VueCropper from 'vue-cropperjs'
 import AvatarLoader from '@/components/AvatarLoader'
-import Phones from '@/components/Phones'
+import PhoneEdit from '@/components/Phone/Edit'
 
 export default {
   data() {
@@ -123,7 +123,7 @@ export default {
     }
   },
 
-  components: { AvatarLoader, Phones },
+  components: { AvatarLoader, PhoneEdit },
 
   created() {
     axios.get(apiUrl('rights')).then(r => {

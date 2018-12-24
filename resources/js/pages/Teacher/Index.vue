@@ -1,9 +1,9 @@
 <template lang="html">
   <div>
-    <v-container grid-list-md fluid class="px-0" v-if='collection !== null'>
+    <Loader v-if='teachers === null' />
+    <v-container grid-list-md fluid class="px-0" v-else>
       <v-layout row wrap class='relative'>
-        <Loader v-if='loading' />
-        <v-flex xs12 v-else>
+        <v-flex xs12>
           <Filters :items='FILTERS' @updated='loadData' class="mb-3" />
           <v-data-table :items='teachers' item-key='id' hide-headers hide-actions>
             <template slot="items" slot-scope="{ item }">

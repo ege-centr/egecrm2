@@ -46,8 +46,8 @@ class ClientsController extends Controller
         $model->phones()->delete();
         $model->phones()->createMany($request->phones);
 
-        $model->representative()->update($request->representative);
-        $model->email()->update($request->email);
+        $model->representative->update($request->representative);
+        $model->email->update($request->email);
 
         return new Resource($model);
     }

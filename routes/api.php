@@ -47,6 +47,8 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
 
     Route::resource('settings', 'SettingsController')->only(['index', 'store']);
 
+    Route::resource('print', 'PrintController')->only(['index']);
+
     Route::prefix('sms')->group(function() {
         Route::get('/', 'SmsController@index');
         Route::post('send', 'SmsController@send');

@@ -19,5 +19,9 @@
     align-items: center;
     background: rgba(white, .8);
     border-radius: $border-radius;
+    &_fullscreen-dialog {
+      height: calc(70vh - 64px);
+      top: 10px;
+    }
   }
 </style>

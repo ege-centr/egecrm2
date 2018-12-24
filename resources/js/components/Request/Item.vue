@@ -6,7 +6,7 @@
             <div class='mb-5'>
               <div class='item-label'>Комментарий</div>
               {{ item.comment }} 
-              <span v-for='(phone, index) in item.phones' :key='index'><a>{{ phone.phone }}</a>{{ index === item.phones.length - 1 ? '' : ', ' }}</span>
+              <PhoneList :items='item.phones' />
               <span class='grey--text'>{{ item.name }}</span>
             </div>
             <Comments class-name='Request' :entity-id='item.id' :items='item.comments' />
@@ -16,7 +16,7 @@
               <div class='item-label'>Статус</div>
               {{ request_statuses.find(e => e.value == item.status).text }}
             </div>
-            <div class='mb-3'>
+            <div class='mb-3' v-if='item.responsibleAdmin'>
               <div class='item-label'>Ответственный</div>
               {{ item.responsibleAdmin.name }}
             </div>
@@ -45,7 +45,7 @@
                 </router-link>
               </div>
             </div>
-             <v-btn flat icon color="black" class='ma-0 mt-5 edit-request-button' @click="$emit('show', item.id)" >
+             <v-btn flat icon color="black" class='ma-0 mt-5 edit-request-button' @click="$emit('openDialog', item.id)" >
                 <v-icon>more_horiz</v-icon>
               </v-btn>
           </v-flex>
@@ -59,9 +59,10 @@
 import { request_statuses } from './data'
 import Avatar from '@/components/UI/Avatar'
 import Comments from '@/components/Comments'
+import PhoneList from '@/components/Phone/List'
 
 export default {
-  components: { Avatar, Comments },
+  components: { Avatar, Comments, PhoneList },
   data() {
     return {
       request_statuses

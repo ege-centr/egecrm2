@@ -71,7 +71,7 @@
                     <v-list-tile-title>Добавить версию</v-list-tile-title>
                   </v-list-tile-content>
               </v-list-tile>
-              <v-list-tile @click='openDialog(item)'>
+              <v-list-tile @click='print(item)'>
                   <v-list-tile-action>
                     <v-icon>print</v-icon>
                   </v-list-tile-action>
@@ -91,12 +91,14 @@
       </v-btn>
     </v-flex>
 
+    <Print ref='Print' />
   </v-flex>
 </template>
 
 <script>
 
 import Dialog from './Dialog'
+import Print from './Print'
 import { MODEL_DEFAULTS, SUBJECT_STATUSES } from './data'
 
 export default {
@@ -111,11 +113,13 @@ export default {
       default: null
     }
   },
-  components: { Dialog },
+
+  components: { Dialog, Print },
+
   data() {
     return {
+      SUBJECT_STATUSES,
       contract: MODEL_DEFAULTS,
-      SUBJECT_STATUSES
     }
   },
   methods: {
@@ -139,6 +143,9 @@ export default {
     },
     stored(item) {
       this.items.push(item)
+    },
+    print(item) {
+      this.$refs.Print.open(item.id)
     },
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn v-if='phones !== null' color='primary' small class='ma-0' @click='add'>
+    <v-btn v-if='phones !== null' color='primary' small class='ma-0' @click='openDialog'>
       <v-icon class="mr-1">add</v-icon>
       добавить
     </v-btn>
@@ -10,7 +10,7 @@
     <v-container grid-list-md fluid class="px-0" v-if='requests !== null'>
       <v-layout row wrap class='relative'>
         <v-flex xs12 v-for='request in requests' :key='request.id'>
-          <RequestItem :item='request' @show='show' />
+          <RequestItem :item='request' @openDialog='openDialog' />
         </v-flex>
       </v-layout>
       <div class="text-xs-center mt-4">
@@ -75,12 +75,8 @@ export default {
       })
     },
 
-    show(id) {
-      this.$refs.RequestDialog.show(id)
-    },
-
-    add() {
-      this.$refs.RequestDialog.add()
+    openDialog(id = null) {
+      this.$refs.RequestDialog.open(id)
     },
 
     saved() {

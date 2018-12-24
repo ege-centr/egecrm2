@@ -7,91 +7,68 @@
           <v-flex md12 class='headline'>
             {{ item.id ? `Редактирование группы №${item.id}` : 'Добавление группы' }}
           </v-flex>
-          <v-flex md3>
-            <v-select clearable
-              v-model="item.teacher_id"
-              :items="teachers"
-              label="Учитель"
-              item-value='id'
-              item-text='names.abbreviation'
-            ></v-select>
-          </v-flex>
-          <v-flex md3>
-            <v-select clearable
-              v-model="item.head_teacher_id"
-              :items="teachers"
-              label="Классный руководитель"
-              item-value='id'
-              item-text='names.abbreviation'
-            ></v-select>
-          </v-flex>
-          <v-flex md3>
-            <v-select clearable
-              v-model="item.grade_id"
-              :items="$store.state.data.grades"
-              item-value='id'
-              item-text='title'
-              label="Класс"
-            ></v-select>
-          </v-flex>
-          <v-flex md3>
-            <v-select clearable
-              v-model="item.year"
-              :items="$store.state.data.years"
-              label="Год"
-            ></v-select>
-          </v-flex>
-          <v-flex md3>
-            <v-select clearable
-              v-model="item.subject_id"
-              :items="$store.state.data.subjects"
-              item-value='id'
-              item-text='name'
-              label="Предмет"
-            ></v-select>
-          </v-flex>
-          <v-flex md3>
-            <v-select clearable
-              v-model="item.cabinet_id"
-              :items="cabinets"
-              item-value='id'
-              label="Кабинет"
-            ></v-select>
-          </v-flex>
-          <v-flex md3>
-            <v-text-field v-model="item.teacher_price" label="Цена за занятие, руб."></v-text-field>
-          </v-flex>
-          <v-flex>
-            <v-text-field v-model="item.duration" label="Длительность занятия, мин."></v-text-field>
-          </v-flex>
-        </v-layout>
 
-        <v-layout>
-          <v-switch class='ml-3 mt-0'
-            label="Готова к запуску"
-            color="success"
-            hide-details
-            v-model='item.is_ready_to_start'
-          ></v-switch>
-        </v-layout>
-
-        <v-layout>
-          <v-switch class='ml-3'
-            label="Заархивирована"
-            color="error"
-            hide-details
-            v-model='item.is_archived'
-          ></v-switch>
-        </v-layout>
-
-        <v-layout wrap v-if='item.clients.length'>
-          <v-flex md12 class='headline mt-3'>
-            Состав группы:
-          </v-flex>
           <v-flex md12>
-            <div v-for="(client, index) in item.clients" :key="client.id" class='flex-items align-center'>
-              <div>
-                {{ client.names.short }}
+            <div class='vertical-inputs'>
+              <div class='vertical-inputs__input'>
+                <v-select clearable hide-details
+                  v-model="item.teacher_id"
+                  :items="teachers"
+                  label="Учитель"
+                  item-value='id'
+                  item-text='names.abbreviation'
+                ></v-select>
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-select clearable hide-details
+                  v-model="item.head_teacher_id"
+                  :items="teachers"
+                  label="Классный руководитель"
+                  item-value='id'
+                  item-text='names.abbreviation'
+                ></v-select>
+              </div>
+              <div class='vertical-inputs__input'>
+                <GradeAndYear :item='item' />
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-select clearable hide-details
+                  v-model="item.subject_id"
+                  :items="$store.state.data.subjects"
+                  item-value='id'
+                  item-text='name'
+                  label="Предмет"
+                ></v-select>
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-select clearable hide-details
+                  v-model="item.cabinet_id"
+                  :items="cabinets"
+                  item-value='id'
+                  label="Кабинет"
+                ></v-select>
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-text-field hide-details v-model="item.teacher_price" label="Цена за занятие, руб."></v-text-field>
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-text-field hide-details v-model="item.duration" label="Длительность занятия, мин."></v-text-field>
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-switch class='mt-0'
+                  label="Готова к запуску"
+                  color="success"
+                  hide-details
+                  v-model='item.is_ready_to_start'
+                ></v-switch>
+              </div>
+              <div class='vertical-inputs__input'>
+                <v-switch class='mt-0'
+                  label="Заархивирована"
+                  color="error"
+                  hide-details
+                  v-model='item.is_archived'
+                ></v-switch>
               </div>
             </div>
           </v-flex>
@@ -112,8 +89,11 @@
 <script>
 
 import { model_defaults, API_URL } from '@/components/Group/data'
+import GradeAndYear from '@/components/GradeAndYear'
 
 export default {
+  components: { GradeAndYear },
+
   data() {
     return {
       item: model_defaults,

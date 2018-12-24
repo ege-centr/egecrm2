@@ -39,11 +39,11 @@
                 <span v-else>Не установлен</span>
               </div>
               <div class='f-1 text-md-right align-center d-flex'>
-                <router-link :to="{name: 'GroupEdit', params: { id: item.id }}">
-                  <v-btn flat icon color="black" class='ma-0'>
+                <div>
+                  <v-btn @click='openGroup(item.id)' flat icon color="black" class='ma-0'>
                     <v-icon>more_horiz</v-icon>
                   </v-btn>
-                </router-link>
+                </div>
               </div>
             </div>
           </v-flex>
@@ -73,7 +73,7 @@
                   <Bars :group-bars='item.schedule.bars' :client-bars='props.item.bars' />
                 </td>
                 <td class='text-md-right' style='padding-right: 16px'>
-                  <v-btn flat icon color="black" class='ma-0'>
+                  <v-btn  flat icon color="black" class='ma-0' @click='openClient(props.item.id)'>
                     <v-icon>more_horiz</v-icon>
                   </v-btn>
                 </td>
@@ -114,6 +114,8 @@
         </v-tab-item>
       </v-tabs-items>
     </div>
+    <ClientDialog ref='ClientDialog' />
+    <GroupDialog ref='GroupDialog' />
   </div>
 </template>
 
@@ -122,9 +124,11 @@
 import { API_URL, LEVELS, GroupSchedule } from '@/components/Group/data'
 import Bars from '@/components/Group/Bars'
 import Visits from '@/components/Group/Visits'
+import ClientDialog from '@/components/Client/Dialog'
+import GroupDialog from '@/components/Group/Dialog'
 
 export default {
-  components: { GroupSchedule, Bars, Visits },
+  components: { GroupSchedule, Bars, Visits, ClientDialog, GroupDialog },
 
   data() {
     return {
@@ -145,6 +149,14 @@ export default {
         this.item = r.data
         this.loading = false
       })
+    },
+
+    openClient(id) {
+      this.$refs.ClientDialog.open(id)
+    },
+
+    openGroup(id) {
+      this.$refs.GroupDialog.open(id)
     },
   }
 }

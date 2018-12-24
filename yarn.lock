@@ -5202,6 +5202,11 @@ prettier@^1.7.0:
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-1.14.2.tgz#0ac1c6e1a90baa22a62925f41963c841983282f9"
   integrity sha512-McHPg0n1pIke+A/4VcaS2en+pTNjy4xF+Uuq86u/5dyDO59/TtFZtQ708QIRkEZ3qwKz3GVkVa6mpxK/CpB8Rg==
 
+print-js@^1.0.54:
+  version "1.0.54"
+  resolved "https://registry.yarnpkg.com/print-js/-/print-js-1.0.54.tgz#f15df027951e9a9165b6d39420d362ba7f0fc130"
+  integrity sha512-tZkwoHJCTS6jqj0UuxhUY9xF8v0rOuAgIZRlfZBOg9D1R4saxznRANkVlAsLW+D4GOOsLq5Zd/OgVk58IfESXA==
+
 private@^0.1.6, private@^0.1.8, private@~0.1.5:
   version "0.1.8"
   resolved "https://registry.yarnpkg.com/private/-/private-0.1.8.tgz#2381edb3689f7a53d653190060fcf822d2f368ff"

@@ -25,11 +25,9 @@
                 </router-link>
               </td>
               <td class='text-md-right'>
-                <router-link :to="{ name: 'ClientEdit', params: { id: item.id }}">
-                  <v-btn flat icon color="black" class='ma-0'>
-                      <v-icon>more_horiz</v-icon>
-                  </v-btn>
-                </router-link>
+                <v-btn flat icon color="black" class='ma-0' @click='edit(item.id)'>
+                  <v-icon>more_horiz</v-icon>
+                </v-btn>
               </td>
             </template>
           </v-data-table>
@@ -52,17 +50,18 @@
         </v-flex>
      </v-layout>
     </v-container>
+    <ClientDialog ref='ClientDialog' />
   </div>
 </template>
 
 <script>
 
-import { API_URL, FILTERS } from '@/components/Client/data'
+import { API_URL, FILTERS, ClientDialog } from '@/components/Client/data'
 import ShowBy from '@/components/UI/ShowBy'
 import Filters from '@/components/Filters'
 
 export default {
-  components: { Filters, ShowBy },
+  components: { Filters, ShowBy, ClientDialog },
 
   data() {
     return {
@@ -96,6 +95,10 @@ export default {
     showByChanged(option) {
       this.show_by = option
       this.loadData()
+    },
+
+    edit(id) {
+      this.$refs.ClientDialog.open(id)
     },
   }
 }

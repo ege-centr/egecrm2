@@ -1,5 +1,5 @@
 <template>
-  <v-layout row justify-center>
+  <v-layout row justify-center style='position: absolute'>
     <v-dialog v-model="dialog" max-width="1000px" scrollable>
       <v-card>
         <v-card-title class='title justify-center'>

@@ -27,6 +27,7 @@
         "js-cookie": "^2.2.0",
         "moment": "^2.22.2",
         "normalize.css": "^8.0.0",
+        "print-js": "^1.0.54",
         "quill-image-drop-module": "^1.0.3",
         "vue-cropperjs": "^2.2.2",
         "vue-router": "^3.0.1",

@@ -68,7 +68,7 @@
     components: { Menu, ListenToLogout, UserDialog, Avatar },
     computed: {
       initialDataLoaded() {
-        return this.$store.state.data.users !== null
+        return this.$store.state.data.years !== null
       }
     },
     methods: {

@@ -45,11 +45,9 @@
           <v-spacer></v-spacer>
           <v-flex class='text-md-right' align-end d-flex>
             <div>
-              <router-link :to="{ name: 'ClientEdit', params: { id: client.id }}">
-                <v-btn flat icon color="black" class='ma-0'>
-                  <v-icon>more_horiz</v-icon>
-                </v-btn>
-              </router-link>
+              <v-btn @click='editClient(client.id)' flat icon color="black" class='ma-0'>
+                <v-icon>more_horiz</v-icon>
+              </v-btn>
             </div>
           </v-flex>
         </v-layout>
@@ -109,6 +107,7 @@
         </v-tab-item>
       </v-tabs-items>
     </div>
+    <ClientDialog ref='ClientDialog' />
   </div>
 </template>
 
@@ -119,7 +118,7 @@ import Comments from '@/components/Comments'
 import ContractList from '@/components/Contract/List'
 import GroupList from '@/components/Group/List'
 import PaymentList from '@/components/Payment/List'
-import { API_URL, CLASS_NAME, ClientMap, GroupNotAssignedList } from '@/components/Client/data'
+import { API_URL, CLASS_NAME, ClientMap, GroupNotAssignedList, ClientDialog } from '@/components/Client/data'
 
 export default {
   props: ['clientId'],
@@ -134,21 +133,22 @@ export default {
     }
   },
 
-  components: { RequestList, Comments, ContractList, ClientMap, GroupList, GroupNotAssignedList, PaymentList },
+  components: { RequestList, Comments, ContractList, ClientMap, GroupList, GroupNotAssignedList, PaymentList, ClientDialog },
 
   created() {
     this.loadData()
   },
 
   methods: {
-    openMap() {
-      this.$refs.ClientMap.openMap()
-    },
     loadData() {
       axios.get(apiUrl(`${API_URL}/${this.clientId || this.$route.params.id}`)).then(r => {
         this.client = r.data
         this.loading = false
       })
+    },
+
+    editClient(id) {
+      this.$refs.ClientDialog.open(id)
     },
   }
 }

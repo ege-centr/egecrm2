@@ -24,6 +24,7 @@ class Phone extends Model
         return [
             'id' => $this->id,
             'phone' => $this->phone,
+            'phone_clean' => $this->phone_clean,
             'comment' => $this->comment
         ];
     }
