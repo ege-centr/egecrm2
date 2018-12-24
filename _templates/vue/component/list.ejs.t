@@ -4,7 +4,7 @@ to: resources/js/components/<%= Name %>/List.vue
 <template>
   <div>
     <v-data-table v-if='getItems && getItems.length'
-      class="elevation-1"
+      class="elevation-3"
       hide-actions
       hide-headers
       :items='getItems'

@@ -19,7 +19,8 @@ class Resource extends JsonResource
             'groups' => GroupCollection::collection($this->groups),
             'representative' => new Representative($this->representative),
             'email' => $this->email,
-            'photo' => $this->photo
+            'photo' => $this->photo,
+            'headTeacher' => $this->getHeadTeacher(),
         ]);
     }
 }

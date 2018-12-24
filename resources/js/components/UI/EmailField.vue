@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-text-field v-model="entity.email.email" label="Email" append-icon="send" :append-icon-cb='openDialog' hide-details></v-text-field>
+    <v-text-field v-model="entity.email.email" label="Email" append-icon="send" @click:append='openDialog' hide-details></v-text-field>
 
     <v-layout row justify-center>
       <v-dialog v-model="dialog" max-width="1000px" scrollable>

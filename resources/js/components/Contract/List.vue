@@ -7,7 +7,7 @@
     <v-data-table
       v-if='items.length'
       :items="items"
-      class="elevation-1"
+      class="elevation-3"
       hide-actions
       hide-headers
     >

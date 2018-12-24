@@ -1,8 +1,8 @@
 <template>
   <span>
-    <span v-for='(phone, index) in items' :key='index'>
+    <span :class="{'with-comments': withComments}" v-for='(phone, index) in items' :key='index'>
       <v-menu>
-        <a slot='activator'>{{ phone.phone }}</a>
+        <span slot='activator'><a>{{ phone.phone }}</a> <span v-if='withComments' class='grey--text caption ml-1'>{{ phone.comment }}</span></span> 
         <v-list dense>
           <v-list-tile @click='call(phone)'>
             <v-list-tile-action>
@@ -24,7 +24,7 @@
           </v-list-tile>
         </v-list>
       </v-menu>
-      {{ index === items.length - 1 ? '' : ', ' }}
+      <span v-if='!withComments'>{{ index === items.length - 1 ? '' : ', ' }}</span>
     </span>
     <Sms ref='Sms' />
   </span>
@@ -35,7 +35,17 @@
 import Sms from './Sms'
 
 export default {
-  props: ['items'],
+  props: {
+    items: {
+      type: Array,
+      default: [],
+    },
+
+    withComments: {
+      type: Boolean,
+      default: false,
+    },
+  },
 
   components: { Sms },
 
@@ -50,3 +60,10 @@ export default {
   }
 }
 </script>
+
+
+<style lang="scss" scoped>
+  .with-comments {
+    display: block;
+  }
+</style>

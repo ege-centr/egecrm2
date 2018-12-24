@@ -6,7 +6,8 @@ use Shared\Model;
 use App\Interfaces\UserInterface;
 use App\Traits\{HasPhones, HasEmail, HasPhoto, HasName, Commentable};
 use App\Http\Resources\Request\Collection as RequestCollection;
-use App\Models\{Request, Phone, Payment, Contract\Contract, Group\Group, Group\GroupClient};
+use App\Http\Resources\Teacher\Collection as TeacherResource;
+use App\Models\{Request, Phone, Payment, Teacher, Contract\Contract, Group\Group, Group\GroupClient};
 
 class Client extends Model implements UserInterface
 {
@@ -14,7 +15,7 @@ class Client extends Model implements UserInterface
 
     protected $fillable = [
         'first_name', 'last_name', 'middle_name',
-        'grade_id', 'year', 'branches'
+        'grade_id', 'year', 'branches', 'school'
     ];
 
     protected $commaSeparated = ['branches'];
@@ -63,6 +64,14 @@ class Client extends Model implements UserInterface
             ->orderBy('id', 'desc')
             ->get();
         return resourceCollection($requests, RequestCollection::class);
+    }
+
+    public function getHeadTeacher()
+    {
+        if ($this->head_teacher_id) {
+            return new TeacherResource(Teacher::find($this->head_teacher_id));
+        }
+        return null;
     }
 
     public function getBars()

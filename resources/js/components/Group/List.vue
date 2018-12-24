@@ -3,7 +3,7 @@
     <Loader v-if='loading' />
     <Filters class='mb-3' :items='FILTERS' @updated='loadData' />
     <v-data-table v-if='getItems && getItems.length'
-      class="elevation-1"
+      class="elevation-3"
       hide-actions
       hide-headers
       :items='getItems'

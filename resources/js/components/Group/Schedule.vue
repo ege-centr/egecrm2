@@ -134,7 +134,7 @@
             <v-layout wrap>
               <v-flex md12>
                 <v-data-table v-if='items.length'
-                  class="elevation-1"
+                  class="elevation-3"
                   hide-actions
                   :headers="[
                     { text: 'Ученик', sortable: false },

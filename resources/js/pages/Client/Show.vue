@@ -7,7 +7,7 @@
       <v-card-text class='relative card-with-loader'>
         <Loader v-if='loading'></Loader>
         <v-layout wrap v-if='client !== null'>
-          <v-flex>
+          <v-flex style='width: 400px'>
             <div class='flex-items'>
               <Avatar :size='100' class='mr-4' :photo='client.photo' />
               <div>
@@ -18,28 +18,52 @@
                   {{ client.middle_name }}
                   <span v-if='client.grade_id !== null'>({{ getData('grades', client.grade_id).title }})</span>
                 </div>
-                <div class='grey--text text--darken-2 font-weight-medium caption mt-3'>Представитель</div>
+                <div class='mt-4'>
+                  <PhoneList :items='client.phones' :with-comments='true' />
+                </div>
+                <div v-if='client.email'>
+                  {{ client.email.email }}
+                </div>
+                <div class='grey--text text--darken-2 font-weight-medium caption mt-4'>Представитель</div>
                 <div class='font-weight-bold'>
                   {{ client.representative.last_name }}
                   {{ client.representative.first_name }}
                   {{ client.representative.middle_name }}
                 </div>
+                <div class='mt-4'>
+                  <PhoneList :items='client.representative.phones' :with-comments='true' />
+                </div>
+                <div v-if='client.representative.email'>
+                  {{ client.representative.email.email }}
+                </div>
               </div>
             </div>
           </v-flex>
           <v-flex>
-            <div v-for='(phone, index) in client.phones' :key='index'>
-              <div class='flex-items'>
-                <div class='d-inline-block mr-2'>
-                  {{ phone.phone }}
-                </div>
-                <div class='d-inline-block grey--text text--darken-2 caption'>
-                  {{ phone.comment }}
-                </div>
-              </div>
+            <div>
+              Место обучения в данный момент: {{ client.school || 'не указано' }}
             </div>
-            <div v-if='client.email'>
-              {{ client.email.email }}
+            <div>
+              Классный руководитель: {{ client.headTeacher ? client.headTeacher.names.short : 'не назначен' }}
+            </div>
+            <div v-if='client.branches.length'>
+              Удобные филиалы: <BranchList :items='client.branches' />
+            </div>
+            <div class='font-weight-bold my-4'>Паспортные данные представителя</div>
+            <div>
+              Паспорт: {{ client.representative.number }} {{ client.representative.series }}
+            </div>
+            <div>
+              Паспорт выдан: {{ client.representative.issued_date | date }} {{ client.representative.issued_by }}
+            </div>
+            <div>
+              Код подразделения: {{ client.representative.code }}
+            </div>
+            <div>
+              Дата рождения: {{ client.representative.birthday | date }}
+            </div>
+            <div>
+              Место прописки: {{ client.representative.address }}
             </div>
           </v-flex>
           <v-spacer></v-spacer>
@@ -118,6 +142,9 @@ import Comments from '@/components/Comments'
 import ContractList from '@/components/Contract/List'
 import GroupList from '@/components/Group/List'
 import PaymentList from '@/components/Payment/List'
+import PhoneList from '@/components/Phone/List'
+import BranchList from '@/components/UI/BranchList'
+
 import { API_URL, CLASS_NAME, ClientMap, GroupNotAssignedList, ClientDialog } from '@/components/Client/data'
 
 export default {
@@ -133,7 +160,7 @@ export default {
     }
   },
 
-  components: { RequestList, Comments, ContractList, ClientMap, GroupList, GroupNotAssignedList, PaymentList, ClientDialog },
+  components: { RequestList, Comments, ContractList, ClientMap, GroupList, GroupNotAssignedList, PaymentList, ClientDialog, PhoneList, BranchList },
 
   created() {
     this.loadData()

@@ -68,6 +68,7 @@ class Clients extends Command
                 'head_teacher_id' => $item->id_head_teacher ?: null,
                 'grade' => $item->grade,
                 'year' => $item->year,
+                'school' => $item->school,
                 'branches' => $item->branches ?: '',
                 'old_student_id' => $item->id,
                 'created_at' => getCurrentTime(),

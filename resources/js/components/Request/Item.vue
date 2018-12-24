@@ -22,9 +22,7 @@
             </div>
             <div class='mb-3'>
               <div class='item-label'>Филиалы</div>
-              <span v-for='(branch_id, index) in item.branches' :key='branch_id'>
-                <span :style="{color: getData('branches', branch_id).color}">{{ getData('branches', branch_id).short }}{{ index === item.branches.length - 1 ? '' : ', ' }}</span>
-              </span>
+              <BranchList :items='item.branches' />
             </div>
             <div class='mb-3'>
               <div class='item-label'>Предметы и класс</div>
@@ -60,9 +58,10 @@ import { request_statuses } from './data'
 import Avatar from '@/components/UI/Avatar'
 import Comments from '@/components/Comments'
 import PhoneList from '@/components/Phone/List'
+import BranchList from '@/components/UI/BranchList'
 
 export default {
-  components: { Avatar, Comments, PhoneList },
+  components: { Avatar, Comments, PhoneList, BranchList },
   data() {
     return {
       request_statuses

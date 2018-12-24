@@ -27,7 +27,11 @@ class ClientsController extends Controller
     {
         $new_model = Client::create($request->input());
         $new_model->phones()->createMany($request->phones);
+
         $new_model->representative()->create($request->representative);
+        $new_model->representative->phones()->createMany($request->representative['phones']);
+        $new_model->representative->email()->create($request->representative['email']);
+
         $new_model->email()->create($request->email);
 
         return response($new_model->id, 201);
@@ -47,7 +51,16 @@ class ClientsController extends Controller
         $model->phones()->createMany($request->phones);
 
         $model->representative->update($request->representative);
+        $model->representative->phones()->delete();
+        $model->representative->phones()->createMany($request->representative['phones']);
+        if ($model->representative->email === null) {
+            $model->representative->email()->create($request->representative['email']);
+        } else {
+            $model->representative->email->update($request->representative['email']);
+        }
+
         $model->email->update($request->email);
+
 
         return new Resource($model);
     }
