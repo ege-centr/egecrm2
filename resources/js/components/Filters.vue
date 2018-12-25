@@ -67,7 +67,26 @@
 
 <script>
 export default {
-  props: ['items'],
+  props: {
+    items: {
+      type: Array,
+      default: () => [],
+      required: true,
+    },
+    preInstalled: {
+      type: Array,
+      default: () => [],
+      required: false,
+    },
+  },
+
+  created() {
+    if (this.preInstalled.length) {
+      this.filters = clone(this.preInstalled)
+      this.emit()
+    }
+  },
+
   data() {
     return {
       filters: [],
@@ -87,22 +106,30 @@ export default {
     select(item) {
       this.item = clone(item)
     },
+
     back() {
       this.item = null
       this.value = null
     },
+
     close(index) {
       this.filters.splice(index, 1)
-      this.$emit('updated', this.getQueryString())
+      this.emit()
     },
+
     apply() {
       this.filters.push({
         item: this.item,
         value: this.value
       })
-      this.$emit('updated', this.getQueryString())
+      this.emit()
       this.menu = false
     },
+
+    emit() {
+      this.$emit('updated', this.getQueryString())
+    },
+
     getFilterValueLabel(filter) {
       switch(filter.item.type) {
         case 'select':
@@ -116,12 +143,15 @@ export default {
           return filter.value
       }
     },
+
     getItemValue(item) {
       return item.valueField ? item.valueField : 'value'
     },
+
     getItemText(item) {
       return item.textField ? item.textField : 'text'
     },
+
     getQueryString() {
       if (this.filters.length) {
         return '&' + this.filters.map(e => e.item.field + '=' + e.value).join('&')

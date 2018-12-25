@@ -131,7 +131,7 @@
       </v-tabs-items>
     </div>
     <GroupDialog ref='GroupDialog' />
-    <MoveClientDialog ref='MoveClientDialog' />
+    <MoveClientDialog ref='MoveClientDialog' @moved='removeClientFromGroup' />
   </div>
 </template>
 

@@ -1,5 +1,3 @@
-import store from '@/store'
-
 export const API_URL = 'groups'
 
 export const GROUP_CLIENTS_API_URL = 'group-clients'
@@ -17,12 +15,6 @@ export const LEVELS = [
   {text: 'высокий', value: 'high'},
   {text: 'спец. группа', value: 'special'}
 ]
-
-export const FILTERS = [
-  {label: 'Класс', field: 'grade_id', type: 'select', options: store.state.data.grades, valueField: 'id', textField: 'title'},
-  {label: 'Предмет', field: 'subject_id', type: 'select', options: store.state.data.subjects, valueField: 'id', textField: 'name'},
-  {label: 'Год', field: 'year', type: 'select', options: store.state.data.years, valueField: 'id', textField: 'name'},
-];
 
 export const GroupSchedule = require('./Schedule')
 export const GroupList = require('./List')

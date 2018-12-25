@@ -9,13 +9,13 @@
           <v-toolbar-title>Перенос клиента {{ client.names.short }} в другую группу</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark flat @click.native="storeOrUpdate" :disabled='selected_group_id === null' :loading='false'>Перенести</v-btn>
+            <v-btn dark flat @click.native="move" :disabled='selected_group_id === null' :loading='saving'>Перенести</v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-card-text class='relative'>
-          <Loader v-if='groups === null' class='loader-wrapper_fullscreen-dialog' />
-          <v-container v-else grid-list-xl class="pa-0 ma-0" fluid>
-            <Filters :items='FILTERS' />
+          <Filters :items='filters' :pre-installed='pre_installed_filters' @updated='loadData' />
+          <Loader v-if='groups === null || loading' class='loader-wrapper_fullscreen-dialog' />
+          <v-container v-else grid-list-xl class="pa-0 ma-0 mt-3" fluid>
             <v-layout wrap>
               <v-flex md12>
                 <v-data-table
@@ -67,7 +67,7 @@
 
 <script>
 
-import { API_URL, FILTERS } from '@/components/Group'
+import { API_URL, GROUP_CLIENTS_API_URL } from '@/components/Group'
 import Filters from '@/components/Filters'
 
 export default {
@@ -75,7 +75,12 @@ export default {
 
   data() {
     return {
-      FILTERS,
+      filters: [
+        {label: 'Класс', field: 'grade_id', type: 'select', options: this.$store.state.data.grades, valueField: 'id', textField: 'title'},
+        {label: 'Предмет', field: 'subject_id', type: 'select', options: this.$store.state.data.subjects, valueField: 'id', textField: 'name'},
+        {label: 'Год', field: 'year', type: 'select', options: this.$store.state.data.years},
+      ],
+      pre_installed_filters: [],
       saving: false,
       groups: null,
       dialog: false,
@@ -83,23 +88,34 @@ export default {
       client: null,
       group: null,
       selected_group_id: null,
+      loading: false,
     }
   },
 
   methods: {
     open(group, client) {
+      this.pre_installed_filters = []
       this.groups = null
       this.selected_group_id = null
       this.client = client
       this.group = clone(group)
+      if (group.grade_id) {
+        this.pre_installed_filters.push({item: this.filters[0], value: group.grade_id})
+      }
+      if (group.subject_id) {
+        this.pre_installed_filters.push({item: this.filters[1], value: group.subject_id})
+      }
+      if (group.year) {
+        this.pre_installed_filters.push({item: this.filters[2], value: group.year})
+      }
       this.dialog = true
-      this.loadData()
     },
 
     loadData(filters = '') {
-      axios.get(apiUrl(API_URL) + `?group_id=${this.group.id}&subject_id=${this.group.subject_id}&grade_id=${this.group.grade_id}&year=${this.group.year}`).then(r => {
-      // axios.get(apiUrl(API_URL) + `?group_id=${this.group.id}${filters}`).then(r => {
+      this.loading = true
+      axios.get(apiUrl(API_URL) + `?group_id=${this.group.id}${filters}`).then(r => {
         this.groups = r.data
+        this.loading = false
       })
     },
 
@@ -107,15 +123,13 @@ export default {
       this.item.photo = new_photo
     },
 
-    async storeOrUpdate() {
-      // this.saving = true
-      // if (this.item.id) {
-      //   await axios.put(apiUrl(API_URL, this.item.id), this.item).then(r => {
-      //     this.item = r.data
-      //   })
-      // } else {
- 
-      // }
+    async move() {
+      this.$emit('moved', this.client)
+      this.saving = true
+      await axios.post(apiUrl(GROUP_CLIENTS_API_URL), {
+        group_id: this.selected_group_id,
+        client_id: this.client.id,
+      })
       this.saving = false
       this.dialog = false
     }
