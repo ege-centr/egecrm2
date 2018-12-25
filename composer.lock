@@ -215,7 +215,7 @@
             "source": {
                 "type": "git",
                 "url": "https://mkolyadin@bitbucket.org/mkolyadin/ege-shared.git",
-                "reference": "65be009b4766ca1ca1ee94d26380a993f9ab5ec0"
+                "reference": "e53737fa3fdd8a087f132524945b0245418aa7e2"
             },
             "type": "library",
             "autoload": {
@@ -223,7 +223,7 @@
                     "Shared\\": "src/"
                 }
             },
-            "time": "2018-07-29T20:02:17+00:00"
+            "time": "2018-12-25T08:58:55+00:00"
         },
         {
             "name": "egulias/email-validator",

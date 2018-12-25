@@ -31,22 +31,32 @@
               </td>
             </template>
           </v-data-table>
+          <v-card class='elevation-0'>
+            <v-card-text>
+              <div class='flex-items'>
+                <v-spacer></v-spacer>
+                <ShowBy :value='show_by' @changed='showByChanged' />
+                <v-icon style='margin: 0 10px' small @click='page -= 1' v-if='collection.meta.last_page > 1' :disabled='page == 1' color='black'>arrow_back_ios</v-icon>
+                <v-icon small @click='page += 1' v-if='collection.meta.last_page > 1' :disabled='page == collection.meta.last_page'  color='black'>arrow_forward_ios</v-icon>
+              </div>
+            </v-card-text>
+          </v-card>
         </v-flex>
       </v-layout>
       <v-layout row class='mt-4' align-center>
         <v-flex md4>
         </v-flex>
         <v-flex md4>
-          <v-pagination
+          <!-- <v-pagination
             v-if='collection.meta.last_page > 1'
             v-model="page"
             :length="collection.meta.last_page"
             :total-visible="7"
             circle
-          ></v-pagination>
+          ></v-pagination> -->
         </v-flex>
         <v-flex class='text-md-right'>
-          <ShowBy :value='show_by' @changed='showByChanged' />
+          
         </v-flex>
      </v-layout>
     </v-container>

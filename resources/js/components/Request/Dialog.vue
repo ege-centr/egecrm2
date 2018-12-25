@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" transition="dialog-bottom-transition" content-class='v-dialog--fullscreen halfscreen-dialog'>
+    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card>
         <v-toolbar dark color="primary">
           <v-btn icon dark @click.native="dialog = false">
@@ -29,18 +29,12 @@
                     ></v-select>
                   </div>
                   <div class='vertical-inputs__input'>
-                   <v-select clearable hide-details
-                      v-model="item.responsible_admin_id"
-                      :items="$store.state.data.admins"
-                      item-value='id'
-                      item-text='name'
-                      label="Ответственный"
-                    ></v-select>
+                    <AdminSelect v-model='item.responsible_admin_id' label='Ответственный' />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-select clearable hide-details
+                    <v-select hide-details
                       v-model="item.grade"
-                      :items="$store.state.data.grades"
+                      :items="withNullOption($store.state.data.grades, 'id', 'title')"
                       item-value='id'
                       item-text='title'
                       label="Класс"
@@ -65,10 +59,10 @@
                     ></v-select>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-textarea v-model="item.comment" label="Комментарий"></v-textarea>
+                    <v-text-field hide-details v-model="item.comment" label="Комментарий"></v-text-field>
                   </div>
                   <div>
-                    <PhoneEdit :item='item' :editable='phones === null' />
+                    <PhoneEdit :item='item' />
                   </div>
                 </div>
               </v-flex>
@@ -84,6 +78,7 @@
 
 import { request_statuses, model_defaults } from './data'
 import PhoneEdit from '@/components/Phone/Edit'
+import { AdminSelect } from '@/components/UI'
 
 export default {
   props: {
@@ -94,7 +89,7 @@ export default {
     }
   },
 
-  components: { PhoneEdit },
+  components: { PhoneEdit, AdminSelect },
 
   data() {
     return {
@@ -108,21 +103,22 @@ export default {
   },
 
   created() {
+    console.log('phones dialog', this.phones)
     if (this.phones) {
-      this.model_defaults = {...model_defaults, phones: this.phones}
+      this.model_defaults = {...model_defaults, phones: [this.phones[0]]}
     }
   },
 
   methods: {
     open(item_id = null) {
       this.dialog = true
-      if (item_id !== null) {
+      if (item_id === null) {
+        this.edit_mode = false
+        this.item = this.model_defaults
+        this.loading = false
+      } else {
         this.edit_mode = true
         this.loadData(item_id)
-      } else {
-        this.edit_mode = false
-        this.item = model_defaults
-        this.loading = false
       }
     },
 

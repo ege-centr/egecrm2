@@ -75,3 +75,21 @@ function getMorphModel($class, $entity_id) {
     $class = getModelClass($class);
     return $class::find($entity_id);
 }
+
+
+/**
+ * Текущий учебный год
+ */
+function academicYear($date = false) : int
+{
+    if ($date === false) {
+        $date = now();
+    }
+    $year = date("Y", strtotime($date));
+    $day_month = date("m-d", strtotime($date));
+
+    if ($day_month >= '01-01' && $day_month <= '07-15') {
+        $year--;
+    }
+    return intval($year);
+}

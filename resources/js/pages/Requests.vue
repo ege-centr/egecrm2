@@ -23,7 +23,7 @@ export default {
 
   methods: {
     add() {
-      this.$refs.RequestList.$refs.RequestDialog.add()
+      this.$refs.RequestList.$refs.RequestDialog.open(null)
     }
   }
 }

@@ -2,8 +2,9 @@
 
 namespace App\Models\Admin;
 
-use Shared\Model;
+use Shared\{Model, Rights};
 use App\Interfaces\UserInterface;
+use Illuminate\Database\Eloquent\Builder;
 use App\Traits\{HasEmail, HasPhoto, HasPhones};
 
 class Admin extends Model implements UserInterface
@@ -24,9 +25,7 @@ class Admin extends Model implements UserInterface
 
     public function isBanned()
     {
-        // @todo
-        return false;
-        // return $this->allowed(\Shared\Rights::WSTAT_BANNED);
+        return !$this->allowed(Rights::LK2_HAS_ACCESS);
     }
 
     public function allowed($right)
@@ -63,5 +62,16 @@ class Admin extends Model implements UserInterface
         }
 
         return false;
-	}
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::addGlobalScope('defaultOrder', function(Builder $builder) {
+            $builder
+                ->orderByRaw("IF(FIND_IN_SET(" . Rights::LK2_HAS_ACCESS . ", rights) > 0, 1, 0) desc")
+                ->orderBy('id', 'asc');
+        });
+    }
 }

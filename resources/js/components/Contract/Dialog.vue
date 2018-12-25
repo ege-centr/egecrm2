@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center v-if='item !== null'>
-    <v-dialog v-model="dialog" content-class='v-dialog--fullscreen halfscreen-dialog' transition="dialog-bottom-transition">
+    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card>
         <v-toolbar dark color="primary">
           <v-btn icon dark @click.native="dialog = false">
@@ -18,7 +18,9 @@
               <v-flex md7>
                 <v-layout wrap align-center v-for='subject in $store.state.data.subjects' :key='subject.id'>
                   <v-flex style='max-width: 150px'>
-                    <v-slider min='0' max='3' @change='subjectStatusHandler(subject.id)' :color="getSubjectColor(subject)"
+                    <v-slider min='0' max='3' @change='subjectStatusHandler(subject.id)' 
+                      :color="getSubjectColor(subject)"
+                      :track-color="getSubjectColor(subject)"
                       class='ma-0'
                       :label="getData('subjects', subject.id).three_letters"
                       v-model="slider[subject.id]"
@@ -28,10 +30,10 @@
                   <v-flex class='ml-4' style='max-width: 246px'>
                     <v-layout align-center v-if='findSubject(subject)'>
                       <v-flex class='py-0 f-1'>
-                        <v-text-field class='pa-0 ma-0' v-model="findSubject(subject).lessons" placeholder="уроков" hide-details></v-text-field>
+                        <v-text-field class='pa-0 ma-0' v-model="findSubject(subject).lessons" label="уроков" hide-details></v-text-field>
                       </v-flex>
                       <v-flex class='py-0 f-1'>
-                        <v-text-field class='pa-0 ma-0' v-model="findSubject(subject).lessons_planned" placeholder="программа" hide-details></v-text-field>
+                        <v-text-field class='pa-0 ma-0' v-model="findSubject(subject).lessons_planned" label="программа" hide-details></v-text-field>
                       </v-flex>
                     </v-layout>
                   </v-flex>
@@ -99,7 +101,7 @@
                 
                 <!-- <v-subheader class='pa-0'>Платежи</v-subheader> -->
                 <div class='contract-payment' v-for='(payment, index) in item.payments' :key='index'>
-                  <v-layout>
+                  <v-layout class='align-center'>
                     <v-flex>
                       <v-text-field v-model="payment.sum" label="Cумма"></v-text-field>
                     </v-flex>
@@ -131,6 +133,9 @@
                         </v-date-picker>
                       </v-menu>
                     </v-flex>
+                    <v-btn flat icon color="red" class='ma-0 mr-3' @click='item.payments.splice(index, 1)'>
+                      <v-icon>remove</v-icon>
+                    </v-btn>
                   </v-layout>
                 </div>
                 <div>
@@ -157,7 +162,7 @@ import {
   SUBJECT_DEFAULTS,
   SUBJECT_STATUS_TO_BE_TERMINATED,
   SUBJECT_STATUS_TERMINATED,
-SUBJECT_STATUS_ACTIVE
+  SUBJECT_STATUS_ACTIVE,
 } from './data'
 
 export default {
@@ -206,6 +211,15 @@ export default {
         this.item.subjects.splice(index, 1)
       }
     },
+    
+    statusToNumber(subject) {
+      switch (subject.status) {
+        case SUBJECT_STATUS_TERMINATED: return 1
+        case SUBJECT_STATUS_TO_BE_TERMINATED: return 3
+        default: return 3
+      }
+    },
+
     open(item) {
       this.slider = {}
       if (item === null) {
@@ -216,27 +230,32 @@ export default {
       } else {
         this.item = clone(item)
         this.item.subjects.forEach(subject => {
-          this.slider[subject.subject_id] = subject.status === SUBJECT_STATUS_TO_BE_TERMINATED ? 1 : (subject.status === SUBJECT_STATUS_TO_BE_TERMINATED ? 2 : 3)
+          this.slider[subject.subject_id] = this.statusToNumber(subject)
         })
       }
       this.dialog = true
     },
+
     addPayment() {
       this.item.payments.push({})
     },
+
     findSubject(subject) {
       return this.item.subjects.find(e => e.subject_id == subject.id)
     },
+
     getSubjectColor(s) {
       const subject = this.findSubject(s)
       if (subject) {
         switch(subject.status) {
           case SUBJECT_STATUS_TERMINATED: return 'error'
           case SUBJECT_STATUS_TO_BE_TERMINATED: return 'orange'
+          default: return 'success'
         }
       }
-      return 'success'
+      return 'grey'
     },
+
     async storeOrUpdate() {
       this.saving = true
       if (this.item.id) {

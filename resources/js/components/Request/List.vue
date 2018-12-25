@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-btn v-if='phones !== null' color='primary' small class='ma-0' @click='openDialog'>
+    <v-btn v-if='phones !== null' color='primary' small class='ma-0' @click='openDialog(null)'>
       <v-icon class="mr-1">add</v-icon>
       добавить
     </v-btn>

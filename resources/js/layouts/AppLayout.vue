@@ -65,12 +65,16 @@
     async created() {
       await this.$store.dispatch('loadInitial')
     },
+
     components: { Menu, ListenToLogout, UserDialog, Avatar },
+    
+    // TODO
     computed: {
       initialDataLoaded() {
         return this.$store.state.data.years !== null
       }
     },
+
     methods: {
       logout() {
         axios.get(apiUrl('logout'))

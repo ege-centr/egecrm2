@@ -59,142 +59,154 @@
         </v-layout>
       </v-container>
 
+      
       <v-layout row justify-center>
-        <v-dialog v-model="dialog" :max-width="edit_lesson_tab ? '500px' : '800px'">
+        <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
           <v-card>
-            <v-card-text>
-              <v-container class="pa-0 ma-0" fluid v-if='edit_lesson_tab'>
+            <v-toolbar dark color="primary">
+              <v-btn icon dark @click.native="dialog = false">
+                <v-icon>close</v-icon>
+              </v-btn>
+              <v-toolbar-title>{{ dialog_item.id ? 'Редактирование' : 'Добавление' }} занятия</v-toolbar-title>
+              <v-spacer></v-spacer>
+              <v-toolbar-items>
+                <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ dialog_item.id ? 'Сохранить' : 'Добавить' }}</v-btn>
+              </v-toolbar-items>
+            </v-toolbar>
+            <v-card-text class='relative'>
+              <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
+              <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
                 <v-layout wrap>
                   <v-flex md12>
-                    <v-menu
-                    ref="date"
-                    :close-on-content-click="false"
-                    :nudge-right="40"
-                    :return-value.sync="dialog_item.date"
-                    lazy
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    min-width="290px"
+                    <div class='vertical-inputs'>
+                      <div class='vertical-inputs__input'>
+                        <v-menu
+                          ref="date"
+                          :close-on-content-click="false"
+                          :nudge-right="40"
+                          :return-value.sync="dialog_item.date"
+                          lazy
+                          transition="scale-transition"
+                          offset-y
+                          full-width
+                          min-width="290px"
+                        >
+                          <v-text-field
+                            slot="activator"
+                            v-model="dialog_item.date"
+                            label="Дата занятия"
+                            prepend-icon="event"
+                            readonly hide-details
+                          ></v-text-field>
+                          <v-date-picker
+                            v-model="dialog_item.date"
+                            @input="$refs.date.save(dialog_item.date)">
+                          </v-date-picker>
+                        </v-menu>
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <v-text-field hide-details v-model='dialog_item.time' label='Время занятия' v-mask="'##:##'"></v-text-field>
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <v-select clearable hide-details
+                          v-model="dialog_item.cabinet_id"
+                          :items="cabinets"
+                          item-value='id'
+                          label="Кабинет"
+                        ></v-select>
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <v-select clearable hide-details
+                          v-model="dialog_item.teacher_id"
+                          :items="teachers"
+                          label="Учитель"
+                          item-value='id'
+                          item-text='names.abbreviation'
+                        ></v-select>
+                      </div>
+                      <div class='vertical-inputs__input' v-if="dialog_item.status === LESSON_STATUS.CONDUCTED">
+                        <v-text-field v-model='dialog_item.price' label='Цена' hide-details></v-text-field>
+                      </div>
+                      <div class="vertical-inputs__input" v-if="dialog_item.status !== LESSON_STATUS.CONDUCTED">
+                        <v-switch class='ma-0'
+                          label="Отменено"
+                          hide-details
+                          :input-value="dialog_item.status === LESSON_STATUS.CANCELLED"
+                          @change='toggleCancelled'
+                        ></v-switch>
+                      </div>
+                      <div class="vertical-inputs__input">
+                         <v-switch class='ma-0'
+                          label="Незапланировано"
+                          hide-details
+                          v-model='dialog_item.is_unplanned'
+                          ></v-switch>
+                      </div>
+                    </div>
+                  </v-flex>
+                </v-layout>
+                <v-layout wrap v-if="dialog_item.status === LESSON_STATUS.CONDUCTED">
+                  <v-flex md12 class='headline'>
+                    Занятие
+                  </v-flex>
+                  <v-flex md12>
+                    <v-data-table v-if='items.length'
+                      class="elevation-3"
+                      hide-actions
+                      :headers="[
+                        { text: 'Ученик', sortable: false },
+                        { text: 'Отсутствовал', sortable: false }, 
+                        { text: 'Опоздание', sortable: false },
+                        { text: 'Комментарий', sortable: false },
+                      ]"
+                      :items='dialog_item.clientLessons'
                     >
-                    <v-text-field
-                    slot="activator"
-                    v-model="dialog_item.date"
-                    label="Дата занятия"
-                    prepend-icon="event"
-                    readonly
-                    ></v-text-field>
-                    <v-date-picker
-                    v-model="dialog_item.date"
-                    @input="$refs.date.save(dialog_item.date)">
-                  </v-date-picker>
-                </v-menu>
-              </v-flex>
-              <v-flex md12>
-                <v-text-field v-model='dialog_item.time' label='Время занятия' v-mask="'##:##'"></v-text-field>
-              </v-flex>
-              <v-flex md12>
-                <v-select clearable
-                v-model="dialog_item.cabinet_id"
-                :items="cabinets"
-                item-value='id'
-                label="Кабинет"
-                ></v-select>
-              </v-flex>
-              <v-flex md12>
-                <v-select clearable
-                v-model="dialog_item.teacher_id"
-                :items="teachers"
-                label="Учитель"
-                item-value='id'
-                item-text='names.abbreviation'
-                ></v-select>
-              </v-flex>
-              <v-flex md12 v-if="dialog_item.status === LESSON_STATUS.CONDUCTED">
-                <v-text-field v-model='dialog_item.price' label='Цена'></v-text-field>
-              </v-flex>
-              <v-flex md12 v-if="dialog_item.status !== LESSON_STATUS.CONDUCTED">
-                <v-switch
-                  label="Отменено"
-                  hide-details
-                  :input-value="dialog_item.status === LESSON_STATUS.CANCELLED"
-                  @change='toggleCancelled'
-                ></v-switch>
-              </v-flex>
-              <v-flex md12>
-                <v-switch
-                label="Незапланировано"
-                hide-details
-                v-model='dialog_item.is_unplanned'
-                ></v-switch>
-              </v-flex>
-            </v-layout>
-          </v-container>
-          <v-container class="pa-0 ma-0" fluid v-else>
-            <v-layout wrap>
-              <v-flex md12>
-                <v-data-table v-if='items.length'
-                  class="elevation-3"
-                  hide-actions
-                  :headers="[
-                    { text: 'Ученик', sortable: false },
-                    { text: 'Отсутствовал', sortable: false }, 
-                    { text: 'Опоздание', sortable: false },
-                    { text: 'Комментарий', sortable: false },
-                  ]"
-                  :items='dialog_item.clientLessons'
-                >
-                  <template slot="items" slot-scope="{ item }">
-                    <td width='200'>
-                      {{ item.client.names.short }}
-                    </td>
-                    <td width='150'>
-                      <v-switch color='red' v-model="item.is_absent" hide-details></v-switch>
-                    </td>
-                    <td width='150'>
-                      <v-icon small v-if="!item.late" class='client-edit-icon'>edit</v-icon>
-                      <v-edit-dialog
-                        :return-value.sync="item.late"
-                        lazy
-                      > {{ item.late }}
-                        <v-text-field
-                          slot="input"
-                          v-model="item.late"
-                          label="Опоздание"
-                          single-line
-                          v-mask="'##'"
-                        ></v-text-field>
-                      </v-edit-dialog>
-                    </td>
-                    <td>
-                      <v-icon small v-if="!item.comment" class='client-edit-icon'>edit</v-icon>
-                      <v-edit-dialog
-                        :return-value.sync="item.comment"
-                        lazy
-                      > {{ item.comment }}
-                        <v-text-field
-                          slot="input"
-                          v-model="item.comment"
-                          single-line
-                          label="Комментарий"
-                        ></v-text-field>
-                      </v-edit-dialog>
-                    </td>
-                  </template>
-                </v-data-table>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card-text>
-            <v-card-actions>
-              <v-btn color="red darken-1" flat @click.native="destroy" v-show='dialog_item.id' :loading='destroying'>Удалить</v-btn>
-              <v-spacer></v-spacer>
-              <v-btn v-if='dialog_item.status === LESSON_STATUS.CONDUCTED' color="blue darken-1" flat @click.native="edit_lesson_tab = !edit_lesson_tab">{{ edit_lesson_tab ? 'Ученики' : 'Занятие' }}</v-btn>
-              <v-btn color="blue darken-1" flat @click.native='storeOrUpdate' :loading='saving'>{{ dialog_item.id ? 'Сохранить' : 'Добавить' }}</v-btn>
-            </v-card-actions>
+                      <template slot="items" slot-scope="{ item }">
+                        <td width='200'>
+                          {{ item.client.names.short }}
+                        </td>
+                        <td width='150'>
+                          <v-switch color='red' v-model="item.is_absent" hide-details></v-switch>
+                        </td>
+                        <td width='150'>
+                          <v-icon small v-if="!item.late" class='client-edit-icon'>edit</v-icon>
+                          <v-edit-dialog
+                            :return-value.sync="item.late"
+                            lazy
+                          > {{ item.late }}
+                            <v-text-field
+                              slot="input"
+                              v-model="item.late"
+                              label="Опоздание"
+                              single-line
+                              v-mask="'##'"
+                            ></v-text-field>
+                          </v-edit-dialog>
+                        </td>
+                        <td>
+                          <v-icon small v-if="!item.comment" class='client-edit-icon'>edit</v-icon>
+                          <v-edit-dialog
+                            :return-value.sync="item.comment"
+                            lazy
+                          > {{ item.comment }}
+                            <v-text-field
+                              slot="input"
+                              v-model="item.comment"
+                              single-line
+                              label="Комментарий"
+                            ></v-text-field>
+                          </v-edit-dialog>
+                        </td>
+                      </template>
+                    </v-data-table>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
           </v-card>
         </v-dialog>
       </v-layout>
+
     </div>
   </div>
 </template>
@@ -225,6 +237,7 @@ export default {
       destroying: false,
       filling: false,
       dialog_item: {},
+      loading: false,
       sortingOptions: {
         rowsPerPage: -1,
         sortBy: 'date'

@@ -138,8 +138,15 @@ textarea {
 }
 
 .halfscreen-dialog {
-  top: 30% !important;
-  height: 70% !important;
+  top: 20% !important;
+  height: 80% !important;
+  // box-shadow: 0 0 15px 3px rgba(black, .4);
+  // & .v-toolbar {
+  //   box-shadow: none !important;
+  // }
+}
+
+.v-dialog--fullscreen {
   & .v-card {
     position: relative;
     & .v-toolbar {
@@ -147,19 +154,16 @@ textarea {
       z-index: 2;
     }
     &__text {
-      padding-top: 70px;
+      padding-top: 80px;
     }
   }
-  // box-shadow: 0 0 15px 3px rgba(black, .4);
-  // & .v-toolbar {
-  //   box-shadow: none !important;
-  // }
 }
 
 #print-block {
   position: absolute;
   left: -10000px;
 }
+
 
 // .v-dialog--scrollable {
 //   & .v-card__text {

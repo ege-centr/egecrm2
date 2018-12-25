@@ -73,9 +73,25 @@
                   <Bars :group-bars='item.schedule.bars' :client-bars='props.item.bars' />
                 </td>
                 <td class='text-md-right' style='padding-right: 16px'>
-                  <v-btn  flat icon color="black" class='ma-0' @click='openClient(props.item.id)'>
-                    <v-icon>more_horiz</v-icon>
-                  </v-btn>
+                  <v-menu>
+                    <v-btn slot='activator' flat icon color="black" class='ma-0'>
+                      <v-icon>more_horiz</v-icon>
+                    </v-btn>
+                     <v-list dense>
+                        <v-list-tile @click='removeClientFromGroup(props.item)'>
+                          <v-list-tile-action>
+                            <v-icon>close</v-icon>
+                          </v-list-tile-action>
+                          <v-list-tile-title>Удалить из группы</v-list-tile-title>
+                        </v-list-tile>
+                        <v-list-tile @click='moveClient(props.item)'>
+                          <v-list-tile-action>
+                            <v-icon>repeat</v-icon>
+                          </v-list-tile-action>
+                          <v-list-tile-title>Переместить в группу</v-list-tile-title>
+                        </v-list-tile>
+                     </v-list>
+                  </v-menu>
                 </td>
               </template>
             </v-data-table>
@@ -114,21 +130,20 @@
         </v-tab-item>
       </v-tabs-items>
     </div>
-    <ClientDialog ref='ClientDialog' />
     <GroupDialog ref='GroupDialog' />
+    <MoveClientDialog ref='MoveClientDialog' />
   </div>
 </template>
 
 <script>
 
-import { API_URL, LEVELS, GroupSchedule } from '@/components/Group/data'
+import { API_URL, GROUP_CLIENTS_API_URL, LEVELS, GroupSchedule, MoveClientDialog } from '@/components/Group'
 import Bars from '@/components/Group/Bars'
 import Visits from '@/components/Group/Visits'
-import ClientDialog from '@/components/Client/Dialog'
 import GroupDialog from '@/components/Group/Dialog'
 
 export default {
-  components: { GroupSchedule, Bars, Visits, ClientDialog, GroupDialog },
+  components: { GroupSchedule, Bars, Visits, GroupDialog, MoveClientDialog },
 
   data() {
     return {
@@ -151,21 +166,18 @@ export default {
       })
     },
 
-    openClient(id) {
-      this.$refs.ClientDialog.open(id)
-    },
-
     openGroup(id) {
       this.$refs.GroupDialog.open(id)
+    },
+
+    removeClientFromGroup(client) {
+      this.item.clients.splice(this.item.clients.findIndex(e => e.id === client.id), 1)
+      axios.delete(apiUrl(GROUP_CLIENTS_API_URL + `?group_id=${this.item.id}&client_id=${client.id}`))
+    },
+
+    moveClient(client) {
+      this.$refs.MoveClientDialog.open(this.item, client)
     },
   }
 }
 </script>
-
-<style scoped lang='scss'>
-  // .v-tabs__items {
-  //   width: calc(100% + 20px);
-  //   padding: 10px;
-  //   margin-left: -10px;
-  // }
-</style>

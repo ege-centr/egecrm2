@@ -11,7 +11,7 @@ class AdminsController extends Controller
 {
     public function index()
     {
-        return resourceCollection(Admin::orderBy('id', 'asc')->paginate(20), Collection::class);
+        return resourceCollection(Admin::paginate(20), Collection::class);
     }
 
     public function store(Request $request)
@@ -26,11 +26,13 @@ class AdminsController extends Controller
 
     public function update(Request $request, $id)
     {
-        //
+        $model = Admin::find($id);
+        $model->update($request->all());
+        return $model;
     }
 
     public function destroy($id)
     {
-        //
+
     }
 }

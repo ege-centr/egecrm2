@@ -16,7 +16,7 @@
           :label="`Комментарий`">
         </v-text-field>
       </div>
-      <v-menu left>
+      <!-- <v-menu left>
         <v-btn slot='activator' flat icon color="black" class='ma-0' v-if='editable'>
           <v-icon>more_horiz</v-icon>
         </v-btn>
@@ -46,7 +46,7 @@
               </v-list-tile-content>
           </v-list-tile>
         </v-list>
-      </v-menu>
+      </v-menu> -->
     </div>
     <div v-if='editable'>
       <v-btn fab dark small color="red" @click="item.phones.push({phone: '', comment: ''})">

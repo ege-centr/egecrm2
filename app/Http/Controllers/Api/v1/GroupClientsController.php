@@ -12,4 +12,9 @@ class GroupClientsController extends Controller
     {
         GroupClient::create($request->all());
     }
+
+    public function destroy(Request $request)
+    {
+        GroupClient::where('group_id', $request->group_id)->where('client_id', $request->client_id)->delete();
+    }
 }

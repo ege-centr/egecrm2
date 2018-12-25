@@ -26,13 +26,14 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         Route::post('static', 'DataController@static');
     });
 
+    Route::delete('group-clients', 'GroupClientsController@destroy');
+    Route::post('group-clients', 'GroupClientsController@store');
 
     Route::apiResources([
         'admins' => 'AdminsController',
         'requests' => 'RequestsController',
         'clients' => 'ClientsController',
         'groups' => 'GroupsController',
-        'group-clients' => 'GroupClientsController',
         'comments' => 'CommentsController',
         'teachers' => 'TeachersController',
         'cabinets' => 'CabinetsController',
@@ -66,7 +67,8 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
             'subjects' => Subject::all(),
             'grades' => Grade::all(),
             'years' => Year::all(),
-            'admins' => AdminCollection::collection(Admin::all())
+            'admins' => AdminCollection::collection(Admin::all()),
+            'academic_year' => academicYear(),
         ]);
     });
 

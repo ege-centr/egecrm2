@@ -13,14 +13,20 @@ class GroupsController extends Controller
     {
         $query = Group::take(100)->orderBy('id', 'desc');
 
-        if (isset($request->level) && $request->level) {
-            $query->where('level', $request->level);
+        if (isset($request->year) && $request->year) {
+            $query->where('year', $request->year);
         }
 
-        foreach(['year', 'grade_id', 'subject_id'] as $field) {
-            if (isset($request->{$field})) {
-                $query->where($field, $request->{$field});
-            }
+        if (isset($request->subject_id) && $request->subject_id) {
+            $query->where('subject_id', $request->subject_id);
+        }
+
+        if (isset($request->grade_id) && $request->grade_id) {
+            $query->where('grade_id', $request->grade_id);
+        }
+
+        if (isset($request->group_id) && $request->group_id) {
+            $query->where('id', '<>', $request->group_id);
         }
 
         return GroupCollection::collection($query->get());

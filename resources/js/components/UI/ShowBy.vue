@@ -1,15 +1,13 @@
 <template>
-  <v-menu offset-y style='font-size: 12px'>
-    <div slot='activator' class='grey--text flex-items align-center'>
-      <span>отображать {{ selected ? `по ${selected}` : 'все' }} </span>
-      <v-icon>keyboard_arrow_down</v-icon>
+  <div class='flex-items align-center'>
+    <div>
+      <span>отображать по: </span>
     </div>
-    <v-list small>
-      <v-list-tile v-for='option in options' :key='option' @click='select(option)'>
-        <v-list-tile-title>{{ option ? `по ${option}` : 'все' }}</v-list-tile-title>
-      </v-list-tile>
-    </v-list>
-  </v-menu>
+    <v-select style='width: 75px; margin: 0 20px; padding: 0' hide-details
+      v-model="selected"
+      :items="options"
+    ></v-select>
+  </div>
 </template>
 
 <script>
@@ -23,7 +21,7 @@ export default {
         10,
         30,
         50,
-        0,
+        'все',
       ]
     }
   },
@@ -31,12 +29,20 @@ export default {
   created() {
     this.selected = this.value
   },
-  
-  methods: {
-    select(option) {
-      this.selected = option
-      this.$emit('changed', option)
+
+  watch: {
+    selected(newVal, oldVal) {
+      if (newVal != oldVal) {
+        this.$emit('changed', newVal)
+      }
     }
   }
+
+  // methods: {
+  //   select(option) {
+  //     this.selected = option
+      
+  //   }
+  // }
 }
 </script>

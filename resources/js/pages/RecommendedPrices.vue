@@ -1,23 +1,26 @@
 <template lang="html">
   <div>
     <Loader v-if='loading' />
-    <div class='mb-5'>
+    <div class='mb-3'>
       <v-chip v-for="year in $store.state.data.years" class='pointer ml-0 mr-3'
         :class="{'primary white--text': year.value == selected_year}"
         @click='selected_year = year.value'
         :key='year.value'>{{ year.text }}</v-chip>
     </div>
-    <div v-if='data !== null'>
-      <div class='mt-3' style='width: 300px' v-for='grade in [9, 10, 11, 14]' :key='grade'>
+    <v-card v-if='data !== null'>
+      <v-card-text>
+        <div class='mt-3' style='width: 300px' v-for='grade in [9, 10, 11, 14]' :key='grade'>
           <v-text-field
             hide-details
             :label="grade == 14 ? 'экстернат' : grade + ' класс'"
-            v-model='data[selected_year][grade]'></v-text-field>
-      </div>
-    </div>
-    <div class='text-md-center mt-5'>
-      <v-btn @click='save' :loading='saving'>сохранить</v-btn>
-    </div>
+            v-model='data[selected_year][grade]'>
+          </v-text-field>
+        </div>
+        <div class='text-md-center mt-5'>
+          <v-btn @click='save' :loading='saving'>сохранить</v-btn>
+        </div>
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 

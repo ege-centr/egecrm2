@@ -19,8 +19,12 @@
     align-items: center;
     background: rgba(white, .8);
     border-radius: $border-radius;
+    &_halfscreen-dialog {
+      height: calc(80vh - 64px);
+      top: 10px;
+    }
     &_fullscreen-dialog {
-      height: calc(70vh - 64px);
+      height: calc(100vh - 64px);
       top: 10px;
     }
   }

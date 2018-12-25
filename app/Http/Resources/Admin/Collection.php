@@ -16,7 +16,8 @@ class Collection extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => getName($this)
+            'name' => getName($this),
+            'is_banned' => $this->isBanned(),
         ];
     }
 }

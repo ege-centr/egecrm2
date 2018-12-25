@@ -75,6 +75,18 @@
                 Права
               </v-flex>
               <v-flex md4>
+                <v-subheader>ЕГЭ-Центр</v-subheader>
+                <div v-for='right in rights.groups.LK2' :key='right'>
+                  <v-switch class='ml-3'
+                   :label="rights.all[right]"
+                   color="success"
+                   hide-details
+                   @change='toggleRight(right)'
+                   :input-value='item.rights.indexOf(right) !== -1'
+                 ></v-switch>
+                </div>
+              </v-flex>
+              <v-flex md4>
                 <v-subheader>ЕГЭ-Репетитор</v-subheader>
                 <div v-for='right in rights.groups.EGEREP' :key='right'>
                   <v-switch class='ml-3'
@@ -155,6 +167,14 @@ export default {
     },
     photoChanged(new_photo) {
       this.item.photo = new_photo
+    },
+    toggleRight(right) {
+      const index = this.item.rights.indexOf(right)
+      if (index === -1) {
+        this.item.rights.push(right)
+      } else {
+        this.item.rights.splice(index, 1)
+      }
     }
   }
 }

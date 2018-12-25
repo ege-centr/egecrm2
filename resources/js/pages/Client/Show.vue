@@ -57,13 +57,13 @@
               Паспорт выдан: {{ client.representative.issued_date | date }} {{ client.representative.issued_by }}
             </div>
             <div>
-              Код подразделения: {{ client.representative.code }}
+              Код подразделения: {{ client.representative.code || 'не указано' }}
             </div>
             <div>
               Дата рождения: {{ client.representative.birthday | date }}
             </div>
             <div>
-              Место прописки: {{ client.representative.address }}
+              Место прописки: {{ client.representative.address || 'не указано' }}
             </div>
           </v-flex>
           <v-spacer></v-spacer>
@@ -122,7 +122,11 @@
           />
         </v-tab-item>
         <v-tab-item>
-          <Comments :class-name='CLASS_NAME' :entity-id='client.id' />
+          <v-card>
+            <v-card-text>
+              <Comments :class-name='CLASS_NAME' :entity-id='client.id' />
+            </v-card-text>
+          </v-card>
         </v-tab-item>
         <v-tab-item>
           <div class='headline'>
@@ -182,9 +186,9 @@ export default {
 </script>
 
 <style scoped lang='scss'>
-  .v-tabs__items {
-    width: calc(100% + 20px);
-    padding: 10px;
-    margin-left: -10px;
-  }
+  // .v-tabs__items {
+  //   width: calc(100% + 20px);
+  //   padding: 10px;
+  //   margin-left: -10px;
+  // }
 </style>
