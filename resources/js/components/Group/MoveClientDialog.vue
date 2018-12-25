@@ -97,7 +97,8 @@ export default {
     },
 
     loadData(filters = '') {
-      axios.get(apiUrl(API_URL) + `?group_id=${this.group.id}${filters}`).then(r => {
+      axios.get(apiUrl(API_URL) + `?group_id=${this.group.id}&subject_id=${this.group.subject_id}&grade_id=${this.group.grade_id}&year=${this.group.year}`).then(r => {
+      // axios.get(apiUrl(API_URL) + `?group_id=${this.group.id}${filters}`).then(r => {
         this.groups = r.data
       })
     },
@@ -107,14 +108,14 @@ export default {
     },
 
     async storeOrUpdate() {
-      this.saving = true
-      if (this.item.id) {
-        await axios.put(apiUrl(API_URL, this.item.id), this.item).then(r => {
-          this.item = r.data
-        })
-      } else {
+      // this.saving = true
+      // if (this.item.id) {
+      //   await axios.put(apiUrl(API_URL, this.item.id), this.item).then(r => {
+      //     this.item = r.data
+      //   })
+      // } else {
  
-      }
+      // }
       this.saving = false
       this.dialog = false
     }
