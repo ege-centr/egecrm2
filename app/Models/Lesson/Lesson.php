@@ -43,7 +43,9 @@ class Lesson extends Model
         parent::boot();
 
         static::addGlobalScope('lessons', function (Builder $builder) {
-            $builder->where('entity_type', '<>', Client::class);
+			$builder->where(function($query) {
+				return $query->where('entity_type', Teacher::class)->orWhereNull('entity_type');
+	        });
         });
 
         // static::creating(function ($model) {
