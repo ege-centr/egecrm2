@@ -1,8 +1,7 @@
 <template>
   <div>
-    <v-btn v-if='phones !== null' color='primary' small class='ma-0' @click='openDialog(null)'>
-      <v-icon class="mr-1">add</v-icon>
-      добавить
+    <v-btn v-if='phones !== null' fab dark small color="red" @click='openDialog(null)'>
+      <v-icon dark>add</v-icon>
     </v-btn>
     <RequestDialog ref='RequestDialog' :phones='phones' @saved='saved' />
     <Loader v-if='loading' />
