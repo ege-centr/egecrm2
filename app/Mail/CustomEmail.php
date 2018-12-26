@@ -6,23 +6,23 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Models\EmailMessage;
+use App\Http\Controllers\Api\v1\UploadController;
 
 class CustomEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $message;
-    public $subject;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($message, $subject)
+    public function __construct(EmailMessage $message)
     {
         $this->message = $message;
-        $this->subject = $subject;
     }
 
     /**
@@ -32,6 +32,10 @@ class CustomEmail extends Mailable
      */
     public function build()
     {
-        return $this->subject($this->subject)->from(config('mail.from.address'))->view("mail.custom")->with(['html' => $this->message]);
+        $mail = $this->subject($this->subject)->from(config('mail.from.address'))->view("mail.custom")->with(['html' => $this->message->message]);
+        foreach($this->message->attachments as $attachment) {
+            $mail->attachFromStorage(UploadController::UPLOAD_PATH . $attachment);
+        }
+        return $mail;
     }
 }

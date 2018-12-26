@@ -22,8 +22,8 @@
                     <span class='ml-2 caption grey--text'>{{ message.created_at | date-time }}</span>
                   </div>
                   {{ message.message }}
-                  <div v-if='message.attachments.length' class='mt-3 grey--text small caption'>
-                    <a v-for='(attachment, index) in message.attachments' :key='index' class='flex-items align-center' target="_blank" :href="`/storage/img/upload/${attachment}`">
+                  <div v-if='message.attachments.length' class='mt-2 grey--text small caption flex-items '>
+                    <a v-for='(attachment, index) in message.attachments' :key='index' class='mr-2 flex-items align-center' target="_blank" :href="`/storage/img/upload/${attachment}`">
                       <v-icon style='font-size: 14px' class='mr-1'>attach_file</v-icon>
                       <span class='grey--text'>Вложение {{ index + 1 }}</span>
                     </a>
@@ -42,8 +42,11 @@
                 append-icon='send'>
               </v-textarea>
               <div class='flex-items align-center'>
-                <v-icon @click='attach'>attach_file</v-icon>
-                <span v-if='attachments.length' class='grey--text ml-2'>({{ attachments.length }} вложений)</span>
+                <v-chip close v-for='(attachment, index) in attachments' :key='attachment.filename' @input='remove(index)'>{{ attachment.original_name }}</v-chip>
+                <v-btn @click='attach' :loading='uploading' flat fab small>
+                  <v-icon style='font-size: 20px'>attach_file</v-icon>
+                </v-btn>
+                <!-- <span v-if='attachments.length' class='grey--text ml-2'>({{ attachments.length }} вложений)</span> -->
               </div>
             </div>
           </v-card-actions>
@@ -68,11 +71,13 @@ export default {
       subject: '',
       attachments: [],
       messages: null,
+      uploading: false,
     }
   },
 
   created() {
      this.$upload.on('file', {
+       extensions: false,
        url: apiUrl('upload'),
        onSuccess(e, response) {
          console.log(response.data)
@@ -82,6 +87,15 @@ export default {
         //    this.$emit('photoChanged', response.data)
         //    this.dialog = true
         //  })
+       },
+       onError(a, b) {
+         this.uploading = false
+       },
+       onStart() {
+         this.uploading = true
+       },
+       onEnd() {
+         this.uploading = false
        }
     })
   },
@@ -108,15 +122,18 @@ export default {
         subject: this.subject,
         message: this.message,
         email: this.item.email,
-        attachments: this.attachments,
+        attachments: _.map(this.attachments, e => e.filename),
       }).then(r => {
-        console.log(r.data)
         this.sending = false
         this.messages.unshift(r.data)
         this.message = ''
         this.subject = ''
         this.attachments = []
       })
+    },
+
+    remove(index) {
+      this.attachments.splice(index, 1)
     },
   }
 }

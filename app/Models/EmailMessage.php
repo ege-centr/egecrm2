@@ -23,7 +23,7 @@ class EmailMessage extends Model
             if (User::loggedIn()) {
                 $model->created_admin_id = User::id();
             }
-            Mail::to($model->email)->send(new CustomEmail($model->message, $model->subject));
+            Mail::to($model->email)->send(new CustomEmail($model));
         });
     }
 

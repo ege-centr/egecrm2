@@ -22,7 +22,7 @@
                   <PhoneList :items='client.phones' :with-comments='true' />
                 </div>
                 <div v-if='client.email'>
-                  {{ client.email.email }}
+                  <EmailShow :item='client.email' />
                 </div>
                 <div class='grey--text text--darken-2 font-weight-medium caption mt-4'>Представитель</div>
                 <div class='font-weight-bold'>
