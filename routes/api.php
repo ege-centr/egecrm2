@@ -46,6 +46,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         'email-messages' => 'EmailMessagesController',
     ]);
 
+    Route::resource('upload', 'UploadController')->only(['store']);
     Route::resource('settings', 'SettingsController')->only(['index', 'store']);
 
     Route::resource('print', 'PrintController')->only(['index']);

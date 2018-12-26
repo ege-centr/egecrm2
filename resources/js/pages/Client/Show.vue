@@ -34,7 +34,7 @@
                   <PhoneList :items='client.representative.phones' :with-comments='true' />
                 </div>
                 <div v-if='client.representative.email'>
-                  {{ client.representative.email.email }}
+                  <EmailShow :item='client.representative.email' />
                 </div>
               </div>
             </div>
@@ -147,6 +147,7 @@ import ContractList from '@/components/Contract/List'
 import GroupList from '@/components/Group/List'
 import PaymentList from '@/components/Payment/List'
 import PhoneList from '@/components/Phone/List'
+import EmailShow from '@/components/Email/Show'
 import BranchList from '@/components/UI/BranchList'
 
 import { API_URL, CLASS_NAME, ClientMap, GroupNotAssignedList, ClientDialog } from '@/components/Client/data'
@@ -164,7 +165,7 @@ export default {
     }
   },
 
-  components: { RequestList, Comments, ContractList, ClientMap, GroupList, GroupNotAssignedList, PaymentList, ClientDialog, PhoneList, BranchList },
+  components: { RequestList, Comments, ContractList, ClientMap, GroupList, GroupNotAssignedList, PaymentList, ClientDialog, PhoneList, BranchList, EmailShow },
 
   created() {
     this.loadData()

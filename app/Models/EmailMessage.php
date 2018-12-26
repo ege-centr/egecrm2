@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Shared\Model;
 use App\Traits\HasCreatedAdmin;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CustomEmail;
@@ -12,7 +12,8 @@ class EmailMessage extends Model
 {
     use HasCreatedAdmin;
 
-    protected $fillable = ['subject', 'message', 'email'];
+    protected $commaSeparated = ['attachments'];
+    protected $fillable = ['subject', 'message', 'email', 'attachments'];
 
     public static function boot()
     {
@@ -31,6 +32,7 @@ class EmailMessage extends Model
         return [
             'createdAdmin' => new AdminResource($this->createdAdmin),
             'message' => $this->message,
+            'attachments' => $this->attachments,
             'subject' => $this->subject,
             'created_at' => $this->created_at->toDateTimeString(),
         ];
