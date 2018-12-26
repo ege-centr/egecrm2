@@ -62,8 +62,8 @@ class Lessons extends Command
                     'price' => $item->price,
                     'duration' => $item->duration,
                     'year' => $item->year,
-                    'entity_type' => $item->type_entity == 'TEACHER' ? Teacher::class : Client::class,
-                    'entity_id' => $item->type_entity == 'STUDENT' ? $client_id : $item->id_teacher,
+                    'entity_type' => $item->type_entity ? ($item->type_entity == 'TEACHER' ? Teacher::class : Client::class) : null,
+                    'entity_id' =>  $item->type_entity ? ($item->type_entity == 'STUDENT' ? $client_id : $item->id_teacher) : null,
                     'group_id' => $group_id,
                     'date' => $item->lesson_date,
                     'time' => $item->lesson_time,
@@ -76,9 +76,9 @@ class Lessons extends Command
                     'status' => ($item->cancelled ? 'cancelled' : ($item->type_entity ? 'conducted' : 'planned')),
                     'is_unplanned' => false,
                     'conducted_email_id' => 69,
-                    'created_at' => ($item->cancelled ? null : $item->date),
-                    'created_at' => $item->date,
-                    'updated_at' => $item->date,
+                    'conducted_at' => ($item->cancelled ? null : $item->date),
+                    'created_at' => $item->type_entity ? $item->date : now(),
+                    'updated_at' => $item->type_entity ? $item->date : now(),
                 ]);
             //}
             $bar->advance();
