@@ -55,7 +55,7 @@ class Lessons extends Command
                 $client_id = DB::table('clients')->where('old_student_id', $item->id_entity)->value('id');
         }
             $group_id = DB::table('groups')->where('old_group_id', $item->id_group)->value('id');;
-            if ($group_id && ($item->type_entity == 'TEACHER' || ($item->type_entity == 'STUDENT' && $client_id))) {
+            //if ($group_id && ($item->type_entity == 'TEACHER' || ($item->type_entity == 'STUDENT' && $client_id))) {
                 $id = DB::table('lessons')->insertGetId([
                     'teacher_id' => $item->id_teacher,
                     'subject_id' => $item->id_subject,
@@ -63,7 +63,7 @@ class Lessons extends Command
                     'duration' => $item->duration,
                     'year' => $item->year,
                     'entity_type' => $item->type_entity == 'TEACHER' ? Teacher::class : Client::class,
-                    'entity_id' => $item->type_entity == 'STUDENT' ? $client_id : $item->id_entity,
+                    'entity_id' => $item->type_entity == 'STUDENT' ? $client_id : $item->id_teacher,
                     'group_id' => $group_id,
                     'date' => $item->lesson_date,
                     'time' => $item->lesson_time,
@@ -73,14 +73,14 @@ class Lessons extends Command
                     'late' => $item->type_entity == 'STUDENT' ? $item->late : null,
                     'comment' => $item->comment ?: '',
                     'is_absent' => $item->type_entity == 'STUDENT' ? ($item->presence == 1 ? false : true) : null,
-                    'status' => ($item->cancelled ? 'cancelled' : 'conducted'), // по-моему сейчас переносятся только проведенные
+                    'status' => ($item->cancelled ? 'cancelled' : ($item->type_entity ? 'conducted' : 'planned')),
                     'is_unplanned' => false,
                     'conducted_email_id' => 69,
                     'created_at' => ($item->cancelled ? null : $item->date),
                     'created_at' => $item->date,
                     'updated_at' => $item->date,
                 ]);
-            }
+            //}
             $bar->advance();
         }
         $bar->finish();

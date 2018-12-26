@@ -66,9 +66,9 @@ class Clients extends Command
                 'last_name' => $item->last_name,
                 'middle_name' => $item->middle_name,
                 'head_teacher_id' => $item->id_head_teacher ?: null,
-                'grade' => $item->grade,
+                'grade_id' => $item->grade,
                 'year' => $item->year,
-                'school' => $item->school,
+                'school' => $item->school ?: '',
                 'branches' => $item->branches ?: '',
                 'old_student_id' => $item->id,
                 'created_at' => getCurrentTime(),
@@ -187,7 +187,7 @@ class Clients extends Command
                         'client_id' => $id,
                         'created_admin_id' => $this->getAdminId($version->id_user),
                         'year' => $contract->year,
-                        'grade' => $contract->grade,
+                        'grade_id' => $contract->grade,
                         'sum' => $version->sum,
                         'date' => $version->date,
                         'discount' => $version->discount,
@@ -203,7 +203,7 @@ class Clients extends Command
                         DB::table('contract_subjects')->insert([
                             'contract_id' => $contract_id,
                             'subject_id' => $cs->id_subject,
-                            'lessons' => $cs->count,
+                            'lessons' => $cs->count ?: 0,
                             'lessons_planned' => $cs->count_program ?: 0,
                             'status' => $this->getSubjectStatus($cs->status),
                         ]);
@@ -214,7 +214,7 @@ class Clients extends Command
                     foreach($contract_payments as $cp) {
                         DB::table('contract_payments')->insert([
                             'contract_id' => $contract_id,
-                            'lessons' => $cp->lesson_count,
+                            'lessons' => $cp->lesson_count ?: 0,
                             'sum' => $cp->sum,
                             'date' => $cp->date
                         ]);
