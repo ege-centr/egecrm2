@@ -159,7 +159,7 @@
 import AvatarLoader from '@/components/AvatarLoader'
 // import ClientMap from '@/components/Client/Map'
 import PhoneEdit from '@/components/Phone/Edit'
-import { MODEL_DEFAULTS, API_URL } from '@/components/Client/data'
+import { MODEL_DEFAULTS, API_URL } from '@/components/Client'
 import EmailField from '@/components/UI/EmailField'
 import GradeAndYear from '@/components/GradeAndYear'
 

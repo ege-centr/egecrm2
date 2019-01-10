@@ -147,13 +147,13 @@ textarea {
 }
 
 .v-dialog--fullscreen {
-  & .v-card {
+  & > .v-card {
     position: relative;
     & .v-toolbar {
       position: fixed;
       z-index: 2;
     }
-    &__text {
+    & > .v-card__text {
       padding-top: 80px;
     }
   }
@@ -162,6 +162,23 @@ textarea {
 #print-block {
   position: absolute;
   left: -10000px;
+}
+
+nav {
+  background: $blue !important;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition-property: opacity;
+  transition-duration: .2s;
+}
+
+.fade-enter-active {
+  transition-delay: .2s;
+}
+
+.fade-enter, .fade-leave-active {
+  opacity: 0
 }
 
 

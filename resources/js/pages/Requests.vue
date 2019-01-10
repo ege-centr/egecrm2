@@ -2,12 +2,9 @@
   <div>
     <v-layout>
       <v-flex xs12 class="text-xs-right">
-        <a class='black-link' @click='add'>
-          <v-btn small fab color="primary">
+          <v-btn small fab color="primary" @click='add'>
             <v-icon dark>add</v-icon>
           </v-btn>
-          добавить заявку
-        </a>
       </v-flex>
     </v-layout>
     <RequestList ref='RequestList' /></RequestList>

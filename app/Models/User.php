@@ -96,7 +96,9 @@ class User extends Model
         // dd([$class, $entity_id]);
         // info('loading admin...');
         // @todo: намана доллар сделай
-        return Admin::with('photo')->find($entity_id);
+        $user = $class::with('photo')->find($entity_id);
+        $user->class = substr($class, 11);
+        return $user;
         // return new AdminResource(Admin::find($_SESSION['user']->id));
     }
 

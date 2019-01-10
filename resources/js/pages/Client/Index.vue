@@ -66,7 +66,7 @@
 
 <script>
 
-import { API_URL, FILTERS, ClientDialog } from '@/components/Client/data'
+import { API_URL, FILTERS, ClientDialog } from '@/components/Client'
 import ShowBy from '@/components/UI/ShowBy'
 import Filters from '@/components/Filters'
 

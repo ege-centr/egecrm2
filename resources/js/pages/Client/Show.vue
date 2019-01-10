@@ -96,7 +96,7 @@
           Комментарии
         </v-tab>
         <v-tab>
-          Баланс счёта
+          Тесты
         </v-tab>
       </v-tabs>
 
@@ -130,7 +130,7 @@
         </v-tab-item>
         <v-tab-item>
           <div class='headline'>
-            Баланс счёта
+            <TestAdminClientList :client='client' />
           </div>
         </v-tab-item>
       </v-tabs-items>
@@ -149,8 +149,9 @@ import PaymentList from '@/components/Payment/List'
 import PhoneList from '@/components/Phone/List'
 import EmailShow from '@/components/Email/Show'
 import BranchList from '@/components/UI/BranchList'
+import { TestAdminClientList } from '@/components/Test'
 
-import { API_URL, CLASS_NAME, ClientMap, GroupNotAssignedList, ClientDialog } from '@/components/Client/data'
+import { API_URL, CLASS_NAME, ClientMap, GroupNotAssignedList, ClientDialog } from '@/components/Client'
 
 export default {
   props: ['clientId'],
@@ -165,10 +166,23 @@ export default {
     }
   },
 
-  components: { RequestList, Comments, ContractList, ClientMap, GroupList, GroupNotAssignedList, PaymentList, ClientDialog, PhoneList, BranchList, EmailShow },
+  components: { 
+    RequestList, Comments, ContractList, ClientMap, GroupList, GroupNotAssignedList, 
+    PaymentList, ClientDialog, PhoneList, BranchList, EmailShow, TestAdminClientList,
+  },
 
   created() {
     this.loadData()
+  },
+
+  watch: {
+    tabs(newVal) {
+      // tests tab
+      if (newVal === 5) {
+        // 123
+        // 
+      }
+    },
   },
 
   methods: {

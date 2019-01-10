@@ -93,3 +93,8 @@ function academicYear($date = false) : int
     }
     return intval($year);
 }
+
+function user()
+{
+    return \App\Models\User::fromSession();
+}

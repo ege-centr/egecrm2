@@ -2,6 +2,7 @@
 window._ = require('lodash');
 window.moment = require('moment');
 window.Popper = require('popper.js').default;
+window.Cookies = require('js-cookie');
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -45,7 +46,12 @@ window.clone = (obj) => {
   return JSON.parse(JSON.stringify(obj))
 }
 
-window.queryString = (obj) => Object.entries(obj).map(e => e[0] + '=' + e[1]).join('&')
+window.queryString = (obj, appendQuestionMark = true) => {
+  if (obj === null) {
+    return ''
+  }
+  return (appendQuestionMark ? '?' : '') + Object.entries(obj).map(e => e[0] + '=' + e[1]).join('&')
+}
 
 
 

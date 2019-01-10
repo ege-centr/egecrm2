@@ -95,7 +95,7 @@ export default {
     loadFittingGroups(item, index) {
       this.currentIndex = index
       this.fittingGroups = null
-      axios.get(apiUrl(`${API_URL}?${queryString(item)}`)).then(r => {
+      axios.get(apiUrl(`${API_URL}${queryString(item)}`)).then(r => {
         this.fittingGroups = r.data
       })
     },

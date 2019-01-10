@@ -1,0 +1,64 @@
+<template>
+  <div>
+    <Loader v-if='loading' />
+    <v-data-table v-else hide-headers hide-actions :items='items' class='mt-3'>
+      <template slot='items' slot-scope="{ item }">
+        <td>
+          {{ item.title }}
+        </td>
+        <td>
+          <span v-if='item.subject_id'>
+            {{ getData('subjects', item.subject_id).three_letters }}
+          </span>
+        </td>
+        <td>
+          <span v-if='item.grade_id'>
+            {{ getData('grades', item.grade_id).title }}
+          </span>
+        </td>
+        <td>
+          {{ item.problems_count  }} вопросов
+        </td>
+        <td class='text-md-right'>
+          <router-link :to="{ name: 'TestClientStart', params: { id: item.id} }">
+            <v-btn small color='primary'>начать</v-btn>
+          </router-link>
+        </td>
+      </template>
+    </v-data-table>
+  </div>
+</template>
+
+<script>
+import { API_URL } from '@/components/Test'
+
+export default {
+  props: {
+    clientId: {
+      type: Number,
+      required: true,
+    },
+  },
+
+  data() {
+    return {
+      loading: false,
+      items: [],
+    }
+  },
+
+  created() {
+    this.loadData()
+  },
+
+  methods: {
+    loadData() {
+      this.loading = true
+      axios.get(apiUrl(API_URL) + queryString({client_id: this.clientId})).then(r => {
+        this.items = r.data
+        this.loading = false
+      })
+    },
+  },
+}
+</script>

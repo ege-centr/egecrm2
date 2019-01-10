@@ -44,7 +44,16 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         'special-dates' => 'SpecialDatesController',
         'lessons' => 'LessonsController',
         'email-messages' => 'EmailMessagesController',
+        'tests' => 'TestsController',
+        'client-tests' => 'ClientTestsController',
+        'client-test-answers' => 'ClientTestAnswersController',
     ]);
+
+    // Route::namespace('Test')->prefix('tests')->group(function() {
+    //     Route::apiResources([
+    //         '/' => 'TestsController',
+    //     ]);
+    // });
 
     Route::resource('upload', 'UploadController')->only(['store']);
     Route::resource('settings', 'SettingsController')->only(['index', 'store']);

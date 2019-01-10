@@ -8,6 +8,7 @@ use App\Models\Task;
 use App\Observers\LogsObserver;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use Illuminate\Support\Carbon;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,6 +20,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Resource::withoutWrapping();
+
+        Carbon::serializeUsing(function ($carbon) {
+            return $carbon->format('Y-m-d H:i:s');
+        });
 
         // Bind logs watcher to all models
         $path = realpath(app_path() . '/Models');

@@ -10,11 +10,12 @@ class SettingsController extends Controller
 {
     public function index(Request $request)
     {
-        return response()->json(Settings::get($request->key, isset($request->json)));
+        $result = Settings::get($request->key, $request->json);
+        return $result ? response()->json($result) : null;
     }
 
     public function store(Request $request)
     {
-        Settings::set($request->key, $request->value, isset($request->json));
+        Settings::set($request->key, $request->value, $request->json);
     }
 }

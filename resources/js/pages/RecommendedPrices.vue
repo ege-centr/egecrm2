@@ -25,9 +25,9 @@
 </template>
 
 <script>
+import Settings from '@/other/settings'
 
-const url = 'settings'
-const settings_key = 'recommended-prices'
+const key = 'recommended-prices'
 
 export default {
   data() {
@@ -46,18 +46,14 @@ export default {
 
   methods: {
     loadData() {
-      axios.get(apiUrl(`${url}?key=${settings_key}&json=1`)).then(r => {
+      Settings.get(key, true).then(r => {
         this.data = r.data
         this.loading = false
       })
     },
     async save() {
       this.saving = true
-      await axios.post(apiUrl(url), {
-        key: settings_key,
-        value: this.data,
-        json: true
-      })
+      await Settings.set(key, this.data, true)
       this.saving = false
     }
   }

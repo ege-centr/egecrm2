@@ -69,6 +69,11 @@ export default {
         route: 'TeacherIndex',
         label: 'Преподаватели'
       },
+      {
+        icon: 'edit',
+        route: 'TestIndex',
+        label: 'Тесты'
+      },
     ],
     admin_menu: [
       {
