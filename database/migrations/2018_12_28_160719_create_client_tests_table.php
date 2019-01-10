@@ -14,7 +14,7 @@ class CreateClientTestsTable extends Migration
     public function up()
     {
         Schema::create('client_tests', function (Blueprint $table) {
-            $table->increments();
+            $table->increments('id');
             $table->unsignedInteger('client_id')->index();
             $table->foreign('client_id')->references('id')->on('clients')->onDelete('cascade');
             $table->unsignedInteger('test_id');
