@@ -10,7 +10,7 @@
     </div>
 
     <v-data-table v-if='getItems && getItems.length'
-      class="elevation-3"
+      :class='config.elevationClass'
       hide-actions
       hide-headers
       :items='getItems'
@@ -40,13 +40,6 @@
       </td>
       <td>
         {{ item.teacher_name }}
-      </td>
-      <td class='text-md-right' v-if='editable'>
-        <router-link :to="{name: 'GroupEdit', params: { id: item.id }}">
-          <v-btn flat icon color="black" class='ma-0'>
-            <v-icon>more_horiz</v-icon>
-          </v-btn>
-        </router-link>
       </td>
     </template>
   </v-data-table>

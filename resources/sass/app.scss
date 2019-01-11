@@ -181,6 +181,9 @@ nav {
   opacity: 0
 }
 
+.v-tabs__items {
+  overflow: visible !important;
+}
 
 // .v-dialog--scrollable {
 //   & .v-card__text {

@@ -103,7 +103,6 @@ export default {
   },
 
   created() {
-    console.log('phones dialog', this.phones)
     if (this.phones) {
       this.model_defaults = {...model_defaults, phones: [this.phones[0]]}
     }
@@ -114,7 +113,7 @@ export default {
       this.dialog = true
       if (item_id === null) {
         this.edit_mode = false
-        this.item = this.model_defaults
+        this.item = clone(this.model_defaults)
         this.loading = false
       } else {
         this.edit_mode = true

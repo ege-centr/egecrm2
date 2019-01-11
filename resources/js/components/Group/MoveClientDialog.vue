@@ -13,13 +13,13 @@
           </v-toolbar-items>
         </v-toolbar>
         <v-card-text class='relative'>
-          <Filters :items='filters' :pre-installed='pre_installed_filters' @updated='loadData' />
+          <Filters v-if='dialog' :items='filters' :pre-installed='pre_installed_filters' @updated='loadData' />
           <Loader v-if='groups === null || loading' class='loader-wrapper_fullscreen-dialog' />
           <v-container v-else grid-list-xl class="pa-0 ma-0 mt-3" fluid>
             <v-layout wrap>
               <v-flex md12>
                 <v-data-table
-                  class="elevation-3"
+                  :class='config.elevationClass'
                   hide-actions
                   hide-headers
                   :items='groups'
@@ -112,6 +112,7 @@ export default {
     },
 
     loadData(filters = '') {
+      console.log('load groups triggered')
       this.loading = true
       axios.get(apiUrl(API_URL) + `?group_id=${this.group.id}${filters}`).then(r => {
         this.groups = r.data

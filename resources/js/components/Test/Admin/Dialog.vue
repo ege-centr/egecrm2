@@ -52,7 +52,7 @@
                         v-model='problem.text'
                       />
                       <AddBtn @click.native="addAnswer(problem)" label='добавить ответ' class='d-inline-block my-3'></AddBtn>
-                      <v-card class='elevate-3 grey lighten-4 mb-2' v-for='(answer, index) in problem.answers' :key='index'>
+                      <v-card class='grey lighten-4 mb-2' v-for='(answer, index) in problem.answers' :key='index' :class='config.elevationClass'>
                         <v-card-text>
                           <v-layout wrap>
                             <v-flex md12>

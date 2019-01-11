@@ -2,7 +2,9 @@ export const API_URL = 'contracts'
 
 export const MODEL_DEFAULTS = {
   subjects: [],
-  payments: []
+  payments: [],
+  grade_id: null,
+  year: null,
 }
 
 export const SUBJECT_STATUS_ACTIVE = 'active'

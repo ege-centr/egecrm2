@@ -3,12 +3,10 @@
     <Loader v-if='loading' />
     <v-layout>
       <v-flex xs12 class="text-xs-right">
-        <router-link :to="{ name: 'ClientCreate' }" class='black-link'>
-          <v-btn small fab color="primary">
-            <v-icon dark>add</v-icon>
-          </v-btn>
-          добавить клиента
-        </router-link>
+        <v-btn small fab color="primary" @click='$refs.ClientDialog.open(null)'>
+          <v-icon dark>add</v-icon>
+        </v-btn>
+        добавить клиента
       </v-flex>
     </v-layout>
     
@@ -25,7 +23,7 @@
                 </router-link>
               </td>
               <td class='text-md-right'>
-                <v-btn flat icon color="black" class='ma-0' @click='edit(item.id)'>
+                <v-btn flat icon color="black" class='ma-0' @click='$refs.ClientDialog.open(item.id)'>
                   <v-icon>more_horiz</v-icon>
                 </v-btn>
               </td>
@@ -33,9 +31,12 @@
           </v-data-table>
           <v-card class='elevation-0'>
             <v-card-text>
-              <div class='flex-items'>
+              <div class='flex-items align-center'>
                 <v-spacer></v-spacer>
                 <ShowBy :value='show_by' @changed='showByChanged' />
+                <div class='mx-3'>
+                  {{ page }} из {{ collection.meta.last_page }}
+                </div>
                 <v-icon style='margin: 0 10px' small @click='page -= 1' v-if='collection.meta.last_page > 1' :disabled='page == 1' color='black'>arrow_back_ios</v-icon>
                 <v-icon small @click='page += 1' v-if='collection.meta.last_page > 1' :disabled='page == collection.meta.last_page'  color='black'>arrow_forward_ios</v-icon>
               </div>
@@ -105,10 +106,6 @@ export default {
     showByChanged(option) {
       this.show_by = option
       this.loadData()
-    },
-
-    edit(id) {
-      this.$refs.ClientDialog.open(id)
     },
   }
 }

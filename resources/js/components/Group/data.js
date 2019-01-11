@@ -1,3 +1,5 @@
+// TODO: удалить все data.js
+
 export const API_URL = 'groups'
 
 export const GROUP_CLIENTS_API_URL = 'group-clients'

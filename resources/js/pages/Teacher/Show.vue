@@ -4,7 +4,7 @@
       Преподаватель {{ $route.params.id }}
     </div>
 
-    <v-card class='elevation-3 mb-4'>
+    <v-card class='mb-4' :class='config.elevationClass'>
       <v-card-text class='relative card-with-loader'>
         <Loader v-if='loading'></Loader>
         <v-layout wrap v-if='item !== null'>

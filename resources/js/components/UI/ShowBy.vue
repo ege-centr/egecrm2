@@ -3,7 +3,7 @@
     <div>
       <span>отображать по: </span>
     </div>
-    <v-select style='width: 75px; margin: 0 20px; padding: 0' hide-details
+    <v-select style='width: 75px; margin: 0 0 0 20px; padding: 0' hide-details
       v-model="selected"
       :items="options"
     ></v-select>

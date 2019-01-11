@@ -11,8 +11,9 @@ class Year
 
     public static function all()
     {
+        // TODO: убрать value, и вообще привести всё к единому виду
         return array_map(function($year) {
-            return ['value' => $year, 'text' => $year . '–' . ($year + 1) . ' уч. г.'];
+            return ['id' => $year, 'value' => $year, 'text' => $year . '–' . ($year + 1) . ' уч. г.'];
         }, self::ALL);
     }
 }

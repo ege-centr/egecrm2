@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <v-card class='elevate-3 grey lighten-4'>
+    <v-card class='grey lighten-4' :class='config.elevationClass'>
       <v-card-text class='pb-2 task'>
         <div v-html='item.text'></div>
         <div class='flex-items align-center mt-2'>

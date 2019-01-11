@@ -51,7 +51,7 @@
                         slot="activator"
                         v-model="dialog_item.date"
                         label="Дата"
-                        prepend-icon="event"
+                        
                         readonly
                       ></v-text-field>
                       <v-date-picker

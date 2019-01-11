@@ -34,6 +34,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         'requests' => 'RequestsController',
         'clients' => 'ClientsController',
         'groups' => 'GroupsController',
+        'group-acts' => 'GroupActsController',
         'comments' => 'CommentsController',
         'teachers' => 'TeachersController',
         'cabinets' => 'CabinetsController',

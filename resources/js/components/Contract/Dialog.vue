@@ -44,20 +44,7 @@
               <v-flex md12>
                 <div class='vertical-inputs mb-5'>
                   <div class='vertical-inputs__input'>
-                    <v-select hide-details
-                      v-model="item.grade_id"
-                      :items="withNullOption($store.state.data.grades, 'id', 'title')"
-                      item-value='id'
-                      item-text='title'
-                      label="Класс"
-                    ></v-select>
-                  </div>
-                  <div class='vertical-inputs__input'>
-                    <v-select
-                      v-model="item.year"
-                      :items="withNullOption($store.state.data.years)"
-                      label="Год"
-                    ></v-select>
+                    <GradeAndYear :item='item' label-type='GRADE_AND_YEAR' />
                   </div>
                   <div class='vertical-inputs__input'>
                     <v-text-field v-model="item.sum" label="Cумма" hide-details></v-text-field>
@@ -85,7 +72,6 @@
                         slot="activator"
                         v-model="item.date"
                         label="Дата"
-                        prepend-icon="event"
                         readonly
                       ></v-text-field>
                       <v-date-picker
@@ -124,7 +110,7 @@
                           slot="activator"
                           v-model="payment.date"
                           label="Дата"
-                          prepend-icon="event"
+                          
                           readonly
                         ></v-text-field>
                         <v-date-picker
@@ -165,12 +151,16 @@ import {
   SUBJECT_STATUS_ACTIVE,
 } from './data'
 
+import GradeAndYear from '@/components/GradeAndYear'
+
 export default {
   props: {
     clientId: {
       type: Number
     }
   },
+
+  components: { GradeAndYear },
 
   data() {
     return {
@@ -279,12 +269,12 @@ export default {
 <style lang="scss" scoped>
   $vertical-input-width: 500px;
 
-  .vertical-inputs__input {
-    width: $vertical-input-width;
-     & .v-input {
-      width: $vertical-input-width;
-     }
-  }
+  // .vertical-inputs__input {
+  //   width: $vertical-input-width;
+  //    & .v-input {
+  //     width: $vertical-input-width;
+  //    }
+  // }
 
   .contract-payment {
     width: $vertical-input-width;

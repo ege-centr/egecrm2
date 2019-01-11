@@ -4,7 +4,7 @@
       <thead>
         <tr>
           <th style="border: none !important"></th>
-          <th v-for='lesson in lessons' :key='lesson.id' style="height: 70px; position: relative" :class="getTdClass(lesson)">
+          <th v-for='(lesson, index) in lessons' :key='lesson.id' style="height: 70px; position: relative" :class="getTdClass(index)">
             <span v-if='lesson.status === LESSON_STATUS.CANCELLED' style='left: -17px'>отменено</span>
             <span v-else>{{ lesson.date | date }}</span>
           </th>
@@ -15,7 +15,7 @@
           <td class='contains-name'>
             <router-link :to="{ name: 'ClientShow', params: { id: client.id } }">{{ client.names.short }}</router-link>
           </td>
-          <td v-for='lesson in lessons' :key='lesson.id' :class="getTdClass(lesson)">
+          <td v-for='(lesson, index) in lessons' :key='lesson.id' :class="getTdClass(index)">
             <SmallCircle v-if='getClientLesson(lesson, client)' 
               :class-name='getCircleClass(lesson, client)' 
               :title="getClientLesson(lesson, client).late > 0 ? 'опоздал на ' + getClientLesson(lesson, client).late + ' мин' : ''"
@@ -29,7 +29,7 @@
           <td class='contains-name'>
             <router-link :to="{ name: 'TeacherShow', params: { id: teacher.id } }">{{ teacher.names.abbreviation }}</router-link>
           </td>
-          <td v-for='lesson in lessons' :key='lesson.id' :class="getTdClass(lesson)">
+          <td v-for='(lesson, index) in lessons' :key='lesson.id' :class="getTdClass(index)">
             <SmallCircle v-if='lesson.status === LESSON_STATUS.CONDUCTED && lesson.teacher_id === teacher.id' class-name='green' />
           </td>
         </tr>
@@ -76,15 +76,24 @@ export default {
       return 'green'
     },
 
-    getTdClass(lesson) {
+    getTdClass(index) {
       return {
-        'odd-month': this.oddMonth(lesson),
-        'is-cancelled': lesson.status === LESSON_STATUS.CANCELLED,
+        // 'odd-month': this.oddMonth(lesson),
+        'is-cancelled': this.lessons[index].status === LESSON_STATUS.CANCELLED,
+        'years-separator': this.yearsSeparator(index),
       }
     },
 
+    // DEPRICATED
     oddMonth(lesson) {
       return moment(lesson.date).format('M') % 2 === 1
+    },
+
+    yearsSeparator(index) {
+      if (index === 0) {
+        return false
+      }
+      return moment(this.lessons[index].date).format('Y') != moment(this.lessons[index - 1].date).format('Y')
     },
   },
 
@@ -180,6 +189,9 @@ export default {
 	}
 	& tr:last-child td {
 		border-bottom: none !important;
-	}
+  }
+  & .years-separator {
+    border-left: 3px solid #E53935 !important;
+  }
 }
 </style>

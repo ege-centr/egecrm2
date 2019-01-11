@@ -15,7 +15,7 @@
         </v-stepper-header>
         <v-stepper-items>
           <v-stepper-content v-for='(problem, index) in test.problems' :step="(index + 1)" :key='index'>
-            <v-card class='elevate-3 grey lighten-4 mb-4'>
+            <v-card class='grey lighten-4 mb-4' :class='config.elevationClass'>
               <v-card-text>
                 <div v-html='problem.text' class='client-problem'></div>
               </v-card-text>

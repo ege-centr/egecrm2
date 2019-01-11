@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-data-table v-if='getItems && getItems.length'
-      class="elevation-3"
+      :class='config.elevationClass'
       hide-actions
       hide-headers
       :items='getItems'

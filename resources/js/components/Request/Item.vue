@@ -1,5 +1,5 @@
 <template>
-    <v-card class="elevation-3 mb-3">
+    <v-card class="mb-3" :class='config.elevationClass'>
       <v-card-text>
         <v-layout row>
           <v-flex style='width: 80%; border-right: 1px solid #9e9e9e'>
@@ -35,15 +35,20 @@
               <div class='item-label'>Реквизиты заявки</div>
               {{ item.created_user_id ? getData('users', item.created_user_id).login : 'system' }} {{ item.created_at | date-time }}
             </div>
-            <div class='mb-3' v-if='item.client_ids.length'>
+            <div class='mb-3'>
               <div class='item-label'>Клиенты</div>
-              <div v-for='client_id in item.client_ids' :key='client_id'>
-                <router-link :to="{ name: 'ClientShow', params: {id: client_id}}">
-                  {{ client_id }}
-                </router-link>
+              <div v-if='item.client_ids.length'>
+                <div v-for='client_id in item.client_ids' :key='client_id'>
+                  <router-link :to="{ name: 'ClientShow', params: {id: client_id}}">
+                    {{ client_id }}
+                  </router-link>
+                </div>
+              </div>
+              <div v-else>
+                <a @click="$emit('openClientDialog', item.phones)">добавить</a>
               </div>
             </div>
-             <v-btn flat icon color="black" class='ma-0 mt-5 edit-request-button' @click="$emit('openDialog', item.id)" >
+             <v-btn flat icon color="black" class='ma-0 mt-5 edit-request-button' @click="$emit('openDialog', item.id)">
                 <v-icon>more_horiz</v-icon>
               </v-btn>
           </v-flex>
@@ -67,7 +72,7 @@ export default {
       request_statuses
     }
   },
-  props: ['item']
+  props: ['item'],
 }
 </script>
 

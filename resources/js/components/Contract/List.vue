@@ -7,7 +7,7 @@
     <v-data-table
       v-if='items.length'
       :items="items"
-      class="elevation-3"
+      :class='config.elevationClass'
       hide-actions
       hide-headers
     >
@@ -32,7 +32,7 @@
           </span>
         </td>
         <td>
-          {{ getData('grades', item.grade_id).title }}
+          {{ getData('grades', item.grade_id).title }}, {{ getData('years', item.year).text }}
         </td>
         <td>
           <span v-for='subject in item.subjects' :class="{

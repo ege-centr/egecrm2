@@ -4,7 +4,7 @@
       Группа {{ $route.params.id }}
     </div>
 
-    <v-card class='elevation-3 mb-4'>
+    <v-card class='mb-4' :class='config.elevationClass'>
       <v-card-text class='relative card-with-loader'>
         <Loader v-if='loading'></Loader>
         <v-layout wrap v-if='item !== null'>
@@ -107,26 +107,27 @@
         <v-tab>
           Посещаемость
         </v-tab>
-        <v-tab>
-          Вкладка
+         <v-tab>
+          Акты
         </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <v-tab-item>
-          <v-card class='elevation-0'>
+          <v-card :class='config.elevationClass'>
             <v-card-text class='relative'>
               <GroupSchedule v-if='item !== null' :group='item' />
             </v-card-text>
           </v-card>
         </v-tab-item>
         <v-tab-item>
-          <v-card class='elevation-0'>
+          <v-card :class='config.elevationClass'>
             <v-card-text class='relative'>
               <Visits :lessons='item.lessons' />
             </v-card-text>
           </v-card>
         </v-tab-item>
         <v-tab-item>
+          <GroupActList :group-id='item.id' />
         </v-tab-item>
       </v-tabs-items>
     </div>
@@ -137,13 +138,21 @@
 
 <script>
 
-import { API_URL, GROUP_CLIENTS_API_URL, LEVELS, GroupSchedule, MoveClientDialog } from '@/components/Group'
+import { 
+  API_URL, 
+  GROUP_CLIENTS_API_URL, 
+  LEVELS, 
+  GroupSchedule, 
+  MoveClientDialog,
+  GroupActList
+} from '@/components/Group'
 import Bars from '@/components/Group/Bars'
 import Visits from '@/components/Group/Visits'
 import GroupDialog from '@/components/Group/Dialog'
 
+
 export default {
-  components: { GroupSchedule, Bars, Visits, GroupDialog, MoveClientDialog },
+  components: { GroupSchedule, Bars, Visits, GroupDialog, MoveClientDialog, GroupActList },
 
   data() {
     return {

@@ -23,6 +23,9 @@
               <v-flex md12>
                 <div class='vertical-inputs'>
                   <div class='vertical-inputs__input'>
+                    <AvatarLoader class-name='Client\Client' :entity-id='item.id' :photo='item.photo' @photoChanged='photoChanged' />
+                  </div>
+                  <div class='vertical-inputs__input'>
                     <v-text-field v-model="item.first_name" label="Имя" hide-details></v-text-field>
                     <!-- <div class='vertical-inputs__input__message'>123</div> -->
                   </div>
@@ -97,7 +100,7 @@
                         slot="activator"
                         v-model="item.representative.birthday"
                         label="Дата рождения"
-                        prepend-icon="event"
+                        
                         readonly
                       ></v-text-field>
                       <v-date-picker
@@ -122,7 +125,7 @@
                         slot="activator"
                         v-model="item.representative.issued_date"
                         label="Дата выдачи"
-                        prepend-icon="event"
+                        
                         readonly
                       ></v-text-field>
                       <v-date-picker
@@ -156,12 +159,12 @@
 
 <script>
 
-import AvatarLoader from '@/components/AvatarLoader'
 // import ClientMap from '@/components/Client/Map'
 import PhoneEdit from '@/components/Phone/Edit'
 import { MODEL_DEFAULTS, API_URL } from '@/components/Client'
 import EmailField from '@/components/UI/EmailField'
 import GradeAndYear from '@/components/GradeAndYear'
+import AvatarLoader from '@/components/AvatarLoader'
 
 export default {
   data() {
@@ -177,14 +180,14 @@ export default {
   components: {  AvatarLoader, PhoneEdit, EmailField, GradeAndYear },
 
   methods: {
-    open(client_id = null) {
+    open(client_id = null, defaults = {}) {
       this.dialog = true
       if (client_id !== null) {
         this.edit_mode = true
         this.loadData(client_id)
       } else {
         this.edit_mode = false
-        this.item = MODEL_DEFAULTS
+        this.item = {...MODEL_DEFAULTS, ...defaults }
         this.loading = false
       }
     },

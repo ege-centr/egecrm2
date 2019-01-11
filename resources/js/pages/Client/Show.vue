@@ -3,7 +3,7 @@
     <div class='headline mb-4'>
       Клиент {{ clientId || $route.params.id }}
     </div>
-    <v-card class='elevation-3 mb-4'>
+    <v-card class='mb-4' :class='config.elevationClass'>
       <v-card-text class='relative card-with-loader'>
         <Loader v-if='loading'></Loader>
         <v-layout wrap v-if='client !== null'>
@@ -39,7 +39,7 @@
               </div>
             </div>
           </v-flex>
-          <v-flex>
+          <v-flex style='width: 400px'>
             <div>
               Место обучения в данный момент: {{ client.school || 'не указано' }}
             </div>

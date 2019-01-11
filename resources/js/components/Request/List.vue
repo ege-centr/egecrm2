@@ -4,12 +4,13 @@
       <v-icon dark>add</v-icon>
     </v-btn>
     <RequestDialog ref='RequestDialog' :phones='phones' @saved='saved' />
+    <ClientDialog ref='ClientDialog' />
     <Loader v-if='loading' />
     <Filters :items='filters' @updated='loadData' v-if='!items' />
     <v-container grid-list-md fluid class="px-0" v-if='requests !== null'>
       <v-layout row wrap class='relative'>
         <v-flex xs12 v-for='request in requests' :key='request.id'>
-          <RequestItem :item='request' @openDialog='openDialog' />
+          <RequestItem :item='request' @openDialog='openDialog' @openClientDialog='openClientDialog' />
         </v-flex>
       </v-layout>
       <div class="text-xs-center mt-4">
@@ -29,6 +30,7 @@
 
 import RequestItem from '@/components/Request/Item'
 import RequestDialog from '@/components/Request/Dialog'
+import { ClientDialog } from '@/components/Client'
 import Filters from '@/components/Filters'
 import { filters } from './data'
 
@@ -42,7 +44,7 @@ export default {
     }
   },
 
-  components: { RequestItem, RequestDialog, Filters },
+  components: { RequestItem, RequestDialog, Filters, ClientDialog },
 
   data() {
     return {
@@ -78,6 +80,11 @@ export default {
       this.$refs.RequestDialog.open(id)
     },
 
+    openClientDialog(phones) {
+      console.log('openning client dialog', phones)
+      this.$refs.ClientDialog.open(null, { phones })
+    },
+
     saved() {
       if (! this.items) {
         this.loadData()
@@ -85,6 +92,10 @@ export default {
         this.$emit('updated')
       }
     },
+
+    testyy() {
+      console.log('testyy')
+    }
   },
 
   computed: {

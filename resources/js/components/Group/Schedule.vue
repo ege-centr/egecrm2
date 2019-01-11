@@ -95,7 +95,7 @@
                             slot="activator"
                             v-model="dialog_item.date"
                             label="Дата занятия"
-                            prepend-icon="event"
+                            
                             readonly hide-details
                           ></v-text-field>
                           <v-date-picker
@@ -108,17 +108,17 @@
                         <v-text-field hide-details v-model='dialog_item.time' label='Время занятия' v-mask="'##:##'"></v-text-field>
                       </div>
                       <div class='vertical-inputs__input'>
-                        <v-select clearable hide-details
+                        <v-select hide-details
                           v-model="dialog_item.cabinet_id"
-                          :items="cabinets"
+                          :items="withNullOption(cabinets)"
                           item-value='id'
                           label="Кабинет"
                         ></v-select>
                       </div>
                       <div class='vertical-inputs__input'>
-                        <v-select clearable hide-details
+                        <v-select hide-details
                           v-model="dialog_item.teacher_id"
-                          :items="teachers"
+                          :items="withNullOption2(teachers)"
                           label="Учитель"
                           item-value='id'
                           item-text='names.abbreviation'
@@ -151,12 +151,12 @@
                   </v-flex>
                   <v-flex md12>
                     <v-data-table v-if='items.length'
-                      class="elevation-3"
                       hide-actions
                       :headers="[
                         { text: 'Ученик', sortable: false },
                         { text: 'Отсутствовал', sortable: false }, 
                         { text: 'Опоздание', sortable: false },
+                        { text: 'Цена', sortable: false },
                         { text: 'Комментарий', sortable: false },
                       ]"
                       :items='dialog_item.clientLessons'
@@ -180,6 +180,21 @@
                               label="Опоздание"
                               single-line
                               v-mask="'##'"
+                            ></v-text-field>
+                          </v-edit-dialog>
+                        </td>
+                        <td width='150'>
+                          <v-icon small v-if="!item.price" class='client-edit-icon'>edit</v-icon>
+                          <v-edit-dialog
+                            :return-value.sync="item.price"
+                            lazy
+                          > {{ item.price }}
+                            <v-text-field
+                              slot="input"
+                              v-model="item.price"
+                              label="Цена"
+                              single-line
+                              v-mask="'#####'"
                             ></v-text-field>
                           </v-edit-dialog>
                         </td>

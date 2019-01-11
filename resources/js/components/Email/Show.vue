@@ -15,7 +15,7 @@
             <div v-else>
               <div v-for='message in messages' :key='message.id' class="mb-3 display-flex">
               <Avatar :photo='message.createdAdmin ? message.createdAdmin.photo : null' :size='50' class='mr-3' />
-              <v-card class='messages__item elevate-3 grey lighten-4'>
+              <v-card class='messages__item grey lighten-4' :class='config.elevationClass'>
                 <v-card-text class='py-2 px-3'>
                   <div class='display-flex align-center'>
                     <span class='font-weight-medium'>{{ message.createdAdmin ? message.createdAdmin.name : 'Неизвестный отправитель' }}</span>
@@ -75,29 +75,30 @@ export default {
     }
   },
 
-  created() {
-     this.$upload.on('file', {
-       extensions: false,
-       url: apiUrl('upload'),
-       onSuccess(e, response) {
-         console.log(response.data)
-         this.attachments.push(response.data)
-        //  this.$emit('photoChanged', null)
-        //  Vue.nextTick(() => {
-        //    this.$emit('photoChanged', response.data)
-        //    this.dialog = true
-        //  })
-       },
-       onError(a, b) {
-         this.uploading = false
-       },
-       onStart() {
-         this.uploading = true
-       },
-       onEnd() {
-         this.uploading = false
-       }
-    })
+  watch: {
+    dialog(newVal) {
+      if (newVal === true) {
+        this.$upload.on('file', {
+          extensions: false,
+          url: apiUrl('upload'),
+          onSuccess(e, response) {
+            console.log(response.data)
+            this.attachments.push(response.data)
+          },
+          onError(a, b) {
+            this.uploading = false
+          },
+          onStart() {
+            this.uploading = true
+          },
+          onEnd() {
+            this.uploading = false
+          }
+        })
+      } else {
+        this.$upload.off('file')
+      }
+    },
   },
 
   methods: {
