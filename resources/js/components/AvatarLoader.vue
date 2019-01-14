@@ -4,7 +4,7 @@
       <v-hover>
         <v-avatar slot-scope="{ hover }" :size='180' style='overflow: hidden'>
           <img :src='photo.url_version' />
-          <div class='photo-needs-cropping'>
+          <div class='photo-needs-cropping' v-if='!photo.has_cropped'>
             <img src='/img/svg/scissors.svg'/>
           </div>
           <v-slide-y-reverse-transition>
