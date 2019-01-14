@@ -5,28 +5,29 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Client\ClientTest;
+use App\Http\Resources\Test\ClientTest as ClientTestResource;
 use User;
 
 class ClientTestsController extends Controller
 {
-    // public function index(Request $request)
-    // {
-    //     $query = ClientTest::query();
+    public function index(Request $request)
+    {
+        $query = ClientTest::query();
 
-    //     if (isset($request->client_id)) {
-    //         $query->where('client_id', $request->client_id);
-    //     }
+        if (isset($request->client_id)) {
+            $query->where('client_id', $request->client_id);
+        }
 
-    //     if (isset($request->test_id)) {
-    //         $query->where('test_id', $request->test_id);
-    //     }
+        if (isset($request->test_id)) {
+            $query->where('test_id', $request->test_id);
+        }
 
-    //     if (isset($request->started)) {
-    //         $query->whereNotNull('started_at');
-    //     }
+        if (isset($request->started)) {
+            $query->whereNotNull('started_at');
+        }
 
-    //     return $query->get();
-    // }
+        return ClientTestResource::collection($query->get());
+    }
 
     public function store(Request $request)
     {
@@ -58,5 +59,10 @@ class ClientTestsController extends Controller
         }
 
         return $query->first();
+    }
+
+    public function destroy($id)
+    {
+        ClientTest::find($id)->delete();
     }
 }

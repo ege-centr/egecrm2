@@ -18,6 +18,7 @@ class Resource extends JsonResource
             'contracts' => ContractResource::collection($this->contracts),
             'groups' => GroupCollection::collection($this->groups),
             'representative' => new Representative($this->representative),
+            'tests' => $this->tests,
             'email' => $this->email,
             'photo' => $this->photo,
             'headTeacher' => $this->getHeadTeacher(),

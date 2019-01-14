@@ -4,20 +4,20 @@
     <v-data-table v-else hide-headers hide-actions :items='items' class='mt-3'>
       <template slot='items' slot-scope="{ item }">
         <td>
-          {{ item.title }}
+          {{ item.test.title }}
         </td>
         <td>
-          <span v-if='item.subject_id'>
-            {{ getData('subjects', item.subject_id).three_letters }}
+          <span v-if='item.test.subject_id'>
+            {{ getData('subjects', item.test.subject_id).three_letters }}
           </span>
         </td>
         <td>
-          <span v-if='item.grade_id'>
-            {{ getData('grades', item.grade_id).title }}
+          <span v-if='item.test.grade_id'>
+            {{ getData('grades', item.test.grade_id).title }}
           </span>
         </td>
         <td>
-          {{ item.problems_count  }} вопросов
+          {{ item.test.problems_count  }} вопросов
         </td>
         <td class='text-md-right'>
           <router-link :to="{ name: 'TestClientStart', params: { id: item.id} }">
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { API_URL } from '@/components/Test'
+import { API_URL, CLIENT_TESTS_API_URL } from '@/components/Test'
 
 export default {
   props: {
@@ -54,7 +54,7 @@ export default {
   methods: {
     loadData() {
       this.loading = true
-      axios.get(apiUrl(API_URL) + queryString({client_id: this.clientId})).then(r => {
+      axios.get(apiUrl(CLIENT_TESTS_API_URL) + queryString({client_id: this.clientId})).then(r => {
         this.items = r.data
         this.loading = false
       })

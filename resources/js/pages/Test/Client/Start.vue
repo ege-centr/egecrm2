@@ -2,7 +2,7 @@
   <div>
     <div v-if='started'>
       <h2 class='text-md-center mb-3'>
-        <v-icon>access_time</v-icon> {{ time_left }}
+        <v-icon>access_time</v-icon> {{ time_left.format("mm:ss") }}
       </h2>
       <v-stepper v-model="step">
         <v-stepper-header>
@@ -132,6 +132,10 @@ export default {
       Vue.nextTick(() => this.started = true)
     },
 
+    end() {
+
+    },
+
     submitAnswer(problem_id) {
       this.step++
       axios.post(apiUrl(CLIENT_TEST_ANSWERS_API_URL), {
@@ -143,7 +147,15 @@ export default {
 
   computed: {
     time_left() {
-      return moment.utc(moment(this.started_at).diff(this.now) - moment.duration(30, 'minute').valueOf()).format("mm:ss")
+      const time_started = moment(this.started_at).toDate().getTime()
+      const time_now = this.now.toDate().getTime()
+      const mins_30 = moment.duration(30, 'minute').valueOf()
+      const timestamp = mins_30 - (time_now - time_started)
+      if (timestamp < 1000) {
+        this.end()
+      }
+      return moment(timestamp).utcOffset(-180)
+      // return moment.utc(moment(this.started_at).diff(this.now) - moment.duration(30, 'minute').valueOf())
     }
   }
 }

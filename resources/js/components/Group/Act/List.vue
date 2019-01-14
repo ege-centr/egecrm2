@@ -57,7 +57,7 @@ export default {
     },
   },
 
-  components: { GroupActDialog },
+  components: { GroupActDialog  },
 
   data() {
     return {

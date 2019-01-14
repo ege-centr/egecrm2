@@ -40,6 +40,11 @@ class Client extends Model implements UserInterface
         return $this->morphMany(Payment::class, 'entity');
     }
 
+    public function tests()
+    {
+        return $this->hasMany(ClientTest::class);
+    }
+
     public function isBanned()
     {
         return false;

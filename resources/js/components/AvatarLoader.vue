@@ -4,15 +4,18 @@
       <v-hover>
         <v-avatar slot-scope="{ hover }" :size='180' style='overflow: hidden'>
           <img :src='photo.url_version' />
+          <div class='photo-needs-cropping'>
+            <img src='/img/svg/scissors.svg'/>
+          </div>
           <v-slide-y-reverse-transition>
             <div class='photo-actions' v-show='hover'>
-              <div @click="selectFileToUpload">
-                <v-icon>arrow_upward</v-icon>
-                <span>загрузить новое</span>
-              </div>
               <div @click="dialog = true">
-                <v-icon>fullscreen</v-icon>
-                <span>изменить</span>
+                <v-icon class='mr-1'>crop_free</v-icon>
+                <span>редактировать</span>
+              </div>
+              <div @click="destroy">
+                <v-icon>close</v-icon>
+                <span>удалить</span>
               </div>
             </div>
           </v-slide-y-reverse-transition>
@@ -20,9 +23,25 @@
       </v-hover>
     </div>
 
-    <div v-else class='image-upload' @click="selectFileToUpload">
-      загрузить фото
+    <div v-else>
+      <v-hover>
+        <v-avatar slot-scope="{ hover }" :size='180' style='overflow: hidden'>
+          <img src='/img/no-profile-img.jpg' />
+          <v-slide-y-reverse-transition>
+            <div class='photo-actions' v-show='hover'>
+              <div @click="selectFileToUpload">
+                <v-icon>arrow_upward</v-icon>
+                <span>загрузить</span>
+              </div>
+            </div>
+          </v-slide-y-reverse-transition>
+        </v-avatar>
+      </v-hover>
     </div>
+
+    <!-- <div v-else class='image-upload' @click="selectFileToUpload">
+      загрузить фото
+    </div> -->
 
     <v-layout row justify-center>
       <v-dialog v-model="dialog" persistent max-width="1000px">
@@ -44,7 +63,8 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="blue darken-1" flat @click.native="dialog = false">Отмена</v-btn>
+            <v-btn color="grey darken-1" flat @click.native="dialog = false">Отмена</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="selectFileToUpload" :loading='cropping'>Загрузить новое</v-btn>
             <v-btn color="blue darken-1" flat @click.native="cropImage" :loading='cropping'>Сохранить</v-btn>
           </v-card-actions>
         </v-card>
@@ -56,6 +76,8 @@
 <script>
 
 import VueCropper from 'vue-cropperjs'
+
+const API_URL = 'photo'
 
 export default {
   props: ['className', 'entityId', 'photo'],
@@ -69,7 +91,7 @@ export default {
 
   created() {
     this.$upload.on('photo', {
-       url: apiUrl('photo/upload'),
+       url: apiUrl(API_URL, 'upload'),
        body: {
          class: this.className,
          entity_id: this.entityId
@@ -95,13 +117,20 @@ export default {
         const formData = new FormData()
         formData.append('file', blob)
         formData.append('photo_id', this.photo.id)
-        axios.post(apiUrl('photo/crop'), formData).then(r => {
+        axios.post(apiUrl(API_URL, 'crop'), formData).then(r => {
+          this.photo = r.data
           this.$emit('photoChanged', r.data)
           this.dialog = false
           setTimeout(() => this.cropping = false, 300)
         })
       })
-    }
+    },
+
+    destroy() {
+      axios.delete(apiUrl(API_URL, this.photo.id))
+      this.photo = null
+      this.$emit('photoChanged', null)
+    },
   }
 }
 </script>
@@ -119,8 +148,13 @@ export default {
     color: white;
     height: 16px;
     font-size: 18px;
+    margin-right: 4px;
   }
   & > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     opacity: .8;
     cursor: pointer;
     margin-bottom: 4px;
@@ -148,6 +182,21 @@ export default {
     border-color: #0088ec;
     color: #0088ec;
     background: #e5f1fd;
+  }
+}
+
+.photo-needs-cropping {
+  position: absolute;
+  background: rgba(black, .7);
+  height: 100%;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  & img {
+    height: 52px;
+    width: 90px;
+    border-radius: 0;
   }
 }
 </style>

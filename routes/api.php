@@ -69,6 +69,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
     Route::prefix('photo')->group(function() {
         Route::post('upload', 'PhotosController@upload');
         Route::post('crop', 'PhotosController@crop');
+        Route::delete('{id}', 'PhotosController@destroy');
     });
 
     # Load initial data

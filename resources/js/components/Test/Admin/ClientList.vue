@@ -22,7 +22,10 @@
           {{ item.problems_count  }} вопросов
         </td>
         <td class='text-md-right'>
-          <v-btn small color='primary' @click='addClientTest(item)' :loading='adding_test_id === item.id'>добавить</v-btn>
+          <v-btn small color='primary' @click='addTest(item)' :loading='adding_test_id === item.id' v-if='client.tests.find(e => e.test_id) === undefined'>добавить</v-btn>
+          <v-btn v-else :loading='destroying_test_id === item.id' small @click='destroyTest(item)'>
+            сбросить
+          </v-btn>
         </td>
       </template>
     </v-data-table>
@@ -30,7 +33,11 @@
 </template>
 
 <script>
-import { API_URL, CLIENT_TESTS_API_URL, TestDialog } from '@/components/Test'
+import { API_URL, CLIENT_TESTS_API_URL } from '@/components/Test'
+
+// TODO: почему это не работает?
+// import { API_URL, CLIENT_TESTS_API_URL, TestDialog } from '@/components/Test'
+import TestDialog from '@/components/Test/Admin/Dialog'
 
 export default {
   props: {
@@ -45,7 +52,10 @@ export default {
   data() {
     return {
       loading: false,
+      items: null,
+      client_tests: null,
       adding_test_id: false,
+      destroying_test_id: false,
     }
   },
 
@@ -60,17 +70,28 @@ export default {
         this.items = r.data
         this.loading = false
       })
+      // axios.get(apiUrl(CLIENT_TESTS_API_URL) + queryString({client_id: this.client.id}))
     },
 
-    addClientTest(test) {
+    addTest(test) {
       this.adding_test_id = test.id
       axios.post(apiUrl(CLIENT_TESTS_API_URL), {
         client_id: this.client.id,
         test_id: test.id,
       }).then(r => {
+        this.client.tests.push(r.data)
         this.adding_test_id = false
       })
     },
+
+    destroyTest(test) {
+      const index = this.client.tests.findIndex(e => e.test_id === test.id)
+      this.destroying_test_id = test.id
+      axios.delete(apiUrl(CLIENT_TESTS_API_URL, this.client.tests[index].id)).then(r => {
+        this.client.tests.splice(index, 1)
+        this.destroying_test_id = false
+      })
+    }
   },
 }
 </script>

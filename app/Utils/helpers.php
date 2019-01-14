@@ -98,3 +98,10 @@ function user()
 {
     return \App\Models\User::fromSession();
 }
+
+
+function numToText($number)
+{
+    $f = new NumberFormatter("ru", NumberFormatter::SPELLOUT);
+    return $f->format($number);
+}

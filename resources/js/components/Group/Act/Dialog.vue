@@ -1,5 +1,6 @@
 <template>
   <v-layout row justify-center>
+    <Print v-if='item && item.id' ref='Print' :params="{type: 'act', group_id: groupId, id: item.id}" />
     <!-- <v-dialog v-model="dialog" transition="dialog-bottom-transition" content-class='v-dialog--fullscreen halfscreen-dialog'> -->
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card>
@@ -11,7 +12,7 @@
           <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn v-if='item && item.id' dark flat @click.native="destroy" :loading='destroying'>Удалить</v-btn>
-            <v-btn v-if='item && item.id' dark flat @click.native="destroy">Сгенерировать</v-btn>
+            <v-btn v-if='item && item.id' dark flat @click.native="$refs.Print.open()">Сгенерировать</v-btn>
             <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ (item === null || item.id) ? 'Сохранить' : 'Добавить' }}</v-btn>
           </v-toolbar-items>
         </v-toolbar>
@@ -72,6 +73,7 @@
 
 <script>
 import { GROUP_ACTS_API_URL } from '@/components/Group'
+import Print from '@/components/Print'
 
 export default {
   props: {
@@ -95,6 +97,8 @@ export default {
     }
   },
   
+  components: { Print },
+
   methods: {
     open(item_id = null) {
       this.item = null

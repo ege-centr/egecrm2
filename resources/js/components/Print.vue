@@ -6,7 +6,7 @@
           <v-btn icon dark @click.native="dialog = false">
             <v-icon>close</v-icon>
           </v-btn>
-          <v-toolbar-title>Печать договора</v-toolbar-title>
+          <v-toolbar-title>{{ title }}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn dark flat @click.native="print">Печать</v-btn>
@@ -32,7 +32,21 @@
 import { VueEditor } from 'vue2-editor'
 import printJS from 'print-js'
 
+const API_URL = 'print'
+
 export default {
+  props: {
+    params: {
+      type: Object,
+      required: false,
+    },
+    title: {
+      type: String,
+      default: 'Печать',
+      required: false,
+    },
+  },
+
   components: { VueEditor },
 
   data() {
@@ -44,10 +58,10 @@ export default {
   },
 
   methods: {
-    open(item_id) {
+    open(params = {}) {
       this.loading = true
       this.dialog = true
-      axios.get(apiUrl(`print?type=contract&id=${item_id}`)).then(r => {
+      axios.get(apiUrl(API_URL) + queryString({...this.params, ...params})).then(r => {
         this.text = r.data
         this.loading = false
       })

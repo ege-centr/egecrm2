@@ -4,22 +4,30 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Contract\Contract;
+use App\Models\{
+    Contract\Contract,
+    Group\Group,
+    Group\GroupAct
+};
 
 class PrintController extends Controller
 {
 
     public function index(Request $request)
     {
-        switch($request->type) {
-            default:
-                return $this->contract($request->id);
-        }
+        return $this->{$request->type}($request->all());
     }
 
-    private function contract($id)
+    private function contract(array $params)
     {
-        $contract = Contract::find($id);
-        return view('print.test')->with(compact('contract'));
+        $contract = Contract::find($params['id']);
+        return view('print.contract')->with(compact('contract'));
+    }
+
+    private function act(array $params)
+    {
+        $act = GroupAct::find($params['id']);
+        $group = Group::find($params['group_id']);
+        return view('print.act')->with(compact('act', 'group'));
     }
 }

@@ -29,4 +29,9 @@ class PhotosController extends Controller
         $photo->save();
         return $photo;
     }
+
+    public function destroy($id)
+    {
+        Photo::find($id)->delete();
+    }
 }

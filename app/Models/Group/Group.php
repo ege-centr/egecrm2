@@ -3,7 +3,7 @@
 namespace App\Models\Group;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{Cabinet, Teacher, Lesson\Lesson, Client\Client};
+use App\Models\{Cabinet, Teacher, Lesson\Lesson, Client\Client, Factory\Subject, Factory\Grade};
 use App\Utils\Time;
 use DB;
 
@@ -37,6 +37,16 @@ class Group extends Model
     public function lessons()
     {
         return $this->hasMany(Lesson::class);
+    }
+
+    public function grade()
+    {
+        return $this->belongsTo(Grade::class);
+    }
+
+    public function subject()
+    {
+        return $this->belongsTo(Subject::class);
     }
 
     public function getSchedule()
