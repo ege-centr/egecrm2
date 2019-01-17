@@ -52,7 +52,7 @@
 
 <script>
 
-import { API_URL, CLASS_NAME } from '@/components/Teacher/data'
+import { API_URL, CLASS_NAME } from '@/components/Teacher'
 import GroupList from '@/components/Group/List'
 import PaymentList from '@/components/Payment/List'
 

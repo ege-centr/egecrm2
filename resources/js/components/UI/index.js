@@ -1,3 +1,6 @@
 export const AdminSelect = require('./AdminSelect')
 export const DataSelect = require('./DataSelect')
 export const AddBtn = require('./AddBtn')
+export const ShowBy = require('./ShowBy')
+export const Pagination = require('./Pagination')
+export const IndexPage = require('./IndexPage')

@@ -20,9 +20,14 @@
           {{ item.test.problems_count  }} вопросов
         </td>
         <td class='text-md-right'>
-          <router-link :to="{ name: 'TestClientStart', params: { id: item.id} }">
-            <v-btn small color='primary'>начать</v-btn>
-          </router-link>
+          <div v-if='item.results === null'>
+            <router-link :to="{ name: 'TestClientStart', params: { id: item.test.id} }">
+              <v-btn small color='primary'>начать</v-btn>
+            </router-link>
+          </div>
+          <div v-else>
+            результат: <b>{{ item.results.score }}</b> из {{ item.results.max_score }}
+          </div>
         </td>
       </template>
     </v-data-table>
@@ -54,7 +59,7 @@ export default {
   methods: {
     loadData() {
       this.loading = true
-      axios.get(apiUrl(CLIENT_TESTS_API_URL) + queryString({client_id: this.clientId})).then(r => {
+      axios.get(apiUrl(CLIENT_TESTS_API_URL) + queryString({client_id: this.clientId, includeTest: true})).then(r => {
         this.items = r.data
         this.loading = false
       })

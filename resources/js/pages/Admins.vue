@@ -10,20 +10,20 @@
         </a>
       </v-flex>
     </v-layout>
-    <UserList ref='UserList' /></UserList>
+    <AdminList ref='AdminList' /></AdminList>
   </div>
 </template>
 
 <script>
 
-import UserList from '@/components/User/List'
+import AdminList from '@/components/Admin/List'
 
 export default {
-  components: { UserList },
+  components: { AdminList },
 
   methods: {
     add() {
-      this.$refs.UserList.$refs.UserDialog.add()
+      this.$refs.AdminList.$refs.UserDialog.add()
     }
   }
 }

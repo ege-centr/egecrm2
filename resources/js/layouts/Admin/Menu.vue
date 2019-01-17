@@ -93,7 +93,7 @@ export default {
       },
       {
         icon: 'people',
-        route: 'Users',
+        route: 'Admins',
         label: 'Пользователи'
       },
       {

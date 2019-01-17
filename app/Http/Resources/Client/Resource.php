@@ -5,6 +5,7 @@ namespace App\Http\Resources\Client;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Contract\Resource as ContractResource;
 use App\Http\Resources\Group\Collection as GroupCollection;
+use App\Http\Resources\Test\ClientTest;
 
 class Resource extends JsonResource
 {
@@ -18,7 +19,7 @@ class Resource extends JsonResource
             'contracts' => ContractResource::collection($this->contracts),
             'groups' => GroupCollection::collection($this->groups),
             'representative' => new Representative($this->representative),
-            'tests' => $this->tests,
+            'tests' => ClientTest::collection($this->tests),
             'email' => $this->email,
             'photo' => $this->photo,
             'headTeacher' => $this->getHeadTeacher(),

@@ -26,6 +26,11 @@ class ClientTestsController extends Controller
             $query->whereNotNull('started_at');
         }
 
+        if (isset($request->includeTest)) {
+            $query->with(['test']);
+        }
+
+        // return $query->get();
         return ClientTestResource::collection($query->get());
     }
 
@@ -40,7 +45,7 @@ class ClientTestsController extends Controller
             ['client_id', User::id()],
             ['test_id', $id]
         ])->first();
-        $model->started_at = now();
+        $model->started_at = $request->started_at;
         $model->save();
         return $model;
     }
@@ -63,6 +68,8 @@ class ClientTestsController extends Controller
 
     public function destroy($id)
     {
-        ClientTest::find($id)->delete();
+        $client_test = ClientTest::find($id);
+        $client_test->answers()->delete();
+        $client_test->delete();
     }
 }

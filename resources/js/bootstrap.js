@@ -53,6 +53,7 @@ window.queryString = (obj, appendQuestionMark = true) => {
   return (appendQuestionMark ? '?' : '') + Object.entries(obj).map(e => e[0] + '=' + e[1]).join('&')
 }
 
+window.colorLog = (message, color = 'PaleVioletRed') => console.log('%c' + message, `color:${color}`) 
 
 
 /**

@@ -127,7 +127,11 @@ export default {
     },
 
     emit() {
-      this.$emit('updated', this.getQueryString())
+      const filters = {}
+      this.filters.forEach(e => {
+        filters[e.item.field] = e.value
+      })
+      this.$emit('updated', filters)
     },
 
     getFilterValueLabel(filter) {
@@ -151,13 +155,6 @@ export default {
     getItemText(item) {
       return item.textField ? item.textField : 'text'
     },
-
-    getQueryString() {
-      if (this.filters.length) {
-        return '&' + this.filters.map(e => e.item.field + '=' + e.value).join('&')
-      }
-      return ''
-    }
   }
 }
 </script>

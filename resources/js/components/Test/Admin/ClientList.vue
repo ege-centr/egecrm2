@@ -21,8 +21,13 @@
         <td>
           {{ item.problems_count  }} вопросов
         </td>
+        <td>
+          <div v-if='getClientTest(item) !== undefined && getClientTest(item).results !== null'>
+            результат: <b>{{ getClientTest(item).results.score }}</b> из {{ getClientTest(item).results.max_score }}
+          </div>
+        </td>
         <td class='text-md-right'>
-          <v-btn small color='primary' @click='addTest(item)' :loading='adding_test_id === item.id' v-if='client.tests.find(e => e.test_id) === undefined'>добавить</v-btn>
+          <v-btn small color='primary' @click='addTest(item)' :loading='adding_test_id === item.id' v-if='getClientTest(item) === undefined'>добавить</v-btn>
           <v-btn v-else :loading='destroying_test_id === item.id' small @click='destroyTest(item)'>
             сбросить
           </v-btn>
@@ -91,6 +96,10 @@ export default {
         this.client.tests.splice(index, 1)
         this.destroying_test_id = false
       })
+    },
+
+    getClientTest(test) {
+      return this.client.tests.find(e => e.test_id === test.id)
     }
   },
 }

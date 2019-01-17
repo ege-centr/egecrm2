@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UserDialog ref='UserDialog' @saved='loadData' />
+    <AdminDialog ref='AdminDialog' @saved='loadData' />
     <Loader v-if='loading' />
     <v-container grid-list-md fluid class="px-0" v-if='data !== null'>
       <v-layout row wrap class='relative'>
@@ -19,7 +19,7 @@
           </v-data-table>
         </v-flex>
         <!-- <v-flex xs12 v-for='item in data' :key='item.id'>
-          <UserItem :item='item' @show='show' />
+          <AdminItem :item='item' @show='show' />
         </v-flex> -->
       </v-layout>
       <div class="text-xs-center mt-4">
@@ -37,10 +37,10 @@
 
 <script>
 
-import UserDialog from '@/components/User/Dialog'
+import AdminDialog from '@/components/Admin/Dialog'
 
 export default {
-  components: { UserDialog },
+  components: { AdminDialog },
 
   data() {
     return {
@@ -75,7 +75,7 @@ export default {
       })
     },
     show(id) {
-      this.$refs.UserDialog.show(id)
+      this.$refs.AdminDialog.show(id)
     }
   },
 

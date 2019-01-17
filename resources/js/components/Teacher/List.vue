@@ -34,7 +34,7 @@
 </template>
 <script>
 
-import { url } from './data'
+import { API_URL } from './'
 
 export default {
   props: {
@@ -64,7 +64,7 @@ export default {
   methods: {
     loadData() {
       this.loading = true
-      axios.get(apiUrl(`${url}?page=${this.page}`)).then(response => {
+      axios.get(apiUrl(`${API_URL}?page=${this.page}`)).then(response => {
         this.collection = response.data
         this.loading = false
       })

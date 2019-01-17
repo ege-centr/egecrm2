@@ -25,7 +25,7 @@
 
 <script>
 
-import { url, model_defaults } from './data'
+import { API_URL, MODEL_DEFAULTS } from './data'
 
 export default {
   data() {
@@ -38,15 +38,15 @@ export default {
   },
   methods: {
     add() {
-      this.item = model_defaults
+      this.item = MODEL_DEFAULTS
       this.dialog = true
     },
     async storeOrUpdate() {
       this.saving = true
       if (this.item.id) {
-        await axios.put(apiUrl(`${url}/${this.item.id}`), this.item)
+        await axios.put(apiUrl(`${API_URL}/${this.item.id}`), this.item)
       } else {
-        await axios.post(apiUrl(url), this.item)
+        await axios.post(apiUrl(API_URL), this.item)
       }
       this.$emit('updated')
       this.dialog = false
@@ -54,7 +54,7 @@ export default {
     },
     async destroy() {
       this.destroying = true
-      await axios.delete(apiUrl(`${url}/${this.item.id}`))
+      await axios.delete(apiUrl(`${API_URL}/${this.item.id}`))
       this.$emit('updated')
       this.dialog = false
       setTimeout(() => this.destroying = false, 500)

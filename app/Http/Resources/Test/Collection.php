@@ -8,8 +8,12 @@ class Collection extends JsonResource
 {
     public function toArray($request)
     {
-        return array_merge(parent::toArray($request), [
+        return [
+            'id' => $this->id,
+            'grade_id' => $this->grade_id,
+            'subject_id' => $this->subject_id,
+            'title' => $this->title,
             'problems_count' => count($this->problems)
-        ]);
+        ];
     }
 }

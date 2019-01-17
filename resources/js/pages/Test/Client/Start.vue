@@ -1,40 +1,52 @@
 <template>
   <div>
     <div v-if='started'>
-      <h2 class='text-md-center mb-3'>
-        <v-icon>access_time</v-icon> {{ time_left.format("mm:ss") }}
-      </h2>
-      <v-stepper v-model="step">
-        <v-stepper-header>
-          <template v-for='(problem, index) in test.problems'>
-            <v-stepper-step editable :complete="step > index" :step="(index + 1)">
-              <!-- Вопрос {{ index + 1 }} -->
-            </v-stepper-step>
-            <v-divider v-if="index + 1 < test.problems.length"></v-divider>
-          </template>
-        </v-stepper-header>
-        <v-stepper-items>
-          <v-stepper-content v-for='(problem, index) in test.problems' :step="(index + 1)" :key='index'>
-            <v-card class='grey lighten-4 mb-4' :class='config.elevationClass'>
-              <v-card-text>
-                <div v-html='problem.text' class='client-problem'></div>
-              </v-card-text>
-            </v-card>
-            <v-radio-group v-model='answers[problem.id]' hide-details>
-              <div class='flex-items mb-3' v-for='(answer, index) in problem.answers' :key='index'>
-                <v-radio class='ma-0' hide-details color="primary" :value='answer.id'></v-radio>
-                <div v-html='answer.text' class='client-answer'></div>
-              </div>
-            </v-radio-group>
-            <div class='text-md-center'>
-              <v-btn color='primary' :disabled="!answers.hasOwnProperty(problem.id)" 
-                @click='submitAnswer(problem.id)'>
-                {{ index === problem.answers.length - 1 ? 'завершить тест' : 'ответить' }}
-              </v-btn>
+      <Loader v-if='finishing' />
+      <div v-else>
+        <div v-if='client_test.results === null'>
+          <h2 class='text-md-center mb-3'>
+            <v-icon>access_time</v-icon> {{ time_left.format("mm:ss") }}
+          </h2>
+          <v-stepper v-model="step">
+            <v-stepper-header>
+              <template v-for='(problem, index) in test.problems'>
+                <v-stepper-step editable :complete="step > index" :step="(index + 1)">
+                  <!-- Вопрос {{ index + 1 }} -->
+                </v-stepper-step>
+                <v-divider v-if="index + 1 < test.problems.length"></v-divider>
+              </template>
+            </v-stepper-header>
+            <v-stepper-items>
+              <v-stepper-content v-for='(problem, index) in test.problems' :step="(index + 1)" :key='index'>
+                <v-card class='grey lighten-4 mb-4' :class='config.elevationClass'>
+                  <v-card-text>
+                    <div v-html='problem.text' class='client-problem'></div>
+                  </v-card-text>
+                </v-card>
+                <v-radio-group v-model='answers[problem.id]' hide-details>
+                  <div class='flex-items mb-3' v-for='(answer, index) in problem.answers' :key='index'>
+                    <v-radio class='ma-0' hide-details color="primary" :value='answer.id'></v-radio>
+                    <div v-html='answer.text' class='client-answer'></div>
+                  </div>
+                </v-radio-group>
+                <div class='text-md-center'>
+                  <v-btn color='primary' :disabled="!answers.hasOwnProperty(problem.id)" 
+                    @click='submitAnswer(problem.id, index === problem.answers.length - 1)'>
+                    {{ index === problem.answers.length - 1 ? 'завершить тест' : 'ответить' }}
+                  </v-btn>
+                </div>
+              </v-stepper-content>
+            </v-stepper-items>
+          </v-stepper>
+        </div>
+        <v-card v-else class='test-results'>
+          <v-card-text>
+            <div class='headline text-md-center'>
+              результат: <b>{{ client_test.results.score }}</b> из {{ client_test.results.max_score }}
             </div>
-          </v-stepper-content>
-        </v-stepper-items>
-      </v-stepper>
+          </v-card-text>
+        </v-card>
+      </div>
     </div>
     <div v-else>
       <Loader v-if='loading' />
@@ -67,11 +79,12 @@ export default {
       data: null,
       loading: true,
       starting: false,
+      finishing: false,
       started: false,
       answers: {},
       step: 0,
-      started_at: null,
       now: moment(),
+      client_test: null,
     }
   },
 
@@ -82,12 +95,8 @@ export default {
     await axios.get(apiUrl(CLIENT_TESTS_API_URL, this.$route.params.id) + queryString({
       client_id: this.$store.state.user.id,
       started: 1,
-    })).then(r => {
-      if (r.data) {
-        this.started_at = r.data.started_at
-      }
-    })
-    if (this.started_at !== null) {
+    })).then(r => this.client_test = r.data)
+    if (this.client_test.started_at !== null) {
       await this.loadTest()
       await this.loadAnswers()
       this.start()
@@ -105,7 +114,7 @@ export default {
     async beginTest() {
       this.starting = true
       await this.loadTest()
-      await axios.put(apiUrl(CLIENT_TESTS_API_URL, this.test.id)).then(r => this.started_at = r.data.started_at)
+      await axios.put(apiUrl(CLIENT_TESTS_API_URL, this.test.id), {started_at: moment().format('YYYY-MM-DD HH:mm:ss')}).then(r => this.client_test = r.data)
       this.starting = false
       this.step = 0
       this.start()
@@ -133,21 +142,30 @@ export default {
     },
 
     end() {
-
+      this.finishing = true
+      axios.put(apiUrl(CLIENT_TESTS_API_URL, this.test.id), {started_at: '0000-00-00 00:00:00'}).then(r => {
+        this.client_test = r.data
+        this.finishing = false
+        Cookies.remove(STEP_COOKIE_KEY)
+      })
     },
 
-    submitAnswer(problem_id) {
-      this.step++
+    submitAnswer(problem_id, is_last_answer) {
       axios.post(apiUrl(CLIENT_TEST_ANSWERS_API_URL), {
         client_id: this.$store.state.user.id,
         test_problem_answer_id: this.answers[problem_id],
       })
+      if (is_last_answer) {
+        this.end()
+      } else {
+        this.step++
+      }
     },
   },
 
   computed: {
     time_left() {
-      const time_started = moment(this.started_at).toDate().getTime()
+      const time_started = moment(this.client_test.started_at).toDate().getTime()
       const time_now = this.now.toDate().getTime()
       const mins_30 = moment.duration(30, 'minute').valueOf()
       const timestamp = mins_30 - (time_now - time_started)
@@ -155,7 +173,6 @@ export default {
         this.end()
       }
       return moment(timestamp).utcOffset(-180)
-      // return moment.utc(moment(this.started_at).diff(this.now) - moment.duration(30, 'minute').valueOf())
     }
   }
 }
@@ -172,6 +189,12 @@ export default {
     & p {
       margin-bottom: 0;
     }
+  }
+
+  .test-results {
+    height: 300px;
+    display: flex;
+    align-items: center;
   }
 </style>
 

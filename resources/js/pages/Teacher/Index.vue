@@ -22,7 +22,7 @@
 
 <script>
 
-import { API_URL, FILTERS } from '@/components/Teacher/data'
+import { API_URL, FILTERS } from '@/components/Teacher'
 import Filters from '@/components/Filters'
 
 export default {

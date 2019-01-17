@@ -118,7 +118,7 @@
 
 <script>
 
-import { model_defaults } from './data'
+import { MODEL_DEFAULTS } from './'
 import VueCropper from 'vue-cropperjs'
 import AvatarLoader from '@/components/AvatarLoader'
 import PhoneEdit from '@/components/Phone/Edit'
@@ -146,7 +146,7 @@ export default {
   methods: {
     add() {
       this.dialog = true
-      this.item = {...model_defaults}
+      this.item = {...MODEL_DEFAULTS}
     },
     async storeOrUpdate() {
       this.loading = true
