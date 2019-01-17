@@ -23,10 +23,12 @@ import filters from '@/other/filters'
 import {GlobalPlugin} from '@/other/plugins'
 import VueTheMask from 'vue-the-mask'
 import Vuetify from 'vuetify'
+// Translation provided by Vuetify (javascript)
+import ru from 'vuetify/es5/locale/ru'
 import vueUpload from '@websanova/vue-upload'
 import * as VueGoogleMaps from 'vue2-google-maps'
 
-[Vuetify, GlobalPlugin, VueTheMask, vueUpload].forEach(use => Vue.use(use))
+[GlobalPlugin, VueTheMask, vueUpload].forEach(use => Vue.use(use))
 
 Vue.use(VueGoogleMaps, {
   load: {
@@ -34,6 +36,13 @@ Vue.use(VueGoogleMaps, {
     libraries: 'places',
     language: 'ru'
   },
+})
+
+Vue.use(Vuetify, {
+  lang: {
+    locales: { ru },
+    current: 'ru'
+  }
 })
 
 Object.entries(filters).forEach(entry => Vue.filter(entry[0], entry[1]))

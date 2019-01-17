@@ -1,23 +1,25 @@
 <template>
   <v-menu
+    ref="datepicker"
     :close-on-content-click="false"
-    v-model="menu"
-    :nudge-right="40"
+    :return-value.sync="date"
     lazy
     transition="scale-transition"
     offset-y
     full-width
-    
+    min-width="290px"
   >
-    <v-text-field
+    <v-text-field hide-details
       slot="activator"
-      v-model="dateFormatted"
+      v-model='dateFormatted'
       :label="label"
-      hide-details
-      persistent-hint
-      @blur="date = parseDate(dateFormatted)"
+      readonly
     ></v-text-field>
-    <v-date-picker v-model="date" no-title @input="menu = false"></v-date-picker>
+    <v-date-picker no-title
+      locale='ru'
+      v-model="date"
+      @input="$refs.datepicker.save(date)">
+    </v-date-picker>
   </v-menu>
 </template>
 
@@ -27,37 +29,36 @@ export default {
 
   data() {
     return {
-      menu: false,
       dateFormatted: null,
     }
   },
 
   created() {
-    this.dateFormatted = this.formatDate(this.date)
+    this.dateFormatted = this.formatDate()
   },
   
   methods: {
-    formatDate(date) {
-      if (!date) {
+    formatDate() {
+      if (!this.date) {
         return null
       }
-      colorLog(`${date} => ` + moment(date).format('DD.MM.YYYY'), 'DarkOliveGreen')
-      return moment(date).format('DD.MM.YYYY')
+      // colorLog(`${date} => ` + moment(date).format('DD.MM.YYYY'), 'DarkOliveGreen')
+      return moment(this.date).format('DD.MM.YYYY')
     },
 
-    parseDate(date) {
-      if (!date) {
+    parseDate() {
+      if (!this.date) {
         return null
       }
-      const [month, day, year] = date.split('.')
-      colorLog(`${date} => ` + moment([year, month, day].join('-')).format('YYYY-MM-DD'), 'DeepPink')
+      const [month, day, year] = this.date.split('.')
+      // colorLog(`${date} => ` + moment([year, month, day].join('-')).format('YYYY-MM-DD'), 'DeepPink')
       return moment([year, month, day].join('-')).format('YYYY-MM-DD')
     }
   },
 
   watch: {
     date(val) {
-      this.dateFormatted = this.formatDate(this.date)
+      this.dateFormatted = this.formatDate()
     }
   }
 }
