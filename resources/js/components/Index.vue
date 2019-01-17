@@ -11,7 +11,9 @@
 
   export default {
     props: ['user'],
+
     components: { AppLayout, LoginLayout },
+    
     created() {
       if (this.user) {
         this.$store.commit('setUser', this.user)
@@ -21,4 +23,6 @@
       }
     }
   }
+
+  // Виды функциональной зависимости: линейная, степенная, экспоненциальная, логарифмическая, гармоническая (синус, косинус) и т.д.
 </script>

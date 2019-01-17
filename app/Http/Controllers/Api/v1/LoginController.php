@@ -21,7 +21,7 @@ class LoginController extends Controller
         // }
 
         $response = User::login($request->credentials);
-        return response()->json($response->data, $response->status);
+        return response()->json($response->status === 200 ? User::fromSession() : $response->data, $response->status);
     }
 
     public function logout()

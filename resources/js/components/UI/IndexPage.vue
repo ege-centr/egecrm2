@@ -13,7 +13,7 @@
         <v-flex xs12>
           <slot name='items' :items='collection.data'></slot>
           
-          <v-card class='elevation-0'>
+          <v-card :class='config.elevationClass'>
             <v-card-text>
               <div class='flex-items align-center'>
                 <v-spacer></v-spacer>

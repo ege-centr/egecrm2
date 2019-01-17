@@ -50,12 +50,19 @@
     },
 
     created() {
+      // TODO: какого хрена при уходе с элемента его стили сохраняются в HEAD?
+      $('body').css({'background-color': '#337ab7'})
       this.MIX_RECAPTCHA_SITE = process.env.MIX_RECAPTCHA_SITE
       const tmp_credentials = Cookies.getJSON(TMP_CREDENTIALS_KEY)
       if (tmp_credentials) {
         this.credentials = tmp_credentials
         this.sms_verification = true
       }
+    },
+
+    destroyed() {
+      $('body').css({'background-color': ''})
+      colorLog('DESTROYED')
     },
 
     methods: {
@@ -88,7 +95,7 @@
             default:
               Cookies.remove(TMP_CREDENTIALS_KEY)
               this.$store.commit('setUser', response.data)
-              location.reload()
+              // location.reload()
           }
         }).catch(error => {
           this.error = error.response.data
@@ -104,6 +111,6 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @import "~sass/login";
 </style>

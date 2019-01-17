@@ -5,7 +5,7 @@
         <AddBtn @click.native='$refs.ClientDialog.open(null)' label='добавить клиента' />
       </template>
       <template slot='items' slot-scope="{ items }">
-        <v-data-table :items='items' item-key='id' hide-headers hide-actions>
+        <v-data-table :items='items' item-key='id' hide-headers hide-actions :class='config.elevationClass'>
           <template slot="items" slot-scope="{ item }">
             <td>
               <router-link :to="{ name: 'ClientShow', params: { id: item.id }}">

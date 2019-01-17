@@ -22,25 +22,26 @@ const router = new Router({
   ]
 })
 
-router.beforeEach((to, from, next) => {
-  if (store.state.user) {
-    colorLog('to')
-    console.log(to)
-    if (to.hasOwnProperty('meta') && to.meta.hasOwnProperty('roles')) {
-      console.log(store.state.user.class, to.meta.roles)
-      if (to.meta.roles.indexOf(store.state.user.class) !== -1) {
-        next()
-      }
-    } else {
-      if (store.state.user.class === ROLES.ADMIN) {
-        next()
-      }
-    }
-  } else {
-    // TODO: сделать лучше. чтобы в роуты с nouser вообще не заходило
-    colorLog('no user', 'LightCoral')
-    Vue.nextTick(() => router.push({name: to.name}))
-  }
-})
+// TODO: требует доработки
+// router.beforeEach((to, from, next) => {
+//   if (store.state.user) {
+//     colorLog('to')
+//     console.log(to)
+//     if (to.hasOwnProperty('meta') && to.meta.hasOwnProperty('roles')) {
+//       console.log(store.state.user.class, to.meta.roles)
+//       if (to.meta.roles.indexOf(store.state.user.class) !== -1) {
+//         next()
+//       }
+//     } else {
+//       if (store.state.user.class === ROLES.ADMIN) {
+//         next()
+//       }
+//     }
+//   } else {
+//     // TODO: сделать лучше. чтобы в роуты с nouser вообще не заходило
+//     colorLog('no user', 'LightCoral')
+//     Vue.nextTick(() => router.push({name: to.name}))
+//   }
+// })
 
 export default router
