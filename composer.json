@@ -12,6 +12,7 @@
     ],
     "require": {
         "php": "^7.1.3",
+        "claviska/simpleimage": "^3.3",
         "ege-shared": "dev-master",
         "fideloper/proxy": "^4.0",
         "google/recaptcha": "^1.2",

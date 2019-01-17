@@ -36,29 +36,7 @@
                     ></v-select>
                   </v-flex>
                   <v-flex md12>
-                    <v-menu
-                      ref="date"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      :return-value.sync="dialog_item.date"
-                      lazy
-                      transition="scale-transition"
-                      offset-y
-                      full-width
-                      min-width="290px"
-                    >
-                      <v-text-field
-                        slot="activator"
-                        v-model="dialog_item.date"
-                        label="Дата"
-                        
-                        readonly
-                      ></v-text-field>
-                      <v-date-picker
-                        v-model="dialog_item.date"
-                        @input="$refs.date.save(dialog_item.date)">
-                      </v-date-picker>
-                    </v-menu>
+                    <DatePicker label="Дата" :date="dialog_item.date" />
                   </v-flex>
                   <v-flex md12 v-show='dialog_item.type === TYPE_EXAM'>
                     <v-select clearable
@@ -148,9 +126,10 @@ const TYPE_EXAM = 'exam'
 const TYPE_VACATION = 'vacation'
 
 import Calendar from '@/components/Calendar/Calendar'
+import { DatePicker } from '@/components/UI'
 
 export default {
-  components: { Calendar },
+  components: { Calendar, DatePicker },
 
   data() {
     return {

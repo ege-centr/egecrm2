@@ -18,9 +18,9 @@
             <v-layout wrap>
               <v-flex md12>
                 <div class='vertical-inputs'>
-                  <div class='vertical-inputs__input'>
+                  <!-- <div class='vertical-inputs__input'>
                     <v-text-field v-model="item.name" label="Имя" hide-details></v-text-field>
-                  </div>
+                  </div> -->
                   <div class='vertical-inputs__input'>
                     <v-select hide-details
                       v-model="item.status"

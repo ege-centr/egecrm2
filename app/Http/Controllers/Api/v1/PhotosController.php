@@ -24,9 +24,14 @@ class PhotosController extends Controller
     public function crop(Request $request)
     {
         $photo = Photo::find($request->photo_id);
-        $request->file->storeAs(Photo::UPLOAD_PATH, $photo->filename_cropped);
         $photo->has_cropped = true;
         $photo->save();
+
+        $image = new \claviska\SimpleImage();
+        $image->fromFile($request->file)
+            ->resize(240, null)
+            ->toFile(storage_path('app/public/img/users/') . $photo->filename_cropped, 'image/jpeg', 60);
+
         return $photo;
     }
 

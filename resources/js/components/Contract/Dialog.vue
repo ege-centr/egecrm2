@@ -57,28 +57,7 @@
                     ></v-select>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-menu
-                      ref="date"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      :return-value.sync="item.date"
-                      lazy
-                      transition="scale-transition"
-                      offset-y
-                      full-width
-                      min-width="290px"
-                    >
-                      <v-text-field
-                        slot="activator"
-                        v-model="item.date"
-                        label="Дата"
-                        readonly
-                      ></v-text-field>
-                      <v-date-picker
-                        v-model="item.date"
-                        @input="$refs.date.save(item.date)">
-                      </v-date-picker>
-                    </v-menu>
+                    <DatePicker label="Дата" :date='item.date' />
                   </div>
                 </div>
 
@@ -95,29 +74,7 @@
                       <v-text-field v-model="payment.lessons" label="Предметов"></v-text-field>
                     </v-flex>
                     <v-flex>
-                      <v-menu
-                        ref="paymentDate"
-                        :close-on-content-click="false"
-                        :nudge-right="40"
-                        :return-value.sync="payment.date"
-                        lazy
-                        transition="scale-transition"
-                        offset-y
-                        full-width
-                        min-width="290px"
-                      >
-                        <v-text-field
-                          slot="activator"
-                          v-model="payment.date"
-                          label="Дата"
-                          
-                          readonly
-                        ></v-text-field>
-                        <v-date-picker
-                          v-model="payment.date"
-                          @input="$refs.paymentDate[index].save(payment.date)">
-                        </v-date-picker>
-                      </v-menu>
+                      <DatePicker label="Дата" :date='payment.date' />
                     </v-flex>
                     <v-btn flat icon color="red" class='ma-0 mr-3' @click='item.payments.splice(index, 1)'>
                       <v-icon>remove</v-icon>
@@ -152,6 +109,7 @@ import {
 } from './data'
 
 import GradeAndYear from '@/components/GradeAndYear'
+import { DatePicker } from '@/components/UI'
 
 export default {
   props: {
@@ -160,7 +118,7 @@ export default {
     }
   },
 
-  components: { GradeAndYear },
+  components: { GradeAndYear, DatePicker },
 
   data() {
     return {

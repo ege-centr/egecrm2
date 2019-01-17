@@ -42,29 +42,7 @@
                     <v-text-field hide-details v-model='item.sum' label='Сумма'></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-menu
-                      ref="date"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      :return-value.sync="item.date"
-                      lazy
-                      transition="scale-transition"
-                      offset-y
-                      full-width
-                      min-width="290px"
-                    >
-                      <v-text-field hide-details
-                        slot="activator"
-                        v-model="item.date"
-                        label="Дата"
-                        
-                        readonly
-                      ></v-text-field>
-                      <v-date-picker
-                        v-model="item.date"
-                        @input="$refs.date.save(item.date)">
-                      </v-date-picker>
-                    </v-menu>
+                    <DatePicker label="Дата" :date="item.date" />
                   </div>
                 </div>
               </v-flex>
@@ -84,6 +62,7 @@
 <script>
 
 import { API_URL, ENUMS, MODEL_DEFAULTS } from './data'
+import { DatePicker } from '@/components/UI'
 
 export default {
   props: {
@@ -94,6 +73,8 @@ export default {
       type: Number
     }
   },
+
+  components: { DatePicker },
 
   data() {
     return {

@@ -80,29 +80,7 @@
                   <v-flex md12>
                     <div class='vertical-inputs'>
                       <div class='vertical-inputs__input'>
-                        <v-menu
-                          ref="date"
-                          :close-on-content-click="false"
-                          :nudge-right="40"
-                          :return-value.sync="dialog_item.date"
-                          lazy
-                          transition="scale-transition"
-                          offset-y
-                          full-width
-                          min-width="290px"
-                        >
-                          <v-text-field
-                            slot="activator"
-                            v-model="dialog_item.date"
-                            label="Дата занятия"
-                            
-                            readonly hide-details
-                          ></v-text-field>
-                          <v-date-picker
-                            v-model="dialog_item.date"
-                            @input="$refs.date.save(dialog_item.date)">
-                          </v-date-picker>
-                        </v-menu>
+                        <DatePicker label="Дата занятия" :item='dialog_item.date' />
                       </div>
                       <div class='vertical-inputs__input'>
                         <v-text-field hide-details v-model='dialog_item.time' label='Время занятия' v-mask="'##:##'"></v-text-field>
@@ -230,11 +208,12 @@
 
 import Calendar from '@/components/Calendar/Calendar'
 import { LESSON_STATUS } from '@/components/Lesson/data'
+import { DatePicker } from '@/components/UI'
 
 const API_URL = 'lessons'
 
 export default {
-  components: { Calendar },
+  components: { Calendar, DatePicker },
 
   props: {
     group: {

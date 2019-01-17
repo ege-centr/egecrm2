@@ -62,7 +62,6 @@
 
     destroyed() {
       $('body').css({'background-color': ''})
-      colorLog('DESTROYED')
     },
 
     methods: {

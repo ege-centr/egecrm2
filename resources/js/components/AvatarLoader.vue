@@ -13,10 +13,10 @@
                 <v-icon class='mr-1'>crop_free</v-icon>
                 <span>редактировать</span>
               </div>
-              <div @click="destroy">
+              <!-- <div @click="destroy">
                 <v-icon>close</v-icon>
                 <span>удалить</span>
-              </div>
+              </div> -->
             </div>
           </v-slide-y-reverse-transition>
         </v-avatar>
@@ -64,7 +64,8 @@
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="grey darken-1" flat @click.native="dialog = false">Отмена</v-btn>
-            <v-btn color="blue darken-1" flat @click.native="selectFileToUpload" :loading='cropping'>Загрузить новое</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="destroy">Удалить</v-btn>
+            <v-btn color="blue darken-1" flat @click.native="selectFileToUpload" :loading='uploading'>Загрузить новое</v-btn>
             <v-btn color="blue darken-1" flat @click.native="cropImage" :loading='cropping'>Сохранить</v-btn>
           </v-card-actions>
         </v-card>
@@ -85,7 +86,8 @@ export default {
   data() {
     return {
       dialog: false,
-      cropping: false
+      cropping: false,
+      uploading: false,
     }
   },
 
@@ -102,7 +104,16 @@ export default {
            this.$emit('photoChanged', response.data)
            this.dialog = true
          })
-       }
+       },
+        onError() {
+          this.uploading = false
+        },
+        onStart() {
+          this.uploading = true
+        },
+        onEnd() {
+          this.uploading = false
+        }
     })
   },
 
@@ -127,9 +138,12 @@ export default {
     },
 
     destroy() {
+      this.dialog = false
       axios.delete(apiUrl(API_URL, this.photo.id))
-      this.photo = null
-      this.$emit('photoChanged', null)
+      this.waitForDialogClose(() => {
+        this.photo = null
+        this.$emit('photoChanged', null)
+      })
     },
   }
 }

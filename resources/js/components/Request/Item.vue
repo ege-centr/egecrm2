@@ -7,7 +7,7 @@
               <div class='item-label'>Комментарий</div>
               {{ item.comment }} 
               <PhoneList :items='item.phones' />
-              <span class='grey--text'>{{ item.name }}</span>
+              <!-- <span class='grey--text'>{{ item.name }}</span> -->
             </div>
             <Comments class-name='Request' :entity-id='item.id' :items='item.comments' />
           </v-flex>

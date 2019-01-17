@@ -38,28 +38,7 @@
                     <v-text-field v-model='item.sum' label='Сумма' hide-details v-mask="'######'"></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-menu
-                      ref="date"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      :return-value.sync="item.date"
-                      lazy
-                      transition="scale-transition"
-                      offset-y
-                      full-width
-                      min-width="290px"
-                    >
-                      <v-text-field
-                        slot="activator"
-                        v-model="item.date"
-                        label="Дата занятия"
-                        readonly hide-details
-                      ></v-text-field>
-                      <v-date-picker
-                        v-model="item.date"
-                        @input="$refs.date.save(item.date)">
-                      </v-date-picker>
-                    </v-menu>
+                    <DatePicker label="Дата занятия" :date='item.date' />
                   </div>
                 </div>
               </v-flex>
@@ -74,6 +53,7 @@
 <script>
 import { GROUP_ACTS_API_URL } from '@/components/Group'
 import Print from '@/components/Print'
+import { DatePicker } from '@/components/UI'
 
 export default {
   props: {
@@ -97,7 +77,7 @@ export default {
     }
   },
   
-  components: { Print },
+  components: { Print, DatePicker },
 
   methods: {
     open(item_id = null) {

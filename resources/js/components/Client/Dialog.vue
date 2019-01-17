@@ -85,54 +85,10 @@
                     <v-text-field v-model="item.representative.code" label="Код подразделения" hide-details></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-menu
-                      ref="birthday"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      :return-value.sync="item.representative.birthday"
-                      lazy
-                      transition="scale-transition"
-                      offset-y
-                      full-width
-                      min-width="290px"
-                    >
-                      <v-text-field hide-details
-                        slot="activator"
-                        v-model="item.representative.birthday"
-                        label="Дата рождения"
-                        
-                        readonly
-                      ></v-text-field>
-                      <v-date-picker
-                        v-model="item.representative.birthday"
-                        @input="$refs.birthday.save(item.representative.birthday)">
-                      </v-date-picker>
-                    </v-menu>
+                    <DatePicker :date='item.representative.birthday' label="Дата рождения" />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-menu
-                      ref="issued_date"
-                      :close-on-content-click="false"
-                      :nudge-right="40"
-                      :return-value.sync="item.representative.issued_date"
-                      lazy
-                      transition="scale-transition"
-                      offset-y
-                      full-width
-                      min-width="290px"
-                    >
-                      <v-text-field hide-details
-                        slot="activator"
-                        v-model="item.representative.issued_date"
-                        label="Дата выдачи"
-                        
-                        readonly
-                      ></v-text-field>
-                      <v-date-picker
-                        v-model="item.representative.issued_date"
-                        @input="$refs.issued_date.save(item.representative.issued_date)">
-                      </v-date-picker>
-                    </v-menu>
+                    <DatePicker :date='item.representative.issued_date' label="Дата выдачи" />
                   </div>
                   <div class='vertical-inputs__input vertical-inputs__input_wide'>
                     <v-text-field v-model="item.representative.issued_by" label="Выдан" hide-details></v-text-field>
@@ -165,6 +121,7 @@ import { MODEL_DEFAULTS, API_URL } from '@/components/Client'
 import EmailField from '@/components/UI/EmailField'
 import GradeAndYear from '@/components/GradeAndYear'
 import AvatarLoader from '@/components/AvatarLoader'
+import { DatePicker } from '@/components/UI'
 
 export default {
   data() {
@@ -177,7 +134,7 @@ export default {
     }
   },
 
-  components: {  AvatarLoader, PhoneEdit, EmailField, GradeAndYear },
+  components: {  AvatarLoader, PhoneEdit, EmailField, GradeAndYear, DatePicker },
 
   methods: {
     open(client_id = null, defaults = {}) {

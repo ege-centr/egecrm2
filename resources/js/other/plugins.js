@@ -27,6 +27,10 @@ export const GlobalPlugin = {
       ]
     }
 
+    Vue.prototype.waitForDialogClose = (f) => {
+      Vue.nextTick(() => f(), 200)
+    }
+
     // Vue.prototype.toggleEnum = function(obj, field, statuses) {
     //   let status = statuses.indexOf(obj[field])
     //   console.log('from', statuses[status], status)
