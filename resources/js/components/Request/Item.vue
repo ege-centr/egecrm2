@@ -14,7 +14,7 @@
           <v-flex style='width: 20%' class='ml-3'>
             <div class='mb-3'>
               <div class='item-label'>Статус</div>
-              {{ request_statuses.find(e => e.value == item.status).text }}
+              {{ REQUEST_STATUSES.find(e => e.value == item.status).text }}
             </div>
             <div class='mb-3' v-if='item.responsibleAdmin'>
               <div class='item-label'>Ответственный</div>
@@ -45,7 +45,7 @@
                 </div>
               </div>
               <div v-else>
-                <a @click="$emit('openClientDialog', item.phones)">добавить</a>
+                <a @click="$emit('openClientDialog', null, {phones: item.phones})">добавить</a>
               </div>
             </div>
              <v-btn flat icon color="black" class='ma-0 mt-5 edit-request-button' @click="$emit('openDialog', item.id)">
@@ -59,7 +59,7 @@
 
 <script>
 
-import { request_statuses } from './data'
+import { REQUEST_STATUSES } from './'
 import Avatar from '@/components/UI/Avatar'
 import Comments from '@/components/Comments'
 import PhoneList from '@/components/Phone/List'
@@ -69,7 +69,7 @@ export default {
   components: { Avatar, Comments, PhoneList, BranchList },
   data() {
     return {
-      request_statuses
+      REQUEST_STATUSES
     }
   },
   props: ['item'],

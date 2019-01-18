@@ -24,7 +24,7 @@
                   <div class='vertical-inputs__input'>
                     <v-select hide-details
                       v-model="item.status"
-                      :items="request_statuses"
+                      :items="REQUEST_STATUSES"
                       label="Статус"
                     ></v-select>
                   </div>
@@ -76,7 +76,7 @@
 
 <script>
 
-import { request_statuses, model_defaults } from './data'
+import { REQUEST_STATUSES, MODEL_DEFAULTS } from './'
 import PhoneEdit from '@/components/Phone/Edit'
 import { AdminSelect } from '@/components/UI'
 
@@ -93,7 +93,7 @@ export default {
 
   data() {
     return {
-      request_statuses,
+      REQUEST_STATUSES,
       loading: true,
       saving: false,
       item: null,
@@ -104,7 +104,7 @@ export default {
 
   created() {
     if (this.phones) {
-      this.model_defaults = {...model_defaults, phones: [this.phones[0]]}
+      this.MODEL_DEFAULTS = {...MODEL_DEFAULTS, phones: [this.phones[0]]}
     }
   },
 
@@ -113,7 +113,7 @@ export default {
       this.dialog = true
       if (item_id === null) {
         this.edit_mode = false
-        this.item = clone(this.model_defaults)
+        this.item = clone(this.MODEL_DEFAULTS)
         this.loading = false
       } else {
         this.edit_mode = true
