@@ -75,10 +75,13 @@ export default {
 
   data() {
     return {
+      // TODO: дубль из pages/Group/Index
       filters: [
-        {label: 'Класс', field: 'grade_id', type: 'select', options: this.$store.state.data.grades, valueField: 'id', textField: 'title'},
-        {label: 'Предмет', field: 'subject_id', type: 'select', options: this.$store.state.data.subjects, valueField: 'id', textField: 'name'},
-        {label: 'Год', field: 'year', type: 'select', options: this.$store.state.data.years},
+        {label: 'Год', field: 'year', type: 'multiple', options: this.$store.state.data.years, valueField: 'id', textField: 'text'},
+        {label: 'Преподаватель', field: 'teacher_id', type: 'multiple', options: this.$store.state.data.teachers, valueField: 'id', textField: 'names.abbreviation'},
+        {label: 'Предмет', field: 'subject_id', type: 'multiple', options: this.$store.state.data.subjects, valueField: 'id', textField: 'name'},
+        {label: 'Класс', field: 'grade_id', type: 'multiple', options: this.$store.state.data.grades, valueField: 'id', textField: 'title'},
+        {label: 'Филиал', field: 'branch_id', type: 'multiple', options: this.$store.state.data.branches, valueField: 'id', textField: 'full'},
       ],
       pre_installed_filters: [],
       saving: false,
@@ -100,28 +103,26 @@ export default {
       this.client = client
       this.group = clone(group)
       if (group.grade_id) {
-        this.pre_installed_filters.push({item: this.filters[0], value: group.grade_id})
+        this.pre_installed_filters.push({item: this.filters[3], value: [group.grade_id]})
       }
       if (group.subject_id) {
-        this.pre_installed_filters.push({item: this.filters[1], value: group.subject_id})
+        this.pre_installed_filters.push({item: this.filters[2], value: [group.subject_id]})
       }
       if (group.year) {
-        this.pre_installed_filters.push({item: this.filters[2], value: group.year})
+        this.pre_installed_filters.push({item: this.filters[0], value: [group.year]})
       }
       this.dialog = true
     },
 
-    loadData(filters = '') {
-      console.log('load groups triggered')
+    loadData(filters = {}) {
       this.loading = true
-      axios.get(apiUrl(API_URL) + `?group_id=${this.group.id}${filters}`).then(r => {
-        this.groups = r.data
+      if (this.group_id) {
+        filters.group_id = this.group_id
+      }
+      axios.get(apiUrl(API_URL) + queryString(filters)).then(r => {
+        this.groups = r.data.data
         this.loading = false
       })
-    },
-
-    photoChanged(new_photo) {
-      this.item.photo = new_photo
     },
 
     async move() {

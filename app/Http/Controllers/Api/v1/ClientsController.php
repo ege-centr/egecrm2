@@ -15,11 +15,31 @@ class ClientsController extends Controller
         if (isset($request->get_all) && $request->get_all) {
             return resourceCollection($query->orderByName()->get(), Collection::class);
         }
-        if (isset($request->name)) {
-            $query->where('first_name', 'like', '%' . $request->name . '%')
-                ->orWhere('last_name', 'like', '%' . $request->name . '%')
-                ->orWhere('middle_name', 'like', '%' . $request->name . '%');
+
+        if (isset($request->grade_id) && $request->grade_id) {
+            $query->whereIn('grade_id', explode(',', $request->grade_id));
         }
+
+        if (isset($request->current_grade_id) && $request->current_grade_id) {
+            $query->whereIn('grade_id', explode(',', $request->current_grade_id));
+        }
+
+        // TODO: current_grade_id
+        //  if (isset($request->current_grade_id) && $request->current_grade_id) {
+        //     $grade_id = $request->current_grade_id + (academicYear())
+        //     $query->where('client_id', $request->client_id);
+        //     $query->whereRaw("IF(" . academicYear() . ")")
+        // }
+
+
+         if (isset($request->client_id) && $request->client_id) {
+            $query->where('client_id', $request->client_id);
+        }
+        // if (isset($request->name)) {
+        //     $query->where('first_name', 'like', '%' . $request->name . '%')
+        //         ->orWhere('last_name', 'like', '%' . $request->name . '%')
+        //         ->orWhere('middle_name', 'like', '%' . $request->name . '%');
+        // }
         return resourceCollection($query->orderBy('id', 'desc')->paginate($request->show_by ?: 9999), Collection::class);
     }
 
@@ -53,7 +73,7 @@ class ClientsController extends Controller
         $model->representative->update($request->representative);
         $model->representative->phones()->delete();
         $model->representative->phones()->createMany($request->representative['phones']);
-        if ($model->representative->email === null) {
+        if (! $model->representative->email) {
             $model->representative->email()->create($request->representative['email']);
         } else {
             $model->representative->email->update($request->representative['email']);

@@ -14,9 +14,10 @@ class Light extends JsonResource
      */
     public function toArray($request)
     {
+        $name = trim(implode(' ', [$this->last_name, $this->first_name]));
         return [
             'id' => $this->id,
-            'name' => getName($this),
+            'name' => $name ?: $this->nickname,
             'photo' => $this->photo
         ];
     }

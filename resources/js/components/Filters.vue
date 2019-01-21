@@ -35,9 +35,10 @@
           <!-- <div class='subheading'>
             {{ item.label }}
           </div> -->
-          <div v-if="item.type === 'select'">
+          <div v-if="item.type === 'select' || item.type === 'multiple'">
             <v-select
               v-model="value"
+              :multiple="item.type === 'multiple'"
               :items="item.options"
               :label="item.label"
               :item-value="getItemValue(item)"
@@ -54,6 +55,9 @@
               @keyup.enter='apply'
             ></v-text-field>
           </div>
+          <div v-if="item.type === 'date'">
+            <DatePicker label='Дата' @updated='(v) => value = v' />
+          </div>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -66,19 +70,29 @@
 </template>
 
 <script>
+
+import DatePicker from '@/components/UI/DatePicker'
+
 export default {
   props: {
+    // Настройки фильтров
     items: {
       type: Array,
       default: () => [],
       required: true,
     },
+
+    // Предустановленные фильтры
+    // Использование: this.pre_installed_filters.push({item: this.filters[3], value: [group.grade_id]})
+    // TODO: сделать удобнеее {filter_index: value}
     preInstalled: {
       type: Array,
       default: () => [],
       required: false,
     },
   },
+
+  components: { DatePicker },
 
   created() {
     if (this.preInstalled.length) {
@@ -137,12 +151,28 @@ export default {
     getFilterValueLabel(filter) {
       switch(filter.item.type) {
         case 'select':
-          return filter.item.options.find(e => e[this.getItemValue(filter.item)] == filter.value)[this.getItemText(filter.item)]
+          return _.get(
+            filter.item.options.find(e => e[this.getItemValue(filter.item)] == filter.value), 
+            this.getItemText(filter.item)
+          )
           // const label = []
           // filter.value.forEach(v => {
           //  label.push(filter.item.options.find(e => e[this.getItemValue(filter.item)] == v)[this.getItemText(filter.item)])
           // })
           // return label.join(', ')
+        case 'multiple':
+          const label = []
+          if (Array.isArray(filter.value)) {
+            filter.value.forEach(v => {
+              label.push(_.get(
+                filter.item.options.find(e => e[this.getItemValue(filter.item)] === v), 
+                this.getItemText(filter.item)
+              ))
+            })
+          }
+          return label.join(', ')
+        case 'date':
+          return this.$options.filters.date(filter.value)
         default:
           return filter.value
       }

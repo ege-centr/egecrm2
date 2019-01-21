@@ -23,7 +23,7 @@ export default {
 
   methods: {
     add() {
-      this.$refs.AdminList.$refs.UserDialog.add()
+      this.$refs.AdminList.$refs.AdminDialog.add()
     }
   }
 }

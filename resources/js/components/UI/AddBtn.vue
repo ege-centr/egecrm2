@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style='display: inline-block; cursor: pointer'>
     <v-btn fab dark small color="red" class='ml-0'>
       <v-icon dark>add</v-icon>
     </v-btn>

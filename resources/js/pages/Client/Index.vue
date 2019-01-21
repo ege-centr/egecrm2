@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <IndexPage :api-url='API_URL' :filters='FILTERS'>
+    <IndexPage :api-url='API_URL' :filters='filters'>
       <template slot='buttons'>
         <AddBtn @click.native='$refs.ClientDialog.open(null)' label='добавить клиента' />
       </template>
@@ -36,7 +36,10 @@ export default {
   data() {
     return {
       API_URL,
-      FILTERS,
+      filters: [
+        {label: 'Класс', field: 'grade_id', type: 'multiple', options: this.$store.state.data.grades, valueField: 'id', textField: 'title'},
+        {label: 'Текущий класс', field: 'current_grade_id', type: 'multiple', options: this.$store.state.data.grades, valueField: 'id', textField: 'title'},
+      ],
     }
   },
   

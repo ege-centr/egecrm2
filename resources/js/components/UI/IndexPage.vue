@@ -6,14 +6,28 @@
       <slot name='buttons'></slot>
     </div>
 
-    <Filters v-if='filters !== null' :items='filters' @updated='loadData' />
+    <Filters v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' @updated='loadData' />
 
     <v-container grid-list-md fluid class="px-0" v-if='collection !== null'>
       <v-layout row wrap class='relative'>
         <v-flex xs12>
+          <div v-if='sort !== undefined' class='grey--text darken-3 mb-3 text-md-right caption flex-items justify-end'>
+            cортировка: 
+            <v-menu class='mx-1'>
+              <span slot='activator' class='sort-label'>{{ selectedSort.label }}</span>
+              <v-list dense>
+                <v-list-tile v-for='(s, index) in sort' :key='index' @click='setSort(index)'>
+                  <v-list-tile-title>{{ s.label }}</v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
+            <v-icon class='pr-3' small @click='toggleSortType'>
+              {{ sort.find(e => e.selected).type === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
+            </v-icon>
+          </div>
           <slot name='items' :items='collection.data'></slot>
           
-          <v-card :class='config.elevationClass'>
+          <v-card :class='config.elevationClass' v-if='pagination'>
             <v-card-text>
               <div class='flex-items align-center'>
                 <v-spacer></v-spacer>
@@ -39,6 +53,9 @@
         </v-flex>
       </v-layout>
     </v-container>
+
+    <slot name='buttons-bottom'></slot>
+
   </div>
 </template>
 
@@ -57,6 +74,23 @@ export default {
       required: false,
       default: null,
     },
+    pagination: {
+      type: Boolean,
+      required: false,
+      default: true,
+    },
+    invisibleFilters: {
+      type: Object,
+      required: false,
+    },
+    preInstalledFilters: {
+      type: Array,
+      required: false,
+    },
+    sort: {
+      type: Array,
+      required: false,
+    },
   },
 
   components: { Filters },
@@ -64,7 +98,7 @@ export default {
   data() {
     return {
       page: 1,
-      show_by: 30,
+      show_by: this.pagination ? 30 : '',
       show_by_options: [
         {text: '10', value: 10},
         {text: '30', value: 30},
@@ -77,7 +111,9 @@ export default {
   },
 
   created() {
-    this.loadData()
+    if (this.preInstalledFilters === undefined) {
+      this.loadData()
+    }
   },
 
   watch: {
@@ -93,16 +129,53 @@ export default {
   methods: {
     loadData(filters = {}) {
       this.loading = true
+      
       // axios.get(apiUrl(`${this.apiUrl}?page=${this.page}&show_by=${this.show_by}${filters}`)).then(response => {
       axios.get(apiUrl(this.apiUrl) + queryString({
         page: this.page,
         show_by: this.show_by,
         ...filters,
+        ...this.invisibleFilters,
+        ...this.getSort(),
       })).then(response => {
         this.collection = response.data
         this.loading = false
       })
     },
+
+    getSort() {
+      if (this.sort !== undefined) {
+        return {
+          sort_by: this.selectedSort.field,
+          sort_type: this.selectedSort.type,
+        }
+      }
+      return {}
+    },
+
+    toggleSortType() {
+      this.selectedSort.type = this.selectedSort.type === 'asc' ? 'desc' : 'asc'
+      this.loadData()
+    },
+
+    setSort(index) {
+      this.selectedSort.selected = false
+      this.sort[index].selected = true
+      this.loadData()
+    },
+  },
+
+  computed: {
+    selectedSort() {
+      return this.sort.find(e => e.selected)
+    },
   }
 }
 </script>
+
+<style lang="scss" scoped>
+  .sort-label {
+    border-bottom: 1px dotted grey;
+    cursor: pointer;
+  }
+</style>

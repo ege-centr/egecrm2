@@ -3,7 +3,7 @@
     <TestDialog ref='TestDialog'/>
 
     <Loader v-if='loading' />
-    <v-data-table v-else hide-headers hide-actions :items='items' class='mt-3'>
+    <v-data-table v-else hide-headers hide-actions :items='items' class='mt-3' :class='config.elevationClass'>
       <template slot='items' slot-scope="{ item }">
         <td>
           <a @click='$refs.TestDialog.open(item.id)'>{{ item.title }}</a>

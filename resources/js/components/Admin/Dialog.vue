@@ -36,9 +36,9 @@
                   <v-flex md3>
                     <v-text-field v-model="item.first_name" label="Отчество"></v-text-field>
                   </v-flex>
-                  <!-- <v-flex md3>
-                    <v-text-field v-model="item.email.email" label="Email"></v-text-field>
-                  </v-flex> -->
+                  <v-flex md3>
+                    <v-text-field v-model="item.nickname" label="Никнейм"></v-text-field>
+                  </v-flex>
                   <PhoneEdit :item='item' />
                 </v-layout>
               </v-flex>

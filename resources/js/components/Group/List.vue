@@ -1,20 +1,10 @@
 <template>
-  <div>
-    <Loader v-if='loading' />
-
-    <div class='mb-3'>
-      <v-chip v-for="year in $store.state.data.years" class='pointer ml-0 mr-3'
-        :class="{'primary white--text': year.value == selected_year}"
-        @click='selected_year = year.value'
-        :key='year.value'>{{ year.text }}</v-chip>
-    </div>
-
-    <v-data-table v-if='getItems && getItems.length'
-      :class='config.elevationClass'
-      hide-actions
-      hide-headers
-      :items='getItems'
-    >
+  <v-data-table
+    :class='config.elevationClass'
+    hide-actions
+    hide-headers
+    :items='items'
+  >
     <template slot='items' slot-scope="{ item }">
       <td width='200'>
         <router-link :to="{ name: 'GroupShow', params: {id: item.id}}">
@@ -43,11 +33,8 @@
       </td>
     </template>
   </v-data-table>
-  </div>
 </template>
 <script>
-
-import { API_URL } from '@/components/Group'
 
 export default {
   props: {
@@ -55,54 +42,7 @@ export default {
       type: Array,
       default: null,
       required: false
-    },
-    editable: {
-      type: Boolean,
-      default: false,
-      required: false
     }
   },
-
-  data() {
-    return {
-      page: 1,
-      loading: false,
-      server_items: null,
-      // TODO
-      selected_year: 2018,
-    }
-  },
-
-  created() {
-    if (! this.items) {
-      this.loadData()
-    }
-  },
-
-  watch: {
-    page() {
-      this.loadData()
-    },
-
-    selected_year() {
-      this.loadData()
-    },
-  },
-
-  methods: {
-    loadData() {
-      this.loading = true
-      axios.get(apiUrl(API_URL + '?year=' + this.selected_year)).then(response => {
-        this.server_items = response.data
-        this.loading = false
-      })
-    },
-  },
-
-  computed: {
-    getItems() {
-      return this.items || this.server_items
-    }
-  }
 }
 </script>

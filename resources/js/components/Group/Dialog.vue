@@ -20,39 +20,39 @@
               <v-flex md12>
                 <div class='vertical-inputs'>
                   <div class='vertical-inputs__input'>
-                    <v-select clearable hide-details
+                    <v-select hide-details
                       v-model="item.teacher_id"
-                      :items="teachers"
+                      :items="withNullOption2($store.state.data.teachers)"
                       label="Учитель"
                       item-value='id'
                       item-text='names.abbreviation'
                     ></v-select>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-select clearable hide-details
+                    <v-select hide-details
                       v-model="item.head_teacher_id"
-                      :items="teachers"
+                      :items="withNullOption2($store.state.data.teachers)"
                       label="Классный руководитель"
                       item-value='id'
                       item-text='names.abbreviation'
                     ></v-select>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <GradeAndYear :item='item' />
+                    <GradeAndYear ref='GradeAndYear' :item='item' />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-select clearable hide-details
+                    <v-select hide-details
                       v-model="item.subject_id"
-                      :items="$store.state.data.subjects"
+                      :items="withNullOption($store.state.data.subjects, 'id', 'name')"
                       item-value='id'
                       item-text='name'
                       label="Предмет"
                     ></v-select>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-select clearable hide-details
+                    <v-select hide-details
                       v-model="item.cabinet_id"
-                      :items="cabinets"
+                      :items="withNullOption(cabinets, 'id', 'text')"
                       item-value='id'
                       label="Кабинет"
                     ></v-select>
@@ -107,14 +107,17 @@ export default {
       item: model_defaults,
       teachers: [],
       cabinets: [],
-      loading: true,
       saving: false,
     }
   },
   
   methods: {
-    open(item_id = null) {
+    async open(item_id = null) {
       this.dialog = true
+      this.loading = true
+      await axios.get(apiUrl('cabinets')).then(r => {
+        this.cabinets = r.data
+      })
       if (item_id !== null) {
         this.edit_mode = true
         this.loadData(item_id)
@@ -126,33 +129,25 @@ export default {
     },
 
     async loadData(item_id) {
-      await axios.get(apiUrl('teachers')).then(r => {
-        this.teachers = r.data
+      axios.get(apiUrl(API_URL, item_id)).then(r => {
+        this.item = r.data
+        this.loading = false
       })
-      await axios.get(apiUrl('cabinets')).then(r => {
-        this.cabinets = r.data
-      })
-      if (item_id) {
-        axios.get(apiUrl(API_URL, item_id)).then(r => {
-          this.item = r.data
-          this.loading = false
-        })
-      }
-      this.loading = false
     },
 
     async storeOrUpdate() {
       this.saving = true
       if (this.item.id) {
-        await axios.put(apiUrl(`${API_URL}/${this.item.id}`), this.item).then(r => {
+        await axios.put(apiUrl(API_URL, this.item.id), this.item).then(r => {
           this.item = r.data
         })
       } else {
-        // await axios.post(apiUrl(API_URL), this.item).then(r => {
-        //   this.$router.push({ name: 'GroupEdit', params: { id: r.data }})
-        // })
+        await axios.post(apiUrl(API_URL), this.item).then(r => {
+          this.$router.push({ name: 'GroupEdit', params: { id: r.data }})
+        })
       }
-      this.saving = false
+      this.dialog = false
+      this.waitForDialogClose(() => this.saving = false)
     },
   },
 }

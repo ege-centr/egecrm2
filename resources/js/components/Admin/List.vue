@@ -5,7 +5,7 @@
     <v-container grid-list-md fluid class="px-0" v-if='data !== null'>
       <v-layout row wrap class='relative'>
         <v-flex xs12>
-          <v-data-table :items='data' item-key='id' hide-headers hide-actions>
+          <v-data-table :items='data' item-key='id' hide-headers hide-actions :class='config.elevationClass'>
             <template slot="items" slot-scope="{ item }">
               <td>
                   {{ item.name }}

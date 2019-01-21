@@ -23,5 +23,12 @@ export const FILTERS = [
   {label: 'Категория', field: 'category', type: 'select', options: ENUMS.categories},
 ]
 
+export const SORT = [
+  {field: 'created_at', type: 'desc', label: 'по дате проводки', selected: true},
+  {field: 'date', type: 'desc', label: 'по дате', selected: false},
+]
 
 export const MODEL_DEFAULTS = {}
+
+export const PaymentDialog = require('./Dialog')
+export const PaymentList = require('./ListNew')

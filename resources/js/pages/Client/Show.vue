@@ -105,26 +105,65 @@
             <RequestList :items='client.requests' :phones='client.phones' @updated='loadData' />
         </v-tab-item>
         <v-tab-item>
-          <ContractList
+          <IndexPage ref='ContractPage'
+            :pagination='false' 
+            :api-url='CONTRACT_API_URL' 
+            :filters='contract_filters' 
+            :invisible-filters="{client_id: client.id}"
+            :pre-installed-filters='[{item: contract_filters[0], value: $store.state.data.academic_year}]'
+          >
+            <template slot='items' slot-scope='{ items }'>
+              <ContractList :items='items' :client='client' @updated='$refs.ContractPage.loadData' />
+            </template>
+            <template slot='buttons-bottom'>
+              <AddBtn @click.native='$refs.ContractDialog.open(null, {client_id: client.id})' />
+            </template>
+          </IndexPage>
+          <!-- <ContractList
             :items='client.contracts'
             :client-id='client.id'
+          /> -->
+        </v-tab-item>
+        <v-tab-item>
+          <IndexPage ref='GroupPage'
+            :pagination='false' 
+            :api-url='GROUP_API_URL' 
+            :filters='group_filters' 
+            :invisible-filters="{client_id: $route.params.id}"
+          >
+            <template slot='items' slot-scope='{ items }'>
+              <GroupList :items='items' />
+            </template>
+          </IndexPage>
+          <!-- <GroupList :items='client.groups' /> -->
+          <GroupNotAssignedList
+            :client='client' 
+            @moved='loadData' 
           />
         </v-tab-item>
         <v-tab-item>
-          <GroupList :items='client.groups' />
-          <GroupNotAssignedList :groups='client.groups' :contracts='client.contracts' @assigned='loadData' />
+          <IndexPage ref='PaymentPage'
+            :pagination='false' 
+            :sort='SORT'
+            :api-url='PAYMENT_API_URL' 
+            :filters='payment_filters' 
+            :invisible-filters="{entity_id: $route.params.id, entity_type: CLASS_NAME}"
+          >
+            <template slot='items' slot-scope='{ items }'>
+              <PaymentList :items='items' />
+            </template>
+            <template slot='buttons-bottom'>
+              <AddBtn @click.native='$refs.PaymentDialog.open(null, {
+                entity_id: $route.params.id,
+                entity_type: CLASS_NAME,
+              })' />
+            </template>
+          </IndexPage>
         </v-tab-item>
         <v-tab-item>
-          <PaymentList
-            :items='client.payments'
-            :entity-id='client.id'
-            :class-name='CLASS_NAME'
-          />
-        </v-tab-item>
-        <v-tab-item>
-          <v-card>
+          <v-card :class='config.elevationClass'>
             <v-card-text>
-              <Comments :class-name='CLASS_NAME' :entity-id='client.id' />
+              <Comments :class-name='CLASS_NAME' :entity-id='$route.params.id' />
             </v-card-text>
           </v-card>
         </v-tab-item>
@@ -136,6 +175,8 @@
       </v-tabs-items>
     </div>
     <ClientDialog ref='ClientDialog' />
+    <PaymentDialog ref='PaymentDialog' />
+    <ContractDialog ref='ContractDialog' @updated.native='$refs.ContractPage.loadData' />
   </div>
 </template>
 
@@ -143,13 +184,16 @@
 
 import RequestList from '@/components/Request/List'
 import Comments from '@/components/Comments'
-import ContractList from '@/components/Contract/List'
+import ContractList from '@/components/Contract/ListNew'
 import GroupList from '@/components/Group/List'
-import PaymentList from '@/components/Payment/List'
+import { API_URL as PAYMENT_API_URL, PaymentDialog, PaymentList, ENUMS, SORT } from '@/components/Payment'
 import PhoneList from '@/components/Phone/List'
 import EmailShow from '@/components/Email/Show'
 import BranchList from '@/components/UI/BranchList'
 import { TestAdminClientList } from '@/components/Test'
+import { IndexPage } from '@/components/UI'
+import { API_URL as GROUP_API_URL } from '@/components/Group'
+import { API_URL as CONTRACT_API_URL, ContractDialog } from '@/components/Contract'
 
 import { API_URL, CLASS_NAME, ClientMap, GroupNotAssignedList, ClientDialog } from '@/components/Client'
 
@@ -159,16 +203,43 @@ export default {
   data() {
     return {
       CLASS_NAME,
+      GROUP_API_URL,
+      CONTRACT_API_URL,
+      PAYMENT_API_URL,
+      SORT,
       tabs: null,
       loading: true,
       client: null,
       map_dialog: false,
+      
+      // TODO: дубль из pages/Group/Index
+      group_filters: [
+        {label: 'Год', field: 'year', type: 'multiple', options: this.$store.state.data.years, valueField: 'id', textField: 'text'},
+        {label: 'Преподаватель', field: 'teacher_id', type: 'multiple', options: this.$store.state.data.teachers, valueField: 'id', textField: 'names.abbreviation'},
+        {label: 'Предмет', field: 'subject_id', type: 'multiple', options: this.$store.state.data.subjects, valueField: 'id', textField: 'name'},
+        {label: 'Класс', field: 'grade_id', type: 'multiple', options: this.$store.state.data.grades, valueField: 'id', textField: 'title'},
+        {label: 'Филиал', field: 'branch_id', type: 'multiple', options: this.$store.state.data.branches, valueField: 'id', textField: 'full'},
+      ],
+
+      contract_filters: [
+        {label: 'Год', field: 'year', type: 'select', options: this.$store.state.data.years, valueField: 'id', textField: 'text'},
+      ],
+
+      payment_filters: [
+        {label: 'Тип', field: 'type', type: 'multiple', options: ENUMS.types},
+        {label: 'Метод', field: 'methods', type: 'multiple', options: ENUMS.methods},
+        {label: 'Год', field: 'year', type: 'multiple', options: this.$store.state.data.years, valueField: 'id', textField: 'text'},
+        {label: 'Категория', field: 'category', type: 'multiple', options: ENUMS.categories},
+        {label: 'Пользователь', field: 'created_admin_id', type: 'select', options: this.$store.state.data.admins, valueField: 'id', textField: 'name'},
+        {label: 'Дата', field: 'date', type: 'date'},
+      ],
     }
   },
 
   components: { 
     RequestList, Comments, ContractList, ClientMap, GroupList, GroupNotAssignedList, 
     PaymentList, ClientDialog, PhoneList, BranchList, EmailShow, TestAdminClientList,
+    IndexPage, ContractDialog, PaymentDialog,
   },
 
   created() {

@@ -13,11 +13,11 @@ class Resource extends JsonResource
     {
         return array_merge(parent::toArray($request), [
             'phones' => $this->phones,
-            'name' => getName($this),
+            'names' => $this->names,
             'requests' => $this->getRequests(),
-            'payments' => $this->payments,
+            // 'payments' => $this->payments,
+            'groups' => $this->groups,
             'contracts' => ContractResource::collection($this->contracts),
-            'groups' => GroupCollection::collection($this->groups),
             'representative' => new Representative($this->representative),
             'tests' => ClientTest::collection($this->tests),
             'email' => $this->email,

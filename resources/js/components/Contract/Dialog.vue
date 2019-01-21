@@ -2,18 +2,20 @@
   <v-layout row justify-center v-if='item !== null'>
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card>
-        <v-toolbar dark color="primary">
+       <v-toolbar dark color="primary">
           <v-btn icon dark @click.native="dialog = false">
             <v-icon>close</v-icon>
           </v-btn>
-          <v-toolbar-title>{{ item.id ? 'Редактирование' : 'Добавление' }} договора</v-toolbar-title>
+          <v-toolbar-title>{{ edit_mode ? 'Редактирование' : 'Добавление' }} договора</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn flat @click.native="storeOrUpdate" :loading='saving'>{{ item.id ? 'Сохранить' : 'Добавить' }}</v-btn>
+            <v-btn dark flat v-if='edit_mode' @click.native="destroy" :loading='destroying'>Удалить</v-btn>
+            <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ edit_mode ? 'Сохранить' : 'Добавить' }}</v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-card-text>
-          <v-container grid-list-xl class="pa-0 ma-0">
+          <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
+          <v-container v-else grid-list-xl class="pa-0 ma-0">
             <v-layout class='mb-3'>
               <v-flex md7>
                 <v-layout wrap align-center v-for='subject in $store.state.data.subjects' :key='subject.id'>
@@ -106,18 +108,12 @@ import {
   SUBJECT_STATUS_TO_BE_TERMINATED,
   SUBJECT_STATUS_TERMINATED,
   SUBJECT_STATUS_ACTIVE,
-} from './data'
+} from './'
 
 import GradeAndYear from '@/components/GradeAndYear'
 import { DatePicker } from '@/components/UI'
 
 export default {
-  props: {
-    clientId: {
-      type: Number
-    }
-  },
-
   components: { GradeAndYear, DatePicker },
 
   data() {
@@ -128,6 +124,10 @@ export default {
       saving: false,
       item: null,
       slider: {},
+      edit_mode: false,
+      loading: true,
+      edit_mode: true,
+      destroying: false,
     }
   },
 
@@ -168,20 +168,17 @@ export default {
       }
     },
 
-    open(item) {
+    open(item_id = null, defaults = {}) {
       this.slider = {}
-      if (item === null) {
-        this.item = {
-          client_id: this.clientId,
-          ...MODEL_DEFAULTS
-        }
-      } else {
-        this.item = clone(item)
-        this.item.subjects.forEach(subject => {
-          this.slider[subject.subject_id] = this.statusToNumber(subject)
-        })
-      }
       this.dialog = true
+      if (item_id !== null) {
+        this.edit_mode = true
+        this.loadData(item_id)
+      } else {
+        this.edit_mode = false
+        this.item = {...MODEL_DEFAULTS, ...defaults }
+        this.loading = false
+      }
     },
 
     addPayment() {
@@ -204,21 +201,41 @@ export default {
       return 'grey'
     },
 
+    loadData(item_id) {
+      this.loading = true
+      axios.get(apiUrl(API_URL, item_id)).then(r => {
+        this.item = r.data
+        this.item.subjects.forEach(subject => {
+          this.slider[subject.subject_id] = this.statusToNumber(subject)
+        })
+        this.loading = false
+      })
+    },
+
+    destroy() {
+      this.destroying = true
+      axios.delete(apiUrl(API_URL, this.item.id)).then(r => {
+        this.$emit('updated')
+        this.dialog = false
+        this.waitForDialogClose(() => this.destroying = false)
+      })
+    },
+
     async storeOrUpdate() {
       this.saving = true
       if (this.item.id) {
-        await axios.put(apiUrl(`${API_URL}/${this.item.id}`), this.item).then(r => {
+        await axios.put(apiUrl(API_URL, this.item.id), this.item).then(r => {
           this.item = r.data
           this.$emit('updated', this.item)
         })
       } else {
         await axios.post(apiUrl(API_URL), this.item).then(r => {
           this.item = r.data
-          this.$emit('stored', this.item)
+          this.$emit('updated', this.item)
         })
       }
       this.dialog = false
-      setTimeout(() => this.saving = false, 300)
+      this.waitForDialogClose(() => this.saving = false)
     }
   }
 }

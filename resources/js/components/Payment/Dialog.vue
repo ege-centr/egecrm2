@@ -1,12 +1,21 @@
 <template lang="html">
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" persistent max-width="800px">
-      <v-card v-if='item !== null'>
-        <v-card-title>
-          <span class="headline">{{ item.id ? 'Редактирование' : 'Добавление' }} платежа</span>
-        </v-card-title>
+    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
+      <v-card>
+        <v-toolbar dark color="primary">
+          <v-btn icon dark @click.native="dialog = false">
+            <v-icon>close</v-icon>
+          </v-btn>
+          <v-toolbar-title>{{ edit_mode ? 'Редактирование' : 'Добавление' }} платежа</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-toolbar-items>
+            <v-btn dark flat v-if='edit_mode' @click.native="destroy" :loading='destroying'>Удалить</v-btn>
+            <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ edit_mode ? 'Сохранить' : 'Добавить' }}</v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
         <v-card-text>
-          <v-container grid-list-xl class="pa-0 ma-0">
+          <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
+          <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
             <v-layout>
               <v-flex md12>
                 <div class='vertical-inputs'>
@@ -49,11 +58,6 @@
             </v-layout>
           </v-container>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="dialog = false">Отмена</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="storeOrUpdate" :loading='saving'>{{ item.id ? 'Сохранить' : 'Добавить' }}</v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-layout>
@@ -65,15 +69,6 @@ import { API_URL, ENUMS, MODEL_DEFAULTS } from './data'
 import { DatePicker } from '@/components/UI'
 
 export default {
-  props: {
-    className: {
-      type: String
-    },
-    entityId: {
-      type: Number
-    }
-  },
-
   components: { DatePicker },
 
   data() {
@@ -82,37 +77,59 @@ export default {
       dialog: false,
       saving: false,
       item: null,
+      edit_mode: true,
+      loading: true,
+      destroying: false,
     }
   },
 
   methods: {
-    open(item) {
-      if (item === null) {
-        this.item = {
-          class: this.className,
-          entity_id: this.entityId,
-          ...MODEL_DEFAULTS
-        }
-      } else {
-        this.item = clone(item)
-      }
+    open(item_id = null, defaults = {}) {
       this.dialog = true
+      if (item_id !== null) {
+        this.edit_mode = true
+        this.loadData(item_id)
+      } else {
+        this.edit_mode = false
+        this.item = {...MODEL_DEFAULTS, ...defaults }
+        this.loading = false
+      }
     },
+
+    loadData(item_id) {
+      this.loading = true
+      axios.get(apiUrl(API_URL, item_id)).then(r => {
+        this.item = r.data
+        this.loading = false
+      })
+    },
+
+    destroy() {
+      this.destroying = true
+      axios.delete(apiUrl(API_URL, this.item.id)).then(r => {
+        this.$emit('updated')
+        this.dialog = false
+        this.waitForDialogClose(() => this.destroying = false)
+      })
+    },
+
     async storeOrUpdate() {
       this.saving = true
       if (this.item.id) {
         await axios.put(apiUrl(`${API_URL}/${this.item.id}`), this.item).then(r => {
-          this.item = r.data
-          this.$emit('updated', this.item)
+          this.$emit('updated')
+          // this.item = r.data
+          // this.$emit('updated', this.item)
         })
       } else {
         await axios.post(apiUrl(API_URL), this.item).then(r => {
-          this.item = r.data
-          this.$emit('stored', this.item)
+          this.$emit('updated')
+          // this.item = r.data
+          // this.$emit('stored', this.item)
         })
       }
       this.dialog = false
-      setTimeout(() => this.saving = false, 300)
+      this.waitForDialogClose(() => this.saving = false)
     }
   }
 }

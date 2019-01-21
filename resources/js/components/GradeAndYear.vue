@@ -53,7 +53,7 @@ export default {
   },
 
   created() {
-    this.updateLabel()
+    Vue.nextTick(() => this.updateLabel())
   },
 
   methods: {

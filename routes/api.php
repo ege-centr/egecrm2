@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use App\Models\Factory\{Branch, Subject, Grade, Year};
 use App\Models\Admin\Admin;
 use App\Http\Resources\Admin\Collection as AdminCollection;
+use App\Models\Teacher;
+use App\Http\Resources\Teacher\Collection as TeacherCollection;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,6 +82,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
             'grades' => Grade::all(),
             'years' => Year::all(),
             'admins' => AdminCollection::collection(Admin::all()),
+            'teachers' => TeacherCollection::collection(Teacher::all()),
             'academic_year' => academicYear(),
         ]);
     });

@@ -56,6 +56,7 @@ class Lessons extends Command
         }
             $group_id = DB::table('groups')->where('old_group_id', $item->id_group)->value('id');;
             //if ($group_id && ($item->type_entity == 'TEACHER' || ($item->type_entity == 'STUDENT' && $client_id))) {
+            if ($group_id) {
                 $id = DB::table('lessons')->insertGetId([
                     'teacher_id' => $item->id_teacher,
                     'subject_id' => $item->id_subject,
@@ -80,7 +81,7 @@ class Lessons extends Command
                     'created_at' => $item->type_entity ? $item->date : now(),
                     'updated_at' => $item->type_entity ? $item->date : now(),
                 ]);
-            //}
+            }
             $bar->advance();
         }
         $bar->finish();

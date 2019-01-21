@@ -35,36 +35,77 @@
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <v-tab-item>
-          <GroupList :items='item.groups' />
+          <IndexPage ref='GroupPage'
+            :pagination='false' 
+            :api-url='GROUP_API_URL' 
+            :filters='group_filters' 
+            :invisible-filters="{teacher_id: $route.params.id}"
+          >
+            <template slot='items' slot-scope='{ items }'>
+              <GroupList :items='items' />
+            </template>
+          </IndexPage>
         </v-tab-item>
         <v-tab-item>
-          <PaymentList
-            :items='item.payments'
-            :entity-id='item.id'
-            :class-name='CLASS_NAME'
-          />
+          <IndexPage ref='PaymentPage'
+            :pagination='false' 
+            :api-url='PAYMENT_API_URL' 
+            :filters='payment_filters' 
+            :sort='SORT'
+            :invisible-filters="{entity_id: $route.params.id, entity_type: CLASS_NAME}"
+          >
+            <template slot='items' slot-scope='{ items }'>
+              <PaymentList :items='items' />
+            </template>
+            <template slot='buttons-bottom'>
+              <AddBtn @click.native='$refs.PaymentDialog.open(null, {
+                entity_id: $route.params.id,
+                entity_type: CLASS_NAME,
+              })' />
+            </template>
+          </IndexPage>
         </v-tab-item>
       </v-tabs-items>
     </div>
-
+    <PaymentDialog ref='PaymentDialog' />
   </div>
 </template>
 
 <script>
 
 import { API_URL, CLASS_NAME } from '@/components/Teacher'
-import GroupList from '@/components/Group/List'
-import PaymentList from '@/components/Payment/List'
+import { GroupList, API_URL as GROUP_API_URL } from '@/components/Group'
+import { API_URL as PAYMENT_API_URL, PaymentDialog, PaymentList, ENUMS, SORT } from '@/components/Payment'
+import { IndexPage } from '@/components/UI'
 
 export default {
-  components: { GroupList, PaymentList },
+  components: { GroupList, PaymentList, IndexPage, PaymentDialog },
 
   data() {
     return {
+      GROUP_API_URL,
+      PAYMENT_API_URL,
       CLASS_NAME,
+      ENUMS,
+      SORT,
       loading: true,
       item: null,
       tabs: null,
+      group_filters: [
+        {label: 'Год', field: 'year', type: 'multiple', options: this.$store.state.data.years, valueField: 'id', textField: 'text'},
+        {label: 'Преподаватель', field: 'teacher_id', type: 'multiple', options: this.$store.state.data.teachers, valueField: 'id', textField: 'names.abbreviation'},
+        {label: 'Предмет', field: 'subject_id', type: 'multiple', options: this.$store.state.data.subjects, valueField: 'id', textField: 'name'},
+        {label: 'Класс', field: 'grade_id', type: 'multiple', options: this.$store.state.data.grades, valueField: 'id', textField: 'title'},
+        {label: 'Филиал', field: 'branch_id', type: 'multiple', options: this.$store.state.data.branches, valueField: 'id', textField: 'full'},
+      ],
+      payment_filters: [
+        {label: 'Тип', field: 'type', type: 'multiple', options: ENUMS.types},
+        {label: 'Метод', field: 'methods', type: 'multiple', options: ENUMS.methods},
+        {label: 'Год', field: 'year', type: 'multiple', options: this.$store.state.data.years, valueField: 'id', textField: 'text'},
+        {label: 'Категория', field: 'category', type: 'multiple', options: ENUMS.categories},
+        {label: 'Пользователь', field: 'created_admin_id', type: 'select', options: this.$store.state.data.admins, valueField: 'id', textField: 'name'},
+        {label: 'Дата', field: 'date', type: 'date'},
+      ],
     }
   },
 

@@ -59,6 +59,10 @@ export default {
   watch: {
     date(val) {
       this.dateFormatted = this.formatDate()
+      // TODO: переделать на v-model
+      if (val !== undefined) {
+        this.$emit('updated', this.date)
+      }
     }
   }
 }
