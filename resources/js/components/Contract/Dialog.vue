@@ -66,10 +66,10 @@
                 <div class='contract-payment' v-for='(payment, index) in item.payments' :key='index'>
                   <v-layout class='align-center'>
                     <v-flex>
-                      <v-text-field v-model="payment.sum" label="Cумма"></v-text-field>
+                      <v-text-field hide-details v-model="payment.sum" label="Cумма"></v-text-field>
                     </v-flex>
                     <v-flex>
-                      <v-text-field v-model="payment.lessons" label="Предметов"></v-text-field>
+                      <v-text-field hide-details v-model="payment.lessons" label="Предметов"></v-text-field>
                     </v-flex>
                     <v-flex>
                       <DatePicker label="Дата" :date='payment.date' />
@@ -79,7 +79,7 @@
                     </v-btn>
                   </v-layout>
                 </div>
-                <div>
+                <div class='mt-3'>
                   <v-btn fab dark small color="red" @click='addPayment'>
                     <v-icon dark>add</v-icon>
                   </v-btn>

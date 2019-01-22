@@ -129,6 +129,7 @@
             :pagination='false' 
             :api-url='GROUP_API_URL' 
             :filters='group_filters' 
+            :pre-installed-filters='[{item: group_filters[0], value: [$store.state.data.academic_year]}]'
             :invisible-filters="{client_id: $route.params.id}"
           >
             <template slot='items' slot-scope='{ items }'>
@@ -147,6 +148,7 @@
             :sort='SORT'
             :api-url='PAYMENT_API_URL' 
             :filters='payment_filters' 
+            :pre-installed-filters='[{item: payment_filters[2], value: [$store.state.data.academic_year]}]'
             :invisible-filters="{entity_id: $route.params.id, entity_type: CLASS_NAME}"
           >
             <template slot='items' slot-scope='{ items }'>
