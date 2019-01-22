@@ -207,7 +207,7 @@
 <script>
 
 import Calendar from '@/components/Calendar/Calendar'
-import { LESSON_STATUS } from '@/components/Lesson/data'
+import { LESSON_STATUS } from '@/components/Lesson'
 import { DatePicker } from '@/components/UI'
 
 const API_URL = 'lessons'

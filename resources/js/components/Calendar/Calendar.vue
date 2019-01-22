@@ -34,7 +34,7 @@
 
 <script>
 
-import { CALENDAR_MONTHS } from './data'
+import { CALENDAR_MONTHS } from './'
 
 export default {
   props: {

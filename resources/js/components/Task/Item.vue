@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <v-card class='grey lighten-4' :class='config.elevationClass'>
+    <v-card :class='config.elevationClass'>
       <v-card-text class='pb-2 task'>
         <div v-html='item.text'></div>
         <div class='flex-items align-center mt-2'>
@@ -11,7 +11,7 @@
             Ответственный: {{ getData('admins', item.responsible_admin_id).name }}
           </div>
           <div class='text-md-right f-1'>
-            <v-btn flat icon color="black" class='ma-0' @click="$emit('edit', item)">
+            <v-btn flat icon color="black" class='ma-0' @click="$emit('edit', item.id)">
               <v-icon>more_horiz</v-icon>
             </v-btn>
           </div>
@@ -24,7 +24,7 @@
 
 <script>
 
-import { statuses } from './data'
+import { STATUSES } from './'
 import Comments from '@/components/Comments'
 
 export default {
@@ -32,7 +32,7 @@ export default {
   components: { Comments },
   computed: {
     status() {
-      return statuses.find(e => e.value == this.item.status)
+      return STATUSES.find(e => e.value == this.item.status)
     }
   }
 }

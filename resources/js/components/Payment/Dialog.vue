@@ -65,7 +65,7 @@
 
 <script>
 
-import { API_URL, ENUMS, MODEL_DEFAULTS } from './data'
+import { API_URL, ENUMS, MODEL_DEFAULTS } from './'
 import { DatePicker } from '@/components/UI'
 
 export default {

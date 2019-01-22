@@ -10,7 +10,7 @@ const router = new Router({
   routes: [
     ...require('./tests').default,
     ...require('./teachers').default,
-    ...require('./special-dates').default,
+    ...require('./settings').default,
     ...require('./payments').default,
     ...require('./requests').default,
     ...require('./admins').default,
@@ -18,7 +18,6 @@ const router = new Router({
     ...require('./groups').default,
     ...require('./tasks').default,
     ...require('./logs').default,
-    ...require('./recommended-prices').default,
   ]
 })
 

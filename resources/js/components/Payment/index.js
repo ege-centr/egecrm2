@@ -31,4 +31,4 @@ export const SORT = [
 export const MODEL_DEFAULTS = {}
 
 export const PaymentDialog = require('./Dialog')
-export const PaymentList = require('./ListNew')
+export const PaymentList = require('./List')

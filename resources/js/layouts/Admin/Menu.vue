@@ -46,7 +46,7 @@ export default {
     menu: [
       {
         icon: 'view_list',
-        route: 'Requests',
+        route: 'RequestIndex',
         label: 'Заявки'
       },
       {

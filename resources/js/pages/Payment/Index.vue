@@ -12,7 +12,7 @@
 
 import { IndexPage } from '@/components/UI'
 import { API_URL, FILTERS, SORT, ENUMS } from '@/components/Payment'
-import PaymentList from '@/components/Payment/ListNew'
+import PaymentList from '@/components/Payment/List'
 
 export default {
   components: { IndexPage, PaymentList },

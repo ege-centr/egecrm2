@@ -1,5 +1,5 @@
 ---
-to: resources/js/components/<%= Name %>/data.js
+to: resources/js/components/<%= Name %>/index.js
 ---
 export const API_URL = '<%= name %>s'
 

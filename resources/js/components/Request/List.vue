@@ -6,7 +6,7 @@
     <RequestDialog ref='RequestDialog' :phones='phones' @saved='saved' />
     <ClientDialog ref='ClientDialog' />
     <Loader v-if='loading' />
-    <Filters :items='filters' @updated='loadData' v-if='!items' />
+    <Filters :items='FILTERS' @updated='loadData' v-if='!items' />
     <v-container grid-list-md fluid class="px-0" v-if='requests !== null'>
       <v-layout row wrap class='relative'>
         <v-flex xs12 v-for='request in requests' :key='request.id'>
@@ -32,7 +32,7 @@ import RequestItem from '@/components/Request/Item'
 import RequestDialog from '@/components/Request/Dialog'
 import { ClientDialog } from '@/components/Client'
 import Filters from '@/components/Filters'
-import { filters } from './data'
+import { FILTERS } from './'
 
 export default {
   props: {
@@ -51,7 +51,7 @@ export default {
       page: 1,
       loading: false,
       collection: null,
-      filters
+      FILTERS
     }
   },
 
@@ -68,9 +68,9 @@ export default {
   },
 
   methods: {
-    loadData(filters = '') {
+    loadData(FILTERS = '') {
       this.loading = true
-      axios.get(apiUrl(`requests?page=${this.page}${filters}`)).then(response => {
+      axios.get(apiUrl(`requests?page=${this.page}${FILTERS}`)).then(response => {
         this.collection = response.data
         this.loading = false
       })

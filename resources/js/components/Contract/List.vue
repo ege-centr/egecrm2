@@ -1,11 +1,8 @@
 <template>
   <v-flex md12>
-    <Dialog ref='Dialog' v-if='clientId'
-      :client-id='clientId'
-      @updated='updated'
-      @stored='stored' />
+    <ContractDialog ref='ContractDialog' @updated="$emit('updated')" />
+    <Print ref='Print' :params="{type: 'contract'}" />
     <v-data-table
-      v-if='items.length'
       :items="items"
       :class='config.elevationClass'
       hide-actions
@@ -21,7 +18,7 @@
           от {{ item.date | date }}
         </td>
         <td>
-          {{ item.sum }} руб.
+          {{ item.sum }} руб. 123
         </td>
         <td>
           <span v-if='item.payments.length'>
@@ -43,19 +40,19 @@
             <span class='grey--text'>{{ subject.lessons }}</span>
           </span>
         </td>
-        <td :class="{'text-md-right': !clientId}">
+        <td>
           <span v-if='item.id'>
             {{ getData('admins', item.created_admin_id).name }}
             {{ item.created_at | date-time }}
           </span>
         </td>
-        <td class='text-md-right' v-if='clientId'>
+        <td class='text-md-right'>
           <v-menu left>
             <v-btn slot='activator' flat icon color="black" class='ma-0'>
               <v-icon>more_horiz</v-icon>
             </v-btn>
             <v-list dense>
-              <v-list-tile @click='openDialog(item)'>
+              <v-list-tile @click='$refs.ContractDialog.open(item.id)'>
                   <v-list-tile-action>
                     <v-icon>edit</v-icon>
                   </v-list-tile-action>
@@ -63,7 +60,7 @@
                     <v-list-tile-title>Редактировать</v-list-tile-title>
                   </v-list-tile-content>
               </v-list-tile>
-              <v-list-tile @click='addContractVersion(item)'>
+              <v-list-tile @click='addVersion(item)'>
                   <v-list-tile-action>
                     <v-icon>file_copy</v-icon>
                   </v-list-tile-action>
@@ -84,22 +81,13 @@
         </td>
       </template>
     </v-data-table>
-
-    <v-flex md12 px-0 mt-3 v-if='clientId'>
-      <v-btn fab dark small color="red" @click='openDialog(null)'>
-        <v-icon dark>add</v-icon>
-      </v-btn>
-    </v-flex>
-
-    <Print ref='Print' :params="{type: 'contract'}" />
   </v-flex>
 </template>
 
 <script>
 
-import Dialog from './Dialog'
 import Print from '@/components/Print'
-import { MODEL_DEFAULTS, SUBJECT_STATUSES } from './data'
+import { MODEL_DEFAULTS, SUBJECT_STATUSES, ContractDialog } from './'
 
 export default {
   props: {
@@ -107,14 +95,13 @@ export default {
       type: Array,
       required: true
     },
-    clientId: {
-      type: Number,
-      required: false,
-      default: null
+    client: {
+      type: Object,
+      required: true,
     }
   },
 
-  components: { Dialog, Print },
+  components: { ContractDialog, Print },
 
   data() {
     return {
@@ -123,26 +110,18 @@ export default {
     }
   },
   methods: {
-    openDialog(item) {
-      this.$refs.Dialog.open(item)
-    },
-    addContractVersion(item) {
-      this.openDialog({
+    addVersion(item) {
+      this.$refs.ContractDialog.open(null, {
         ...clone(item),
         id: undefined
       })
     },
+
+    // TODO: перенести в Dialog
     destroy(item) {
       const index = this.items.findIndex(e => e.id == item.id)
       this.items.splice(index, 1)
       axios.delete(apiUrl(API_URL, item.id))
-    },
-    updated(item) {
-      const index = this.items.findIndex(e => e.id == item.id)
-      Vue.set(this.items, index, item)
-    },
-    stored(item) {
-      this.items.push(item)
     },
   }
 }

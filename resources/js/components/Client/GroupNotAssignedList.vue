@@ -30,7 +30,7 @@
 
 <script>
 
-import { SUBJECT_STATUS_TERMINATED } from '@/components/Contract/data'
+import { SUBJECT_STATUS_TERMINATED } from '@/components/Contract'
 import { API_URL, GROUP_CLIENTS_API_URL, MoveClientDialog } from '@/components/Group'
 
 export default {

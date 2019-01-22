@@ -41,7 +41,7 @@
 <script>
 
 import SmallCircle from '@/components/UI/SmallCircle'
-import { LESSON_STATUS } from '@/components/Lesson/data'
+import { LESSON_STATUS } from '@/components/Lesson'
 
 export default {
   props: {

@@ -3,80 +3,44 @@ to: resources/js/components/<%= Name %>/List.vue
 ---
 <template>
   <div>
-    <v-data-table v-if='getItems && getItems.length'
+    <<%= Name %>Dialog ref='<%= Name %>Dialog' />
+    <v-data-table
       :class='config.elevationClass'
       hide-actions
       hide-headers
-      :items='getItems'
+      :items='items'
     >
       <template slot='items' slot-scope="{ item }">
         <td>
-          <router-link :to="{ name: '<%= Name %>Show', params: {id: item.id}}">
-            <%= Name %> {{ item.id }}
-          </router-link>
+          {{ item.id }}
         </td>
         <td class='text-md-right'>
-          <router-link :to="{name: '<%= Name %>Edit', params: { id: item.id }}">
-            <v-btn flat icon color="black" class='ma-0'>
-              <v-icon>more_horiz</v-icon>
-            </v-btn>
-          </router-link>
+          <v-btn @click='$refs.<%= Name %>Dialog.open(item.id)' slot='activator' flat icon color="black" class='ma-0'>
+            <v-icon>more_horiz</v-icon>
+          </v-btn>
         </td>
       </template>
     </v-data-table>
-    <div class="text-xs-center mt-4" v-if='items === null'>
-      <v-pagination
-        v-if='collection.meta.last_page > 1'
-        v-model="page"
-        :length="collection.meta.last_page"
-        :total-visible="7"
-        circle
-      ></v-pagination>
-   </div>
   </div>
 </template>
 <script>
 
-import { url } from './data'
+import { <%= Name %>Dialog } from './'
 
 export default {
   props: {
     items: {
       type: Array,
-      default: null,
-      required: false
-    }
-  },
-  data() {
-    return {
-      page: 1,
-      loading: false,
-      collection: null,
-    }
-  },
-  created() {
-    if (! this.items) {
-      this.loadData()
-    }
-  },
-  watch: {
-    page() {
-        this.loadData()
-    }
-  },
-  methods: {
-    loadData() {
-      this.loading = true
-      axios.get(apiUrl(`${url}?page=${this.page}`)).then(response => {
-        this.collection = response.data
-        this.loading = false
-      })
+      required: true
     },
   },
-  computed: {
-    getItems() {
-      return this.items || (this.collection !== null ? this.collection.data : null)
+
+  components: { <%= Name %>Dialog },
+
+  data() {
+    return {
     }
   },
+  
 }
 </script>

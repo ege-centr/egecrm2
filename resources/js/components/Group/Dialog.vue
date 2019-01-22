@@ -90,7 +90,7 @@
 </template>
 
 <script>
-import { model_defaults, API_URL } from '@/components/Group/data'
+import { model_defaults, API_URL } from '@/components/Group'
 import GradeAndYear from '@/components/GradeAndYear'
 
 export default {

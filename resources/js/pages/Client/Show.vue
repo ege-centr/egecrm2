@@ -186,7 +186,7 @@
 
 import RequestList from '@/components/Request/List'
 import Comments from '@/components/Comments'
-import ContractList from '@/components/Contract/ListNew'
+import ContractList from '@/components/Contract/List'
 import GroupList from '@/components/Group/List'
 import { API_URL as PAYMENT_API_URL, PaymentDialog, PaymentList, ENUMS, SORT } from '@/components/Payment'
 import PhoneList from '@/components/Phone/List'

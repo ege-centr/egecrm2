@@ -43,7 +43,6 @@
               :label="item.label"
               :item-value="getItemValue(item)"
               :item-text="getItemText(item)"
-              clearable
               hide-details
             ></v-select>
           </div>
@@ -75,7 +74,7 @@ import DatePicker from '@/components/UI/DatePicker'
 
 export default {
   props: {
-    // Настройки фильтров
+    // Опции выбора фильтров
     items: {
       type: Array,
       default: () => [],
@@ -109,6 +108,7 @@ export default {
       menu: false
     }
   },
+
   watch: {
     menu(newVal, oldVal) {
       if (newVal === false && oldVal === true) {
@@ -116,9 +116,30 @@ export default {
       }
     }
   },
+
   methods: {
+    // 1 стадия выбора фильтра
     select(item) {
       this.item = clone(item)
+      // проверяем, было ли выбрано значение ранее
+      if (this.previouslySelectedFilter !== undefined) {
+        this.value = this.previouslySelectedFilter.value
+      }
+    },
+
+     // 2 стадия выбора фильтра – выбрать и применить
+    apply() {
+      const item = {
+        item: this.item,
+        value: this.value
+      }
+      if (this.previouslySelectedFilter === undefined) {
+        this.filters.push(item)
+      } else {
+        this.previouslySelectedFilter = item
+      }
+      this.emit()
+      this.menu = false
     },
 
     back() {
@@ -129,15 +150,6 @@ export default {
     close(index) {
       this.filters.splice(index, 1)
       this.emit()
-    },
-
-    apply() {
-      this.filters.push({
-        item: this.item,
-        value: this.value
-      })
-      this.emit()
-      this.menu = false
     },
 
     emit() {
@@ -184,6 +196,17 @@ export default {
 
     getItemText(item) {
       return item.textField ? item.textField : 'text'
+    },
+  },
+
+  computed: {
+    previouslySelectedFilter: {
+      get() {
+        return this.filters.find(e => e.item.field === this.item.field)
+      },
+      set(newValue) {
+        this.filters[this.filters.findIndex(e => e.item.field === this.item.field)] = newValue
+      }
     },
   }
 }

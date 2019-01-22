@@ -28,7 +28,7 @@ class TasksController extends Controller
 
     public function show($id)
     {
-        return new Resource(Admin::find($id));
+        return new TaskResource(Task::find($id));
     }
 
     public function update(Request $request, $id)

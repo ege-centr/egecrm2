@@ -1,26 +1,34 @@
 ---
 to: resources/js/components/<%= Name %>/Dialog.vue
 ---
-<template>
+<template lang="html">
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" persistent max-width="1200px">
-      <v-card v-if='item !== null'>
-        <v-card-title>
-          <span class="headline">{{ item.id ? 'Редактирование' : 'Добавление' }}</span>
-        </v-card-title>
+    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
+      <v-card>
+        <v-toolbar dark color="primary">
+          <v-btn icon dark @click.native="dialog = false">
+            <v-icon>close</v-icon>
+          </v-btn>
+          <v-toolbar-title>{{ edit_mode ? 'Редактирование' : 'Добавление' }}</v-toolbar-title>
+          <v-spacer></v-spacer>
+          <v-toolbar-items>
+            <v-btn dark flat v-if='edit_mode' @click.native="destroy" :loading='destroying'>Удалить</v-btn>
+            <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ edit_mode ? 'Сохранить' : 'Добавить' }}</v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
         <v-card-text>
-          <v-container grid-list-xl class="pa-0 ma-0">
+          <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
+          <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
             <v-layout>
-
+              <v-flex md12>
+                <div class='vertical-inputs'>
+                  <div class='vertical-inputs__input'>
+                  </div>
+                </div>
+              </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
-        <v-card-actions>
-          <v-btn color="red darken-1" flat @click.native="destroy" v-if='item.id' :loading='destroying'>Удалить</v-btn>
-          <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" flat @click.native="dialog = false">Отмена</v-btn>
-          <v-btn color="blue darken-1" flat @click.native="storeOrUpdate" :loading='saving'>{{ item.id ? 'Сохранить' : 'Добавить' }}</v-btn>
-        </v-card-actions>
       </v-card>
     </v-dialog>
   </v-layout>
@@ -28,40 +36,21 @@ to: resources/js/components/<%= Name %>/Dialog.vue
 
 <script>
 
-import { url, model_defaults } from './data'
+import { API_URL, MODEL_DEFAULTS } from './'
+import { DialogMixin } from '@/mixins'
 
 export default {
+  mixins: [ DialogMixin ],
+
   data() {
     return {
-      dialog: false,
-      saving: false,
-      destroying: false,
-      item: null
+      API_URL,
+      MODEL_DEFAULTS,
     }
   },
+
   methods: {
-    add() {
-      this.item = model_defaults
-      this.dialog = true
-    },
-    async storeOrUpdate() {
-      this.saving = true
-      if (this.item.id) {
-        await axios.put(apiUrl(`${url}/${this.item.id}`), this.item)
-      } else {
-        await axios.post(apiUrl(url), this.item)
-      }
-      this.$emit('updated')
-      this.dialog = false
-      setTimeout(() => this.saving = false, 500)
-    },
-    async destroy() {
-      this.destroying = true
-      await axios.delete(apiUrl(`${url}/${this.item.id}`))
-      this.$emit('updated')
-      this.dialog = false
-      setTimeout(() => this.destroying = false, 500)
-    }
+
   }
 }
 </script>

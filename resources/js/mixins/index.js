@@ -1,0 +1,1 @@
+export const DialogMixin = require('./Dialog').default

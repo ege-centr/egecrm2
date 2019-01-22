@@ -1,9 +1,9 @@
-import Requests from '@/pages/Requests'
+import RequestIndex from '@/pages/Request/Index'
 
 export default [
   {
     path: '/requests',
-    name: 'Requests',
-    component: Requests
+    name: 'RequestIndex',
+    component: RequestIndex
   }
 ]

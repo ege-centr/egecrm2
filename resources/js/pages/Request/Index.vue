@@ -11,14 +11,6 @@
     </IndexPage>
     <RequestDialog ref='RequestDialog' />
     <ClientDialog ref='ClientDialog' />
-    <!-- <v-layout>
-      <v-flex xs12 class="text-xs-right">
-          <v-btn small fab color="primary" @click='add'>
-            <v-icon dark>add</v-icon>
-          </v-btn>
-      </v-flex>
-    </v-layout>
-    <RequestList ref='RequestList' /></RequestList> -->
   </div>
 </template>
 
