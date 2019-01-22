@@ -11,11 +11,19 @@ export const SUBJECT_STATUS_ACTIVE = 'active'
 export const SUBJECT_STATUS_TO_BE_TERMINATED = 'to_be_terminated'
 export const SUBJECT_STATUS_TERMINATED = 'terminated'
 
+export const SUBJECT_STATUS_LABELS = [
+  {value: SUBJECT_STATUS_ACTIVE, text: 'активный'},
+  {value: SUBJECT_STATUS_TO_BE_TERMINATED, text: 'к расторжению'},
+  {value: SUBJECT_STATUS_TERMINATED, text: 'расторжен'},
+]
+
 export const SUBJECT_STATUSES = [
   SUBJECT_STATUS_ACTIVE,
   SUBJECT_STATUS_TO_BE_TERMINATED,
   SUBJECT_STATUS_TERMINATED,
 ]
+
+
 
 export const SUBJECT_DEFAULTS = {
   status: SUBJECT_STATUS_ACTIVE

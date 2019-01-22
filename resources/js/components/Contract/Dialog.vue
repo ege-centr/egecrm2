@@ -19,25 +19,21 @@
             <v-layout class='mb-3'>
               <v-flex md7>
                 <v-layout wrap align-center v-for='subject in $store.state.data.subjects' :key='subject.id'>
-                  <v-flex style='max-width: 150px'>
-                    <v-slider min='0' max='3' @change='subjectStatusHandler(subject.id)' 
-                      :color="getSubjectColor(subject)"
-                      :track-color="getSubjectColor(subject)"
-                      class='ma-0'
-                      :label="getData('subjects', subject.id).three_letters"
-                      v-model="slider[subject.id]"
-                      hide-details
-                    ></v-slider>
+                  <v-flex style='max-width: 50px'>
+                    <span :class="getSubjectColor(subject)">{{ subject.three_letters }}</span>
                   </v-flex>
-                  <v-flex class='ml-4' style='max-width: 246px'>
-                    <v-layout align-center v-if='findSubject(subject)'>
-                      <v-flex class='py-0 f-1'>
-                        <v-text-field class='pa-0 ma-0' v-model="findSubject(subject).lessons" label="уроков" hide-details></v-text-field>
-                      </v-flex>
-                      <v-flex class='py-0 f-1'>
-                        <v-text-field class='pa-0 ma-0' v-model="findSubject(subject).lessons_planned" label="программа" hide-details></v-text-field>
-                      </v-flex>
-                    </v-layout>
+                  <v-flex class='ml-3' style='max-width: 190px'>
+                    <v-select hide-details class='pa-0 ma-0' @change='(e) => changeSubject(e, subject.id)'
+                      :items="withNullOption(SUBJECT_STATUS_LABELS)"
+                      :value="findSubject(subject) ? findSubject(subject).status : undefined"
+                      placeholder="Статус"
+                    ></v-select>
+                  </v-flex>
+                  <v-flex class='ml-3' style='max-width: 120px' v-if='findSubject(subject)'>
+                    <v-text-field class='pa-0 ma-0' v-model="findSubject(subject).lessons" label="уроков" hide-details></v-text-field>
+                  </v-flex>
+                  <v-flex class='ml-3' style='max-width: 120px' v-if='findSubject(subject)'>
+                    <v-text-field class='pa-0 ma-0' v-model="findSubject(subject).lessons_planned" label="программа" hide-details></v-text-field>
                   </v-flex>
                 </v-layout>
               </v-flex>
@@ -104,6 +100,7 @@ import {
   MODEL_DEFAULTS,
   DISCOUNTS,
   SUBJECT_STATUSES,
+  SUBJECT_STATUS_LABELS,
   SUBJECT_DEFAULTS,
   SUBJECT_STATUS_TO_BE_TERMINATED,
   SUBJECT_STATUS_TERMINATED,
@@ -120,10 +117,10 @@ export default {
     return {
       DISCOUNTS,
       SUBJECT_STATUSES,
+      SUBJECT_STATUS_LABELS,
       dialog: false,
       saving: false,
       item: null,
-      slider: {},
       edit_mode: false,
       loading: true,
       edit_mode: true,
@@ -132,44 +129,7 @@ export default {
   },
 
   methods: {
-    subjectStatusHandler(subject_id) {
-      const status = this.slider[subject_id]
-      let index = this.item.subjects.findIndex(e => e.subject_id == subject_id)
-      if (status > 0) {
-        if (index === -1) {
-          index = this.item.subjects.push({
-            subject_id: subject_id,
-            ...SUBJECT_DEFAULTS
-          }) - 1
-        }
-        switch (status) {
-          case 1: {
-            this.item.subjects[index].status = SUBJECT_STATUS_TERMINATED
-            break
-          }
-          case 2: {
-            this.item.subjects[index].status = SUBJECT_STATUS_TO_BE_TERMINATED
-            break
-          }
-          default: {
-            this.item.subjects[index].status = SUBJECT_STATUS_ACTIVE
-          }
-        }
-      } else {
-        this.item.subjects.splice(index, 1)
-      }
-    },
-    
-    statusToNumber(subject) {
-      switch (subject.status) {
-        case SUBJECT_STATUS_TERMINATED: return 1
-        case SUBJECT_STATUS_TO_BE_TERMINATED: return 3
-        default: return 3
-      }
-    },
-
     open(item_id = null, defaults = {}) {
-      this.slider = {}
       this.dialog = true
       if (item_id !== null) {
         this.edit_mode = true
@@ -193,21 +153,35 @@ export default {
       const subject = this.findSubject(s)
       if (subject) {
         switch(subject.status) {
-          case SUBJECT_STATUS_TERMINATED: return 'error'
-          case SUBJECT_STATUS_TO_BE_TERMINATED: return 'orange'
-          default: return 'success'
+          case SUBJECT_STATUS_TERMINATED: return 'error--text'
+          case SUBJECT_STATUS_TO_BE_TERMINATED: return 'orange--text'
+          default: return 'success--text'
         }
       }
-      return 'grey'
+      return 'grey--text'
+    },
+
+    changeSubject(status, subject_id) {
+      let index = this.item.subjects.findIndex(e => e.subject_id == subject_id)
+      if (status) {
+        if (index === -1) {
+          index = this.item.subjects.push({
+            subject_id: subject_id,
+            ...SUBJECT_DEFAULTS
+          }) - 1
+        }
+        this.item.subjects[index].status = status
+      } else {
+        if (index !== -1) {
+          this.item.subjects.splice(index, 1)
+        }
+      }
     },
 
     loadData(item_id) {
       this.loading = true
       axios.get(apiUrl(API_URL, item_id)).then(r => {
         this.item = r.data
-        this.item.subjects.forEach(subject => {
-          this.slider[subject.subject_id] = this.statusToNumber(subject)
-        })
         this.loading = false
       })
     },

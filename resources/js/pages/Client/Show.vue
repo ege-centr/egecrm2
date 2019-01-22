@@ -163,7 +163,7 @@
         <v-tab-item>
           <v-card :class='config.elevationClass'>
             <v-card-text>
-              <Comments :class-name='CLASS_NAME' :entity-id='$route.params.id' />
+              <Comments :class-name='CLASS_NAME' :entity-id='client.id' />
             </v-card-text>
           </v-card>
         </v-tab-item>

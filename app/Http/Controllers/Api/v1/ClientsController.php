@@ -73,10 +73,13 @@ class ClientsController extends Controller
         $model->representative->update($request->representative);
         $model->representative->phones()->delete();
         $model->representative->phones()->createMany($request->representative['phones']);
-        if (! $model->representative->email) {
-            $model->representative->email()->create($request->representative['email']);
-        } else {
-            $model->representative->email->update($request->representative['email']);
+
+        if ($request->representatives['email']['email']) {
+            if ($model->representative->email === null) {
+                $model->representative->email()->create($request->representative['email']);
+            } else {
+                $model->representative->email->update($request->representative['email']);
+            }
         }
 
         $model->email->update($request->email);

@@ -6,10 +6,11 @@
           <v-btn icon dark @click.native="dialog = false">
             <v-icon>close</v-icon>
           </v-btn>
-          <v-toolbar-title>{{ item.id ? 'Редактирование' : 'Добавление' }} пользователя</v-toolbar-title>
+          <v-toolbar-title>{{ edit_mode ? 'Редактирование' : 'Добавление' }} пользователя</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark flat @click.native="storeOrUpdate" :loading='loading.dialog'>{{ item.id ? 'Сохранить' : 'Добавить' }}</v-btn>
+            <v-btn dark flat v-if='edit_mode' @click.native="destroy" :loading='destroying'>Удалить</v-btn>
+            <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ edit_mode ? 'Сохранить' : 'Добавить' }}</v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-card-text>
@@ -70,42 +71,42 @@
                   добавить IP
                 </v-btn>
               </v-flex>
-
+              
               <v-flex md12 class='headline'>
                 Права
               </v-flex>
-              <v-flex md4>
+              <v-flex md4 v-if='rights !== null'>
                 <v-subheader>ЕГЭ-Центр</v-subheader>
                 <div v-for='right in rights.groups.LK2' :key='right'>
                   <v-switch class='ml-3'
-                   :label="rights.all[right]"
-                   color="success"
-                   hide-details
-                   @change='toggleRight(right)'
-                   :input-value='item.rights.indexOf(right) !== -1'
-                 ></v-switch>
+                  :label="rights.all[right]"
+                  color="success"
+                  hide-details
+                  @change='toggleRight(right)'
+                  :input-value='item.rights.indexOf(right) !== -1'
+                ></v-switch>
                 </div>
               </v-flex>
-              <v-flex md4>
+              <v-flex md4 v-if='rights !== null'>
                 <v-subheader>ЕГЭ-Репетитор</v-subheader>
                 <div v-for='right in rights.groups.EGEREP' :key='right'>
                   <v-switch class='ml-3'
-                   :label="rights.all[right]"
-                   color="success"
-                   hide-details
-                   :input-value='item.rights.indexOf(right) !== -1'
-                 ></v-switch>
+                  :label="rights.all[right]"
+                  color="success"
+                  hide-details
+                  :input-value='item.rights.indexOf(right) !== -1'
+                ></v-switch>
                 </div>
               </v-flex>
-              <v-flex md4>
+              <v-flex md4 v-if='rights !== null'>
                 <v-subheader>Общее</v-subheader>
                 <div v-for='right in rights.groups.COMMON' :key='right'>
                   <v-switch class='ml-3'
-                   :label="rights.all[right]"
-                   color="success"
-                   hide-details
-                   :input-value='item.rights.indexOf(right) !== -1'
-                 ></v-switch>
+                  :label="rights.all[right]"
+                  color="success"
+                  hide-details
+                  :input-value='item.rights.indexOf(right) !== -1'
+                ></v-switch>
                 </div>
               </v-flex>
             </v-layout>
@@ -118,7 +119,7 @@
 
 <script>
 
-import { MODEL_DEFAULTS } from './'
+import { MODEL_DEFAULTS, API_URL } from './'
 import VueCropper from 'vue-cropperjs'
 import AvatarLoader from '@/components/AvatarLoader'
 import PhoneEdit from '@/components/Phone/Edit'
@@ -130,8 +131,11 @@ export default {
       crop_dialog: false,
       cropping: false,
       item: {},
-      loading: false,
-      rights: null
+      loading: true,
+      rights: null,
+      edit_mode: false,
+      destroying: false,
+      saving: false,
     }
   },
 
@@ -144,26 +148,42 @@ export default {
   },
 
   methods: {
+    open(item_id = null, defaults = {}) {
+      this.dialog = true
+      if (item_id !== null) {
+        this.edit_mode = true
+        this.loadData(item_id)
+      } else {
+        this.edit_mode = false
+        this.item = {...MODEL_DEFAULTS, ...defaults }
+        this.loading = false
+      }
+    },
+
     add() {
       this.dialog = true
       this.item = {...MODEL_DEFAULTS}
     },
+    
+
+    loadData(item_id) {
+      this.loading = true
+      axios.get(apiUrl(API_URL, item_id)).then(r => {
+        this.item = r.data
+        this.loading = false
+      })
+    },
+
     async storeOrUpdate() {
       this.loading = true
       if (this.item.id) {
-        await axios.put(apiUrl(`admins/${this.item.id}`), this.item)
+        await axios.put(apiUrl(API_URL, this.item.id), this.item)
       } else {
-        await axios.post(apiUrl('admins'), this.item)
+        await axios.post(apiUrl(API_URL), this.item)
       }
       this.$emit('saved')
       this.loading = false
       this.dialog = false
-    },
-    show(id) {
-      axios.get(apiUrl(`admins/${id}`)).then(r => {
-        this.item = r.data
-        this.dialog = true
-      })
     },
     photoChanged(new_photo) {
       this.item.photo = new_photo

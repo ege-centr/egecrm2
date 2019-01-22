@@ -1,9 +1,9 @@
-import Admins from '@/pages/Admins'
+import AdminIndex from '@/pages/Admin/Index'
 
 export default [
   {
-    path: '/Admins',
-    name: 'Admins',
-    component: Admins
+    path: '/admins',
+    name: 'AdminIndex',
+    component: AdminIndex
   }
 ]

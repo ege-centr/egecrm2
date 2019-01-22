@@ -5,9 +5,6 @@
         <PaymentList :items='items' />
       </template>
     </IndexPage>
-    <!-- <v-container grid-list-md fluid class="px-0">
-      <PaymentList />
-    </v-container> -->
   </div>
 </template>
 
