@@ -2,19 +2,19 @@ export const API_URL = 'payments'
 
 export const ENUMS = {
   methods: [
-    {text: 'карта', value: 'card'},
-    {text: 'наличные', value: 'cash'},
-    {text: 'счет', value: 'bill'},
-    {text: 'карта онлайн', value: 'card_online'}
+    {title: 'карта', id: 'card'},
+    {title: 'наличные', id: 'cash'},
+    {title: 'счет', id: 'bill'},
+    {title: 'карта онлайн', id: 'card_online'}
   ],
   types: [
-    {text: 'платеж', value: 'payment'},
-    {text: 'возврат', value: 'return'}
+    {title: 'платеж', id: 'payment'},
+    {title: 'возврат', id: 'return'}
   ],
   categories: [
-    {text: 'обучение', value: 'study'},
-    {text: 'профориентация', value: 'career_guidance'},
-    {text: 'пробный ЕГЭ', value: 'ege_trial'}
+    {title: 'обучение', id: 'study'},
+    {title: 'профориентация', id: 'career_guidance'},
+    {title: 'пробный ЕГЭ', id: 'ege_trial'}
   ]
 }
 

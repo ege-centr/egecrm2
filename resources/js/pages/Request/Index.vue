@@ -1,6 +1,9 @@
 <template lang="html">
   <div>
     <IndexPage :api-url='API_URL' :filters='FILTERS'>
+      <template slot='buttons'>
+        <AddBtn label='добавить заявку' @click.native='$refs.RequestDialog.open(null)' />
+      </template>
       <template slot='items' slot-scope='{ items }'>
         <v-layout row wrap class='relative'>
           <v-flex xs12 v-for='item in items' :key='item.id'>

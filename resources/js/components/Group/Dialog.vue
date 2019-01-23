@@ -20,42 +20,31 @@
               <v-flex md12>
                 <div class='vertical-inputs'>
                   <div class='vertical-inputs__input'>
-                    <v-select hide-details
-                      v-model="item.teacher_id"
-                      :items="withNullOption2($store.state.data.teachers)"
+                    <ClearableSelect v-model="item.teacher_id"
                       label="Учитель"
-                      item-value='id'
                       item-text='names.abbreviation'
-                    ></v-select>
+                      :items='$store.state.data.teachers' />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-select hide-details
-                      v-model="item.head_teacher_id"
-                      :items="withNullOption2($store.state.data.teachers)"
-                      label="Классный руководитель"
-                      item-value='id'
-                      item-text='names.abbreviation'
-                    ></v-select>
+                     <ClearableSelect v-model="item.head_teacher_id"
+                        label="Классный руководитель"
+                        item-text='names.abbreviation'
+                        :items='$store.state.data.teachers' />
                   </div>
                   <div class='vertical-inputs__input'>
                     <GradeAndYear ref='GradeAndYear' :item='item' />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-select hide-details
-                      v-model="item.subject_id"
-                      :items="withNullOption($store.state.data.subjects, 'id', 'name')"
-                      item-value='id'
-                      item-text='name'
-                      label="Предмет"
-                    ></v-select>
+                    <ClearableSelect v-model="item.head_teacher_id"
+                        label="Классный руководитель"
+                        item-text='names.abbreviation'
+                        :items='$store.state.data.teachers' />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-select hide-details
-                      v-model="item.cabinet_id"
-                      :items="withNullOption(cabinets, 'id', 'text')"
-                      item-value='id'
-                      label="Кабинет"
-                    ></v-select>
+                    <ClearableSelect v-model="item.cabinet_id"
+                        label='Кабинет'
+                        item-text='text'
+                        :items='cabinets' />
                   </div>
                   <div class='vertical-inputs__input'>
                     <v-text-field hide-details v-model="item.teacher_price" label="Цена за занятие, руб."></v-text-field>

@@ -32,13 +32,10 @@
                     <AdminSelect v-model='item.responsible_admin_id' label='Ответственный' />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-select hide-details
-                      v-model="item.grade"
-                      :items="withNullOption($store.state.data.grades, 'id', 'title')"
-                      item-value='id'
-                      item-text='title'
-                      label="Класс"
-                    ></v-select>
+                    <ClearableSelect label='Класс'
+                      :items='$store.state.data.grades'
+                      v-model='item.grade'
+                    />
                   </div>
                   <div class='vertical-inputs__input'>
                     <v-select multiple hide-details
@@ -93,6 +90,7 @@ export default {
 
   data() {
     return {
+      MODEL_DEFAULTS,
       REQUEST_STATUSES,
       loading: true,
       saving: false,

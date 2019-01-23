@@ -20,32 +20,24 @@
               <v-flex md12>
                 <div class='vertical-inputs'>
                   <div class='vertical-inputs__input'>
-                     <v-select hide-details
-                        v-model="item.method"
-                        :items="withNullOption(ENUMS.methods)"
-                        label="Cпособ оплаты"
-                      ></v-select>
+                    <ClearableSelect v-model="item.method"
+                      :items='ENUMS.methods'
+                      label="Cпособ оплаты" />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-select hide-details
-                      v-model="item.type"
-                      :items="withNullOption(ENUMS.types)"
-                      label="Тип"
-                    ></v-select>
+                    <ClearableSelect v-model="item.type"
+                      :items='ENUMS.types'
+                      label="Тип" />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-select hide-details
-                      v-model="item.category"
-                      :items="withNullOption(ENUMS.categories)"
-                      label="Категория"
-                    ></v-select>
+                    <ClearableSelect v-model="item.category"
+                      :items='ENUMS.categories'
+                      label="Категория" />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-select hide-details
-                      v-model="item.year"
-                      :items="withNullOption($store.state.data.years)"
-                      label="Год"
-                    ></v-select>
+                    <ClearableSelect v-model="item.year"
+                      :items='$store.state.data.years'
+                      label="Год" />
                   </div>
                   <div class='vertical-inputs__input'>
                     <v-text-field hide-details v-model='item.sum' label='Сумма'></v-text-field>

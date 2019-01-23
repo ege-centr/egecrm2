@@ -1,5 +1,5 @@
-import RecommendedPrices from '@/pages/settings/RecommendedPrices'
-import SpecialDates from '@/pages/settings/SpecialDates'
+import RecommendedPrices from '@/pages/Settings/RecommendedPrices'
+import SpecialDates from '@/pages/Settings/SpecialDates'
 
 export default [
   {

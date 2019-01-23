@@ -1,34 +1,39 @@
 <template>
   <v-select hide-details ref='select'
-    :value="value"
-    @input="admin_id => $emit('input', admin_id)"
-    :items="$store.state.data.admins"
+    :value='value'
+    @input="value => $emit('input', value)"
+    :items="items"
     :label="label"
     item-value='id'
-    item-text='name'
+    :item-text='itemText'
   >
     <v-list-tile slot='prepend-item' @click='clear'>
       <v-list-tile-title class='grey--text'>
         не установлено
       </v-list-tile-title>
     </v-list-tile>
-    <template slot='item' slot-scope='{ item }' @click='value = item.id'>
-      <div :class="{'grey--text': item.is_banned}">{{ item.name }}</div>
-    </template>
   </v-select>
 </template>
 
 <script>
 export default {
   props: {
+    items: {
+      type: Array,
+      required: true,
+    },
     label: {
       type: String,
-      default: 'Пользователь',
-      required: false,
+      required: true,
     },
     value: {
-      required: true
+      required: true,
     },
+    itemText: {
+      type: String,
+      required: false,
+      default: 'title',
+    }
   },
 
   methods: {
@@ -40,3 +45,5 @@ export default {
   }
 }
 </script>
+
+

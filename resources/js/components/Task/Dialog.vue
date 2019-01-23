@@ -27,14 +27,7 @@
                       <v-flex md12>
                         <div class='vertical-inputs'>
                           <div class='vertical-inputs__input'>
-                            <v-select
-                              hide-details
-                              v-model="item.responsible_admin_id"
-                              :items="withNullOption($store.state.data.admins, 'id', 'name')"
-                              item-value='id'
-                              item-text='name'
-                              label="Ответственный"
-                            ></v-select>
+                            <AdminSelect v-model='item.responsible_admin_id' label='Ответственный' />
                           </div>
                           <div class='vertical-inputs__input'>
                             <v-select
@@ -63,11 +56,12 @@ import { API_URL, STATUSES, MODEL_DEFAULTS } from './'
 import { VueEditor, Quill } from 'vue2-editor'
 import { ImageDrop } from 'quill-image-drop-module'
 import { DialogMixin } from '@/mixins'
+import { AdminSelect } from '@/components/UI'
 
 export default {
   mixins: [ DialogMixin ],
 
-  components: { VueEditor },
+  components: { VueEditor, AdminSelect },
 
   data() {
     return {

@@ -1,6 +1,7 @@
 import Loader from '@/components/UI/Loader'
 import Avatar from '@/components/UI/Avatar'
 import AddBtn from '@/components/UI/AddBtn'
+import ClearableSelect from '@/components/UI/ClearableSelect'
 
 export const GlobalPlugin = {
   install(Vue, options) {
@@ -45,5 +46,6 @@ export const GlobalPlugin = {
     Vue.component('Loader', Loader)
     Vue.component('Avatar', Avatar)
     Vue.component('AddBtn', AddBtn)
+    Vue.component('ClearableSelect', ClearableSelect)
   }
 }
