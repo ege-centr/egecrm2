@@ -22,7 +22,7 @@
 
               <v-flex md12>
                 <div class='vertical-inputs'>
-                  <div class='vertical-inputs__input'>
+                  <div class='vertical-inputs__input' v-if='edit_mode'>
                     <AvatarLoader class-name='Client\Client' :entity-id='item.id' :photo='item.photo' @photoChanged='photoChanged' />
                   </div>
                   <div class='vertical-inputs__input'>

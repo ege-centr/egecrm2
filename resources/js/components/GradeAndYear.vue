@@ -1,8 +1,7 @@
 <template>
   <v-menu transition="slide-y-transition">
     <div slot='activator' style='pointer-events: none'>
-      <v-select hide-details label='Класс и год' item-value='id' item-text='title'
-        :items='$store.state.data.grades' :value='item.grade_id'>
+      <v-select hide-details label='Класс и год' :items='[null, true]' :value='(item.grade_id > 0 || item.year > 0)'>
         <template slot="selection" slot-scope="{ item }">
           <span>{{ label }}</span>
         </template>
@@ -69,15 +68,20 @@ export default {
     updateLabel() {
       switch(this.labelType) {
         case LABEL_TYPES.CALCULATED_GRADE:
-          if (!this.item.grade_id) {
+          if (!this.item.year && !this.item.grade_id) {
+            // no year, no grade
             this.label = null
-          }
-          if (this.item.year > 0 && this.item.grade_id < 12) {
+          } else if (this.item.grade_id && !this.item.year) {
+            // grade only
+            this.label = this.getData('grades', this.item.grade_id).title
+          } else if (!this.item.grade_id && this.item.year) {
+            // year only
+            this.label = this.getData('years', this.item.year).title
+          } else {
+            // grade & year – calculate
             let years_passed = 2018 - this.item.year
             let new_grade = parseInt(this.item.grade_id) + years_passed
             this.label = this.getData('grades', new_grade > 12 ? 12 : new_grade).title
-          } else {
-            this.label = this.getData('grades', this.item.grade_id).title
           }
           break
         case LABEL_TYPES.GRADE_AND_YEAR:
@@ -91,6 +95,7 @@ export default {
           this.label = label.join(', ')
           break
       }
+      this.$forceUpdate()
     },
   },
 }

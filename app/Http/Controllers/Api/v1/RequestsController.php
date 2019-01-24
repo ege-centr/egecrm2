@@ -10,8 +10,7 @@ use App\Http\Resources\Request\{Resource, Collection};
 class RequestsController extends Controller
 {
     protected $filters = [
-        'equals' => ['status', 'grade', 'responsible_admin_id'],
-        'like' => ['name'],
+        'equals' => ['status', 'grade_id', 'responsible_admin_id'],
     ];
 
     public function index(Request $request)

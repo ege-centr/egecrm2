@@ -20,7 +20,7 @@
                 Основное
               </v-flex>
 
-              <div class='mr-4 mb-5'>
+              <div class='mr-4 mb-5' v-if='edit_mode'>
                 <v-flex>
                   <AvatarLoader class-name='Admin\Admin' :entity-id='item.id' :photo='item.photo' @photoChanged='photoChanged' />
                 </v-flex>
@@ -40,8 +40,11 @@
                   <v-flex md3>
                     <v-text-field v-model="item.nickname" label="Никнейм"></v-text-field>
                   </v-flex>
-                  <PhoneEdit :item='item' />
                 </v-layout>
+              </v-flex>
+
+              <v-flex md12>
+                <PhoneEdit :item='item' />
               </v-flex>
 
 

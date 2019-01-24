@@ -36,7 +36,7 @@
                   <div class='vertical-inputs__input'>
                     <ClearableSelect label='Класс'
                       :items='$store.state.data.grades'
-                      v-model='item.grade'
+                      v-model='item.grade_id'
                     />
                   </div>
                   <div class='vertical-inputs__input'>

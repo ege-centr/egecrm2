@@ -63,7 +63,7 @@ class Requests extends Command
                 'branches' => $item->branches ?: '',
                 'subjects' => $item->subjects,
                 'comment' => $item->comment ?: '',
-                'grade' => $item->grade,
+                'grade_id' => $item->grade,
                 'created_at' => $item->date,
                 'updated_at' => $item->date
             ]);

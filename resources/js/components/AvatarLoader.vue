@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if='entityId'>
     <div v-if='photo'>
       <v-hover>
         <v-avatar slot-scope="{ hover }" :size='180' style='overflow: hidden'>
