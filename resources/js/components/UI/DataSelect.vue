@@ -43,6 +43,11 @@ export default {
         }}
       case 'years':
         return this.item.label = 'Год'
+      case 'teachers':
+         return this.item = {...this.item, ...{
+          text: 'names.abbreviation',
+          label: 'Учитель',
+        }}
     }
   },
 }

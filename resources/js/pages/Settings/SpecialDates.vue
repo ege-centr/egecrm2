@@ -4,9 +4,9 @@
     <div class='mb-3 flex-items'>
       <div>
         <v-chip v-for="year in $store.state.data.years" class='pointer ml-0 mr-3'
-        :class="{'primary white--text': year.value == selected_year}"
-        @click='selected_year = year.value'
-        :key='year.value'>{{ year.text }}</v-chip>
+        :class="{'primary white--text': year.id == selected_year}"
+        @click='selected_year = year.id'
+        :key='year.id'>{{ year.title }}</v-chip>
       </div>
       <v-spacer></v-spacer>
       <!-- <div>

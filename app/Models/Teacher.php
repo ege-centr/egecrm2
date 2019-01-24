@@ -37,7 +37,7 @@ class Teacher extends Model
         parent::boot();
 
         static::addGlobalScope('egecentr_active', function(Builder $builder) {
-            $builder->where('in_egecentr', 2)->orderByName();
+            $builder->where('in_egecentr', '>', 0)->orderByRaw('IF(in_egecentr = 2, 1, 0) desc')->orderByName();
         });
     }
 }

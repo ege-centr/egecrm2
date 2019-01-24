@@ -32,7 +32,7 @@
                 </td>
                 <td :class="{'purple lighten-5': item.is_unplanned}">
                   <span v-if='item.teacher_id'>
-                    {{ teachers.find(e => e.id == item.teacher_id).names.abbreviation }}
+                    {{ getData('teachers', item.teacher_id).names.abbreviation }}
                   </span>
                 </td>
                 <td class='grey--text' :class="{'purple lighten-5': item.is_unplanned}">
@@ -53,7 +53,6 @@
               <v-btn color='primary' small flat @click='fillSchedule' :loading='filling' v-if='items.length > 0'>
                 проставить до 1 июня текущего года
               </v-btn>
-              <!-- <a @click='fillSchedule' v-if='items.length > 0'>проставить до 1 июня текущего года</a> -->
             </div>
           </v-flex>
         </v-layout>
@@ -93,11 +92,12 @@
                         />
                       </div>
                       <div class='vertical-inputs__input'>
-                        <ClearableSelect v-model="dialog_item.teacher_id"
+                        <DataSelect type='teachers' v-model="dialog_item.teacher_id" />
+                        <!-- <ClearableSelect v-model="dialog_item.teacher_id"
                           label="Учитель"
                           :items='teachers' 
                           item-text='names.abbreviation'
-                        />
+                        /> -->
                       </div>
                       <div class='vertical-inputs__input' v-if="dialog_item.status === LESSON_STATUS.CONDUCTED">
                         <v-text-field v-model='dialog_item.price' label='Цена' hide-details></v-text-field>
@@ -205,12 +205,12 @@
 
 import Calendar from '@/components/Calendar/Calendar'
 import { LESSON_STATUS } from '@/components/Lesson'
-import { DatePicker } from '@/components/UI'
+import { DatePicker, DataSelect } from '@/components/UI'
 
 const API_URL = 'lessons'
 
 export default {
-  components: { Calendar, DatePicker },
+  components: { Calendar, DatePicker, DataSelect },
 
   props: {
     group: {
@@ -242,9 +242,6 @@ export default {
 
   methods: {
     async loadData() {
-      await axios.get(apiUrl('teachers')).then(r => {
-        this.teachers = r.data
-      })
       await axios.get(apiUrl('cabinets')).then(r => {
         this.cabinets = r.data
       })

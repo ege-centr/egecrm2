@@ -7,14 +7,7 @@
         <img src='/img/svg/logo.svg'>
       </v-avatar>
       <v-spacer></v-spacer>
-      <v-text-field
-        flat
-        solo-inverted
-        hide-details
-        prepend-inner-icon="search"
-        label="Поиск..."
-        class="hidden-sm-and-down"
-      ></v-text-field>
+      <SearchBar />
       <v-spacer></v-spacer>
       <v-menu left>
           <Avatar slot='activator' :photo='$store.state.user.photo' :version='true' :size='50' />
@@ -46,11 +39,12 @@
 <script>
 
 import Menu from './Menu'
+import SearchBar from '@/components/Search/Bar'
 import Avatar from '@/components/UI/Avatar'
 import ListenToLogout from '@/components/ListenToLogout'
 
 export default {
-  components: { Menu, Avatar },
+  components: { Menu, Avatar, SearchBar },
 }
 </script>
 
