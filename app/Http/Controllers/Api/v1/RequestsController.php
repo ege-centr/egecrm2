@@ -10,7 +10,7 @@ use App\Http\Resources\Request\{Resource, Collection};
 class RequestsController extends Controller
 {
     protected $filters = [
-        'equals' => ['status'],
+        'equals' => ['status', 'grade', 'responsible_admin_id'],
         'like' => ['name'],
     ];
 

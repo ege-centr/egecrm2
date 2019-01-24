@@ -13,10 +13,11 @@ export const MODEL_DEFAULTS = {
   phones: [{phone: '', comment: ''}]
 }
 
+// TODO: переименовать в grade_id
 export const FILTERS = [
   {label: 'Статус', field: 'status', type: 'select', options: REQUEST_STATUSES},
-  {label: 'Класс', field: 'grade', type: 'select', options: store.state.data.grades, valueField: 'id', textField: 'title'},
-  {label: 'Ответственный', field: 'responsible_admin_id', type: 'select', options: store.state.data.admins, valueField: 'id', textField: 'name'},
+  {label: 'Класс', field: 'grade', type: 'select', options: store.state.data.grades},
+  {label: 'Ответственный', field: 'responsible_admin_id', type: 'select', options: store.state.data.admins, textField: 'name'},
   {label: 'Имя', field: 'name', type: 'text'}
 ]
 
