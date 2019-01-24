@@ -191,11 +191,11 @@ export default {
     },
 
     getItemValue(item) {
-      return item.valueField ? item.valueField : 'value'
+      return item.valueField ? item.valueField : 'id'
     },
 
     getItemText(item) {
-      return item.textField ? item.textField : 'text'
+      return item.textField ? item.textField : 'title'
     },
   },
 

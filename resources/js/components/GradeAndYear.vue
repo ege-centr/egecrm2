@@ -17,9 +17,9 @@
       </v-list-tile>
       <v-list-tile style='height: 0; border-bottom: 1px solid #8c8c8c'>
       </v-list-tile>
-      <v-list-tile v-for='year in $store.state.data.years' :key='year.value' @click="select('year', year.value)">
-        <v-list-tile-title>{{ year.text }}</v-list-tile-title>
-        <v-list-tile-action class='justify-end' v-if='item.year === year.value'>
+      <v-list-tile v-for='year in $store.state.data.years' :key='year.id' @click="select('year', year.id)">
+        <v-list-tile-title>{{ year.title }}</v-list-tile-title>
+        <v-list-tile-action class='justify-end' v-if='item.year === year.id'>
           <v-icon>check</v-icon>
         </v-list-tile-action>
       </v-list-tile>
@@ -86,7 +86,7 @@ export default {
             label.push(this.getData('grades', this.item.grade_id).title)
           }
           if (this.item.year) {
-            label.push(this.getData('years', this.item.year).text)
+            label.push(this.getData('years', this.item.year).title)
           }
           this.label = label.join(', ')
           break

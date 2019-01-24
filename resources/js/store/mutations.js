@@ -1,7 +1,7 @@
 export default {
   // static data from Models/Data
-  setData(state, payload) {
-    state.data[payload.field] = payload.data
+  setData(state, data) {
+    state.data = data
   },
 
   setUser(state, user) {

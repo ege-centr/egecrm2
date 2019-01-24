@@ -1,3 +1,5 @@
+import store from '@/store'
+
 export const API_URL = 'payments'
 
 export const ENUMS = {
@@ -19,8 +21,12 @@ export const ENUMS = {
 }
 
 export const FILTERS = [
-  {label: 'Метод', field: 'methods', type: 'select', options: ENUMS.methods},
-  {label: 'Категория', field: 'category', type: 'select', options: ENUMS.categories},
+  {label: 'Тип', field: 'type', type: 'multiple', options: ENUMS.types},
+  {label: 'Метод', field: 'method', type: 'multiple', options: ENUMS.methods},
+  {label: 'Год', field: 'year', type: 'multiple', options: store.state.data.years},
+  {label: 'Категория', field: 'category', type: 'multiple', options: ENUMS.categories},
+  {label: 'Пользователь', field: 'created_admin_id', type: 'select', options: store.state.data.admins, textField: 'name'},
+  {label: 'Дата', field: 'date', type: 'date'},
 ]
 
 export const SORT = [

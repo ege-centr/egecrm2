@@ -23,13 +23,11 @@
               <v-flex md12>
                 <div class='vertical-inputs'>
                   <div class='vertical-inputs__input'>
-                    <v-select hide-details
-                      v-model="item.teacher_id"
-                      :items="withNullOption2(teachers)"
+                    <ClearableSelect v-model="item.teacher_id"
                       label="Учитель"
-                      item-value='id'
+                      :items='teachers' 
                       item-text='names.abbreviation'
-                    ></v-select>
+                    />
                   </div>
                   <div class='vertical-inputs__input'>
                     <v-text-field v-model='item.lesson_count' label='Количество занятий' hide-details v-mask="'####'"></v-text-field>

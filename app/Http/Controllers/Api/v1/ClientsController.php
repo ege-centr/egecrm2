@@ -9,38 +9,26 @@ use App\Http\Resources\Client\{Resource, Collection};
 
 class ClientsController extends Controller
 {
+    protected $filters = [
+        'equals' => ['client_id'],
+        'multiple' => ['grade_id'],
+    ];
+
     public function index(Request $request)
     {
-        $query = Client::query();
+        $query = Client::orderBy('id', 'desc');
+
         if (isset($request->get_all) && $request->get_all) {
-            return resourceCollection($query->orderByName()->get(), Collection::class);
+            return Collection::collection($query->orderByName()->get());
         }
 
-        if (isset($request->grade_id) && $request->grade_id) {
-            $query->whereIn('grade_id', explode(',', $request->grade_id));
-        }
+        $this->filter($request, $query);
 
         if (isset($request->current_grade_id) && $request->current_grade_id) {
-            $query->whereIn('grade_id', explode(',', $request->current_grade_id));
+            $query->whereRaw("grade_id + (" . academicYear() .  " - `year`) IN ({$request->current_grade_id})");
         }
 
-        // TODO: current_grade_id
-        //  if (isset($request->current_grade_id) && $request->current_grade_id) {
-        //     $grade_id = $request->current_grade_id + (academicYear())
-        //     $query->where('client_id', $request->client_id);
-        //     $query->whereRaw("IF(" . academicYear() . ")")
-        // }
-
-
-         if (isset($request->client_id) && $request->client_id) {
-            $query->where('client_id', $request->client_id);
-        }
-        // if (isset($request->name)) {
-        //     $query->where('first_name', 'like', '%' . $request->name . '%')
-        //         ->orWhere('last_name', 'like', '%' . $request->name . '%')
-        //         ->orWhere('middle_name', 'like', '%' . $request->name . '%');
-        // }
-        return resourceCollection($query->orderBy('id', 'desc')->paginate($request->show_by ?: 9999), Collection::class);
+        return Collection::collection($this->showBy($request, $query));
     }
 
     public function store(Request $request)

@@ -3,24 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\Commentable;
+use App\Traits\{Commentable, HasCreatedAdmin};
 
 class Task extends Model
 {
-    use Commentable;
+    use Commentable, HasCreatedAdmin;
 
     protected $fillable = [
         'text', 'status', 'responsible_admin_id'
     ];
-
-    public static function boot()
-    {
-        parent::boot();
-
-        static::creating(function($model) {
-            if (User::loggedIn()) {
-                $model->created_admin_id = User::id();
-            }
-        });
-    }
 }

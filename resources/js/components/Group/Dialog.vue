@@ -79,7 +79,7 @@
 </template>
 
 <script>
-import { model_defaults, API_URL } from '@/components/Group'
+import { MODEL_DEFAULTS, API_URL } from '@/components/Group'
 import GradeAndYear from '@/components/GradeAndYear'
 
 export default {
@@ -93,7 +93,7 @@ export default {
       dialog: false,
       edit_mode: true,
 
-      item: model_defaults,
+      item: MODEL_DEFAULTS,
       teachers: [],
       cabinets: [],
       saving: false,
@@ -112,7 +112,7 @@ export default {
         this.loadData(item_id)
       } else {
         this.edit_mode = false
-        this.item = model_defaults
+        this.item = MODEL_DEFAULTS
         this.loading = false
       }
     },

@@ -9,16 +9,16 @@ use App\Http\Resources\Request\{Resource, Collection};
 
 class RequestsController extends Controller
 {
+    protected $filters = [
+        'equals' => ['status'],
+        'like' => ['name'],
+    ];
+
     public function index(Request $request)
     {
         $query = ClientRequest::with('responsibleAdmin')->orderBy('id', 'desc');
-        if (isset($request->status)) {
-            $query->whereStatus($request->status);
-        }
-        if (isset($request->name)) {
-            $query->where('name', 'like', '%' . $request->name . '%');
-        }
-        return resourceCollection($query->paginate(30), Collection::class);
+        $this->filter($request, $query);
+        return Collection::collection($this->showBy($request, $query));
     }
 
     public function store(Request $request)

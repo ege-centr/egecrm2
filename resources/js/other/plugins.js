@@ -13,21 +13,6 @@ export const GlobalPlugin = {
       elevationClass: 'elevation-3',
     }
 
-    Vue.prototype.withNullOption = function(items, value = 'value', text = 'text') {
-      return [
-        {[value]: null, [text]: 'не установлено'},
-        ...items
-      ]
-    }
-
-    // TODO: замалым
-    Vue.prototype.withNullOption2 = function(items) {
-      return [
-        {id: null, names: {abbreviation: 'не установлено'}},
-        ...items
-      ]
-    }
-
     Vue.prototype.waitForDialogClose = (f) => {
       Vue.nextTick(() => f(), 200)
     }

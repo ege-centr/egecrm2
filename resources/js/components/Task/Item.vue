@@ -16,7 +16,7 @@
             </v-btn>
           </div>
         </div>
-        <Comments class='mt-3' class-name='Task' :entity-id='item.id' />
+        <Comments class='mt-3' :class-name='CLASS_NAME' :entity-id='item.id' :items='item.comments' />
       </v-card-text>
     </v-card>
   </div>
@@ -24,12 +24,20 @@
 
 <script>
 
-import { STATUSES } from './'
+import { STATUSES, CLASS_NAME } from './'
 import Comments from '@/components/Comments'
 
 export default {
   props: ['item'],
+
   components: { Comments },
+
+  data() {
+    return {
+      CLASS_NAME,
+    }
+  },
+  
   computed: {
     status() {
       return STATUSES.find(e => e.value == this.item.status)

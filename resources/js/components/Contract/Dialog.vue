@@ -18,16 +18,25 @@
           <v-container v-else grid-list-xl class="pa-0 ma-0">
             <v-layout class='mb-3'>
               <v-flex md7>
-                <v-layout wrap align-center v-for='subject in $store.state.data.subjects' :key='subject.id'>
+                <v-layout wrap align-center v-for='(subject, index) in $store.state.data.subjects' :key='subject.id'>
                   <v-flex style='max-width: 50px'>
                     <span :class="getSubjectColor(subject)">{{ subject.three_letters }}</span>
                   </v-flex>
                   <v-flex class='ml-3' style='max-width: 190px'>
                     <v-select hide-details class='pa-0 ma-0' @change='(e) => changeSubject(e, subject.id)'
-                      :items="withNullOption(SUBJECT_STATUS_LABELS)"
+                      :items="SUBJECT_STATUS_LABELS"
                       :value="findSubject(subject) ? findSubject(subject).status : undefined"
+                      item-text='title'
+                      item-value='id'
                       placeholder="Статус"
-                    ></v-select>
+                      ref='select'
+                    >
+                      <v-list-tile slot='prepend-item' @click='changeSubject(null, subject.id); $refs.select[index].isMenuActive = false'>
+                        <v-list-tile-title class='grey--text'>
+                          не установлено
+                        </v-list-tile-title>
+                      </v-list-tile>
+                    </v-select>
                   </v-flex>
                   <v-flex class='ml-3' style='max-width: 120px' v-if='findSubject(subject)'>
                     <v-text-field class='pa-0 ma-0' v-model="findSubject(subject).lessons" label="уроков" hide-details></v-text-field>
@@ -48,11 +57,11 @@
                     <v-text-field v-model="item.sum" label="Cумма" hide-details></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-select
-                      v-model="item.discount"
-                      :items="withNullOption(DISCOUNTS)"
-                      label="Скидка"
-                    ></v-select>
+                      <ClearableSelect v-model='item.discount'
+                        label="Скидка"
+                        :items='DISCOUNTS' 
+                        item-text='names.abbreviation'
+                      />
                   </div>
                   <div class='vertical-inputs__input'>
                     <DatePicker label="Дата" :date='item.date' />

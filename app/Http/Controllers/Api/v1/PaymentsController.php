@@ -9,31 +9,20 @@ use App\Http\Resources\Payment\Collection as PaymentCollection;
 
 class PaymentsController extends Controller
 {
+    protected $filters = [
+        'multiple' => ['year', 'category', 'method', 'type'],
+        'equals' => ['created_admin_id', 'date', 'entity_id'],
+    ];
+
     public function index(Request $request)
     {
         $query = Payment::query();
-
-        if (isset($request->sort_by) && $request->sort_by) {
-            $query->orderBy($request->sort_by, $request->sort_type)->orderBy('id', 'desc');
-        }
-
-        foreach(['year', 'category', 'method', 'type'] as $field) {
-            if (isset($request->{$field}) && $request->{$field}) {
-                $query->whereIn($field, explode(',', $request->{$field}));
-            }
-        }
-
-        foreach(['created_admin_id', 'date', 'entity_id'] as $field) {
-            if (isset($request->{$field}) && $request->{$field}) {
-                $query->where($field, $request->{$field});
-            }
-        }
-
+        $this->filter($request, $query);
+        $query->orderBy('id', 'desc');
         if (isset($request->entity_type) && $request->entity_type) {
             $query->where('entity_type', getModelClass($request->entity_type, true));
         }
-
-        return PaymentCollection::collection($query->paginate($request->show_by ?: 9999));
+        return PaymentCollection::collection($this->showBy($request, $query));
     }
 
     public function update(Request $request, $id)

@@ -23,38 +23,30 @@
     </div>
     <div v-if='items !== null'>
       <v-layout row justify-center>
-        <v-dialog v-model="dialog" persistent max-width="400px" v-if="dialog_item !== null">
+        <v-dialog v-model="dialog" persistent max-width="330px" v-if="dialog_item !== null">
           <v-card>
             <v-card-text>
               <v-container class="pa-0 ma-0" fluid>
                 <v-layout wrap>
                   <v-flex md12>
-                    <v-select
-                      v-model="dialog_item.type"
-                      :items="types"
-                      label="Тип"
-                    ></v-select>
-                  </v-flex>
-                  <v-flex md12>
-                    <DatePicker label="Дата" :date="dialog_item.date" />
-                  </v-flex>
-                  <v-flex md12 v-show='dialog_item.type === TYPE_EXAM'>
-                    <v-select clearable
-                      v-model="dialog_item.subject_id"
-                      :items="$store.state.data.subjects"
-                      item-value='id'
-                      item-text='name'
-                      label="Предмет"
-                    ></v-select>
-                  </v-flex>
-                  <v-flex md12 v-show='dialog_item.type === TYPE_EXAM'>
-                    <v-select clearable
-                      v-model="dialog_item.grade_id"
-                      :items="$store.state.data.grades"
-                      item-value='id'
-                      item-text='title'
-                      label="Класс"
-                    ></v-select>
+                    <div class='vertical-inputs'>
+                      <div class='vertical-inputs__input'>
+                        <v-select hide-details
+                          v-model="dialog_item.type"
+                          :items="types"
+                          label="Тип"
+                        ></v-select>
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <DatePicker label="Дата" :date="dialog_item.date" />
+                      </div>
+                      <div class='vertical-inputs__input' v-show='dialog_item.type === TYPE_EXAM'>
+                        <DataSelect v-model='dialog_item.subject_id' type='subjects' />
+                      </div>
+                      <div class='vertical-inputs__input' v-show='dialog_item.type === TYPE_EXAM'>
+                        <DataSelect v-model='dialog_item.grade_id' type='grades' />
+                      </div>
+                    </div>
                   </v-flex>
                 </v-layout>
               </v-container>
@@ -126,10 +118,10 @@ const TYPE_EXAM = 'exam'
 const TYPE_VACATION = 'vacation'
 
 import Calendar from '@/components/Calendar/Calendar'
-import { DatePicker } from '@/components/UI'
+import { DatePicker, DataSelect } from '@/components/UI'
 
 export default {
-  components: { Calendar, DatePicker },
+  components: { Calendar, DatePicker, DataSelect },
 
   data() {
     return {

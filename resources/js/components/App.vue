@@ -10,14 +10,10 @@
   import LoginLayout from '@/layouts/LoginLayout'
 
   export default {
-    props: ['user'],
-
     components: { AppLayout, LoginLayout },
     
     created() {
-      if (this.user) {
-        this.$store.commit('setUser', this.user)
-      }
+      // типа Drawer сохраняется в LocalStorage
       if (localStorage.hasOwnProperty('drawer')) {
         this.$store.commit('toggleDrawer', localStorage.getItem('drawer') === 'true')
       }

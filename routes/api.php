@@ -1,32 +1,13 @@
 <?php
 
 use Illuminate\Http\Request;
-use App\Models\Factory\{Branch, Subject, Grade, Year};
-use App\Models\Admin\Admin;
-use App\Http\Resources\Admin\Collection as AdminCollection;
-use App\Models\Teacher;
-use App\Http\Resources\Teacher\Collection as TeacherCollection;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
 
 Route::namespace('Api\v1')->prefix('v1')->group(function() {
 
     Route::post('login', 'LoginController@login');
     Route::get('logout', 'LoginController@logout');
 
-    Route::prefix('data')->group(function() {
-        Route::post('enum', 'DataController@enum');
-        Route::post('static', 'DataController@static');
-    });
+    Route::get('initial-data', 'InitialDataController@index');
 
     Route::delete('group-clients', 'GroupClientsController@destroy');
     Route::post('group-clients', 'GroupClientsController@store');
@@ -72,19 +53,6 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         Route::post('upload', 'PhotosController@upload');
         Route::post('crop', 'PhotosController@crop');
         Route::delete('{id}', 'PhotosController@destroy');
-    });
-
-    # Load initial data
-    Route::get('load-initial', function() {
-        return response()->json([
-            'branches' => Branch::all(),
-            'subjects' => Subject::all(),
-            'grades' => Grade::all(),
-            'years' => Year::all(),
-            'admins' => AdminCollection::collection(Admin::all()),
-            'teachers' => TeacherCollection::collection(Teacher::all()),
-            'academic_year' => academicYear(),
-        ]);
     });
 
     Route::get('rights', function() {

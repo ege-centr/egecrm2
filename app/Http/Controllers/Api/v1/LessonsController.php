@@ -9,12 +9,14 @@ use App\Http\Resources\Lesson\Resource as LessonResource;
 
 class LessonsController extends Controller
 {
+    protected $filters = [
+        'equals' => ['group_id']
+    ];
+
     public function index(Request $request)
     {
         $query = Lesson::query();
-        if (isset($request->group_id)) {
-            $query->whereGroupId($request->group_id);
-        }
+        $this->filter($request, $query);
         return LessonResource::collection($query->get());
     }
 

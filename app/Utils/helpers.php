@@ -12,10 +12,10 @@ function cacheKey(...$args)
     return "egecrm:" . implode(':', $args);
 }
 
-function resourceCollection($data, $resourceClass)
-{
-    return new \Illuminate\Http\Resources\Json\AnonymousResourceCollection($data, $resourceClass);
-}
+// function resourceCollection($data, $resourceClass)
+// {
+//     return new \Illuminate\Http\Resources\Json\AnonymousResourceCollection($data, $resourceClass);
+// }
 
 /**
  * Remove certain keys from array

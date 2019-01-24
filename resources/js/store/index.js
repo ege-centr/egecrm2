@@ -10,13 +10,7 @@ const store = new Vuex.Store({
   state: {
     drawer: true,
     user: null,
-    data: {
-      admins: null,
-      subjects: null,
-      branches: null,
-      grades: null,
-      years: null
-    },
+    data: null,
     loading: false
   },
   mutations,

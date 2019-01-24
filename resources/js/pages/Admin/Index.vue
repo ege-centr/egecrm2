@@ -1,7 +1,7 @@
 <template>
   <div>
     <AdminDialog ref='AdminDialog' />
-    <IndexPage :api-url='API_URL'>
+    <IndexPage :api-url='API_URL' :filters='FILTERS'>
       <template slot='buttons'>
         <AddBtn @click.native='$refs.AdminDialog.open(null)' label='добавить пользователя' />
       </template>
@@ -23,6 +23,7 @@ export default {
   data() {
     return {
       API_URL,
+      FILTERS,
     }
   },
 }

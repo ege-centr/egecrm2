@@ -68,7 +68,7 @@ class Client extends Model implements UserInterface
             ->whereIn('id', $request_ids)
             ->orderBy('id', 'desc')
             ->get();
-        return resourceCollection($requests, RequestCollection::class);
+        return RequestCollection::collection($requests);
     }
 
     public function getHeadTeacher()

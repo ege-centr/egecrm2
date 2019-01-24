@@ -9,9 +9,15 @@ use App\Http\Resources\Admin\{Resource, Collection};
 
 class AdminsController extends Controller
 {
-    public function index()
+    protected $filters = [
+        'likeMultiple' => ['name' => ['first_name', 'last_name', 'middle_name', 'nickname']]
+    ];
+
+    public function index(Request $request)
     {
-        return resourceCollection(Admin::paginate(20), Collection::class);
+        $query = Admin::query();
+        $this->filter($request, $query);
+        return Collection::collection($this->showBy($request, $query));
     }
 
     public function store(Request $request)

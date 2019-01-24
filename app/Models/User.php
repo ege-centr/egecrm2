@@ -91,15 +91,18 @@ class User extends Model
     */
     public static function fromSession()
     {
-        $class = $_SESSION['user']['class'];
-        $entity_id = $_SESSION['user']['entity_id'];
-        // dd([$class, $entity_id]);
-        // info('loading admin...');
-        // @todo: намана доллар сделай
-        $user = $class::with('photo')->find($entity_id);
-        $user->class = substr($class, 11);
-        return $user;
-        // return new AdminResource(Admin::find($_SESSION['user']->id));
+        if (isset($_SESSION["user"]) && $_SESSION["user"]) {
+            $class = $_SESSION['user']['class'];
+            $entity_id = $_SESSION['user']['entity_id'];
+            // dd([$class, $entity_id]);
+            // info('loading admin...');
+            // @todo: намана доллар сделай
+            $user = $class::with('photo')->find($entity_id);
+            $user->class = substr($class, 11);
+            return $user;
+            // return new AdminResource(Admin::find($_SESSION['user']->id));
+        }
+        return null;
     }
 
     public static function id()

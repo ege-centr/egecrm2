@@ -86,21 +86,18 @@
                         <v-text-field hide-details v-model='dialog_item.time' label='Время занятия' v-mask="'##:##'"></v-text-field>
                       </div>
                       <div class='vertical-inputs__input'>
-                        <v-select hide-details
-                          v-model="dialog_item.cabinet_id"
-                          :items="withNullOption(cabinets)"
-                          item-value='id'
+                        <ClearableSelect v-model="dialog_item.cabinet_id"
                           label="Кабинет"
-                        ></v-select>
+                          :items='cabinets' 
+                          item-text='text'
+                        />
                       </div>
                       <div class='vertical-inputs__input'>
-                        <v-select hide-details
-                          v-model="dialog_item.teacher_id"
-                          :items="withNullOption2(teachers)"
+                        <ClearableSelect v-model="dialog_item.teacher_id"
                           label="Учитель"
-                          item-value='id'
+                          :items='teachers' 
                           item-text='names.abbreviation'
-                        ></v-select>
+                        />
                       </div>
                       <div class='vertical-inputs__input' v-if="dialog_item.status === LESSON_STATUS.CONDUCTED">
                         <v-text-field v-model='dialog_item.price' label='Цена' hide-details></v-text-field>

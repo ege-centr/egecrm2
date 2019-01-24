@@ -82,7 +82,7 @@
 
 <script>
 
-import { DataSelect, AddBtn } from '@/components/UI'
+import { DataSelect } from '@/components/UI'
 import { MODEL_DEFAULTS, PROBLEM_DEFAULTS, ANSWER_DEFAULTS, API_URL } from '@/components/Test'
 import { VueEditor, Quill } from 'vue2-editor'
 import { ImageDrop } from 'quill-image-drop-module'
@@ -90,7 +90,7 @@ import { ImageDrop } from 'quill-image-drop-module'
 Quill.register('modules/imageDrop', ImageDrop)
 
 export default {
-  components: { DataSelect, AddBtn, VueEditor },
+  components: { DataSelect, VueEditor },
   
   data() {
     return {

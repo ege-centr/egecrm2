@@ -10,29 +10,15 @@ use App\Http\Resources\Group\{Collection as GroupCollection, Resource as GroupRe
 
 class GroupsController extends Controller
 {
+    protected $filters = [
+        'multiple' => ['year', 'teacher_id', 'subject_id', 'grade_id'],
+    ];
+
     public function index(Request $request)
     {
         $query = Group::orderBy('id', 'desc');
 
-        if (isset($request->year) && $request->year) {
-            $query->whereIn('year', explode(',', $request->year));
-        }
-
-        if (isset($request->teacher_id) && $request->teacher_id) {
-            $query->whereIn('teacher_id', explode(',', $request->teacher_id));
-        }
-
-        if (isset($request->subject_id) && $request->subject_id) {
-            $query->whereIn('subject_id', explode(',', $request->subject_id));
-        }
-
-        if (isset($request->grade_id) && $request->grade_id) {
-            $query->whereIn('grade_id', explode(',', $request->grade_id));
-        }
-
-        if (isset($request->branch_id) && $request->branch_id) {
-            // $query->where('branch_id', $request->branch_id);
-        }
+        $this->filter($request, $query);
 
         if (isset($request->group_id) && $request->group_id) {
             $query->where('id', '<>', $request->group_id);
