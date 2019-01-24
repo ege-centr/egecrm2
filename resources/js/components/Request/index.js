@@ -3,9 +3,9 @@ import store from '@/store'
 export const API_URL = 'requests'
 
 export const REQUEST_STATUSES = [
-  {text: 'новые', value: 'new'},
-  {text: 'ожидающиеся', value: 'awaiting'},
-  {text: 'выполненные', value: 'finished'}
+  {title: 'новые', id: 'new'},
+  {title: 'ожидающиеся', id: 'awaiting'},
+  {title: 'выполненные', id: 'finished'}
 ]
 
 export const MODEL_DEFAULTS = {

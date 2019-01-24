@@ -25,6 +25,8 @@
                     <v-select hide-details
                       v-model="item.status"
                       :items="REQUEST_STATUSES"
+                      item-text='title'
+                      item-value='id'
                       label="Статус"
                     ></v-select>
                   </div>

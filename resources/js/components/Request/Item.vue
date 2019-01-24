@@ -14,7 +14,7 @@
           <v-flex style='width: 20%' class='ml-3'>
             <div class='mb-3'>
               <div class='item-label'>Статус</div>
-              {{ REQUEST_STATUSES.find(e => e.value == item.status).text }}
+              {{ REQUEST_STATUSES.find(e => e.id == item.status).title }}
             </div>
             <div class='mb-3' v-if='item.responsibleAdmin'>
               <div class='item-label'>Ответственный</div>
