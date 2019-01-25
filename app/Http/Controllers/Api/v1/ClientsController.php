@@ -42,7 +42,7 @@ class ClientsController extends Controller
 
         $new_model->email()->create($request->email);
 
-        return response($new_model->id, 201);
+        return response(new Resource($new_model), 201);
     }
 
     public function show($id)
