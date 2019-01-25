@@ -68,7 +68,7 @@
 <script>
 
 import { API_URL, GROUP_CLIENTS_API_URL, FILTERS } from '@/components/Group'
-import Filters from '@/components/Filters'
+import Filters from '@/components/Filters/Filters'
 
 export default {
   components: { Filters },
