@@ -17,6 +17,8 @@
               <div class='mr-5 pr-5'>
                 <div class='item-label'>Преподаватель</div>
                 {{ item ? item.names.full : 'Не установлен' }}
+                <div class='mt-3 item-label'>Предметы</div>
+                <span v-for='(subject_id, index) in item.subjects_ec' :key='subject_id'>{{ getData('subjects', subject_id).name }}{{ index === item.subjects_ec.length - 1 ? '' : '+' }}</span>
               </div>
             </div>
           </v-flex>

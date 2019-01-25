@@ -19,5 +19,5 @@ export const FILTERS = [
   {label: 'Ответственный', field: 'responsible_admin_id', type: 'select', options: store.state.data.admins, textField: 'name'},
 ]
 
-export const RequestList = require('./List')
+export const RequestItem = require('./Item')
 export const RequestDialog = require('./Dialog')

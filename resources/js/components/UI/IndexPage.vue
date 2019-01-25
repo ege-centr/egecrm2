@@ -6,7 +6,7 @@
       <slot name='buttons'></slot>
     </div>
 
-    <Filters v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' @updated='loadData' />
+    <Filters ref='Filters' v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' @updated='loadData' />
 
     <v-container grid-list-md fluid class="px-0" v-if='collection !== null'>
       <v-layout row wrap class='relative'>
@@ -129,8 +129,6 @@ export default {
   methods: {
     loadData(filters = {}) {
       this.loading = true
-      
-      // axios.get(apiUrl(`${this.apiUrl}?page=${this.page}&show_by=${this.show_by}${filters}`)).then(response => {
       axios.get(apiUrl(this.apiUrl) + queryString({
         page: this.page,
         show_by: this.show_by,
@@ -141,6 +139,11 @@ export default {
         this.collection = response.data
         this.loading = false
       })
+    },
+
+    // reload data with current filters
+    reloadData() {
+      this.$refs.Filters.emit()
     },
 
     getSort() {

@@ -43,7 +43,7 @@
                     <v-text-field hide-details v-model='item.sum' label='Сумма'></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <DatePicker label="Дата" :date="item.date" />
+                    <DatePicker label="Дата" v-model="item.date"  />
                   </div>
                 </div>
               </v-flex>

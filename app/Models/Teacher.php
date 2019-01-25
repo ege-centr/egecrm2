@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use Shared\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Traits\HasName;
 use App\Models\{Payment, Group\Group};
@@ -10,6 +10,8 @@ use App\Models\{Payment, Group\Group};
 class Teacher extends Model
 {
     use HasName;
+
+    protected $commaSeparated = ['subjects_ec'];
 
     protected $connection = 'egerep';
     protected $table = 'tutors';
@@ -32,11 +34,16 @@ class Teacher extends Model
         return Payment::where('entity_type', self::class)->where('entity_id', $this->id)->get();
     }
 
+    public function scopeActive($query)
+    {
+        return $query->where('in_egecentr', 2);
+    }
+
     public static function boot()
     {
         parent::boot();
 
-        static::addGlobalScope('egecentr_active', function(Builder $builder) {
+        static::addGlobalScope('from_egecentr', function(Builder $builder) {
             $builder->where('in_egecentr', '>', 0)->orderByRaw('IF(in_egecentr = 2, 1, 0) desc')->orderByName();
         });
     }

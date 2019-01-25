@@ -69,7 +69,7 @@
           <v-spacer></v-spacer>
           <v-flex class='text-md-right' align-end d-flex>
             <div>
-              <v-btn @click='editClient(client.id)' flat icon color="black" class='ma-0'>
+              <v-btn @click='$refs.ClientDialog.open(client.id)' flat icon color="black" class='ma-0'>
                 <v-icon>more_horiz</v-icon>
               </v-btn>
             </div>
@@ -102,7 +102,24 @@
 
       <v-tabs-items v-model="tabs">
         <v-tab-item>
-            <RequestList :items='client.requests' :phones='client.phones' @updated='loadData' />
+          <IndexPage ref='RequestPage'
+            :pagination='false' 
+            :api-url='REQUEST_API_URL'
+            :invisible-filters="{client_id: client.id}"
+          >
+            <template slot='items' slot-scope='{ items }'>
+              <v-layout row wrap class='relative'>
+                <v-flex xs12 v-for='item in items' :key='item.id'>
+                  <RequestItem :item='item' @openDialog='$refs.RequestDialog.open(item.id)' />
+                </v-flex>
+              </v-layout>
+            </template>
+            <template slot='buttons-bottom'>
+              <AddBtn @click.native='$refs.RequestDialog.open(null, {
+                phones: client.phones,
+              })' />
+            </template>
+          </IndexPage>
         </v-tab-item>
         <v-tab-item>
           <IndexPage ref='ContractPage'
@@ -119,10 +136,6 @@
               <AddBtn @click.native='$refs.ContractDialog.open(null, {client_id: client.id})' />
             </template>
           </IndexPage>
-          <!-- <ContractList
-            :items='client.contracts'
-            :client-id='client.id'
-          /> -->
         </v-tab-item>
         <v-tab-item>
           <IndexPage ref='GroupPage'
@@ -136,7 +149,6 @@
               <GroupList :items='items' />
             </template>
           </IndexPage>
-          <!-- <GroupList :items='client.groups' /> -->
           <GroupNotAssignedList
             :client='client' 
             @moved='loadData' 
@@ -177,14 +189,14 @@
       </v-tabs-items>
     </div>
     <ClientDialog ref='ClientDialog' />
-    <PaymentDialog ref='PaymentDialog' />
-    <ContractDialog ref='ContractDialog' @updated.native='$refs.ContractPage.loadData' />
+    <PaymentDialog ref='PaymentDialog' v-if='$refs.PaymentPage' @updated='$refs.PaymentPage.reloadData' />
+    <RequestDialog ref='RequestDialog' v-if='$refs.RequestPage' @updated='$refs.RequestPage.loadData' />
+    <ContractDialog ref='ContractDialog' v-if='$refs.ContractPage' @updated='$refs.ContractPage.reloadData' />
   </div>
 </template>
 
 <script>
 
-import RequestList from '@/components/Request/List'
 import Comments from '@/components/Comments'
 import { 
   API_URL as PAYMENT_API_URL, 
@@ -211,6 +223,11 @@ import {
   ContractList
 } from '@/components/Contract'
 import { API_URL, CLASS_NAME, GroupNotAssignedList, ClientDialog } from '@/components/Client'
+import { 
+  RequestItem,
+  RequestDialog,
+  API_URL as REQUEST_API_URL
+} from '@/components/Request'
 
 export default {
   props: ['clientId'],
@@ -225,6 +242,7 @@ export default {
       GROUP_FILTERS,
       PAYMENT_FILTERS,
       CONTRACT_FILTERS,
+      REQUEST_API_URL,
       tabs: null,
       loading: true,
       client: null,
@@ -232,7 +250,7 @@ export default {
   },
 
   components: { 
-    RequestList, Comments, ContractList, GroupList, GroupNotAssignedList, 
+    RequestDialog, RequestItem, Comments, ContractList, GroupList, GroupNotAssignedList, 
     PaymentList, ClientDialog, PhoneList, BranchList, EmailShow, TestAdminClientList,
     IndexPage, ContractDialog, PaymentDialog,
   },
@@ -253,14 +271,10 @@ export default {
 
   methods: {
     loadData() {
-      axios.get(apiUrl(`${API_URL}/${this.clientId || this.$route.params.id}`)).then(r => {
+      axios.get(apiUrl(API_URL, (this.clientId || this.$route.params.id))).then(r => {
         this.client = r.data
         this.loading = false
       })
-    },
-
-    editClient(id) {
-      this.$refs.ClientDialog.open(id)
     },
   }
 }

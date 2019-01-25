@@ -10,7 +10,9 @@ class Collection extends JsonResource
     {
         return [
             'id' => $this->id,
-            'names' => $this->names
+            'in_egecentr' => $this->in_egecentr,
+            'subjects_ec' => $this->subjects_ec,
+            'names' => $this->names,
         ];
     }
 }

@@ -38,7 +38,7 @@
                         ></v-select>
                       </div>
                       <div class='vertical-inputs__input'>
-                        <DatePicker label="Дата" :date="dialog_item.date" />
+                        <DatePicker label="Дата" v-model="dialog_item.date" />
                       </div>
                       <div class='vertical-inputs__input' v-show='dialog_item.type === TYPE_EXAM'>
                         <DataSelect v-model='dialog_item.subject_id' type='subjects' />

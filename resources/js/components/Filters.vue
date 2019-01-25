@@ -55,7 +55,7 @@
             ></v-text-field>
           </div>
           <div v-if="item.type === 'date'">
-            <DatePicker label='Дата' @updated='(v) => value = v' />
+            <DatePicker label='Дата' v-model='value' />
           </div>
         </v-card-text>
         <v-card-actions>

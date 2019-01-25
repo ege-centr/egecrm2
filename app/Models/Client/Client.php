@@ -5,7 +5,6 @@ namespace App\Models\Client;
 use Shared\Model;
 use App\Interfaces\UserInterface;
 use App\Traits\{HasPhones, HasEmail, HasPhoto, HasName, Commentable};
-use App\Http\Resources\Request\Collection as RequestCollection;
 use App\Http\Resources\Teacher\Collection as TeacherResource;
 use App\Models\{Request, Phone, Payment, Teacher, Contract\Contract, Group\Group, Group\GroupClient};
 
@@ -55,7 +54,7 @@ class Client extends Model implements UserInterface
         return true;
     }
 
-    public function getRequests()
+    public function requests()
     {
         $request_ids = [];
         foreach($this->phones as $phone) {
@@ -64,11 +63,9 @@ class Client extends Model implements UserInterface
                 $request_ids = array_merge($request_ids, $ids);
             }
         }
-        $requests = Request::with('responsibleAdmin')
+        return Request::with('responsibleAdmin')
             ->whereIn('id', $request_ids)
-            ->orderBy('id', 'desc')
-            ->get();
-        return RequestCollection::collection($requests);
+            ->orderBy('id', 'desc');
     }
 
     public function getHeadTeacher()

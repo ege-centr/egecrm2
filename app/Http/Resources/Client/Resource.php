@@ -14,7 +14,7 @@ class Resource extends JsonResource
         return array_merge(parent::toArray($request), [
             'phones' => $this->phones,
             'names' => $this->names,
-            'requests' => $this->getRequests(),
+            // 'requests' => $this->getRequests(),
             // 'payments' => $this->payments,
             'groups' => $this->groups,
             'contracts' => ContractResource::collection($this->contracts),

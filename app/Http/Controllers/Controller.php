@@ -71,4 +71,12 @@ class Controller extends BaseController
             }
         });
     }
+
+    /**
+     * Поиск в comma-separated values
+     */
+    private function filterFindInSet(string $field, $value, Builder &$query)
+    {
+        $query->whereRaw("FIND_IN_SET({$value}, {$field})");
+    }
 }

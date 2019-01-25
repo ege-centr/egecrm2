@@ -44,16 +44,11 @@ export default {
     async storeOrUpdate() {
       this.saving = true
       if (this.item.id) {
-        await axios.put(apiUrl(this.API_URL, this.item.id), this.item).then(r => {
-          this.item = r.data
-          this.$emit('updated', this.item)
-        })
+        await axios.put(apiUrl(this.API_URL, this.item.id), this.item).then(r => this.item = r.data)
       } else {
-        await axios.post(apiUrl(this.API_URL), this.item).then(r => {
-          this.item = r.data
-          this.$emit('updated', this.item)
-        })
+        await axios.post(apiUrl(this.API_URL), this.item).then(r => this.item = r.data)
       }
+      this.$emit('updated', this.item)
       this.dialog = false
       this.waitForDialogClose(() => this.saving = false)
     }

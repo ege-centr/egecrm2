@@ -33,7 +33,7 @@
             </div>
             <div class='mb-3'>
               <div class='item-label'>Реквизиты заявки</div>
-              {{ item.created_user_id ? getData('users', item.created_user_id).login : 'system' }} {{ item.created_at | date-time }}
+              {{ item.created_admin_id ? getData('admins', item.created_admin_id).name : 'system' }} {{ item.created_at | date-time }}
             </div>
             <div class='mb-3'>
               <div class='item-label'>Клиенты</div>

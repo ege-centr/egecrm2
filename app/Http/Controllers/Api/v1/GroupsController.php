@@ -37,7 +37,9 @@ class GroupsController extends Controller
 
     public function store(Request $request)
     {
-        $model = Group::create($request->input());
+        return new GroupResource(
+            Group::create($request->input())
+        );
     }
 
     public function show($id)

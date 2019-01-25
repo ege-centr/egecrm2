@@ -1,7 +1,7 @@
 ---
 to: resources/js/components/<%= Name %>/Dialog.vue
 ---
-<template lang="html">
+<template>
   <v-layout row justify-center>
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card>

@@ -85,10 +85,10 @@
                     <v-text-field v-model="item.representative.code" label="Код подразделения" hide-details></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <DatePicker :date='item.representative.birthday' label="Дата рождения" />
+                    <DatePicker v-model='item.representative.birthday' label="Дата рождения" />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <DatePicker :date='item.representative.issued_date' label="Дата выдачи" />
+                    <DatePicker v-model='item.representative.issued_date' label="Дата выдачи" />
                   </div>
                   <div class='vertical-inputs__input vertical-inputs__input_wide'>
                     <v-text-field v-model="item.representative.issued_by" label="Выдан" hide-details></v-text-field>
@@ -168,9 +168,9 @@ export default {
           this.item = r.data
         })
       } else {
-        // await axios.post(apiUrl('clients'), this.client).then(r => {
-        //   this.$router.push({ name: 'ClientEdit', params: { id: r.data }})
-        // })
+        await axios.post(apiUrl('clients'), this.item).then(r => {
+          this.$router.push({ name: 'ClientShow', params: { id: r.data.id }})
+        })
       }
       this.saving = false
       this.dialog = false

@@ -1,60 +1,37 @@
-<template lang="html">
+<template>
   <div>
-    <Loader v-if='teachers === null' />
-    <v-container grid-list-md fluid class="px-0" v-else>
-      <v-layout row wrap class='relative'>
-        <v-flex xs12>
-          <Filters :items='FILTERS' @updated='loadData' class="mb-3" />
-          <v-data-table :items='teachers' item-key='id' hide-headers hide-actions>
+    <IndexPage :api-url='API_URL' :filters='FILTERS' :pagination='false'>
+      <template slot='items' slot-scope='{ items }'>
+        <v-data-table :items='items' item-key='id' hide-headers hide-actions>
             <template slot="items" slot-scope="{ item }">
-              <td>
+              <td width='400'>
                 <router-link :to="{ name: 'TeacherShow', params: { id: item.id }}">
                   {{ item.names.full }}
                 </router-link>
               </td>
+              <td>
+                <span v-for='(subject_id, index) in item.subjects_ec' :key='subject_id'>{{ getData('subjects', subject_id).three_letters }}{{ index === item.subjects_ec.length - 1 ? '' : '+' }}</span>
+              </td>
             </template>
           </v-data-table>
-        </v-flex>
-      </v-layout>
-    </v-container>
+      </template>
+    </IndexPage>
   </div>
 </template>
 
 <script>
 
+import { IndexPage } from '@/components/UI'
 import { API_URL, FILTERS } from '@/components/Teacher'
-import Filters from '@/components/Filters'
 
 export default {
-  components: { Filters },
-  
+  components: { IndexPage },
+
   data() {
     return {
+      API_URL,
       FILTERS,
-      page: 1,
-      loading: false,
-      teachers: null
     }
   },
-
-  created() {
-    this.loadData()
-  },
-
-  watch: {
-    page() {
-        this.loadData()
-    }
-  },
-
-  methods: {
-    loadData(filters = '') {
-      this.loading = true
-      axios.get(apiUrl(`${API_URL}?page=${this.page}${filters}`)).then(response => {
-        this.teachers = response.data
-        this.loading = false
-      })
-    }
-  }
 }
 </script>

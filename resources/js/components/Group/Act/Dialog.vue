@@ -1,33 +1,28 @@
 <template>
   <v-layout row justify-center>
-    <Print v-if='item && item.id' ref='Print' :params="{type: 'act', group_id: groupId, id: item.id}" />
-    <!-- <v-dialog v-model="dialog" transition="dialog-bottom-transition" content-class='v-dialog--fullscreen halfscreen-dialog'> -->
+    <Print v-if='item && item.id' ref='Print' :params="{type: 'act', group_id: item.group_id, id: item.id}" />
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card>
         <v-toolbar dark color="primary">
           <v-btn icon dark @click.native="dialog = false">
             <v-icon>close</v-icon>
           </v-btn>
-          <v-toolbar-title>{{ (item === null || item.id) ? 'Редактирование' : 'Добавление' }} акта</v-toolbar-title>
+          <v-toolbar-title>{{ edit_mode ? 'Редактирование' : 'Добавление' }} акта</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn v-if='item && item.id' dark flat @click.native="destroy" :loading='destroying'>Удалить</v-btn>
+            <v-btn dark flat v-if='edit_mode' @click.native="destroy" :loading='destroying'>Удалить</v-btn>
             <v-btn v-if='item && item.id' dark flat @click.native="$refs.Print.open()">Сгенерировать</v-btn>
-            <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ (item === null || item.id) ? 'Сохранить' : 'Добавить' }}</v-btn>
+            <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ edit_mode ? 'Сохранить' : 'Добавить' }}</v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-card-text class='relative'>
+        <v-card-text>
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
           <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
-            <v-layout wrap>
+            <v-layout>
               <v-flex md12>
                 <div class='vertical-inputs'>
                   <div class='vertical-inputs__input'>
-                    <ClearableSelect v-model="item.teacher_id"
-                      label="Учитель"
-                      :items='teachers' 
-                      item-text='names.abbreviation'
-                    />
+                    <TeacherSelect v-model="item.teacher_id" />
                   </div>
                   <div class='vertical-inputs__input'>
                     <v-text-field v-model='item.lesson_count' label='Количество занятий' hide-details v-mask="'####'"></v-text-field>
@@ -36,7 +31,7 @@
                     <v-text-field v-model='item.sum' label='Сумма' hide-details v-mask="'######'"></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <DatePicker label="Дата занятия" :date='item.date' />
+                    <DatePicker label="Дата занятия" v-model='item.date' />
                   </div>
                 </div>
               </v-flex>
@@ -49,75 +44,26 @@
 </template>
 
 <script>
-import { GROUP_ACTS_API_URL } from '@/components/Group'
+
+import { API_URL, MODEL_DEFAULTS } from './'
+import { DialogMixin } from '@/mixins'
 import Print from '@/components/Print'
-import { DatePicker } from '@/components/UI'
+import { DatePicker, TeacherSelect } from '@/components/UI'
 
 export default {
-  props: {
-    groupId: {
-      type: Number,
-      required: true,
-    },
-  },
+  mixins: [ DialogMixin ],
+
+  components: { Print, DatePicker, TeacherSelect },
 
   data() {
     return {
-      loading: true,
-      saving: false,
-      item: null,
-      dialog: false,
-
-      teachers: [],
-      loading: true,
-      saving: false,
-      destroying: false,
+      API_URL,
+      MODEL_DEFAULTS,
     }
   },
-  
-  components: { Print, DatePicker },
 
   methods: {
-    open(item_id = null) {
-      this.item = null
-      this.dialog = true
-      if (item_id === null) {
-        this.item = {group_id: this.groupId}
-      }
-      this.loadData(item_id)
-    },
 
-    async loadData(item_id) {
-      await axios.get(apiUrl('teachers')).then(r => {
-        this.teachers = r.data
-      })
-      if (item_id) {
-        axios.get(apiUrl(GROUP_ACTS_API_URL, item_id)).then(r => {
-          this.item = r.data
-        })
-      }
-      this.loading = false
-    },
-
-    async storeOrUpdate() {
-      this.saving = true
-      if (this.item.id) {
-        await axios.put(apiUrl(GROUP_ACTS_API_URL, this.item.id), this.item)
-      } else {
-        await axios.post(apiUrl(GROUP_ACTS_API_URL), this.item)
-      }
-      this.$emit('updated')
-      this.saving = false
-      this.dialog = false
-    },
-
-    async destroy() {
-      this.destroying = true
-      await axios.delete(apiUrl(GROUP_ACTS_API_URL, this.item.id))
-      this.$emit('updated')
-      this.destroying = false
-      this.dialog = false
-    },
-  },
+  }
 }
 </script>

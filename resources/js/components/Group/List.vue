@@ -12,7 +12,9 @@
         </router-link>
       </td>
       <td>
-        {{ getData('subjects', item.subject_id).three_letters }}–{{ item.grade_id }}
+        <span v-if='item.subject_id'>
+          {{ getData('subjects', item.subject_id).three_letters }}–{{ item.grade_id }}
+        </span>
       </td>
       <td>
         <span v-if="item.cabinet">

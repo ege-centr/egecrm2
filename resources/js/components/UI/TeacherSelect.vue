@@ -2,38 +2,33 @@
   <v-select hide-details ref='select'
     :value='value'
     @input="value => $emit('input', value)"
-    :items="items"
+    :items="$store.state.data.teachers"
     :label="label"
     item-value='id'
-    :item-text='itemText'
+    item-text='names.abbreviation'
   >
     <v-list-tile slot='prepend-item' @click='clear'>
       <v-list-tile-title class='grey--text'>
         не установлено
       </v-list-tile-title>
     </v-list-tile>
+    <template slot='item' slot-scope='{ item }' @click='value = item.id'>
+      <div :class="{'grey--text': item.in_egecentr !== 2}">{{ item.names.abbreviation }}</div>
+    </template>
   </v-select>
 </template>
 
 <script>
 export default {
   props: {
-    items: {
-      type: Array,
-      required: true,
-    },
     label: {
       type: String,
-      required: true,
+      required: false,
+      default: 'Учитель',
     },
     value: {
       required: true,
     },
-    itemText: {
-      type: String,
-      required: false,
-      default: 'title',
-    }
   },
 
   methods: {

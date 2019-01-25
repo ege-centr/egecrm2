@@ -14,8 +14,7 @@ class Resource extends JsonResource
             'id' => $this->id,
             'names' => $this->names,
             'photo_url' => $this->photo_url,
-            'groups' => GroupCollection::collection($this->groups),
-            'payments' => $this->payments,
+            'subjects_ec' => $this->subjects_ec,
         ];
     }
 }

@@ -9,9 +9,15 @@ use App\Http\Resources\Teacher\{Collection as TeacherCollection, Resource as Tea
 
 class TeachersController extends Controller
 {
-    public function index()
+    protected $filters = [
+        'findInSet' => ['subjects_ec']
+    ];
+
+    public function index(Request $request)
     {
-        return TeacherCollection::collection(Teacher::all());
+        $query = Teacher::active();
+        $this->filter($request, $query);
+        return TeacherCollection::collection($this->showAll($query));
     }
 
     public function store(Request $request)

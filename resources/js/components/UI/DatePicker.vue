@@ -25,15 +25,17 @@
 
 <script>
 export default {
-  props: ['date', 'label'],
+  props: ['value', 'label'],
 
   data() {
     return {
+      date: null,
       dateFormatted: null,
     }
   },
 
   created() {
+    this.date = this.value
     this.dateFormatted = this.formatDate()
   },
   
@@ -42,7 +44,6 @@ export default {
       if (!this.date) {
         return null
       }
-      // colorLog(`${date} => ` + moment(date).format('DD.MM.YYYY'), 'DarkOliveGreen')
       return moment(this.date).format('DD.MM.YYYY')
     },
 
@@ -59,9 +60,8 @@ export default {
   watch: {
     date(val) {
       this.dateFormatted = this.formatDate()
-      // TODO: переделать на v-model
       if (val !== undefined) {
-        this.$emit('updated', this.date)
+        this.$emit('input', this.date)
       }
     }
   }

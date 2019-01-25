@@ -20,25 +20,13 @@
               <v-flex md12>
                 <div class='vertical-inputs'>
                   <div class='vertical-inputs__input'>
-                    <ClearableSelect v-model="item.teacher_id"
-                      label="Учитель"
-                      item-text='names.abbreviation'
-                      :items='$store.state.data.teachers' />
+                    <TeacherSelect v-model='item.teacher_id' />
                   </div>
                   <div class='vertical-inputs__input'>
-                     <ClearableSelect v-model="item.head_teacher_id"
-                        label="Классный руководитель"
-                        item-text='names.abbreviation'
-                        :items='$store.state.data.teachers' />
+                    <TeacherSelect v-model='item.head_teacher_id' label="Классный руководитель" />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <GradeAndYear ref='GradeAndYear' :item='item' />
-                  </div>
-                  <div class='vertical-inputs__input'>
-                    <ClearableSelect v-model="item.head_teacher_id"
-                        label="Классный руководитель"
-                        item-text='names.abbreviation'
-                        :items='$store.state.data.teachers' />
+                    <GradeAndYear ref='GradeAndYear' :item='item' label-type='GRADE_AND_YEAR' />
                   </div>
                   <div class='vertical-inputs__input'>
                     <ClearableSelect v-model="item.cabinet_id"
@@ -81,9 +69,10 @@
 <script>
 import { MODEL_DEFAULTS, API_URL } from '@/components/Group'
 import GradeAndYear from '@/components/GradeAndYear'
+import { TeacherSelect } from '@/components/UI'
 
 export default {
-  components: { GradeAndYear },
+  components: { GradeAndYear, TeacherSelect },
 
   data() {
     return {
@@ -132,7 +121,7 @@ export default {
         })
       } else {
         await axios.post(apiUrl(API_URL), this.item).then(r => {
-          this.$router.push({ name: 'GroupEdit', params: { id: r.data }})
+          this.$router.push({ name: 'GroupShow', params: { id: r.data.id }})
         })
       }
       this.dialog = false

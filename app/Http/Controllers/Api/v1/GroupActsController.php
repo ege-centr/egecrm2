@@ -9,11 +9,16 @@ use App\Http\Resources\Group\ActResource;
 
 class GroupActsController extends Controller
 {
+    protected $filters = [
+        'equals' => ['group_id'],
+    ];
+
     public function index(Request $request)
     {
-        return ActResource::collection(GroupAct::where('group_id', $request->group_id)
-            ->orderBy('id', 'desc')
-            ->get()
+        $query = GroupAct::orderBy('id', 'desc');
+        $this->filter($request, $query);
+        return ActResource::collection(
+            $this->showAll($query)
         );
     }
 

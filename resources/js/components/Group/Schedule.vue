@@ -79,7 +79,7 @@
                   <v-flex md12>
                     <div class='vertical-inputs'>
                       <div class='vertical-inputs__input'>
-                        <DatePicker label="Дата занятия" :item='dialog_item.date' />
+                        <DatePicker label="Дата занятия" v-model='dialog_item.date' />
                       </div>
                       <div class='vertical-inputs__input'>
                         <v-text-field hide-details v-model='dialog_item.time' label='Время занятия' v-mask="'##:##'"></v-text-field>
@@ -92,12 +92,7 @@
                         />
                       </div>
                       <div class='vertical-inputs__input'>
-                        <DataSelect type='teachers' v-model="dialog_item.teacher_id" />
-                        <!-- <ClearableSelect v-model="dialog_item.teacher_id"
-                          label="Учитель"
-                          :items='teachers' 
-                          item-text='names.abbreviation'
-                        /> -->
+                        <TeacherSelect v-model="dialog_item.teacher_id" />
                       </div>
                       <div class='vertical-inputs__input' v-if="dialog_item.status === LESSON_STATUS.CONDUCTED">
                         <v-text-field v-model='dialog_item.price' label='Цена' hide-details></v-text-field>
@@ -205,12 +200,12 @@
 
 import Calendar from '@/components/Calendar/Calendar'
 import { LESSON_STATUS } from '@/components/Lesson'
-import { DatePicker, DataSelect } from '@/components/UI'
+import { DatePicker, DataSelect, TeacherSelect } from '@/components/UI'
 
 const API_URL = 'lessons'
 
 export default {
-  components: { Calendar, DatePicker, DataSelect },
+  components: { Calendar, DatePicker, DataSelect, TeacherSelect },
 
   props: {
     group: {

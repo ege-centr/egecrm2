@@ -64,7 +64,7 @@
                       />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <DatePicker label="Дата" :date='item.date' />
+                    <DatePicker label="Дата" v-model='item.date' />
                   </div>
                 </div>
 
@@ -81,7 +81,7 @@
                       <v-text-field hide-details v-model="payment.lessons" label="Предметов"></v-text-field>
                     </v-flex>
                     <v-flex>
-                      <DatePicker label="Дата" :date='payment.date' />
+                      <DatePicker label="Дата" v-model='payment.date' />
                     </v-flex>
                     <v-btn flat icon color="red" class='ma-0 mr-3' @click='item.payments.splice(index, 1)'>
                       <v-icon>remove</v-icon>

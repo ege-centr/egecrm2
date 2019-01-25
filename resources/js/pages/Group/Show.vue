@@ -20,7 +20,7 @@
               </div>
               <div class='mr-5 pr-5'>
                 <div class='item-label'>Предмет и класс</div>
-                <span class='text-capitalize'>{{ getData('subjects', item.subject_id).name }}</span>
+                <span v-if='item.subject_id' class='text-capitalize'>{{ getData('subjects', item.subject_id).name }}</span>
                 <span v-if='item.grade_id'>, {{ getData('grades', item.grade_id).title }}</span>
                 <div class='mt-3 item-label'>Расписание</div>
                 <span>{{ item.schedule.label }}</span>
@@ -127,11 +127,20 @@
           </v-card>
         </v-tab-item>
         <v-tab-item>
-          <GroupActList :group-id='item.id' />
+          <IndexPage :api-url='GROUP_ACTS_API_URL' :invisible-filters='{group_id: item.id}' :pagination='false'>
+            <template slot='items' slot-scope='{ items }'>
+              <GroupActList :items='items' />
+            </template>
+            <template slot='buttons-bottom'>
+              <AddBtn @click.native='$refs.GroupActDialog.open(null, {group_id: item.id})' />
+            </template>
+          </IndexPage>
+          <!-- <GroupActList :group-id='item.id' /> -->
         </v-tab-item>
       </v-tabs-items>
     </div>
     <GroupDialog ref='GroupDialog' />
+    <GroupActDialog ref='GroupActDialog' />
     <MoveClientDialog ref='MoveClientDialog' @moved='removeClientFromGroup' />
   </div>
 </template>
@@ -143,20 +152,26 @@ import {
   GROUP_CLIENTS_API_URL, 
   LEVELS, 
   GroupSchedule, 
-  MoveClientDialog,
-  GroupActList
+  MoveClientDialog
 } from '@/components/Group'
 import Bars from '@/components/Group/Bars'
 import Visits from '@/components/Group/Visits'
 import GroupDialog from '@/components/Group/Dialog'
+import { IndexPage } from '@/components/UI'
+import { 
+  API_URL as GROUP_ACTS_API_URL,
+  GroupActDialog
+} from '@/components/Group/Act'
+import GroupActList from '@/components/Group/Act/List'
 
 
 export default {
-  components: { GroupSchedule, Bars, Visits, GroupDialog, MoveClientDialog, GroupActList },
+  components: { IndexPage, GroupSchedule, Bars, Visits, GroupDialog, MoveClientDialog, GroupActList, GroupActDialog },
 
   data() {
     return {
       LEVELS,
+      GROUP_ACTS_API_URL,
       loading: true,
       item: null,
       tabs: null,
