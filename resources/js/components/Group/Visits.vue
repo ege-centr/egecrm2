@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="visits__items" v-for='client in clients' :key='client.id'>
-        <div class='text-md-left'>
+        <div>
           <router-link :to="{ name: 'ClientShow', params: { id: client.id } }">{{ client.names.short }}</router-link>
         </div>
         <div v-for='(lesson, index) in lessons' :key='lesson.id' :class="getClass(index)">
@@ -19,7 +19,7 @@
         </div>
       </div>
       <div class="visits__items" v-for="(teacher, index) in teachers" :key="teacher.id" :class="{'first-teacher-item': index === 0}">
-        <div class='text-md-left'>
+        <div>
           <router-link :to="{ name: 'TeacherShow', params: { id: teacher.id } }">{{ teacher.names.abbreviation }}</router-link>
         </div>
         <div v-for='(lesson, index) in lessons' :key='lesson.id' :class="getClass(index)">
@@ -122,15 +122,18 @@ export default {
   $cell-width: 25px;
   .visits {
     font-size: 12px;
+    overflow-x: scroll;
     & > div {
       display: flex;
       text-align: center;
       & > div {
-        width: $cell-width;
+        min-width: $cell-width;
         border-right: 1px solid $border-color;
         border-bottom: 1px solid $border-color;
         &:first-child {
           width: 250px;
+          min-width: 250px;
+          text-align: left;
         }
         &.is-cancelled {
           background: $border-color;
@@ -139,6 +142,7 @@ export default {
           margin-left: #{$cell-width + 2px};
           border-left: 1px solid $border-color;
           width: #{$cell-width + 2px};
+          min-width: #{$cell-width + 2px};
         }
       }
     }
