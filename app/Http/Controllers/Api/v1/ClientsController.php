@@ -10,7 +10,8 @@ use App\Http\Resources\Client\{Resource, Collection};
 class ClientsController extends Controller
 {
     protected $filters = [
-        'equals' => ['client_id'],
+        // FIXME: убрать client_id?
+        'equals' => ['id', 'client_id'],
         'multiple' => ['grade_id'],
     ];
 

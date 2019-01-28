@@ -119,10 +119,12 @@
                   <v-flex md12 class='headline'>
                     Занятие
                   </v-flex>
+                  
                   <v-flex md12>
                     <v-data-table v-if='items.length'
                       hide-actions
                       :headers="[
+                        { text: '', sortable: false },
                         { text: 'Ученик', sortable: false },
                         { text: 'Отсутствовал', sortable: false }, 
                         { text: 'Опоздание', sortable: false },
@@ -132,8 +134,11 @@
                       :items='dialog_item.clientLessons'
                     >
                       <template slot="items" slot-scope="{ item }">
+                        <td width='30' class='px-0 text-md-center' @click='destroyClientLesson(item.id)'>
+                          <v-icon class='pointer'>close</v-icon>
+                        </td>
                         <td width='200'>
-                          {{ item.client.names.short }}
+                          {{ item.client ? item.client.names.short : 'ученик не указан' }}
                         </td>
                         <td width='150'>
                           <v-switch color='red' v-model="item.is_absent" hide-details></v-switch>
@@ -185,13 +190,48 @@
                       </template>
                     </v-data-table>
                   </v-flex>
+                  <v-flex md12>
+                    <AddBtn label='добавить ученика' @click.native='addClientDialog' />
+                  </v-flex>
                 </v-layout>
               </v-container>
             </v-card-text>
           </v-card>
         </v-dialog>
       </v-layout>
-
+       <v-layout row justify-center>
+        <v-dialog v-model="add_client.dialog" max-width="300px">
+          <v-card>
+            <v-card-text>
+              <v-container grid-list-xl class="pa-0 ma-0" fluid>
+                <v-layout wrap>
+                  <v-flex md12>
+                    <div class='vertical-inputs'>
+                      <div class='vertical-inputs__input mb-0'>
+                        <v-text-field
+                          @input='addClientInput'
+                          :loading='add_client.loading'
+                          :hint='add_client.client === null ? null : add_client.client.names.short'
+                          v-model='add_client.input' 
+                          v-mask="'######'" 
+                          label='ID ученика'></v-text-field>
+                        </div>
+                    </div>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+            <v-card-actions class='justify-center'>
+              <v-btn color='primary' class='ma-0' 
+                @click='addClientLesson' 
+                :loading='add_client.adding' 
+                :disabled='add_client.client === null'>
+                добавить
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-layout>
     </div>
   </div>
 </template>
@@ -201,6 +241,7 @@
 import Calendar from '@/components/Calendar/Calendar'
 import { LESSON_STATUS } from '@/components/Lesson'
 import { DatePicker, DataSelect, TeacherSelect } from '@/components/UI'
+import { API_URL as CLIENTS_API_URL } from '@/components/Client'
 
 const API_URL = 'lessons'
 
@@ -218,6 +259,16 @@ export default {
       LESSON_STATUS,
       edit_lesson_tab: true,
       dialog: false,
+      
+      // TODO: мб вынести?
+      add_client: {
+        input: '',
+        dialog: false,
+        loading: false,
+        client: null,
+        adding: false,
+      },
+
       items: null,
       saving: false,
       destroying: false,
@@ -297,6 +348,45 @@ export default {
 
     toggleCancelled(isCancelled) {
       this.dialog_item.status = isCancelled ? LESSON_STATUS.CANCELLED : LESSON_STATUS.PLANNED
+    },
+
+    addClientInput: _.debounce(function() {
+      if (this.add_client.input === '') {
+        this.add_client.client = null
+      } else {
+        this.add_client.loading = true
+        this.add_client.client = null
+        axios.get(apiUrl(CLIENTS_API_URL) + queryString({id: this.add_client.input})).then(r => {
+          if (r.data.meta.total > 0) {
+            this.add_client.client = r.data.data[0]
+          }
+          this.add_client.loading = false
+        })
+      }
+    }, 300),
+
+    addClientDialog() {
+      this.add_client = { ...this.add_client, ...{dialog: true, input: '', client: null}}
+    },
+
+    addClientLesson() {
+      this.add_client.adding = true
+      axios.post(apiUrl('client-lessons'), {
+        client_id: this.add_client.client.id,
+        lesson_id: this.dialog_item.id,
+      }).then(r => {
+        this.dialog_item.clientLessons.push(r.data)
+        this.add_client.dialog = false
+        this.add_client.adding = false
+      })
+    },
+
+    destroyClientLesson(lesson_id) {
+      this.dialog_item.clientLessons.splice(
+        this.dialog_item.clientLessons.findIndex(e => e.id === lesson_id),
+        1
+      )
+      axios.delete(apiUrl('client-lessons', lesson_id))
     },
 
     async fillSchedule() {

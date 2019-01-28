@@ -1,40 +1,32 @@
 <template>
   <div>
-    <table class="table-journal">
-      <thead>
-        <tr>
-          <th style="border: none !important"></th>
-          <th v-for='(lesson, index) in lessons' :key='lesson.id' style="height: 70px; position: relative" :class="getTdClass(index)">
-            <span v-if='lesson.status === LESSON_STATUS.CANCELLED' style='left: -17px'>отменено</span>
-            <span v-else>{{ lesson.date | date }}</span>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for='client in clients' :key='client.id'>
-          <td class='contains-name'>
-            <router-link :to="{ name: 'ClientShow', params: { id: client.id } }">{{ client.names.short }}</router-link>
-          </td>
-          <td v-for='(lesson, index) in lessons' :key='lesson.id' :class="getTdClass(index)">
-            <SmallCircle v-if='getClientLesson(lesson, client)' 
-              :class-name='getCircleClass(lesson, client)' 
-              :title="getClientLesson(lesson, client).late > 0 ? 'опоздал на ' + getClientLesson(lesson, client).late + ' мин' : ''"
-            />
-          </td>
-        </tr>
-        <tr>
-          <td colspan='1000'></td>
-        </tr>
-        <tr v-for="teacher in teachers" :key="teacher.id">
-          <td class='contains-name'>
-            <router-link :to="{ name: 'TeacherShow', params: { id: teacher.id } }">{{ teacher.names.abbreviation }}</router-link>
-          </td>
-          <td v-for='(lesson, index) in lessons' :key='lesson.id' :class="getTdClass(index)">
-            <SmallCircle v-if='lesson.status === LESSON_STATUS.CONDUCTED && lesson.teacher_id === teacher.id' class-name='green' />
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class='visits'>
+      <div class='visits__dates'>
+        <div></div>
+        <div v-for='(lesson, index) in lessons' :key='lesson.id' :class="getClass(index)">
+          <span>{{ lesson.date | date }}</span>
+        </div>
+      </div>
+      <div class="visits__items" v-for='client in clients' :key='client.id'>
+        <div class='text-md-left'>
+          <router-link :to="{ name: 'ClientShow', params: { id: client.id } }">{{ client.names.short }}</router-link>
+        </div>
+        <div v-for='(lesson, index) in lessons' :key='lesson.id' :class="getClass(index)">
+          <SmallCircle v-if='getClientLesson(lesson, client)' 
+            :class-name='getCircleClass(lesson, client)' 
+            :title="getClientLesson(lesson, client).late > 0 ? 'опоздал на ' + getClientLesson(lesson, client).late + ' мин' : ''"
+          />
+        </div>
+      </div>
+      <div class="visits__items" v-for="(teacher, index) in teachers" :key="teacher.id" :class="{'first-teacher-item': index === 0}">
+        <div class='text-md-left'>
+          <router-link :to="{ name: 'TeacherShow', params: { id: teacher.id } }">{{ teacher.names.abbreviation }}</router-link>
+        </div>
+        <div v-for='(lesson, index) in lessons' :key='lesson.id' :class="getClass(index)">
+          <SmallCircle v-if='lesson.status === LESSON_STATUS.CONDUCTED && lesson.teacher_id === teacher.id' class-name='green' />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -76,7 +68,7 @@ export default {
       return 'green'
     },
 
-    getTdClass(index) {
+    getClass(index) {
       return {
         // 'odd-month': this.oddMonth(lesson),
         'is-cancelled': this.lessons[index].status === LESSON_STATUS.CANCELLED,
@@ -113,85 +105,67 @@ export default {
     teachers() {
       const teachers = []
       this.lessons.forEach(lesson => {
-        if (teachers.findIndex(e => e.id === lesson.teacher.id) === -1) {
+        if (lesson.teacher !== null && teachers.findIndex(e => e.id === lesson.teacher.id) === -1) {
           teachers.push(lesson.teacher)
         }
       })
       return teachers
-    }
+    },
+
+    
   },
 }
 </script>
 
 <style lang="scss" scoped>
-.table-journal {
-	width: auto !important;
-  border-spacing: 0;
-  border-collapse: collapse;
-  font-size: 12px;
-  & tr {
-    & td, & th {
-      width: 26px;
+  $border-color: #ddd;
+  $cell-width: 25px;
+  .visits {
+    font-size: 12px;
+    & > div {
+      display: flex;
+      text-align: center;
+      & > div {
+        width: $cell-width;
+        border-right: 1px solid $border-color;
+        border-bottom: 1px solid $border-color;
+        &:first-child {
+          width: 250px;
+        }
+        &.is-cancelled {
+          background: $border-color;
+        }
+        &.years-separator {
+          margin-left: #{$cell-width + 2px};
+          border-left: 1px solid $border-color;
+          width: #{$cell-width + 2px};
+        }
+      }
     }
-    & td {
-      &.contains-name {
-        text-align: left; 
-        width: 250px;
+    &__dates {
+      & > div {
+        height: 70px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        & span {
+            writing-mode: tb;
+            display: inline-block;
+            transform: rotate(180deg);
+        }
+      }
+    }
+
+    &__items {
+      & > div {
+        padding: 3px 5px;
+      }
+      &.first-teacher-item {
+        margin-top: #{$cell-width + 2px};
+        & > div {
+          border-top: 1px solid $border-color;
+        }
       }
     }
   }
-	& th {
-		font-weight: normal;
-		color: black;
-		& span {
-			position: absolute;
-      -moz-transform: rotate(-90deg);  /* FF3.5+ */
-      -o-transform: rotate(-90deg);  /* Opera 10.5 */
-      -webkit-transform: rotate(-90deg);  /* Saf3.1+, Chrome */
-      filter:  progid:DXImageTransform.Microsoft.BasicImage(rotation=3);  /* IE6,IE7 */
-      -ms-filter: "progid:DXImageTransform.Microsoft.BasicImage(rotation=3)"; /* IE8 */
-      vertical-align: top !important;
-      display: block;
-	    left: -12px;
-      top: 27px;
-      white-space: nowrap;
-		}
-		& .lesson-cancelled-journal {
-			position: absolute;
-       width: 200px;
-       left: -92px;
-       top: 125px;
-       color: #337ab7;
-		}
-	}
-  & .odd-month {
-    background: #eee;
-  }
-  & .is-cancelled {
-    background: #9E9E9E;
-    border: 1px solid #9E9E9E !important;
-    color: white;
-  }
-	& td:last-child, & th:last-child {
-    border-right: none !important;
-	}
-	& td, & th {
-	  height: 24px;
-	  padding: 0 4px !important;
-	  text-align: center;
-	  border: solid 1px #ddd !important;
-	}
-	& tr td:first-child {
-		border-left: none !important;
-	}
-	& th {
-		border-top: none !important;
-	}
-	& tr:last-child td {
-		border-bottom: none !important;
-  }
-  & .years-separator {
-    border-left: 3px solid #E53935 !important;
-  }
-}
 </style>
