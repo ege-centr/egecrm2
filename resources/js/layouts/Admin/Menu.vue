@@ -80,7 +80,6 @@ export default {
         icon: 'calendar_today',
         route: 'AbstractGroupIndex',
         label: 'Болота',
-        counter: 'groups',
       },
       {
         icon: 'attach_money',

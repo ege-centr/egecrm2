@@ -28,11 +28,5 @@ export default {
   },
 
   components: { MacroDialog },
-
-  data() {
-    return {
-    }
-  },
-  
 }
 </script>

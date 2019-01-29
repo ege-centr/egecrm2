@@ -17,7 +17,7 @@
           <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
             <v-layout>
               <v-flex md12>
-                <VueEditor style='height: 500px' v-model='text' />
+                <codemirror style='height: 1000px' :options="cmOptions" v-model='text' />
               </v-flex>
             </v-layout>
           </v-container>
@@ -30,10 +30,11 @@
 <script>
 
 import { API_URL, MODEL_DEFAULTS } from './'
-import { VueEditor } from 'vue2-editor'
+import 'codemirror/mode/htmlmixed/htmlmixed.js'
+import { codemirror } from 'vue-codemirror'
 
 export default {
-  components: { VueEditor },
+  components: { codemirror },
   
   data() {
     return {
@@ -44,6 +45,12 @@ export default {
       loading: true,
       saving: false,
       text: '',
+      cmOptions: {
+        tabSize: 4,
+        mode: 'text/html',
+        lineNumbers: true,
+        line: true,
+      }
     }
   },
 

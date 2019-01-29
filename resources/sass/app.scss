@@ -6,6 +6,7 @@
 @import url('//fonts.googleapis.com/css?family=Material+Icons');
 @import "_variables";
 @import "_vertical-inputs";
+@import '~codemirror/lib/codemirror.css';
 
 body, .application, .display-1, .headline {
   font-family: 'Rubik', sans-serif !important;
@@ -212,3 +213,7 @@ nav {
 // .v-navigation-drawer .v-input__slot {
 //   border-radius: 0 !important;
 // }
+
+.CodeMirror {
+  height: 90vh;
+}
