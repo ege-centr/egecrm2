@@ -1,5 +1,5 @@
 <template>
-  <v-data-table :items='items' item-key='id' hide-headers hide-actions>
+  <v-data-table :items='items' item-key='id' hide-headers hide-actions :class='config.elevationClass'>
     <template slot="items" slot-scope="{ item }">
       <td width='400'>
         <router-link :to="{ name: 'TeacherShow', params: { id: item.id }}">
