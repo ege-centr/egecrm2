@@ -51,6 +51,9 @@ class Group extends Model
 
     public function getSchedule()
     {
+        if (! $this->year) {
+            return null;
+        }
         $weekday_intervals = [
             [10, 11],
             [12, 13],
@@ -75,7 +78,7 @@ class Group extends Model
                     year={$this->year} AND
                     time BETWEEN '{$interval[0]}:00:00' AND '{$interval[1]}:00:00' AND
                     DATE_FORMAT(date, '%w') = " . ($weekday == 7 ? 0 : $weekday))
-                    ->value('time');
+                ->value('time');
                 $bars[$weekday][] = $time;
                 if ($time) {
                     $labels[] = "{$label} в {$time}";

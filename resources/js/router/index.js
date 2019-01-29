@@ -8,6 +8,8 @@ Vue.use(Router)
 const router = new Router({
   mode: 'history',
   routes: [
+    ...require('./macros').default,
+    ...require('./abstract-groups').default,
     ...require('./tests').default,
     ...require('./teachers').default,
     ...require('./settings').default,
@@ -22,6 +24,10 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
+  // очищаем результаты поиска при переходе по другой ссылке
+  if (store.state.search !== null) {
+    store.commit('set', {field: 'search', payload: null})
+  }
   Vue.nextTick(() => {
     if (store.state.user) {
       if (to.hasOwnProperty('meta') && to.meta.hasOwnProperty('roles')) {

@@ -18,7 +18,7 @@
           от {{ item.date | date }}
         </td>
         <td>
-          {{ item.sum }} руб. 123
+          {{ item.sum }} руб.
         </td>
         <td>
           <span v-if='item.payments.length'>

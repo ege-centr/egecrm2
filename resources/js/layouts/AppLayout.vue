@@ -5,8 +5,9 @@
     <v-content>
       <v-container fluid>
         <transition name="fade">
-          <router-view></router-view>
+          <router-view v-show='$store.state.search === null'></router-view>
         </transition>
+        <SearchResults v-show='$store.state.search !== null' />
       </v-container>
     </v-content>
     <!-- <ListenToLogout></ListenToLogout> -->
@@ -18,6 +19,7 @@
   import AdminLayout from '@/layouts/Admin/Layout'
   import ClientLayout from '@/layouts/Client/Layout'
   import { CLASS_NAME as CLIENT_CLASS_NAME } from '@/components/Client'
+  import { SearchResults } from '@/components/Search'
 
   export default {
     data() {
@@ -26,7 +28,7 @@
       }
     },
 
-    components: { AdminLayout, ClientLayout },
+    components: { AdminLayout, ClientLayout, SearchResults },
     
     methods: {
       logout() {

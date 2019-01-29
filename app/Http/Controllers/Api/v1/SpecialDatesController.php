@@ -8,9 +8,15 @@ use App\Models\SpecialDate;
 
 class SpecialDatesController extends Controller
 {
-    public function index()
+    protected $filters = [
+        'equals' => ['year', 'subject_id', 'grade_id']
+    ];
+
+    public function index(Request $request)
     {
-        return SpecialDate::all();
+        $query = SpecialDate::query();
+        $this->filter($request, $query);
+        return $query->get();
     }
 
     public function store(Request $request)

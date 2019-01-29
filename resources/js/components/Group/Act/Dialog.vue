@@ -1,6 +1,5 @@
 <template>
   <v-layout row justify-center>
-    <Print v-if='item && item.id' ref='Print' :params="{type: 'act', group_id: item.group_id, id: item.id}" />
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card>
         <v-toolbar dark color="primary">
@@ -11,7 +10,6 @@
           <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn dark flat v-if='edit_mode' @click.native="destroy" :loading='destroying'>Удалить</v-btn>
-            <v-btn v-if='item && item.id' dark flat @click.native="$refs.Print.open()">Сгенерировать</v-btn>
             <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ edit_mode ? 'Сохранить' : 'Добавить' }}</v-btn>
           </v-toolbar-items>
         </v-toolbar>
@@ -47,13 +45,12 @@
 
 import { API_URL, MODEL_DEFAULTS } from './'
 import { DialogMixin } from '@/mixins'
-import Print from '@/components/Print'
 import { DatePicker, TeacherSelect } from '@/components/UI'
 
 export default {
   mixins: [ DialogMixin ],
 
-  components: { Print, DatePicker, TeacherSelect },
+  components: { DatePicker, TeacherSelect },
 
   data() {
     return {
@@ -61,9 +58,5 @@ export default {
       MODEL_DEFAULTS,
     }
   },
-
-  methods: {
-
-  }
 }
 </script>

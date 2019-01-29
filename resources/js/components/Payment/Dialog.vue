@@ -24,6 +24,12 @@
                       :items='ENUMS.methods'
                       label="Cпособ оплаты" />
                   </div>
+                  <div class='vertical-inputs__input' v-if="item.method === 'card'">
+                    <v-text-field hide-details v-model='item.card_number' 
+                      placeholder='**** **** **** ****'
+                      label='Номер карты' 
+                      mask="#*** **** **** ####"></v-text-field>
+                  </div>
                   <div class='vertical-inputs__input'>
                     <ClearableSelect v-model="item.type"
                       :items='ENUMS.types'

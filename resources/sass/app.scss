@@ -1,12 +1,14 @@
 @import "~normalize.css/normalize";
 @import "~animate.css/animate";
 @import '~vuetify/dist/vuetify.min';
-@import url('//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons');
+// @import url('//fonts.googleapis.com/css?family=Rubik:400,500,700,400italic&subset=cyrillic');
+@import url('https://fonts.googleapis.com/css?family=Rubik:400,400i,500,700&subset=cyrillic');
+@import url('//fonts.googleapis.com/css?family=Material+Icons');
 @import "_variables";
 @import "_vertical-inputs";
 
-body {
-    font-family: 'Roboto', sans-serif;
+body, .application, .display-1, .headline {
+  font-family: 'Rubik', sans-serif !important;
 }
 
 button {
@@ -198,4 +200,15 @@ nav {
 //       height:100%;
 //     }
 //   }
+// }
+
+.menu-counter {
+  color: #BDBDBD;
+  display: inline-block;
+  margin-left: 5px;
+  font-size: 12px;
+}
+
+// .v-navigation-drawer .v-input__slot {
+//   border-radius: 0 !important;
 // }

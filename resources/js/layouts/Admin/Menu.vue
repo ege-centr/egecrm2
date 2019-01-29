@@ -6,13 +6,23 @@
     app
     dark
   >
+    <div class='menu-logo'>
+      <img src='/img/svg/logo-full.svg' />
+    </div>
+
+    
+    <SearchBar />
+    
     <v-list dense>
       <v-list-tile v-for='(m, index) in menu' :key='index' @click="goTo(m.route)">
           <v-list-tile-action>
               <v-icon>{{ m.icon }}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-              <v-list-tile-title>{{ m.label }}</v-list-tile-title>
+              <v-list-tile-title>
+                {{ m.label }}
+                <span class='menu-counter' v-if="m.hasOwnProperty('counter')">{{ $store.state.counters[m.counter] || '' }}</span>
+              </v-list-tile-title>
           </v-list-tile-content>
       </v-list-tile>
       <v-list-group
@@ -40,24 +50,37 @@
 
 <script>
 
+import SearchBar from '@/components/Search/Bar'
+
 export default {
+  components: { SearchBar },
+
   data: () => ({
     drawer: true,
     menu: [
       {
         icon: 'view_list',
         route: 'RequestIndex',
-        label: 'Заявки'
+        label: 'Заявки',
+        counter: 'requests',
       },
       {
         icon: 'person',
         route: 'ClientIndex',
-        label: 'Клиенты'
+        label: 'Клиенты',
+        counter: 'clients',
       },
       {
         icon: 'calendar_today',
         route: 'GroupIndex',
-        label: 'Группы'
+        label: 'Группы',
+        counter: 'groups',
+      },
+      {
+        icon: 'calendar_today',
+        route: 'AbstractGroupIndex',
+        label: 'Болота',
+        counter: 'groups',
       },
       {
         icon: 'attach_money',
@@ -92,6 +115,11 @@ export default {
         label: 'Логи'
       },
       {
+        icon: 'print',
+        route: 'MacroIndex',
+        label: 'Макросы'
+      },
+      {
         icon: 'people',
         route: 'AdminIndex',
         label: 'Пользователи'
@@ -110,3 +138,23 @@ export default {
   }
 }
 </script>
+
+<style lang='scss' scoped>
+
+.v-navigation-drawer {
+  background: #213846;
+}
+
+.menu-logo {
+  text-align: center;
+  padding: 20px 0 34px;
+  & img {
+    width: 40%;
+  }
+}
+
+.v-list__tile__title {
+  text-transform: lowercase;
+}
+
+</style>

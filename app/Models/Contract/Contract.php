@@ -41,6 +41,14 @@ class Contract extends Model
         return $query->whereNumber($number);
     }
 
+    /**
+     * Активные договоры
+     */
+    public function scopeActive($query)
+    {
+        return $query->whereRaw('id = (select max(c2.id) from contracts c2 where c2.number = contracts.number)');
+    }
+
     public static function boot()
     {
         parent::boot();

@@ -11,7 +11,9 @@ const store = new Vuex.Store({
     drawer: true,
     user: null,
     data: null,
-    loading: false
+    loading: false, // depricated?
+    counters: {},
+    search: null,
   },
   mutations,
   getters,

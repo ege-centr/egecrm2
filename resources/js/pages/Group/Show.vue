@@ -122,7 +122,7 @@
         <v-tab-item>
           <v-card :class='config.elevationClass'>
             <v-card-text class='relative'>
-              <Visits :lessons='item.lessons' />
+              <Visits :group='item' />
             </v-card-text>
           </v-card>
         </v-tab-item>

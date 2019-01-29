@@ -1,0 +1,54 @@
+<template>
+  <v-container grid-list-xl class="pa-0 ma-0" fluid v-if='result !== null'>
+    <div v-if='typesWithData.length > 0'>
+      <v-layout wrap row v-for='type in typesWithData' :key='type.field' class='mb-4'>
+        <v-flex md12 class='headline'>
+          {{ type.title }} <span class='grey--text'>({{ result[type.field].length }})</span>
+        </v-flex>
+        <v-flex md12 >
+          <component :is='type.component' :items='result[type.field]' />
+        </v-flex>
+      </v-layout>
+    </div>
+    <div v-else class='headline'>
+      По вашему запросу ничего не найдено
+    </div>
+  </v-container>
+</template>
+
+<script>
+
+import { ClientList } from '@/components/Client'
+import { TeacherList } from '@/components/Teacher'
+
+export default {
+  components: { ClientList, TeacherList },
+
+  data() {
+    return {
+      types: [
+        {
+          title: 'Клиенты',
+          component: 'ClientList',
+          field: 'clients',
+        },
+        {
+          title: 'Учителя',
+          component: 'TeacherList',
+          field: 'tutors',
+        },
+      ],
+    }
+  },
+
+  computed: {
+    result() {
+      return this.$store.state.search
+    },
+
+    typesWithData() {
+      return this.types.filter(type => this.result[type.field].length > 0)
+    },
+  }
+}
+</script>

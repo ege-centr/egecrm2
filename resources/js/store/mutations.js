@@ -8,6 +8,14 @@ export default {
     state.user = user
   },
 
+  setCounters(state, counters) {
+    state.counters = counters
+  },
+
+  set(state, {field, payload}) {
+    state[field] = payload
+  },
+
   toggleDrawer(state, value = null) {
     if (value !== null) {
       state.drawer = value
@@ -17,6 +25,7 @@ export default {
     localStorage.setItem('drawer', state.drawer)
   },
 
+  // depricated?
   loading(state, value) {
     state.loading = value
   }

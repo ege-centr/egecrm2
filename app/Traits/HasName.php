@@ -13,6 +13,15 @@ trait HasName
         ];
     }
 
+    public function scopeSearchByName($query, $text)
+    {
+        return $query->where(function ($query) use ($text) {
+            $query->where('first_name', 'like', "%{$text}%")
+                ->orWhere('last_name', 'like', "%{$text}%")
+                ->orWhere('middle_name', 'like', "%{$text}%");
+        });
+    }
+
     public function scopeOrderByName($query)
     {
         return $query->orderByRaw('last_name asc, first_name asc, middle_name asc');

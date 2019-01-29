@@ -1,5 +1,6 @@
 <template lang="html">
   <div>
+
     <Loader v-if='loading' />
     <div class='mb-3 flex-items'>
       <div>
@@ -110,6 +111,8 @@
 
 <script>
 
+import YearFilter from '@/components/Filters/YearFilter'
+
 const url = 'settings'
 const settings_key = 'recommended-prices'
 
@@ -121,7 +124,7 @@ import Calendar from '@/components/Calendar/Calendar'
 import { DatePicker, DataSelect } from '@/components/UI'
 
 export default {
-  components: { Calendar, DatePicker, DataSelect },
+  components: { Calendar, DatePicker, DataSelect, YearFilter },
 
   data() {
     return {

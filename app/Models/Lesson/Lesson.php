@@ -48,8 +48,9 @@ class Lesson extends Model
 	        });
         });
 
-        // static::creating(function ($model) {
-        //     $model->created_email_id = User::id();
-        // });
+        static::creating(function ($model) {
+            $model->entry_id = uniqid();
+            // $model->created_email_id = User::id();
+        });
     }
 }

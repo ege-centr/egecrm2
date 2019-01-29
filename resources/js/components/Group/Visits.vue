@@ -3,7 +3,7 @@
     <div class='visits'>
       <div class='visits__dates'>
         <div></div>
-        <div v-for='(lesson, index) in lessons' :key='lesson.id' :class="getClass(index)">
+        <div v-for='(lesson, index) in group.lessons' :key='lesson.id' :class="getClass(index)">
           <span>{{ lesson.date | date }}</span>
         </div>
       </div>
@@ -11,7 +11,7 @@
         <div>
           <router-link :to="{ name: 'ClientShow', params: { id: client.id } }">{{ client.names.short }}</router-link>
         </div>
-        <div v-for='(lesson, index) in lessons' :key='lesson.id' :class="getClass(index)">
+        <div v-for='(lesson, index) in group.lessons' :key='lesson.id' :class="getClass(index)">
           <SmallCircle v-if='getClientLesson(lesson, client)' 
             :class-name='getCircleClass(lesson, client)' 
             :title="getClientLesson(lesson, client).late > 0 ? 'опоздал на ' + getClientLesson(lesson, client).late + ' мин' : ''"
@@ -22,7 +22,7 @@
         <div>
           <router-link :to="{ name: 'TeacherShow', params: { id: teacher.id } }">{{ teacher.names.abbreviation }}</router-link>
         </div>
-        <div v-for='(lesson, index) in lessons' :key='lesson.id' :class="getClass(index)">
+        <div v-for='(lesson, index) in group.lessons' :key='lesson.id' :class="getClass(index)">
           <SmallCircle v-if='lesson.status === LESSON_STATUS.CONDUCTED && lesson.teacher_id === teacher.id' class-name='green' />
         </div>
       </div>
@@ -37,9 +37,9 @@ import { LESSON_STATUS } from '@/components/Lesson'
 
 export default {
   props: {
-    lessons: {
-      type: Array,
-      default: []
+    group: {
+      type: Object,
+      required: true,
     }
   },
 
@@ -71,7 +71,7 @@ export default {
     getClass(index) {
       return {
         // 'odd-month': this.oddMonth(lesson),
-        'is-cancelled': this.lessons[index].status === LESSON_STATUS.CANCELLED,
+        'is-cancelled': this.group.lessons[index].status === LESSON_STATUS.CANCELLED,
         'years-separator': this.yearsSeparator(index),
       }
     },
@@ -85,26 +85,32 @@ export default {
       if (index === 0) {
         return false
       }
-      return moment(this.lessons[index].date).format('Y') != moment(this.lessons[index - 1].date).format('Y')
+      return moment(this.group.lessons[index].date).format('Y') != moment(this.group.lessons[index - 1].date).format('Y')
     },
   },
 
   computed: {
     clients() {
       const clients = []
-      this.lessons.forEach(lesson => {
+      this.group.lessons.forEach(lesson => {
         lesson.clientLessons.forEach(clientLesson => {
           if (clients.findIndex(e => e.id === clientLesson.client.id) === -1) {
             clients.push(clientLesson.client)
           }
         })
       })
+      // клиенты, у которых еще не было ни одного занятия
+      this.group.clients.forEach(client => {
+        if (clients.findIndex(e => e.id === client.id) === -1) {
+          clients.push(client)
+        }
+      })
       return clients
     },
 
     teachers() {
       const teachers = []
-      this.lessons.forEach(lesson => {
+      this.group.lessons.forEach(lesson => {
         if (lesson.teacher !== null && teachers.findIndex(e => e.id === lesson.teacher.id) === -1) {
           teachers.push(lesson.teacher)
         }

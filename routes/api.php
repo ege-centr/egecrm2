@@ -12,11 +12,16 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
     Route::delete('group-clients', 'GroupClientsController@destroy');
     Route::post('group-clients', 'GroupClientsController@store');
 
+    Route::get('counters', 'CountersController@index');
+
+    Route::get('search', 'SearchController@index');
+
     Route::apiResources([
         'admins' => 'AdminsController',
         'requests' => 'RequestsController',
         'clients' => 'ClientsController',
         'groups' => 'GroupsController',
+        'abstract-groups' => 'AbstractGroupsController',
         'group-acts' => 'GroupActsController',
         'comments' => 'CommentsController',
         'teachers' => 'TeachersController',
@@ -30,6 +35,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         'client-lessons' => 'ClientLessonsController',
         'email-messages' => 'EmailMessagesController',
         'tests' => 'TestsController',
+        'macros' => 'MacrosController',
         'client-tests' => 'ClientTestsController',
         'client-test-answers' => 'ClientTestAnswersController',
     ]);

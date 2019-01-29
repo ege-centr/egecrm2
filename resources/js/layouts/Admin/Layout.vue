@@ -1,7 +1,7 @@
 <template>
   <div>
     <Menu></Menu>
-    <v-toolbar class='toolbar' app fixed clipped-left dark>
+    <!-- <v-toolbar class='toolbar' app fixed clipped-left dark>
       <v-toolbar-side-icon @click.stop="$store.commit('toggleDrawer')"></v-toolbar-side-icon>
       <v-avatar tile>
         <img src='/img/svg/logo.svg'>
@@ -30,7 +30,7 @@
             </v-list-tile>
           </v-list>
       </v-menu>
-    </v-toolbar>
+    </v-toolbar> -->
     <!-- <ListenToLogout></ListenToLogout> -->
     <!-- <UserDialog ref='UserDialog'></UserDialog> -->
   </div>
@@ -45,6 +45,12 @@ import ListenToLogout from '@/components/ListenToLogout'
 
 export default {
   components: { Menu, Avatar, SearchBar },
+
+  created() {
+    axios.get(apiUrl('counters')).then(r => {
+      this.$store.commit('setCounters', r.data)
+    })
+  },
 }
 </script>
 

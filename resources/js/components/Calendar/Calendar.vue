@@ -107,7 +107,7 @@ export default {
 
   methods: {
     loadSpecialDates() {
-      axios.get(apiUrl('special-dates')).then(r => {
+      axios.get(apiUrl('special-dates') + queryString(_.pick(this.group, ['subject_id', 'grade_id', 'year']))).then(r => {
         this.specialDates = r.data
       })
     },

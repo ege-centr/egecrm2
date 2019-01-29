@@ -18,44 +18,7 @@
           <v-container v-else grid-list-xl class="pa-0 ma-0 mt-3" fluid>
             <v-layout wrap>
               <v-flex md12>
-                <v-data-table
-                  :class='config.elevationClass'
-                  hide-actions
-                  hide-headers
-                  :items='groups'
-                >
-                <template slot='items' slot-scope="{ item }">
-                  <td width='100'>
-                    <v-radio-group v-model="selected_group_id" hide-details>
-                      <v-radio :value='item.id' class='ma-0'></v-radio>
-                    </v-radio-group>
-                  </td>
-                  <td width='200'>
-                      Группа {{ item.id }}
-                  </td>
-                  <td>
-                    {{ getData('subjects', item.subject_id).three_letters }}–{{ item.grade_id }}
-                  </td>
-                  <td>
-                    <span v-if="item.cabinet">
-                      {{ item.cabinet.text }}
-                    </span>
-                  </td>
-                  <td>
-                    <span v-if='item.clients_count'>
-                      {{ item.clients_count }} ученика
-                    </span>
-                    <span v-else>нет учеников</span>
-                  </td>
-                  <td>
-                    {{ item.lessons_count }} занятий
-                  </td>
-                  <td>
-                    {{ item.teacher_name }}
-                  </td>
-                </template>
-              </v-data-table>
-
+                <GroupList :items='groups' :selectable='true' :selected_group_id.sync='selected_group_id' />
               </v-flex>
             </v-layout>
           </v-container>
@@ -67,11 +30,11 @@
 
 <script>
 
-import { API_URL, GROUP_CLIENTS_API_URL, FILTERS } from '@/components/Group'
+import { API_URL, GROUP_CLIENTS_API_URL, FILTERS, GroupList } from '@/components/Group'
 import Filters from '@/components/Filters/Filters'
 
 export default {
-  components: { Filters },
+  components: { Filters, GroupList },
 
   data() {
     return {
@@ -95,6 +58,7 @@ export default {
       this.selected_group_id = null
       this.client = client
       this.group = clone(group)
+      // TODO: переделать в IndexPage (может тогда уж переименовать IndexPage?)
       if (group.grade_id) {
         this.pre_installed_filters.push({item: this.FILTERS[3], value: [group.grade_id]})
       }

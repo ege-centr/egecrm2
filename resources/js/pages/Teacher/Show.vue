@@ -41,6 +41,7 @@
             :pagination='false' 
             :api-url='GROUP_API_URL' 
             :filters='GROUP_FILTERS' 
+            filter-component='YearFilter'
             :invisible-filters="{teacher_id: $route.params.id}"
           >
             <template slot='items' slot-scope='{ items }'>

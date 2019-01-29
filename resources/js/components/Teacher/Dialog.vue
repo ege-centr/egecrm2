@@ -25,7 +25,7 @@
 
 <script>
 
-import { API_URL, MODEL_DEFAULTS } from './data'
+import { API_URL, MODEL_DEFAULTS } from './'
 
 export default {
   data() {

@@ -6,7 +6,7 @@
       <slot name='buttons'></slot>
     </div>
 
-    <Filters ref='Filters' v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' @updated='loadData' />
+    <component :is='filterComponent' ref='Filters' v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' @updated='loadData' ></component>
 
     <v-container grid-list-md fluid class="px-0" v-if='collection !== null'>
       <v-layout row wrap class='relative'>
@@ -61,7 +61,7 @@
 
 <script>
 
-import Filters from '@/components/Filters/Filters'
+import { Filters, YearFilter } from '@/components/Filters'
 
 export default {
   props: {
@@ -91,9 +91,13 @@ export default {
       type: Array,
       required: false,
     },
+    filterComponent: {
+      type: String,
+      default: 'Filters',
+    },
   },
 
-  components: { Filters },
+  components: { Filters, YearFilter },
 
   data() {
     return {
@@ -111,7 +115,7 @@ export default {
   },
 
   created() {
-    if (this.preInstalledFilters === undefined) {
+    if (this.preInstalledFilters === undefined && this.filterComponent !== 'YearFilter') {
       this.loadData()
     }
   },

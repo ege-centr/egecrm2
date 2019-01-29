@@ -123,6 +123,7 @@
         </v-tab-item>
         <v-tab-item>
           <IndexPage ref='ContractPage'
+            filter-component='YearFilter'
             :pagination='false' 
             :api-url='CONTRACT_API_URL' 
             :filters='CONTRACT_FILTERS' 
