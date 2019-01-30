@@ -27,8 +27,8 @@
             <div class='mb-3'>
               <div class='item-label'>Предметы и класс</div>
               <span v-for='(subject_id, index) in item.subjects' :key='subject_id'>{{ getData('subjects', subject_id).three_letters }}{{ index == (item.subjects.length - 1) ? '' : '+' }}</span>
-              <span v-if='item.grade'>
-                ({{ getData('grades', item.grade).title }})
+              <span v-if='item.grade_id'>
+                ({{ getData('grades', item.grade_id).title }})
               </span>
             </div>
             <div class='mb-3'>

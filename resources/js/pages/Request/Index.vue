@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <IndexPage :api-url='API_URL' :filters='FILTERS'>
+    <IndexPage :api-url='API_URL' :filters='FILTERS' ref='IndexPage'>
       <template slot='buttons'>
         <AddBtn label='добавить заявку' @click.native='$refs.RequestDialog.open(null)' />
       </template>
@@ -12,7 +12,7 @@
         </v-layout>
       </template>
     </IndexPage>
-    <RequestDialog ref='RequestDialog' />
+    <RequestDialog ref='RequestDialog' @updated='() => $refs.IndexPage.reloadData()' />
     <ClientDialog ref='ClientDialog' />
   </div>
 </template>

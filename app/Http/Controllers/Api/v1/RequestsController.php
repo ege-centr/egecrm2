@@ -51,6 +51,6 @@ class RequestsController extends Controller
 
     public function destroy($id)
     {
-        //
+        ClientRequest::find($id)->delete();
     }
 }

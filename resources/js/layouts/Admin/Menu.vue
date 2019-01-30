@@ -2,7 +2,7 @@
   <v-navigation-drawer
     clipped
     fixed
-    :value="$store.state.drawer"
+    :value="true"
     app
     dark
   >

@@ -8,7 +8,7 @@
 
     <component :is='filterComponent' ref='Filters' v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' @updated='loadData' ></component>
 
-    <v-container grid-list-md fluid class="px-0" v-if='collection !== null'>
+    <v-container grid-list-md fluid class="px-0" :class="{'invisible': loading}">
       <v-layout row wrap class='relative'>
         <v-flex xs12>
           <div v-if='sort !== undefined' class='grey--text darken-3 mb-3 text-md-right caption flex-items justify-end'>
@@ -25,9 +25,13 @@
               {{ sort.find(e => e.selected).type === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
             </v-icon>
           </div>
-          <slot name='items' :items='collection.data'></slot>
+          <slot name='items' :items='data'></slot>
           
-          <div v-if='pagination' class='flex-items align-center mt-3 mr-1'>
+          <infinite-loading @infinite="infiniteHandler" ref='InfiniteLoading' :distance='2000' spinner='spiral' class='mt-3'>
+            <div slot='no-more'></div>
+          </infinite-loading>
+
+          <!-- <div v-if='pagination' class='flex-items align-center mt-3 mr-1'>
             <v-spacer></v-spacer>
             <div class='flex-items align-center'>
               <div>
@@ -39,58 +43,24 @@
               ></v-select>
             </div>
             <div class='mx-3'>
-              {{ page }} из {{ collection.meta.last_page }}
+              {{ page }} из {{ data.meta.last_page }}
             </div>
-            <v-icon style='margin: 0 10px' small @click='page -= 1' v-if='collection.meta.last_page > 1' :disabled='page == 1' color='black'>arrow_back_ios</v-icon>
-            <v-icon small @click='page += 1' v-if='collection.meta.last_page > 1' :disabled='page == collection.meta.last_page'  color='black'>arrow_forward_ios</v-icon>
-          </div>
+            <v-icon style='margin: 0 10px' small @click='page -= 1' v-if='data.meta.last_page > 1' :disabled='page == 1' color='black'>arrow_back_ios</v-icon>
+            <v-icon small @click='page += 1' v-if='data.meta.last_page > 1' :disabled='page == data.meta.last_page'  color='black'>arrow_forward_ios</v-icon>
+          </div> -->
 
         </v-flex>
       </v-layout>
     </v-container>
 
     <slot name='buttons-bottom'></slot>
-
-
-    <v-dialog
-      v-model="confirm_show_all_dialog"
-      max-width="420"
-    >
-      <v-card>
-        <v-card-title class="headline">Вы уверены?</v-card-title>
-
-        <v-card-text>
-          Загрузка всех записей может занять некоторое время
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-
-          <v-btn
-            color="grey"
-            flat="flat"
-            @click="confirm_show_all_dialog = false"
-          >
-            Отмена
-          </v-btn>
-
-          <v-btn
-            color="primary"
-            flat="flat"
-            @click="confirmShowAll"
-          >
-            Продолжить
-          </v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
   </div>
 </template>
 
 <script>
 
 import { Filters, YearFilter } from '@/components/Filters'
+import InfiniteLoading from 'vue-infinite-loading'
 
 export default {
   props: {
@@ -126,36 +96,36 @@ export default {
     },
   },
 
-  components: { Filters, YearFilter },
+  components: { Filters, YearFilter, InfiniteLoading },
 
   data() {
     return {
-      page: 1,
+      page: 0,
       // пустая страка – показать все
       // -1 – подтверждение перед показом всех
-      show_by: this.pagination ? 30 : '',
+      show_by: this.pagination ? 100 : '',
       show_by_options: [
         {text: '10', value: 10},
         {text: '30', value: 30},
         {text: '50', value: 50},
         {text: 'все', value: -1},
       ],
-      loading: false,
-      collection: null,
+      loading: true,
+      data: [],
       confirm_show_all_dialog: false,
     }
   },
 
   created() {
-    if (this.preInstalledFilters === undefined && this.filterComponent !== 'YearFilter') {
-      this.loadData()
-    }
+    // if (this.preInstalledFilters === undefined && this.filterComponent !== 'YearFilter') {
+    //   this.loadData()
+    // }
   },
 
   watch: {
-    page() {
-      this.loadData()
-    },
+    // page() {
+    //   this.loadData()
+    // },
 
     show_by(newVal, oldVal) {
       if (newVal === -1 && oldVal !== '') {
@@ -171,7 +141,7 @@ export default {
 
   methods: {
     loadData(filters = {}) {
-      this.loading = true
+      // this.loading = true
       axios.get(apiUrl(this.apiUrl) + queryString({
         page: this.page,
         show_by: this.show_by,
@@ -179,7 +149,12 @@ export default {
         ...this.invisibleFilters,
         ...this.getSort(),
       })).then(response => {
-        this.collection = response.data
+        this.data.push(...response.data.data)
+        if (response.data.meta.current_page === response.data.meta.last_page) {
+          this.$refs.InfiniteLoading.stateChanger.complete()
+        } else {
+          this.$refs.InfiniteLoading.stateChanger.loaded()
+        }
         this.loading = false
       })
     },
@@ -215,7 +190,13 @@ export default {
       this.show_by = ''
       this.confirm_show_all_dialog = false
       Vue.nextTick(() => this.show_by = -1)
-    },   
+    },
+
+    infiniteHandler(state) {
+      // state.loaded()
+      this.page++
+      this.reloadData()
+    },
   },
 
   computed: {
