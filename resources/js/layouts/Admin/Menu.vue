@@ -44,6 +44,14 @@
         </v-list-tile>
       </v-list>
     </v-list-group>
+      <v-list-tile @click="$store.dispatch('logout')">
+        <v-list-tile-action>
+          <v-icon>exit_to_app</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+          <v-list-tile-title>Выход</v-list-tile-title>
+        </v-list-tile-content>
+      </v-list-tile> 
     </v-list>
   </v-navigation-drawer>
 </template>

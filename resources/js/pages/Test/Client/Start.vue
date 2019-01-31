@@ -94,7 +94,7 @@ export default {
     })
     await axios.get(apiUrl(CLIENT_TESTS_API_URL, this.$route.params.id) + queryString({
       client_id: this.$store.state.user.id,
-      started: 1,
+      // started: 1,
     })).then(r => this.client_test = r.data)
     if (this.client_test.started_at !== null) {
       await this.loadTest()

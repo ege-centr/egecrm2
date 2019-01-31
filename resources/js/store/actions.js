@@ -1,4 +1,8 @@
 export default {
+  logout({ commit }) {
+    axios.get(apiUrl('logout'))
+    commit('setUser', null)
+  }
   // Load initial data
   // async loadInitial({ commit, state }) {
   //   await axios.get(apiUrl('load-initial')).then(response => {

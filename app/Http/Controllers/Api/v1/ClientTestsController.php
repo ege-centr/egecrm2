@@ -63,7 +63,7 @@ class ClientTestsController extends Controller
             $query->whereNotNull('started_at');
         }
 
-        return $query->first();
+        return $query->firstOrFail();
     }
 
     public function destroy($id)

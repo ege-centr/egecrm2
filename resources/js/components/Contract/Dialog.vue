@@ -17,7 +17,7 @@
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
           <v-container v-else grid-list-xl class="pa-0 ma-0">
             <v-layout class='mb-3'>
-              <v-flex md7>
+              <v-flex md6>
                 <v-layout wrap align-center v-for='(subject, index) in $store.state.data.subjects' :key='subject.id'>
                   <v-flex style='max-width: 50px'>
                     <span :class="getSubjectColor(subject)">{{ subject.three_letters }}</span>
@@ -46,9 +46,9 @@
                   </v-flex>
                 </v-layout>
               </v-flex>
-            </v-layout>
-            <v-layout>
-              <v-flex md12>
+
+
+              <v-flex md6>
                 <div class='vertical-inputs mb-5'>
                   <div class='vertical-inputs__input'>
                     <GradeAndYear :item='item' label-type='GRADE_AND_YEAR' />
@@ -94,6 +94,9 @@
                   </v-btn>
                 </div>
               </v-flex>
+            </v-layout>
+            <v-layout>
+              
             </v-layout>
           </v-container>
         </v-card-text>

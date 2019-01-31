@@ -4,7 +4,14 @@
       <!-- <div class='subheading'>
         {{ item.label }}
       </div> -->
-      <div v-if="item.type === 'select' || item.type === 'multiple'">
+      <!-- <div v-if="item.type === 'select'">
+        <v-list dense>
+          <v-list-tile @click='' v-for='(option, index) in item.options' :key='index'>
+            <v-list-tile-title>{{ option[item.textField ? item.textField : 'title'] }}</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </div> -->
+      <div v-if="item.type === 'multiple' || item.type === 'select'">
         <v-select
           v-model="value"
           :multiple="item.type === 'multiple'"
