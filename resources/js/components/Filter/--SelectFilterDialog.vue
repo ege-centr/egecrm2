@@ -1,17 +1,17 @@
 <template>
   <v-card style='width: 300px'>
-    <v-card-text>
+    <v-card-text class='pa-0'>
       <!-- <div class='subheading'>
         {{ item.label }}
       </div> -->
-      <!-- <div v-if="item.type === 'select'">
+      <div v-if="item.type === 'select'">
         <v-list dense>
-          <v-list-tile @click='' v-for='(option, index) in item.options' :key='index'>
+          <v-list-tile @click='select(option)' v-for='(option, index) in item.options' :key='index'>
             <v-list-tile-title>{{ option[item.textField ? item.textField : 'title'] }}</v-list-tile-title>
           </v-list-tile>
         </v-list>
-      </div> -->
-      <div v-if="item.type === 'multiple' || item.type === 'select'">
+      </div>
+      <div v-if="item.type === 'multiple'">
         <v-select
           v-model="value"
           :multiple="item.type === 'multiple'"
@@ -34,11 +34,11 @@
         <DatePicker label='Дата' v-model='value' />
       </div>
     </v-card-text>
-    <v-card-actions>
+    <!-- <v-card-actions>
       <v-spacer></v-spacer>
       <v-btn color="grey" v-if='filterValue === null' small flat @click='back'>назад</v-btn>
       <v-btn color="blue darken-1" small flat :disabled='!value' @click='apply'>Применить</v-btn>
-    </v-card-actions>
+    </v-card-actions> -->
   </v-card>
 </template>
 
@@ -73,6 +73,11 @@ export default {
   },
   
   methods: {
+    select(option) {
+      this.value = option[this.item.valueField ? this.item.valueField : 'id']
+      this.apply()
+    },
+
     apply() {
       this.$emit('selected', _.pick(this, ['item', 'value']))
       this.value = null

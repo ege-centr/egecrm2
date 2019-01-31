@@ -6,7 +6,7 @@
       <slot name='buttons'></slot>
     </div>
 
-    <component :is='filterComponent' ref='Filters' v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' @updated='loadData' ></component>
+    <component :is='filterComponent' ref='Filter' v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' @updated='loadData' ></component>
 
     <v-container grid-list-md fluid class="px-0" v-if='collection !== null'>
       <v-layout row wrap class='relative'>
@@ -90,7 +90,7 @@
 
 <script>
 
-import { Filters, YearFilter } from '@/components/Filters'
+import { AllFilter, YearFilter } from '@/components/Filter'
 
 export default {
   props: {
@@ -122,11 +122,11 @@ export default {
     },
     filterComponent: {
       type: String,
-      default: 'Filters',
+      default: 'AllFilter',
     },
   },
 
-  components: { Filters, YearFilter },
+  components: { AllFilter, YearFilter },
 
   data() {
     return {
@@ -147,9 +147,13 @@ export default {
   },
 
   created() {
-    if (this.preInstalledFilters === undefined && this.filterComponent !== 'YearFilter') {
+    if (this.filters === null) {
       this.loadData()
     }
+    // if ()
+    // if (this.preInstalledFilters === undefined && this.filterComponent !== 'YearFilter' &&) {
+    //   this.loadData()
+    // }
   },
 
   watch: {
@@ -186,7 +190,7 @@ export default {
 
     // reload data with current filters
     reloadData() {
-      this.$refs.Filters.emit()
+      this.$refs.Filter.emit()
     },
 
     getSort() {

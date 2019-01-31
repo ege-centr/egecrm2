@@ -18,11 +18,17 @@
         </v-avatar>
       </v-chip>
 
-      <SelectFilterDialog 
-        v-if='used_filter_menu[filter.item.field]' 
+      <component 
+        @selected='apply'
+        :is="getTypeComponentName(filter.item)" 
         :item='filter.item' 
         :filter-value='filter.value' 
-        @selected='apply' />
+        v-if='used_filter_menu[filter.item.field]' 
+      />
+      <!-- <SelectFilterDialog 
+        :item='filter.item' 
+        :filter-value='filter.value' 
+        @selected='apply' /> -->
     </v-menu>
 
     <v-menu
@@ -46,14 +52,18 @@
         </v-list-tile>
       </v-list>
 
-      <SelectFilterDialog :item='item' @selected='apply' @back='item = null' v-else />
+      <!-- <SelectFilterDialog :item='item' @selected='apply' v-else /> -->
+      <component :is="getTypeComponentName(item)" :item='item' @selected='apply' v-else /></component>
     </v-menu>
   </div>
 </template>
 
 <script>
-
-import SelectFilterDialog from './SelectFilterDialog'
+import { LOCAL_STORAGE_KEY } from './'
+import { 
+  TypeSelect,
+  TypeMultiple,
+} from './Type'
 
 export default {
   props: {
@@ -68,19 +78,26 @@ export default {
     // Использование: this.pre_installed_filters.push({item: this.filters[3], value: [group.grade_id]})
     // TODO: сделать удобнеее {filter_index: value}
     preInstalled: {
-      type: Array,
-      default: () => [],
+      type: Object,
+      default: null,
       required: false,
     },
   },
 
-  components: { SelectFilterDialog },
+  components: { TypeSelect, TypeMultiple },
 
   created() {
-    if (this.preInstalled.length) {
-      this.filters = clone(this.preInstalled)
-      this.emit()
+    if (this.preInstalled === null) {
+      if (LOCAL_STORAGE_KEY in localStorage) {
+        const filters = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
+        if (filters.hasOwnProperty(this.$route.name) && Object.keys(filters[this.$route.name]).length > 0) {
+          this.setPreInstalled(filters[this.$route.name])
+        }
+      }
+    } else {
+      this.setPreInstalled(this.preInstalled)
     }
+    this.emit()
   },
 
   data() {
@@ -112,7 +129,6 @@ export default {
     apply(item) {
       // был ли фильтр выбран ранее?
       const index = this.filters.findIndex(e => e.item.field === item.item.field)
-      colorLog("Index " + index)
       if (index === -1) {
         this.filters.push(item)
       } else {
@@ -167,6 +183,24 @@ export default {
 
     getItemText(item) {
       return item.textField ? item.textField : 'title'
+    },
+
+    getTypeComponentName(item) {
+      const type = item.type
+      return 'Type' + (type.charAt(0).toUpperCase() + type.slice(1))
+    },
+
+    setPreInstalled(filters) {
+      const items = []
+      Object.keys(filters).forEach(field => {
+        items.push({
+          item: this.items.find(e => e.field === field),
+          value: filters[field]
+        })
+      })
+      if (items.length > 0) {
+        this.filters = items
+      }
     },
   },
 

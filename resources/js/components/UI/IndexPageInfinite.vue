@@ -6,7 +6,7 @@
       <slot name='buttons'></slot>
     </div>
 
-    <component :is='filterComponent' ref='Filters' v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' @updated='loadData' ></component>
+    <component :is='filterComponent' ref='Filter' v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' @updated='loadData' ></component>
 
     <v-container grid-list-md fluid class="px-0" :class="{'invisible': loading}">
       <v-layout row wrap class='relative'>
@@ -59,7 +59,7 @@
 
 <script>
 
-import { Filters, YearFilter } from '@/components/Filters'
+import { AllFilter, YearFilter } from '@/components/Filter'
 import InfiniteLoading from 'vue-infinite-loading'
 
 export default {
@@ -92,11 +92,11 @@ export default {
     },
     filterComponent: {
       type: String,
-      default: 'Filters',
+      default: 'AllFilter',
     },
   },
 
-  components: { Filters, YearFilter, InfiniteLoading },
+  components: { AllFilter, YearFilter, InfiniteLoading },
 
   data() {
     return {
@@ -161,7 +161,7 @@ export default {
 
     // reload data with current filters
     reloadData() {
-      this.$refs.Filters.emit()
+      this.$refs.Filter.emit()
     },
 
     getSort() {

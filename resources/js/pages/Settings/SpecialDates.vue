@@ -111,7 +111,7 @@
 
 <script>
 
-import YearFilter from '@/components/Filters/YearFilter'
+import { YearFilter } from '@/components/Filter'
 
 const url = 'settings'
 const settings_key = 'recommended-prices'

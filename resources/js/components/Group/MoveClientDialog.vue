@@ -13,7 +13,7 @@
           </v-toolbar-items>
         </v-toolbar>
         <v-card-text class='relative'>
-          <Filters v-if='dialog' :items='FILTERS' :pre-installed='pre_installed_filters' @updated='loadData' />
+          <AllFilter v-if='dialog' :items='FILTERS' :pre-installed='pre_installed_filters' @updated='loadData' />
           <Loader v-if='groups === null || loading' class='loader-wrapper_fullscreen-dialog' />
           <v-container v-else grid-list-xl class="pa-0 ma-0 mt-3" fluid>
             <v-layout wrap>
@@ -31,10 +31,10 @@
 <script>
 
 import { API_URL, GROUP_CLIENTS_API_URL, FILTERS, GroupList } from '@/components/Group'
-import Filters from '@/components/Filters/Filters'
+import { AllFilter } from '@/components/Filter'
 
 export default {
-  components: { Filters, GroupList },
+  components: { AllFilter, GroupList },
 
   data() {
     return {
@@ -53,21 +53,18 @@ export default {
 
   methods: {
     open(group, client) {
-      this.pre_installed_filters = []
+      this.pre_installed_filters = {}
       this.groups = null
       this.selected_group_id = null
       this.client = client
-      this.group = clone(group)
+      this.group = clone(group);
       // TODO: переделать в IndexPage (может тогда уж переименовать IndexPage?)
-      if (group.grade_id) {
-        this.pre_installed_filters.push({item: this.FILTERS[3], value: [group.grade_id]})
-      }
-      if (group.subject_id) {
-        this.pre_installed_filters.push({item: this.FILTERS[2], value: [group.subject_id]})
-      }
-      if (group.year) {
-        this.pre_installed_filters.push({item: this.FILTERS[0], value: [group.year]})
-      }
+      ['grade_id', 'subject_id', 'year'].forEach(field => {
+        if (group[field]) {
+          this.pre_installed_filters[field] = [group[field]]
+        }
+      })
+      console.log(this.pre_installed_filters)
       this.dialog = true
     },
 
