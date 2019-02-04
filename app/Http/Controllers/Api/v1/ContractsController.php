@@ -17,7 +17,7 @@ class ContractsController extends Controller
     {
         $query = Contract::query();
         $this->filter($request, $query);
-        return ContractResource::collection($this->showAll($query));
+        return ContractResource::collection($this->showBy($request, $query));
     }
 
     public function show($id)
