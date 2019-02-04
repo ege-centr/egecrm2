@@ -5,10 +5,10 @@
           <v-flex style='width: 80%; border-right: 1px solid #9e9e9e'>
             <div class='mb-5'>
               <div class='flex-items'>
-                <Avatar :photo='item.createdAdmin.photo' :size='50' class='mr-3' />
+                <Avatar :photo='item.created_admin_id ? item.createdAdmin.photo : null' :size='50' class='mr-3' />
                 <div>
                   <div>
-                    <b>{{ item.createdAdmin.name }}</b>
+                    <b>{{ item.created_admin_id ? item.createdAdmin.name : 'System' }}</b>
                     <span class='d-inline-block ml-1 grey--text'>
                       {{ item.created_at | date-time }}
                     </span>
