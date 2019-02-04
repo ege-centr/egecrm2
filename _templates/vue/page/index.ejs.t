@@ -6,7 +6,7 @@ to: resources/js/pages/<%= Name %>/Index.vue
     <% if (typeof(dialog) != "undefined") { %>
     <<%= Name %>Dialog ref='<%= Name %>Dialog' />
     <% } %>
-    <IndexPage :api-url='API_URL' :filters='FILTERS'>
+    <DisplayData :api-url='API_URL' :filters='FILTERS'>
       <% if (typeof(dialog) != "undefined") { %>
       <template slot='buttons'>
         <AddBtn label='добавить' @click.native='$refs.<%= Name %>Dialog.open(null)' />
@@ -15,17 +15,17 @@ to: resources/js/pages/<%= Name %>/Index.vue
       <template slot='items' slot-scope='{ items }'>
         <<%= Name %>List :items='items' />
       </template>
-    </IndexPage>
+    </DisplayData>
   </div>
 </template>
 
 <script>
 
-import { IndexPage } from '@/components/UI'
+import { DisplayData } from '@/components/UI'
 import { API_URL, FILTERS, <%= Name %>List<%= (typeof(dialog) != "undefined") ? (', ' + Name + 'Dialog') : '' %> } from '@/components/<%= Name %>'
 
 export default {
-  components: { IndexPage, <%= Name %>List<%= (typeof(dialog) != "undefined") ? (', ' + Name + 'Dialog') : '' %> },
+  components: { DisplayData, <%= Name %>List<%= (typeof(dialog) != "undefined") ? (', ' + Name + 'Dialog') : '' %> },
 
   data() {
     return {

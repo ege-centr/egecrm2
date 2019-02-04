@@ -127,14 +127,14 @@
           </v-card>
         </v-tab-item>
         <v-tab-item>
-          <IndexPage :api-url='GROUP_ACTS_API_URL' :invisible-filters='{group_id: item.id}' :pagination='false'>
+          <DisplayData :api-url='GROUP_ACTS_API_URL' :invisible-filters='{group_id: item.id}' :pagination='false'>
             <template slot='items' slot-scope='{ items }'>
               <GroupActList :items='items' />
             </template>
             <template slot='buttons-bottom'>
               <AddBtn @click.native='$refs.GroupActDialog.open(null, {group_id: item.id})' />
             </template>
-          </IndexPage>
+          </DisplayData>
           <!-- <GroupActList :group-id='item.id' /> -->
         </v-tab-item>
       </v-tabs-items>
@@ -157,7 +157,7 @@ import {
 import Bars from '@/components/Group/Bars'
 import Visits from '@/components/Group/Visits'
 import GroupDialog from '@/components/Group/Dialog'
-import { IndexPage } from '@/components/UI'
+import { DisplayData } from '@/components/UI'
 import { 
   API_URL as GROUP_ACTS_API_URL,
   GroupActDialog
@@ -166,7 +166,7 @@ import GroupActList from '@/components/Group/Act/List'
 
 
 export default {
-  components: { IndexPage, GroupSchedule, Bars, Visits, GroupDialog, MoveClientDialog, GroupActList, GroupActDialog },
+  components: { DisplayData, GroupSchedule, Bars, Visits, GroupDialog, MoveClientDialog, GroupActList, GroupActDialog },
 
   data() {
     return {

@@ -13,15 +13,18 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
     Route::post('group-clients', 'GroupClientsController@store');
 
     Route::get('counters', 'CountersController@index');
-
     Route::get('search', 'SearchController@index');
+
+    Route::prefix('abstract-groups')->group(function() {
+        Route::get('/', 'AbstractGroupsController@index');
+        Route::get('/{year}/{grade_id}/{subject_id}', 'AbstractGroupsController@show');
+    });
 
     Route::apiResources([
         'admins' => 'AdminsController',
         'requests' => 'RequestsController',
         'clients' => 'ClientsController',
         'groups' => 'GroupsController',
-        'abstract-groups' => 'AbstractGroupsController',
         'group-acts' => 'GroupActsController',
         'comments' => 'CommentsController',
         'teachers' => 'TeachersController',
@@ -29,6 +32,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         'tasks' => 'TasksController',
         'logs' => 'LogsController',
         'payments' => 'PaymentsController',
+        'payment-additionals' => 'PaymentAdditionalsController',
         'contracts' => 'ContractsController',
         'special-dates' => 'SpecialDatesController',
         'lessons' => 'LessonsController',

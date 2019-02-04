@@ -98,6 +98,10 @@ a.black-link {
   width: calc(100% + 32px);
 }
 
+.width-100 {
+  width: 100%;
+}
+
 .v-picker--landscape .v-picker__actions, .v-picker--landscape .v-picker__body {
   margin: 0 !important;
 }
@@ -220,4 +224,18 @@ nav {
 
 .CodeMirror {
   height: 90vh;
+}
+
+.quillWrapper {
+  height: 85vh !important;
+}
+
+.ql-toolbar.ql-snow {
+  border-top: none !important;
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.ql-toolbar.ql-snow+.ql-container.ql-snow {
+  border: none;
 }

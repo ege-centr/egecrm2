@@ -1,21 +1,21 @@
 <template lang="html">
   <div>
-    <IndexPage :api-url='API_URL' :filters='FILTERS' :sort='SORT'>
+    <DisplayData :api-url='API_URL' :filters='FILTERS' :sort='SORT'>
       <template slot='items' slot-scope='{ items }'>
         <PaymentList :items='items' />
       </template>
-    </IndexPage>
+    </DisplayData>
   </div>
 </template>
 
 <script>
 
-import { IndexPage } from '@/components/UI'
+import { DisplayData } from '@/components/UI'
 import { API_URL, FILTERS, SORT, ENUMS } from '@/components/Payment'
 import PaymentList from '@/components/Payment/List'
 
 export default {
-  components: { IndexPage, PaymentList },
+  components: { DisplayData, PaymentList },
 
   data() {
     return {

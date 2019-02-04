@@ -4,10 +4,21 @@
         <v-layout row>
           <v-flex style='width: 80%; border-right: 1px solid #9e9e9e'>
             <div class='mb-5'>
-              <div class='item-label'>Комментарий</div>
-              {{ item.comment }} 
-              <PhoneList :items='item.phones' />
-              <!-- <span class='grey--text'>{{ item.name }}</span> -->
+              <div class='flex-items'>
+                <Avatar :photo='item.createdAdmin.photo' :size='50' class='mr-3' />
+                <div>
+                  <div>
+                    <b>{{ item.createdAdmin.name }}</b>
+                    <span class='d-inline-block ml-1 grey--text'>
+                      {{ item.created_at | date-time }}
+                    </span>
+                  </div>
+                  <div>
+                    {{ item.comment }} 
+                    <PhoneList :items='item.phones' />
+                  </div>
+                </div>
+              </div>
             </div>
             <Comments class-name='Request' :entity-id='item.id' :items='item.comments' />
           </v-flex>
@@ -30,10 +41,6 @@
               <span v-if='item.grade_id'>
                 ({{ getData('grades', item.grade_id).title }})
               </span>
-            </div>
-            <div class='mb-3'>
-              <div class='item-label'>Реквизиты заявки</div>
-              {{ item.created_admin_id ? getData('admins', item.created_admin_id).name : 'system' }} {{ item.created_at | date-time }}
             </div>
             <div class='mb-3'>
               <div class='item-label'>Клиенты</div>

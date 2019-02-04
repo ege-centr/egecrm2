@@ -76,7 +76,7 @@
               <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
               <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
                 <v-layout wrap>
-                  <v-flex md12>
+                  <v-flex md4>
                     <div class='vertical-inputs'>
                       <div class='vertical-inputs__input'>
                         <DatePicker label="Дата занятия" v-model='dialog_item.date' />
@@ -114,85 +114,87 @@
                       </div>
                     </div>
                   </v-flex>
-                </v-layout>
-                <v-layout wrap v-if="dialog_item.status === LESSON_STATUS.CONDUCTED">
-                  <v-flex md12 class='headline'>
-                    Занятие
-                  </v-flex>
-                  
-                  <v-flex md12>
-                    <v-data-table v-if='items.length'
-                      hide-actions
-                      :headers="[
-                        { text: '', sortable: false },
-                        { text: 'Ученик', sortable: false },
-                        { text: 'Отсутствовал', sortable: false }, 
-                        { text: 'Опоздание', sortable: false },
-                        { text: 'Цена', sortable: false },
-                        { text: 'Комментарий', sortable: false },
-                      ]"
-                      :items='dialog_item.clientLessons'
-                    >
-                      <template slot="items" slot-scope="{ item }">
-                        <td width='30' class='px-0 text-md-center' @click='destroyClientLesson(item.id)'>
-                          <v-icon class='pointer'>close</v-icon>
-                        </td>
-                        <td width='200'>
-                          {{ item.client ? item.client.names.short : 'ученик не указан' }}
-                        </td>
-                        <td width='150'>
-                          <v-switch color='red' v-model="item.is_absent" hide-details></v-switch>
-                        </td>
-                        <td width='150'>
-                          <v-icon small v-if="!item.late" class='client-edit-icon'>edit</v-icon>
-                          <v-edit-dialog
-                            :return-value.sync="item.late"
-                            lazy
-                          > {{ item.late }}
-                            <v-text-field
-                              slot="input"
-                              v-model="item.late"
-                              label="Опоздание"
-                              single-line
-                              v-mask="'##'"
-                            ></v-text-field>
-                          </v-edit-dialog>
-                        </td>
-                        <td width='150'>
-                          <v-icon small v-if="!item.price" class='client-edit-icon'>edit</v-icon>
-                          <v-edit-dialog
-                            :return-value.sync="item.price"
-                            lazy
-                          > {{ item.price }}
-                            <v-text-field
-                              slot="input"
-                              v-model="item.price"
-                              label="Цена"
-                              single-line
-                              v-mask="'#####'"
-                            ></v-text-field>
-                          </v-edit-dialog>
-                        </td>
-                        <td>
-                          <v-icon small v-if="!item.comment" class='client-edit-icon'>edit</v-icon>
-                          <v-edit-dialog
-                            :return-value.sync="item.comment"
-                            lazy
-                          > {{ item.comment }}
-                            <v-text-field
-                              slot="input"
-                              v-model="item.comment"
-                              single-line
-                              label="Комментарий"
-                            ></v-text-field>
-                          </v-edit-dialog>
-                        </td>
-                      </template>
-                    </v-data-table>
-                  </v-flex>
-                  <v-flex md12>
-                    <AddBtn label='добавить ученика' @click.native='addClientDialog' />
-                  </v-flex>
+                   <v-flex md8>
+                    <v-layout wrap v-if="dialog_item.status === LESSON_STATUS.CONDUCTED">
+                      <!-- <v-flex md12 class='headline'>
+                        Занятие
+                      </v-flex> -->
+                      
+                      <v-flex md12>
+                        <v-data-table v-if='items.length'
+                          hide-actions
+                          :headers="[
+                            { text: '', sortable: false },
+                            { text: 'Ученик', sortable: false },
+                            { text: 'Отсутствовал', sortable: false }, 
+                            { text: 'Опоздание', sortable: false },
+                            { text: 'Цена', sortable: false },
+                            { text: 'Комментарий', sortable: false },
+                          ]"
+                          :items='clientLessons'
+                        >
+                          <template slot="items" slot-scope="{ item }">
+                            <td width='30' class='px-0 text-md-center' @click='destroyClientLesson(item.id)'>
+                              <v-icon class='pointer'>close</v-icon>
+                            </td>
+                            <td width='200'>
+                              {{ item.client ? item.client.names.short : 'ученик не указан' }}
+                            </td>
+                            <td width='150'>
+                              <v-switch color='red' v-model="item.is_absent" hide-details></v-switch>
+                            </td>
+                            <td width='150'>
+                              <v-icon small v-if="!item.late" class='client-edit-icon'>edit</v-icon>
+                              <v-edit-dialog
+                                :return-value.sync="item.late"
+                                lazy
+                              > {{ item.late }}
+                                <v-text-field
+                                  slot="input"
+                                  v-model="item.late"
+                                  label="Опоздание"
+                                  single-line
+                                  v-mask="'##'"
+                                ></v-text-field>
+                              </v-edit-dialog>
+                            </td>
+                            <td width='150'>
+                              <v-icon small v-if="!item.price" class='client-edit-icon'>edit</v-icon>
+                              <v-edit-dialog
+                                :return-value.sync="item.price"
+                                lazy
+                              > {{ item.price }}
+                                <v-text-field
+                                  slot="input"
+                                  v-model="item.price"
+                                  label="Цена"
+                                  single-line
+                                  v-mask="'#####'"
+                                ></v-text-field>
+                              </v-edit-dialog>
+                            </td>
+                            <td>
+                              <v-icon small v-if="!item.comment" class='client-edit-icon'>edit</v-icon>
+                              <v-edit-dialog
+                                :return-value.sync="item.comment"
+                                lazy
+                              > {{ item.comment }}
+                                <v-text-field
+                                  slot="input"
+                                  v-model="item.comment"
+                                  single-line
+                                  label="Комментарий"
+                                ></v-text-field>
+                              </v-edit-dialog>
+                            </td>
+                          </template>
+                        </v-data-table>
+                      </v-flex>
+                      <v-flex md12>
+                        <AddBtn label='добавить ученика' @click.native='addClientDialog' />
+                      </v-flex>
+                    </v-layout>
+                   </v-flex>
                 </v-layout>
               </v-container>
             </v-card-text>
@@ -268,6 +270,9 @@ export default {
         client: null,
         adding: false,
       },
+
+      // FIXME:
+      recompute_client_lessons: 0,
 
       items: null,
       saving: false,
@@ -370,23 +375,34 @@ export default {
     },
 
     addClientLesson() {
-      this.add_client.adding = true
-      axios.post(apiUrl('client-lessons'), {
-        client_id: this.add_client.client.id,
-        lesson_id: this.dialog_item.id,
-      }).then(r => {
-        this.dialog_item.clientLessons.push(r.data)
-        this.add_client.dialog = false
-        this.add_client.adding = false
+      this.dialog_item.clientLessons.push({
+        client: this.add_client.client,
+        entity_id: this.add_client.client.id,
+        entry_id: this.dialog_item.entry_id,
       })
+      this.add_client.dialog = false
+      // this.add_client.adding = true
+      // axios.post(apiUrl('client-lessons'), {
+      //   client_id: this.add_client.client.id,
+      //   lesson_id: this.dialog_item.id,
+      // }).then(r => {
+      //   this.dialog_item.clientLessons.push(r.data)
+      //   this.add_client.dialog = false
+      //   this.add_client.adding = false
+      // })
     },
 
     destroyClientLesson(lesson_id) {
-      this.dialog_item.clientLessons.splice(
-        this.dialog_item.clientLessons.findIndex(e => e.id === lesson_id),
-        1
-      )
-      axios.delete(apiUrl('client-lessons', lesson_id))
+      const index = this.dialog_item.clientLessons.findIndex(e => e.id === lesson_id)
+      console.log('INDEX', index, this.dialog_item.clientLessons[index])
+      this.dialog_item.clientLessons[index].to_be_deleted = true
+      this.recompute_client_lessons++
+      // this.dialog_item.clientLessons[index].to_be_deleted = true
+      // this.dialog_item.clientLessons.splice(
+      //   this.dialog_item.clientLessons.findIndex(e => e.id === lesson_id),
+      //   1
+      // )
+      // axios.delete(apiUrl('client-lessons', lesson_id))
     },
 
     async fillSchedule() {
@@ -402,6 +418,14 @@ export default {
         await this.store({...last_lesson, date})
       }
     },
+  },
+
+  computed: {
+    clientLessons() {
+      this.recompute_client_lessons
+      colorLog('Recalculating...', 'PaleVioletRed', this.recompute_client_lessons)
+      return this.dialog_item.clientLessons.filter(e => e.to_be_deleted !== true)
+    }
   }
 }
 </script>

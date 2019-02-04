@@ -26,7 +26,10 @@
                     <TeacherSelect v-model='item.head_teacher_id' label="Классный руководитель" />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <GradeAndYear ref='GradeAndYear' :item='item' label-type='GRADE_AND_YEAR' />
+                    <DataSelect type='years' v-model="item.year" />
+                  </div>
+                  <div class='vertical-inputs__input'>
+                    <DataSelect type='grades' v-model="item.grade_id" />
                   </div>
                   <div class='vertical-inputs__input'>
                     <ClearableSelect v-model="item.cabinet_id"
@@ -68,11 +71,10 @@
 
 <script>
 import { MODEL_DEFAULTS, API_URL } from '@/components/Group'
-import GradeAndYear from '@/components/GradeAndYear'
-import { TeacherSelect } from '@/components/UI'
+import { TeacherSelect, DataSelect } from '@/components/UI'
 
 export default {
-  components: { GradeAndYear, TeacherSelect },
+  components: { DataSelect, TeacherSelect },
 
   data() {
     return {

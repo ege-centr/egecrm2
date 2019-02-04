@@ -34,10 +34,13 @@
         <v-tab>
           Платежи
         </v-tab>
+        <v-tab>
+          Допуслуги
+        </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <v-tab-item>
-          <IndexPage ref='GroupPage'
+          <DisplayData ref='GroupPage'
             :pagination='false' 
             :api-url='GROUP_API_URL' 
             :filters='GROUP_FILTERS' 
@@ -47,10 +50,10 @@
             <template slot='items' slot-scope='{ items }'>
               <GroupList :items='items' />
             </template>
-          </IndexPage>
+          </DisplayData>
         </v-tab-item>
         <v-tab-item>
-          <IndexPage ref='PaymentPage'
+          <DisplayData ref='PaymentPage'
             :pagination='false' 
             :api-url='PAYMENT_API_URL' 
             :filters='PAYMENT_FILTERS' 
@@ -66,11 +69,29 @@
                 entity_type: CLASS_NAME,
               })' />
             </template>
-          </IndexPage>
+          </DisplayData>
+        </v-tab-item>
+        <v-tab-item>
+           <DisplayData ref='PaymentAdditionalPage'
+            :pagination='false' 
+            :api-url='PAYMENT_ADDITIONAL_API_URL' 
+            :invisible-filters="{entity_id: $route.params.id, entity_type: CLASS_NAME}"
+          >
+            <template slot='items' slot-scope='{ items }'>
+              <PaymentAdditionalList :items='items' />
+            </template>
+            <template slot='buttons-bottom'>
+              <AddBtn @click.native='$refs.PaymentAdditionalDialog.open(null, {
+                entity_id: $route.params.id,
+                entity_type: CLASS_NAME,
+              })' />
+            </template>
+          </DisplayData>
         </v-tab-item>
       </v-tabs-items>
     </div>
     <PaymentDialog ref='PaymentDialog' />
+    <PaymentAdditionalDialog ref='PaymentAdditionalDialog' />
   </div>
 </template>
 
@@ -89,18 +110,25 @@ import {
   PaymentDialog, 
   PaymentList, 
 } from '@/components/Payment'
-import { IndexPage } from '@/components/UI'
+import {
+  API_URL as PAYMENT_ADDITIONAL_API_URL,
+  PaymentAdditionalList,
+  PaymentAdditionalDialog,
+} from '@/components/Payment/Additional'
+import { DisplayData } from '@/components/UI'
 
 export default {
-  components: { GroupList, PaymentList, IndexPage, PaymentDialog },
+  components: { GroupList, PaymentList, DisplayData, PaymentDialog, PaymentAdditionalList, PaymentAdditionalDialog },
 
   data() {
     return {
       GROUP_API_URL,
       GROUP_FILTERS,
       PAYMENT_API_URL,
+      PAYMENT_ADDITIONAL_API_URL,
       CLASS_NAME,
       PAYMENT_SORT,
+      PAYMENT_FILTERS,
       loading: true,
       item: null,
       tabs: null,

@@ -1,13 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\api\v1;
+namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Payment\Payment;
-use App\Http\Resources\Payment\Collection as PaymentCollection;
+use App\Models\Payment\PaymentAdditional;
 
-class PaymentsController extends Controller
+class PaymentAdditionalsController extends Controller
 {
     protected $filters = [
         'multiple' => ['year', 'category', 'method', 'type'],
@@ -16,36 +15,35 @@ class PaymentsController extends Controller
 
     public function index(Request $request)
     {
-        $query = Payment::query();
+        $query = PaymentAdditional::query();
         $this->filter($request, $query);
-        $query->orderBy('id', 'desc');
         if (isset($request->entity_type) && $request->entity_type) {
             $query->where('entity_type', getModelClass($request->entity_type, true));
         }
-        return PaymentCollection::collection($this->showBy($request, $query));
+        return $this->showAll($query);
     }
 
     public function update(Request $request, $id)
     {
-        $item = Payment::find($id);
+        $item = PaymentAdditional::find($id);
         $item->update($request->input());
         return $item;
     }
 
     public function store(Request $request)
     {
-        return Payment::create(array_merge($request->input(), [
+        return PaymentAdditional::create(array_merge($request->input(), [
             'entity_type' => getModelClass($request->entity_type, true)
         ]));
     }
 
     public function show($id)
     {
-        return Payment::find($id);
+        return PaymentAdditional::find($id);
     }
 
     public function destroy($id)
     {
-        Payment::destroy($id);
+        PaymentAdditional::destroy($id);
     }
 }

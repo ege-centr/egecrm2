@@ -1,8 +1,12 @@
 <template>
   <span>
-    <span :class="{'with-comments': withComments}" v-for='(phone, index) in items' :key='index'>
-      <v-menu>
-        <span slot='activator'><a>{{ phone.phone }}</a> <span v-if='withComments' class='grey--text caption ml-1'>{{ phone.comment }}</span></span> 
+    <span v-for='(phone, index) in items' :key='index'>
+      <v-menu :class="{'d-block': block}">
+        <span slot='activator' class='flex-items align-center'>
+          <a>{{ phone.phone }} {{  }}</a> 
+          <span class='grey--text caption ml-1'>{{ phone.comment }}</span>
+          <span v-if='!block' class='mr-1'>{{ index === items.length - 1 ? '' : ', ' }}</span>
+        </span> 
         <v-list dense>
           <v-list-tile @click='call(phone)'>
             <v-list-tile-action>
@@ -16,15 +20,14 @@
             </v-list-tile-action>
             <v-list-tile-title>СМС</v-list-tile-title>
           </v-list-tile>
-          <v-list-tile @click=''>
+          <!-- <v-list-tile @click=''>
             <v-list-tile-action>
               <v-icon>play_arrow</v-icon>
             </v-list-tile-action>
             <v-list-tile-title>Прослушивание</v-list-tile-title>
-          </v-list-tile>
+          </v-list-tile> -->
         </v-list>
       </v-menu>
-      <span v-if='!withComments'>{{ index === items.length - 1 ? '' : ', ' }}</span>
     </span>
     <Sms ref='Sms' />
   </span>
@@ -40,10 +43,10 @@ export default {
       type: Array,
       default: [],
     },
-
-    withComments: {
+    block: {
       type: Boolean,
       default: false,
+      required: false,
     },
   },
 
@@ -60,10 +63,3 @@ export default {
   }
 }
 </script>
-
-
-<style lang="scss" scoped>
-  .with-comments {
-    display: block;
-  }
-</style>

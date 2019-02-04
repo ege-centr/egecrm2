@@ -8,6 +8,7 @@ Vue.use(Router)
 const router = new Router({
   mode: 'history',
   routes: [
+    ...require('./contracts').default,
     ...require('./macros').default,
     ...require('./abstract-groups').default,
     ...require('./tests').default,

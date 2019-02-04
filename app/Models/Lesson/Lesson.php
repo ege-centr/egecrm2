@@ -38,6 +38,12 @@ class Lesson extends Model
         }
     }
 
+    // public function addClient($client)
+    // {
+    //     $data = ;
+    //     return
+    // }
+
     public static function boot()
     {
         parent::boot();

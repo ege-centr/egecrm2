@@ -29,6 +29,9 @@
                       placeholder='**** **** **** ****'
                       label='Номер карты' 
                       mask="#*** **** **** ####"></v-text-field>
+                      <div class='vertical-inputs__input__message' v-if='item.card_number && item.card_number.length > 0'>
+                        <div class='payment-system' :class="'payment-system_' + item.card_number[0]"></div>
+                      </div>
                   </div>
                   <div class='vertical-inputs__input'>
                     <ClearableSelect v-model="item.type"
@@ -128,7 +131,26 @@ export default {
       }
       this.dialog = false
       this.waitForDialogClose(() => this.saving = false)
-    }
+    },
   }
 }
 </script>
+
+<style lang="scss">
+  .payment-system {
+    height: 22px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    &_2 {
+      height: 14px;
+      background-image: url('/img/svg/payment/mir.svg')
+    }
+    &_4 {
+      background-image: url('/img/svg/payment/visa.svg')
+    }
+    &_3, &_5, &_6 {
+      background-image: url('/img/svg/payment/mastercard.svg')
+    }
+  }
+</style>
+

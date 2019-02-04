@@ -14,7 +14,8 @@ class Collection extends JsonResource
             'comments' => CommentResource::collection($this->comments),
             'phones' => $this->phones,
             'client_ids' => $this->getClientIds(),
-            'responsibleAdmin' => new AdminResource($this->responsibleAdmin)
+            'responsibleAdmin' => new AdminResource($this->responsibleAdmin),
+            'createdAdmin' => new AdminResource($this->createdAdmin),
         ]);
     }
 }

@@ -8,10 +8,7 @@
     >
       <template slot='items' slot-scope="{ item }">
         <td>
-          {{ getData('subjects', item.subject_id).name }}
-        </td>
-        <td>
-          {{ getData('grades', item.grade_id).title }}
+          {{ getData('subjects', item.subject_id).three_letters }}–{{ getData('grades', item.grade_id).short }}
         </td>
         <td>
           {{ getData('years', item.year).title }}

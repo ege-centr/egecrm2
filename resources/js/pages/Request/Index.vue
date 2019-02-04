@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <IndexPage :api-url='API_URL' :filters='FILTERS' ref='IndexPage'>
+    <DisplayData :api-url='API_URL' :filters='FILTERS' :show-by='15' ref='DisplayData'>
       <template slot='buttons'>
         <AddBtn label='добавить заявку' @click.native='$refs.RequestDialog.open(null)' />
       </template>
@@ -11,8 +11,8 @@
           </v-flex>
         </v-layout>
       </template>
-    </IndexPage>
-    <RequestDialog ref='RequestDialog' @updated='() => $refs.IndexPage.reloadData()' />
+    </DisplayData>
+    <RequestDialog ref='RequestDialog' @updated='() => $refs.DisplayData.reloadData()' />
     <ClientDialog ref='ClientDialog' />
   </div>
 </template>
@@ -22,11 +22,11 @@
 import { API_URL, FILTERS } from '@/components/Request'
 import RequestItem from '@/components/Request/Item'
 import RequestDialog from '@/components/Request/Dialog'
-import { IndexPage } from '@/components/UI'
+import { DisplayData } from '@/components/UI'
 import { ClientDialog } from '@/components/Client'
 
 export default {
-  components: { RequestItem, RequestDialog, IndexPage, ClientDialog },
+  components: { RequestItem, RequestDialog, DisplayData, ClientDialog },
 
   data() {
     return {

@@ -48,7 +48,8 @@ export default {
       cmOptions: {
         tabSize: 4,
         mode: 'text/html',
-        lineNumbers: true,
+        lineNumbers: false,
+        lineWrapping: true,
         line: true,
       }
     }

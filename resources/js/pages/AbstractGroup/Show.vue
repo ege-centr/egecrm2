@@ -10,13 +10,6 @@
         <v-layout wrap v-else>
           <v-flex md12>
             <div class='flex-items'>
-              <v-avatar size='100' class='mr-4'>
-                <img src="/img/no-profile-img.jpg">
-              </v-avatar>
-              <div class='mr-5 pr-5'>
-                <div class='item-label'>Преподаватель</div>
-                {{ 'Не установлен' }}
-              </div>
               <div class='mr-5 pr-5'>
                 <div class='item-label'>Предмет и класс</div>
                 <span>
@@ -27,13 +20,6 @@
               <div class='mr-5 pr-5'>
                 <div class='item-label'>Учебный год</div>
                 <span>{{ getData('years', $route.params.year).title }}</span>
-              </div>
-              <div>
-                <div class='item-label'>Статус</div>
-                <span>Болото</span>
-                <!-- <div class='mt-3 item-label'>Уровень</div>
-                <span v-if='item.level' class='text-capitalize'>{{ LEVELS.find(e => e.value == item.level).text }}</span>
-                <span v-else>Не установлен</span> -->
               </div>
             </div>
           </v-flex>
@@ -61,17 +47,9 @@
                 </td>
                 <td class='text-md-right' style='padding-right: 16px'>
                   <v-menu>
-                    <v-btn slot='activator' flat icon color="black" class='ma-0'>
+                    <v-btn @click='moveClient(props.item)' slot='activator' flat icon color="black" class='ma-0'>
                       <v-icon>more_horiz</v-icon>
                     </v-btn>
-                     <v-list dense>
-                        <v-list-tile @click='moveClient(props.item)'>
-                          <v-list-tile-action>
-                            <v-icon>repeat</v-icon>
-                          </v-list-tile-action>
-                          <v-list-tile-title>Переместить в группу</v-list-tile-title>
-                        </v-list-tile>
-                     </v-list>
                   </v-menu>
                 </td>
               </template>
@@ -106,7 +84,12 @@ export default {
 
   methods: {
     loadData() {
-      axios.get(apiUrl(API_URL) + queryString(this.abstractGroup)).then(r => {
+      axios.get(apiUrl(
+        API_URL, 
+        this.abstractGroup.year, 
+        this.abstractGroup.grade_id, 
+        this.abstractGroup.subject_id
+      )).then(r => {
         this.clients = r.data
         this.loading = false
       })

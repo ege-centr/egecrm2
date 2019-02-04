@@ -10,12 +10,12 @@
           <v-card-title class='title justify-center'>
             {{ item.email }}
           </v-card-title>
-          <v-card-text class='messages'>
+          <v-card-text class='email-messages'>
             <Loader v-if='messages === null' />
             <div v-else>
               <div v-for='message in messages' :key='message.id' class="mb-3 display-flex">
               <Avatar :photo='message.createdAdmin ? message.createdAdmin.photo : null' :size='50' class='mr-3' />
-              <v-card class='messages__item grey lighten-4' :class='config.elevationClass'>
+              <v-card class='email-messages__item grey lighten-4' :class='config.elevationClass'>
                 <v-card-text class='py-2 px-3'>
                   <div class='display-flex align-center'>
                     <span class='font-weight-medium'>{{ message.createdAdmin ? message.createdAdmin.name : 'Неизвестный отправитель' }}</span>
@@ -33,20 +33,27 @@
             </div>
             </div>
           </v-card-text>
-          <v-card-actions class='v-card-actions--normal-padding'>
+          <v-card-actions class='v-card-actions--normal-padding email'>
             <div style='width: 100%'>
-              <v-text-field label="Тема сообщения" v-model='subject'></v-text-field>
-              <v-textarea v-model='message' label='Сообщение' :counter='true' ref='textarea' :loading='sending'
-                @keydown.enter.prevent='send'
+              <v-text-field label="Тема сообщения" v-model='subject' :counter='100'></v-text-field>
+              <v-textarea v-model='message' label='Сообщение' :counter='1000' ref='textarea' :loading='sending'
+                @keydown.enter='handleCmdEnter($event)'
                 @click:append='send'
                 append-icon='send'>
               </v-textarea>
               <div class='flex-items align-center'>
-                <v-chip close v-for='(attachment, index) in attachments' :key='attachment.filename' @input='remove(index)'>{{ attachment.original_name }}</v-chip>
-                <v-btn @click='attach' :loading='uploading' flat fab small>
+                <v-chip close v-for='(attachment, index) in attachments' :key='attachment.filename' @input='remove(index)'>
+                  {{ attachment.original_name }} 
+                </v-chip>
+                <v-chip v-if='uploading_file_name !== null'>
+                  <span class='grey--text darken-5'>
+                    загрузка {{ uploading_file_name }}...
+                  </span>
+                </v-chip>
+                <v-btn @click='attach' :loading='uploading_file_name !== null' flat fab small>
                   <v-icon style='font-size: 20px'>attach_file</v-icon>
                 </v-btn>
-                <!-- <span v-if='attachments.length' class='grey--text ml-2'>({{ attachments.length }} вложений)</span> -->
+                <span v-if='uploading_error' class='error--text'>размер файла больше 20мб</span>
               </div>
             </div>
           </v-card-actions>
@@ -71,7 +78,8 @@ export default {
       subject: '',
       attachments: [],
       messages: null,
-      uploading: false,
+      uploading_file_name: null,
+      uploading_error: false,
     }
   },
 
@@ -80,19 +88,25 @@ export default {
       if (newVal === true) {
         this.$upload.on('file', {
           extensions: false,
+          maxSizePerFile: 1024 * 1024 * 20,
           url: apiUrl('upload'),
           onSuccess(e, response) {
             console.log(response.data)
             this.attachments.push(response.data)
           },
           onError(a, b) {
-            this.uploading = false
+            this.uploading_file_name = null
+            this.uploading_error = true
           },
-          onStart() {
-            this.uploading = true
+          onProgress(a, b) {
+            console.log('progress', a, b)
+          },
+          onSelect(fileList) {
+            this.uploading_file_name = fileList[0].name
+            this.uploading_error = false
           },
           onEnd() {
-            this.uploading = false
+            this.uploading_file_name = null
           }
         })
       } else {
@@ -133,6 +147,12 @@ export default {
       })
     },
 
+    handleCmdEnter(event) {
+      if (event.metaKey || event.ctrlKey) {
+        this.send()
+      }
+    },
+
     remove(index) {
       this.attachments.splice(index, 1)
     },
@@ -140,15 +160,17 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-  .v-input__append-inner {
-    align-self: flex-end !important;
-    & i {
-      font-size: 24px;
-      margin-bottom: 18px;
+<style lang='scss'>
+  .email {
+    & .v-input__append-inner {
+      align-self: flex-end !important;
+      & i {
+        font-size: 24px;
+        margin-bottom: 18px;
+      }
     }
   }
-  .messages {
+  .email-messages {
     height: 500px;
     position: relative;
     &__item {

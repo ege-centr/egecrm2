@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\{Payment, Client\Client, Contract\Contract};
+use App\Models\{Payment\Payment, Client\Client, Contract\Contract};
 use App\Http\Resources\Client\{Resource, Collection};
 
 class ClientsController extends Controller

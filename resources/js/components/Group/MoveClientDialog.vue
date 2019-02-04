@@ -58,7 +58,7 @@ export default {
       this.selected_group_id = null
       this.client = client
       this.group = clone(group);
-      // TODO: переделать в IndexPage (может тогда уж переименовать IndexPage?)
+      // TODO: переделать в DisplayData (может тогда уж переименовать DisplayData?)
       ['grade_id', 'subject_id', 'year'].forEach(field => {
         if (group[field]) {
           this.pre_installed_filters[field] = [group[field]]

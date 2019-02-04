@@ -6,7 +6,7 @@ use Shared\Model;
 use App\Interfaces\UserInterface;
 use App\Traits\{HasPhones, HasEmail, HasPhoto, HasName, Commentable};
 use App\Http\Resources\Teacher\Collection as TeacherResource;
-use App\Models\{Request, Phone, Payment, Teacher, Contract\Contract, Group\Group, Group\GroupClient};
+use App\Models\{Request, Phone, Payment\Payment, Teacher, Contract\Contract, Group\Group, Group\GroupClient};
 
 class Client extends Model implements UserInterface
 {

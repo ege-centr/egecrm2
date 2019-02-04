@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Payment;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasCreatedAdmin;
@@ -10,11 +10,6 @@ class Payment extends Model
     use HasCreatedAdmin;
 
     protected $fillable = ['category', 'type', 'method', 'date', 'sum', 'year', 'entity_type', 'entity_id', 'card_number'];
-
-    // public function setCardNumberAttribute($value)
-    // {
-    //     return preg_replace('/[^0-9]/', '', $value);
-    // }
 
     public static function boot()
     {

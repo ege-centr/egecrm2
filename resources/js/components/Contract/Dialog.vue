@@ -15,7 +15,7 @@
         </v-toolbar>
         <v-card-text>
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
-          <v-container v-else grid-list-xl class="pa-0 ma-0">
+          <v-container v-else grid-list-xl class="pa-0 ma-0" style='max-width: 100%'>
             <v-layout class='mb-3'>
               <v-flex md6>
                 <v-layout wrap align-center v-for='(subject, index) in $store.state.data.subjects' :key='subject.id'>
@@ -51,7 +51,10 @@
               <v-flex md6>
                 <div class='vertical-inputs mb-5'>
                   <div class='vertical-inputs__input'>
-                    <GradeAndYear :item='item' label-type='GRADE_AND_YEAR' />
+                    <DataSelect type='years' v-model="item.year" />
+                  </div>
+                  <div class='vertical-inputs__input'>
+                    <DataSelect type='grades' v-model="item.grade_id" />
                   </div>
                   <div class='vertical-inputs__input'>
                     <v-text-field v-model="item.sum" label="Cумма" hide-details></v-text-field>
@@ -68,9 +71,6 @@
                   </div>
                 </div>
 
-
-                
-                
                 <!-- <v-subheader class='pa-0'>Платежи</v-subheader> -->
                 <div class='contract-payment' v-for='(payment, index) in item.payments' :key='index'>
                   <v-layout class='align-center'>
@@ -119,11 +119,10 @@ import {
   SUBJECT_STATUS_ACTIVE,
 } from './'
 
-import GradeAndYear from '@/components/GradeAndYear'
-import { DatePicker } from '@/components/UI'
+import { DatePicker, DataSelect } from '@/components/UI'
 
 export default {
-  components: { GradeAndYear, DatePicker },
+  components: { DataSelect, DatePicker },
 
   data() {
     return {

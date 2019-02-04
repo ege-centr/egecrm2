@@ -1,20 +1,20 @@
 <template>
   <div>
-    <IndexPage :api-url='API_URL' :filters='FILTERS' :pagination='false'>
+    <DisplayData :api-url='API_URL' :filters='FILTERS' :pagination='false'>
       <template slot='items' slot-scope='{ items }'>
         <TeacherList :items='items' />
       </template>
-    </IndexPage>
+    </DisplayData>
   </div>
 </template>
 
 <script>
 
-import { IndexPage } from '@/components/UI'
+import { DisplayData } from '@/components/UI'
 import { API_URL, FILTERS, TeacherList } from '@/components/Teacher'
 
 export default {
-  components: { IndexPage, TeacherList },
+  components: { DisplayData, TeacherList },
 
   data() {
     return {

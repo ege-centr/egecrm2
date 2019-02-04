@@ -14,7 +14,7 @@
     <SearchBar />
     
     <v-list dense>
-      <v-list-tile v-for='(m, index) in menu' :key='index' @click="goTo(m.route)">
+      <v-list-tile v-for='(m, index) in menu' :key='index' @click="goTo(m.route)" :class="{'border-top': m.route === 'RecommendedPrices'}">
           <v-list-tile-action>
               <v-icon>{{ m.icon }}</v-icon>
           </v-list-tile-action>
@@ -25,7 +25,7 @@
               </v-list-tile-title>
           </v-list-tile-content>
       </v-list-tile>
-      <v-list-group
+      <!-- <v-list-group
         prepend-icon="settings"
         value="true"
       >
@@ -43,7 +43,7 @@
             </v-list-tile-content>
         </v-list-tile>
       </v-list>
-    </v-list-group>
+    </v-list-group> -->
       <v-list-tile @click="$store.dispatch('logout')">
         <v-list-tile-action>
           <v-icon>exit_to_app</v-icon>
@@ -104,8 +104,11 @@ export default {
         route: 'TestIndex',
         label: 'Тесты'
       },
-    ],
-    admin_menu: [
+      {
+        icon: 'import_contacts',
+        route: 'ContractIndex',
+        label: 'Договоры'
+      },
       {
         icon: 'multiline_chart',
         route: 'RecommendedPrices',
@@ -137,6 +140,9 @@ export default {
         label: 'Задачи'
       },
     ],
+    admin_menu: [
+      
+    ],
   }),
   methods: {
     goTo(route) {
@@ -162,6 +168,10 @@ export default {
 
 .v-list__tile__title {
   text-transform: lowercase;
+}
+
+.border-top {
+  border-top: 1px solid rgba(white, .1);
 }
 
 </style>

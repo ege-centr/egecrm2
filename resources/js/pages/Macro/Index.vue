@@ -1,20 +1,20 @@
 <template>
   <div>
-    <IndexPage :api-url='API_URL' :pagination='false'>
+    <DisplayData :api-url='API_URL' :pagination='false'>
       <template slot='items' slot-scope='{ items }'>
         <MacroList :items='items' />
       </template>
-    </IndexPage>
+    </DisplayData>
   </div>
 </template>
 
 <script>
 
-import { IndexPage } from '@/components/UI'
+import { DisplayData } from '@/components/UI'
 import { API_URL, MacroList } from '@/components/Macro'
 
 export default {
-  components: { IndexPage, MacroList },
+  components: { DisplayData, MacroList },
 
   data() {
     return {

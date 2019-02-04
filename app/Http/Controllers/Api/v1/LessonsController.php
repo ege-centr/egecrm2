@@ -30,7 +30,16 @@ class LessonsController extends Controller
         $model = Lesson::find($id);
         $model->update($request->all());
         foreach($request->clientLessons as $clientLesson) {
-            ClientLesson::find($clientLesson['id'])->update($clientLesson);
+            if (isset($clientLesson['id'])) {
+                $client_lesson = ClientLesson::find($clientLesson['id']);
+                if (isset($clientLesson['to_be_deleted'])) {
+                    $client_lesson->delete();
+                } else {
+                    $client_lesson->update($clientLesson);
+                }
+            } else {
+                ClientLesson::create(array_merge($model->toArray(), $clientLesson));
+            }
         }
         return new LessonResource($model);
     }

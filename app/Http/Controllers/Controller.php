@@ -43,27 +43,27 @@ class Controller extends BaseController
      * FILTERS TYPES
      */
 
-    private function filterMultiple(string $field, $value, Builder &$query)
+    protected function filterMultiple(string $field, $value, Builder &$query)
     {
         $query->whereIn($field, explode(',', $value));
     }
 
-    private function filterEquals(string $field, $value, Builder &$query)
+    protected function filterEquals(string $field, $value, Builder &$query)
     {
         $query->where($field, $value);
     }
 
-    private function filterExclude(string $field, $value, Builder &$query)
+    protected function filterExclude(string $field, $value, Builder &$query)
     {
         $query->where($field, '<>', $value);
     }
 
-    private function filterLike(string $field, $value, Builder &$query)
+    protected function filterLike(string $field, $value, Builder &$query)
     {
         $query->where($field, 'like', '%' . $value . '%');
     }
 
-    private function filterLikeMultiple(array $fields, $value, Builder &$query)
+    protected function filterLikeMultiple(array $fields, $value, Builder &$query)
     {
         $query->where(function ($query) use ($fields, $value) {
             foreach($fields as $field) {
@@ -75,7 +75,7 @@ class Controller extends BaseController
     /**
      * Поиск в comma-separated values
      */
-    private function filterFindInSet(string $field, $value, Builder &$query)
+    protected function filterFindInSet(string $field, $value, Builder &$query)
     {
         $query->whereRaw("FIND_IN_SET({$value}, {$field})");
     }

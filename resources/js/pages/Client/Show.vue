@@ -19,7 +19,7 @@
                   <span v-if='client.grade_id !== null'>({{ getData('grades', client.grade_id).title }})</span>
                 </div>
                 <div class='mt-4'>
-                  <PhoneList :items='client.phones' :with-comments='true' />
+                  <PhoneList :items='client.phones' :block='true' />
                 </div>
                 <div v-if='client.email'>
                   <EmailShow :item='client.email' />
@@ -31,7 +31,7 @@
                   {{ client.representative.middle_name }}
                 </div>
                 <div class='mt-4'>
-                  <PhoneList :items='client.representative.phones' :with-comments='true' />
+                  <PhoneList :items='client.representative.phones' :block='true' />
                 </div>
                 <div v-if='client.representative.email'>
                   <EmailShow :item='client.representative.email' />
@@ -102,7 +102,7 @@
 
       <v-tabs-items v-model="tabs">
         <v-tab-item>
-          <IndexPage ref='RequestPage'
+          <DisplayData ref='RequestPage'
             :pagination='false' 
             :api-url='REQUEST_API_URL'
             :invisible-filters="{client_id: client.id}"
@@ -119,11 +119,11 @@
                 phones: client.phones,
               })' />
             </template>
-          </IndexPage>
+          </DisplayData>
         </v-tab-item>
         <v-tab-item>
-          <IndexPage ref='ContractPage'
-            filter-component='YearFilter'
+          <DisplayData ref='ContractPage'
+            :year-tabs='true'
             :pagination='false' 
             :api-url='CONTRACT_API_URL' 
             :filters='CONTRACT_FILTERS' 
@@ -136,10 +136,11 @@
             <template slot='buttons-bottom'>
               <AddBtn @click.native='$refs.ContractDialog.open(null, {client_id: client.id})' />
             </template>
-          </IndexPage>
+          </DisplayData>
         </v-tab-item>
         <v-tab-item>
-          <IndexPage ref='GroupPage'
+          <DisplayData ref='GroupPage'
+            :year-tabs='true'
             :pagination='false' 
             :api-url='GROUP_API_URL' 
             :filters='GROUP_FILTERS' 
@@ -149,16 +150,16 @@
             <template slot='items' slot-scope='{ items }'>
               <GroupList :items='items' />
             </template>
-          </IndexPage>
-          <GroupNotAssignedList
+          </DisplayData>
+          <GroupNotAssignedList style='position: relative; top: -24px'
             :client='client' 
             @moved='loadData' 
           />
         </v-tab-item>
         <v-tab-item>
-          <IndexPage ref='PaymentPage'
+          <DisplayData ref='PaymentPage'
+            :year-tabs='true'
             :pagination='false' 
-            :sort='PAYMENT_SORT'
             :api-url='PAYMENT_API_URL' 
             :filters='PAYMENT_FILTERS' 
             :pre-installed-filters='[{item: PAYMENT_FILTERS[2], value: [$store.state.data.academic_year]}]'
@@ -173,7 +174,7 @@
                 entity_type: CLASS_NAME,
               })' />
             </template>
-          </IndexPage>
+          </DisplayData>
         </v-tab-item>
         <v-tab-item>
           <v-card :class='config.elevationClass'>
@@ -210,7 +211,7 @@ import PhoneList from '@/components/Phone/List'
 import EmailShow from '@/components/Email/Show'
 import BranchList from '@/components/UI/BranchList'
 import { TestAdminClientList } from '@/components/Test'
-import { IndexPage } from '@/components/UI'
+import { DisplayData } from '@/components/UI'
 import { 
   API_URL as GROUP_API_URL, 
   FILTERS as GROUP_FILTERS,
@@ -253,7 +254,7 @@ export default {
   components: { 
     RequestDialog, RequestItem, Comments, ContractList, GroupList, GroupNotAssignedList, 
     PaymentList, ClientDialog, PhoneList, BranchList, EmailShow, TestAdminClientList,
-    IndexPage, ContractDialog, PaymentDialog,
+    DisplayData, ContractDialog, PaymentDialog,
   },
 
   created() {

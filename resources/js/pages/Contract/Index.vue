@@ -1,8 +1,8 @@
 <template>
   <div>
-    <DisplayData :api-url='API_URL' :filters='FILTERS' :pagination='false'>
+    <DisplayData :api-url='API_URL' :filters='FILTERS'>
       <template slot='items' slot-scope='{ items }'>
-        <AbstractGroupList :items='items' />
+        <ContractList :items='items' />
       </template>
     </DisplayData>
   </div>
@@ -11,10 +11,10 @@
 <script>
 
 import { DisplayData } from '@/components/UI'
-import { API_URL, FILTERS, AbstractGroupList } from '@/components/AbstractGroup'
+import { API_URL, FILTERS, ContractList } from '@/components/Contract'
 
 export default {
-  components: { DisplayData, AbstractGroupList },
+  components: { DisplayData, ContractList },
 
   data() {
     return {

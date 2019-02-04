@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use Shared\Model;
-use App\Traits\{Enumable, HasPhones, Commentable};
+use App\Traits\{Enumable, HasPhones, HasCreatedAdmin, Commentable};
 use App\Models\Client\Client;
 
 class Request extends Model
 {
-    use Enumable, HasPhones, Commentable;
+    use Enumable, HasPhones, HasCreatedAdmin, Commentable;
     protected $fillable = [
         'name', 'grade_id', 'comment', 'responsible_admin_id',
         'subjects', 'google_id', 'status', 'branches',
@@ -32,16 +32,5 @@ class Request extends Model
         }
 
         return $client_ids;
-    }
-
-    public static function boot()
-    {
-        parent::boot();
-
-        static::creating(function($model) {
-            if (User::loggedIn()) {
-                $model->created_admin_id = User::id();
-            }
-        });
     }
 }

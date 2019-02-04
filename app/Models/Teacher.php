@@ -5,7 +5,7 @@ namespace App\Models;
 use Shared\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Traits\HasName;
-use App\Models\{Payment, Group\Group};
+use App\Models\{Payment\Payment, Group\Group};
 
 class Teacher extends Model
 {

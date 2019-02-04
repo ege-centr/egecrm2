@@ -97,7 +97,7 @@ export default {
     } else {
       this.setPreInstalled(this.preInstalled)
     }
-    this.emit()
+    this.emit(true)
   },
 
   data() {
@@ -144,12 +144,12 @@ export default {
       this.emit()
     },
 
-    emit() {
+    emit(initial_set = false) {
       const filters = {}
       this.filters.forEach(e => {
         filters[e.item.field] = e.value
       })
-      this.$emit('updated', filters)
+      this.$emit('updated', filters, initial_set)
     },
 
     getFilterValueLabel(filter) {
