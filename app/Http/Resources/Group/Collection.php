@@ -21,8 +21,8 @@ class Collection extends JsonResource
             'lessons_count' => $lesson_count,
             'lessons_conducted_count' => $this->lessons()->where('status', 'conducted')->count(),
             'first_lesson_date' => $lesson_count ? $this->lessons()->orderBy('date', 'asc')->value('date') : null,
-            // 'schedule' => $this->getSchedule(),
-            'schedule' => ['label' => '123']
+            'schedule' => $this->getSchedule(),
+            // 'schedule' => ['label' => '123']
         ];
     }
 }
