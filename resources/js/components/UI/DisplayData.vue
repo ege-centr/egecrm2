@@ -46,9 +46,7 @@
       </v-layout>
     </v-container>
 
-    <div v-if='items.length === 0' class='text-md-center grey--text darken-3 font-weight-medium' style='margin: 150px 0' :class="{'invisible': loading}">
-      нет данных
-    </div>
+    <NoData v-if='items.length === 0' :class="{'invisible': loading}" />
 
     <slot name='buttons-bottom'></slot>
   </div>
@@ -57,6 +55,7 @@
 <script>
 
 import { AllFilter } from '@/components/Filter'
+import { NoData } from '@/components/UI'
 import InfiniteLoading from 'vue-infinite-loading'
 
 export default {
@@ -98,7 +97,7 @@ export default {
     }
   },
 
-  components: { AllFilter, InfiniteLoading },
+  components: { AllFilter, NoData, InfiniteLoading },
 
   data() {
     return {

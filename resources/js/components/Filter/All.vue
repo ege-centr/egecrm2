@@ -62,7 +62,9 @@
 import { LOCAL_STORAGE_KEY } from './'
 import { 
   TypeSelect,
+  TypeUser,
   TypeMultiple,
+  TypeInterval,
 } from './Type'
 
 export default {
@@ -84,7 +86,12 @@ export default {
     },
   },
 
-  components: { TypeSelect, TypeMultiple },
+  components: { 
+    TypeInterval,
+    TypeSelect, 
+    TypeMultiple, 
+    TypeUser,
+  },
 
   created() {
     if (this.preInstalled === null) {
@@ -147,7 +154,11 @@ export default {
     emit(initial_set = false) {
       const filters = {}
       this.filters.forEach(e => {
-        filters[e.item.field] = e.value
+        let value = e.value
+        if (_.isObject(value)) {
+          value = JSON.stringify(value)
+        }
+        filters[e.item.field] = value
       })
       this.$emit('updated', filters, initial_set)
     },
@@ -159,7 +170,7 @@ export default {
             filter.item.options.find(e => e[this.getItemValue(filter.item)] == filter.value), 
             this.getItemText(filter.item)
           )
-        case 'multiple':
+        case 'multiple': {
           const label = []
           if (Array.isArray(filter.value)) {
             filter.value.forEach(v => {
@@ -170,8 +181,21 @@ export default {
             })
           }
           return label.join(', ')
+        }
         case 'date':
           return this.$options.filters.date(filter.value)
+        case 'user':
+          return this.getData('admins', filter.value).name
+        case 'interval': {
+          const label = []
+          if (filter.value.start !== null) {
+            label.push('с ' + this.$options.filters.date(filter.value.start))
+          }
+          if (filter.value.end !== null) {
+            label.push('по ' + this.$options.filters.date(filter.value.end))
+          }
+          return label.join(' ')
+        }
         default:
           return filter.value
       }

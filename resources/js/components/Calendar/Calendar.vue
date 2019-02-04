@@ -1,6 +1,6 @@
 <template>
   <div class='calendar'>
-    <div v-for='month in CALENDAR_MONTHS'>
+    <div v-for='month in monthsWithData' :key='month'>
       <div class='calendar__month-title font-weight-bold'>{{ month_labels[month] }} {{ getYear(month) }}</div>
       <table class='calendar__table'>
         <thead>
@@ -12,7 +12,9 @@
         </thead>
         <tbody>
           <tr v-for='days_by_weeks in days_by_months_and_weeks[month]'>
-            <td v-for='day in days_by_weeks' class='font-weight-medium calendar-day' :title="hasSpecial(day, 'exam') ? 'экзамен' : (hasSpecial(day, 'vacation') ? 'праздник' : '')"
+            <td v-for='(day, index) in days_by_weeks' :key='index'
+              class='font-weight-medium calendar-day' 
+              :title="hasSpecial(day, 'exam') ? 'экзамен' : (hasSpecial(day, 'vacation') ? 'праздник' : '')"
               :class="{
                 'calendar-day_active calendar-day_has-lesson-conducted': lessonCount(day, 'conducted') > 0,
                 'calendar-day_has-lesson-conducted_multiple': lessonCount(day, 'conducted') > 1,
@@ -162,6 +164,23 @@ export default {
       }
       return false
     }
+  },
+
+  computed: {
+    monthsWithData() {
+      if (this.lessons.length === 0) {
+        return CALENDAR_MONTHS
+      }
+      const months_with_data = []
+      this.lessons.filter(lesson => lesson.status !== 'cancelled').forEach(lesson => {
+        let month = parseInt(moment(lesson.date).format('M'))
+        if (months_with_data.indexOf(month) === -1) {
+          months_with_data.push(month)
+        }
+      })
+      console.log(months_with_data)
+      return _.intersection(CALENDAR_MONTHS, months_with_data)
+    },
   }
 }
 </script>

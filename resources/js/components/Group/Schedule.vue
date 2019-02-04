@@ -9,7 +9,7 @@
           </v-flex>
           <v-spacer></v-spacer>
           <v-flex>
-            <v-data-table hide-actions hide-headers :items='items' :pagination.sync="sortingOptions" class='mt-3'>
+            <v-data-table hide-actions hide-headers :items='items' :pagination.sync="sortingOptions" class='mt-3' v-if='items.length > 0'>
               <template slot='items' slot-scope="{ index, item }">
                 <td width='10' class='pr-0 grey--text' :class="{'purple lighten-5': item.is_unplanned}">
                   <div class='lesson-status' :class="{
@@ -45,6 +45,7 @@
                 </td>
               </template>
             </v-data-table>
+            <NoData v-else />
             <div class='mt-3'>
               <v-btn color='primary' small class='ma-0 mr-3' @click='add'>
                 <v-icon class="mr-1">add</v-icon>
@@ -79,7 +80,7 @@
                   <v-flex md4>
                     <div class='vertical-inputs'>
                       <div class='vertical-inputs__input'>
-                        <DatePicker label="Дата занятия" v-model='dialog_item.date' />
+                        <DatePicker v-if='dialog' label="Дата занятия" v-model='dialog_item.date' />
                       </div>
                       <div class='vertical-inputs__input'>
                         <v-text-field hide-details v-model='dialog_item.time' label='Время занятия' v-mask="'##:##'"></v-text-field>
@@ -242,13 +243,13 @@
 
 import Calendar from '@/components/Calendar/Calendar'
 import { LESSON_STATUS } from '@/components/Lesson'
-import { DatePicker, DataSelect, TeacherSelect } from '@/components/UI'
+import { DatePicker, DataSelect, TeacherSelect, NoData } from '@/components/UI'
 import { API_URL as CLIENTS_API_URL } from '@/components/Client'
 
 const API_URL = 'lessons'
 
 export default {
-  components: { Calendar, DatePicker, DataSelect, TeacherSelect },
+  components: { Calendar, DatePicker, DataSelect, TeacherSelect, NoData },
 
   props: {
     group: {
@@ -259,7 +260,6 @@ export default {
   data() {
     return {
       LESSON_STATUS,
-      edit_lesson_tab: true,
       dialog: false,
       
       // TODO: мб вынести?
@@ -314,7 +314,6 @@ export default {
     },
 
     edit(lesson) {
-      this.edit_lesson_tab = true
       this.dialog = true
       this.dialog_item = clone(lesson)
     },

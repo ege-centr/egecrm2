@@ -63,6 +63,17 @@ class Controller extends BaseController
         $query->where($field, 'like', '%' . $value . '%');
     }
 
+    protected function filterInterval(string $field, $value, Builder &$query)
+    {
+        $value = json_decode($value);
+        if (isset($value->start)) {
+            $query->where($field, '>=', $value->start);
+        }
+        if (isset($value->end)) {
+            $query->where($field, '<=', $value->end);
+        }
+    }
+
     protected function filterLikeMultiple(array $fields, $value, Builder &$query)
     {
         $query->where(function ($query) use ($fields, $value) {

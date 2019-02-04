@@ -16,7 +16,9 @@ export const MODEL_DEFAULTS = {
 export const FILTERS = [
   {label: 'Статус', field: 'status', type: 'select', options: REQUEST_STATUSES},
   {label: 'Класс', field: 'grade_id', type: 'select', options: store.state.data.grades},
-  {label: 'Ответственный', field: 'responsible_admin_id', type: 'select', options: store.state.data.admins, textField: 'name'},
+  {label: 'Ответственный', field: 'responsible_admin_id', type: 'user'},
+  {label: 'Пользователь', field: 'created_admin_id', type: 'user'},
+  {label: 'Период', field: 'created_at', type: 'interval'}
 ]
 
 export const RequestItem = require('./Item')
