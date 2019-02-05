@@ -62,7 +62,7 @@
 import { LOCAL_STORAGE_KEY } from './'
 import { 
   TypeSelect,
-  TypeUser,
+  TypeAdmin,
   TypeMultiple,
   TypeInterval,
 } from './Type'
@@ -90,7 +90,7 @@ export default {
     TypeInterval,
     TypeSelect, 
     TypeMultiple, 
-    TypeUser,
+    TypeAdmin,
   },
 
   created() {
@@ -155,11 +155,15 @@ export default {
       const filters = {}
       this.filters.forEach(e => {
         let value = e.value
+        if (Array.isArray(value)) {
+          value = value.join(',')
+        }
         if (_.isObject(value)) {
           value = JSON.stringify(value)
         }
         filters[e.item.field] = value
       })
+      console.log('emitting', filters)
       this.$emit('updated', filters, initial_set)
     },
 
@@ -184,8 +188,13 @@ export default {
         }
         case 'date':
           return this.$options.filters.date(filter.value)
-        case 'user':
-          return this.getData('admins', filter.value).name
+        case 'admin': {
+          const label = []
+          filter.value.forEach(admin_id => {
+            label.push(this.getData('admins', admin_id).name)
+          })
+          return label.join(', ')
+        }
         case 'interval': {
           const label = []
           if (filter.value.start !== null) {

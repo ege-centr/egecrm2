@@ -12,8 +12,7 @@ export default {
 
   data() {
     return {
-      value: null,
-      applyEnabled: false,
+      value: [],
     }
   },
 
@@ -26,7 +25,21 @@ export default {
   methods: {
     apply() {
       this.$emit('selected', _.pick(this, ['item', 'value']))
-      // this.value = _.isArray(this.value) ? [] : null
+    },
+
+    select(option) {
+      this.value = option[this.idField]
+      this.apply()
+    },
+
+    selectMultiple(option) {
+      const value = option[this.idField]
+      const value_index = this.value.indexOf(value)
+      if (value_index === -1) {
+        this.value.push(value)
+      } else {
+        this.value.splice(value_index, 1)
+      }
     },
   },
 

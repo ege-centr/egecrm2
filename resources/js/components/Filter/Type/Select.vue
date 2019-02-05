@@ -15,14 +15,6 @@ import { FilterTypeMixin } from '@/mixins'
 
 export default {
   components: { FilterTypeBase },
-
   mixins: [ FilterTypeMixin ],
-
-  methods: {
-    select(option) {
-      this.value = option[this.idField]
-      this.apply()
-    },
-  }
 }
 </script>

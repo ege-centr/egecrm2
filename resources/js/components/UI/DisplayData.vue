@@ -37,7 +37,7 @@
 
           <slot name='items' :items='items' v-if='items.length > 0'></slot>
 
-          <infinite-loading v-if='pagination'
+          <infinite-loading v-if='paginate !== null && infinite_loading'
             @infinite='loadData' ref='InfiniteLoading' :distance='2000' spinner='spiral' class='mt-3'>
             <div slot='no-more'></div>
             <div slot='no-results'></div>
@@ -55,7 +55,6 @@
 <script>
 
 import { AllFilter } from '@/components/Filter'
-import { NoData } from '@/components/UI'
 import InfiniteLoading from 'vue-infinite-loading'
 
 export default {
@@ -69,10 +68,10 @@ export default {
       required: false,
       default: null,
     },
-    pagination: {
-      type: Boolean,
+    paginate: {
+      type: Number,
       required: false,
-      default: true,
+      default: null,
     },
     invisibleFilters: {
       type: Object,
@@ -86,30 +85,27 @@ export default {
       type: Array,
       required: false,
     },
-    showBy: {
-      type: Number,
-      required: false,
-      default: 50,
-    },
     yearTabs: {
       type: Boolean,
       default: false,
     }
   },
 
-  components: { AllFilter, NoData, InfiniteLoading },
+  components: { AllFilter, InfiniteLoading },
 
   data() {
     return {
       page: 1,
       loading: true,
+      // для пересоздания компонента
+      infinite_loading: true,
       data: [],
       selected_year: this.$store.state.data.academic_year,
     }
   },
 
   created() {
-    if (! this.pagination) {
+    if (this.paginate === null) {
       this.loadData()
     }
   },
@@ -118,12 +114,12 @@ export default {
     loadData(state) {
       axios.get(apiUrl(this.apiUrl) + queryString({
         page: this.page,
-        show_by: this.pagination ? this.showBy : '',
+        paginate: this.paginate || '',
         ...this.current_filters,
         ...this.invisibleFilters,
         ...this.getSort(),
       })).then(response => {
-        if (this.page === 1 || !this.pagination) {
+        if (this.page === 1 || this.paginate === null) {
           this.data = response.data.data
         } else {
           this.data.push(...response.data.data)
@@ -131,29 +127,42 @@ export default {
         if (this.yearTabs) {
           this.selected_year = this.yearsWithData.slice(-1)[0].id
         }
-        // if (response.data.meta.current_page === response.data.meta.last_page) {
-        //   state.complete()
-        // } else {
-        //   state.loaded()
-        // }
-        if (this.pagination) {
-          if (response.data.meta.current_page >= response.data.meta.last_page) {
-            this.$refs.InfiniteLoading.stateChanger.complete()
+        if (this.paginate !== null) {
+          if (response.data.meta.current_page === response.data.meta.last_page) {
+            colorLog('COMPLETE', 'Turquoise')
+            state.complete()
           } else {
-            this.$refs.InfiniteLoading.stateChanger.loaded()
+            colorLog('LOADED', 'PaleVioletRed')
+            state.loaded()
           }
           this.page++
         }
+        // if (this.paginate !== null) {
+        //   if (response.data.meta.current_page >= response.data.meta.last_page) {
+        //     colorLog('COMPLETE', 'Turquoise')
+        //     this.$refs.InfiniteLoading.stateChanger.complete()
+        //   } else {
+        //     colorLog('LOADED', 'PaleVioletRed')
+        //     this.$refs.InfiniteLoading.stateChanger.loaded()
+        //   }
+        //   this.page++
+        // }
         this.loading = false
       })
     },
 
     reloadData() {
+      colorLog('Reloading data', 'Turquoise')
       this.loading = true
       this.page = 1
-      this.loadData()
+      this.data = []
+      this.infinite_loading = false
+      Vue.nextTick(() => this.infinite_loading = true)
+      // this.loadData()
       // this.$refs.InfiniteLoading.$emit('infinite', this.$refs.InfiniteLoading.stateChanger)
-      // this.$refs.InfiniteLoading.attemptLoad()
+      // Vue.nextTick(() => {
+      //   this.$refs.InfiniteLoading.attemptLoad()
+      // })
     },
 
     getSort() {
@@ -169,14 +178,14 @@ export default {
     toggleSortType() {
       this.loading = true
       this.selectedSort.type = this.selectedSort.type === 'asc' ? 'desc' : 'asc'
-      this.loadData()
+      this.reloadData()
     },
 
     setSort(index) {
       this.loading = true
       this.selectedSort.selected = false
       this.sort[index].selected = true
-      this.loadData()
+      this.reloadData()
     },
 
     filtersUpdated(filters, initial_set) {

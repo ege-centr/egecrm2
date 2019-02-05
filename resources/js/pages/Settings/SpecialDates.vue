@@ -70,7 +70,7 @@
               </v-flex>
               <v-spacer></v-spacer>
               <v-flex md6>
-                <v-data-table hide-actions hide-headers :items='current_year_items' :pagination.sync="sortingOptions" class='mt-3'>
+                <v-data-table hide-actions hide-headers :items='current_year_items' :paginate.sync="sortingOptions" class='mt-3'>
                   <template slot='items' slot-scope="{ item }">
                     <td>
                       {{ item.date | date }}

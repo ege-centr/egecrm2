@@ -1,10 +1,10 @@
 <template>
-   <v-card>
-    <v-card-text class='pa-0' style='max-height: 700px'>
+  <v-card class='relative'>
+    <v-card-text class='pa-0' style='max-height: 700px; overflow-y: scroll; padding-bottom: 60px !important;'>
       <slot></slot>
     </v-card-text>
-     <v-card-actions v-if='applyButton || $parent.filterValue !== null' class='justify-center'>
-       <v-btn color="blue darken-1" small flat 
+    <v-card-actions v-if='applyButton || $parent.filterValue !== null' class='justify-center' >
+      <v-btn color="blue darken-1" small flat 
         v-if='$parent.filterValue !== null'
         @click='togglePin'>{{ isPinned() ? 'открепить' : 'закрепить' }}</v-btn>
       <v-btn color="blue darken-1" small flat 
@@ -12,7 +12,7 @@
         :disabled='!applyEnabled' 
         @click='$parent.apply'>Применить</v-btn>
     </v-card-actions>
-   </v-card>
+  </v-card>
 </template>
 
 <script>
@@ -22,7 +22,7 @@ export default {
   props: {
     applyButton: {
       type: Boolean,
-      default: false,
+      default: true,
     },
     applyEnabled: {
       type: Boolean,
@@ -74,3 +74,17 @@ export default {
   },
 }
 </script>
+
+
+<style lang="scss" scoped>
+  .v-card__actions {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    background: white;
+    box-shadow: 0 0 12px 12px white;
+  }
+</style>
+>
+
+</style>

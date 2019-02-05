@@ -9,7 +9,7 @@
           </v-flex>
           <v-spacer></v-spacer>
           <v-flex>
-            <v-data-table hide-actions hide-headers :items='items' :pagination.sync="sortingOptions" class='mt-3' v-if='items.length > 0'>
+            <v-data-table hide-actions hide-headers :items='items' :paginate.sync="sortingOptions" class='mt-3' v-if='items.length > 0'>
               <template slot='items' slot-scope="{ index, item }">
                 <td width='10' class='pr-0 grey--text' :class="{'purple lighten-5': item.is_unplanned}">
                   <div class='lesson-status' :class="{

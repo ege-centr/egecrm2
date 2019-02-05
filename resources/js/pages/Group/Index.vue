@@ -1,7 +1,7 @@
 <template>
   <div>
     <GroupDialog ref='GroupDialog' />
-    <DisplayData :api-url='API_URL' :filters='FILTERS' :pagination='false'>
+    <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='30'>
       <template slot='buttons'>
         <AddBtn @click.native='$refs.GroupDialog.open(null)' label='добавить группу' />
       </template>

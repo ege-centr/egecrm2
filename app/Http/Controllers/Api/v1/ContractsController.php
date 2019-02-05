@@ -10,7 +10,8 @@ use App\Http\Resources\Contract\Resource as ContractResource;
 class ContractsController extends Controller
 {
     protected $filters = [
-        'equals' => ['client_id', 'year']
+        'equals' => ['client_id'],
+        'multiple' => ['year'],
     ];
 
     public function index(Request $request)

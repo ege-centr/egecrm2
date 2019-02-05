@@ -95,9 +95,6 @@
                 </div>
               </v-flex>
             </v-layout>
-            <v-layout>
-              
-            </v-layout>
           </v-container>
         </v-card-text>
       </v-card>

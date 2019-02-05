@@ -14,98 +14,105 @@
         </v-toolbar>
         <v-card-text class='relative'>
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
-          <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
-            <v-layout wrap>
-              <v-flex md12 class='headline'>
-                Ученик
+          <v-container grid-list-xl class="pa-0 ma-0"  style='max-width: 100%' fluid v-else>
+            <v-layout>
+              <v-flex md6>
+                <v-layout wrap>
+                  <v-flex md12 class='headline'>
+                    Ученик
+                  </v-flex>
+
+                  <v-flex md12>
+                    <div class='vertical-inputs'>
+                      <div class='vertical-inputs__input' v-if='edit_mode'>
+                        <AvatarLoader class-name='Client\Client' :entity-id='item.id' :photo='item.photo' @photoChanged='photoChanged' />
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <v-text-field v-model="item.first_name" label="Имя" hide-details></v-text-field>
+                        <!-- <div class='vertical-inputs__input__message'>123</div> -->
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <v-text-field v-model="item.last_name" label="Фамилия" hide-details></v-text-field>
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <v-text-field v-model="item.middle_name" label="Отчество" hide-details></v-text-field>
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <v-text-field v-model="item.school" label="Школа" hide-details></v-text-field>
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <GradeAndYear :item='item' />
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <v-select multiple hide-details
+                          v-model="item.branches"
+                          :items="$store.state.data.branches"
+                          item-value='id'
+                          item-text='full'
+                          label="Филиалы"
+                        ></v-select>
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <EmailField :entity='item' />
+                      </div>
+                      <div>
+                        <PhoneEdit :item='item' />
+                      </div>
+                    </div>
+                  </v-flex>
+                </v-layout>
               </v-flex>
 
-              <v-flex md12>
-                <div class='vertical-inputs'>
-                  <div class='vertical-inputs__input' v-if='edit_mode'>
-                    <AvatarLoader class-name='Client\Client' :entity-id='item.id' :photo='item.photo' @photoChanged='photoChanged' />
-                  </div>
-                  <div class='vertical-inputs__input'>
-                    <v-text-field v-model="item.first_name" label="Имя" hide-details></v-text-field>
-                    <!-- <div class='vertical-inputs__input__message'>123</div> -->
-                  </div>
-                  <div class='vertical-inputs__input'>
-                    <v-text-field v-model="item.last_name" label="Фамилия" hide-details></v-text-field>
-                  </div>
-                  <div class='vertical-inputs__input'>
-                    <v-text-field v-model="item.middle_name" label="Отчество" hide-details></v-text-field>
-                  </div>
-                  <div class='vertical-inputs__input'>
-                    <v-text-field v-model="item.school" label="Школа" hide-details></v-text-field>
-                  </div>
-                  <div class='vertical-inputs__input'>
-                    <GradeAndYear :item='item' />
-                  </div>
-                  <div class='vertical-inputs__input'>
-                    <v-select multiple hide-details
-                      v-model="item.branches"
-                      :items="$store.state.data.branches"
-                      item-value='id'
-                      item-text='full'
-                      label="Филиалы"
-                    ></v-select>
-                  </div>
-                  <div class='vertical-inputs__input'>
-                    <EmailField :entity='item' />
-                  </div>
-                  <div>
-                    <PhoneEdit :item='item' />
-                  </div>
-                </div>
+              <v-flex md6>
+                <v-layout wrap>
+                  <v-flex md12 class='headline'>
+                    Представитель
+                  </v-flex>
+                  <v-flex md12>
+                    <div class='vertical-inputs'>
+                      <div class='vertical-inputs__input'>
+                        <v-text-field v-model="item.representative.first_name" label="Имя" hide-details></v-text-field>
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <v-text-field v-model="item.representative.last_name" label="Фамилия" hide-details></v-text-field>
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <v-text-field v-model="item.representative.middle_name" label="Отчество" hide-details></v-text-field>
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <v-text-field v-model="item.representative.series" label="Серия" hide-details></v-text-field>
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <v-text-field v-model="item.representative.number" label="Номер" hide-details></v-text-field>
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <v-text-field v-model="item.representative.code" label="Код подразделения" hide-details></v-text-field>
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <DatePicker v-model='item.representative.birthday' label="Дата рождения" />
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <DatePicker v-model='item.representative.issued_date' label="Дата выдачи" />
+                      </div>
+                      <div class='vertical-inputs__input vertical-inputs__input_wide'>
+                        <v-text-field v-model="item.representative.issued_by" label="Выдан" hide-details></v-text-field>
+                      </div>
+                      <div class='vertical-inputs__input vertical-inputs__input_wide'>
+                        <v-text-field v-model="item.representative.address" label="Адрес" hide-details></v-text-field>
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <EmailField :entity='item.representative' />
+                        <div class='vertical-inputs__input__message blue--text accent-1'>данный email используется в качестве логина</div>
+                      </div>
+                      <div>
+                        <PhoneEdit :item='item.representative' />
+                      </div>
+                    </div>
+                  </v-flex>
+                </v-layout>
               </v-flex>
-            </v-layout>
 
-            <v-layout wrap>
-              <v-flex md12 class='headline'>
-                Представитель
-              </v-flex>
-              <v-flex md12>
-                <div class='vertical-inputs'>
-                  <div class='vertical-inputs__input'>
-                    <v-text-field v-model="item.representative.first_name" label="Имя" hide-details></v-text-field>
-                  </div>
-                  <div class='vertical-inputs__input'>
-                    <v-text-field v-model="item.representative.last_name" label="Фамилия" hide-details></v-text-field>
-                  </div>
-                  <div class='vertical-inputs__input'>
-                    <v-text-field v-model="item.representative.middle_name" label="Отчество" hide-details></v-text-field>
-                  </div>
-                  <div class='vertical-inputs__input'>
-                    <v-text-field v-model="item.representative.series" label="Серия" hide-details></v-text-field>
-                  </div>
-                  <div class='vertical-inputs__input'>
-                    <v-text-field v-model="item.representative.number" label="Номер" hide-details></v-text-field>
-                  </div>
-                  <div class='vertical-inputs__input'>
-                    <v-text-field v-model="item.representative.code" label="Код подразделения" hide-details></v-text-field>
-                  </div>
-                  <div class='vertical-inputs__input'>
-                    <DatePicker v-model='item.representative.birthday' label="Дата рождения" />
-                  </div>
-                  <div class='vertical-inputs__input'>
-                    <DatePicker v-model='item.representative.issued_date' label="Дата выдачи" />
-                  </div>
-                  <div class='vertical-inputs__input vertical-inputs__input_wide'>
-                    <v-text-field v-model="item.representative.issued_by" label="Выдан" hide-details></v-text-field>
-                  </div>
-                  <div class='vertical-inputs__input vertical-inputs__input_wide'>
-                    <v-text-field v-model="item.representative.address" label="Адрес" hide-details></v-text-field>
-                  </div>
-                  <div class='vertical-inputs__input'>
-                    <EmailField :entity='item.representative' />
-                    <div class='vertical-inputs__input__message blue--text accent-1'>данный email используется в качестве логина</div>
-                  </div>
-                  <div>
-                    <PhoneEdit :item='item.representative' />
-                  </div>
-                </div>
-              </v-flex>
-            </v-layout>
+            </v-layout>            
           </v-container>
         </v-card-text>
       </v-card>

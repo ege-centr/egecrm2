@@ -14,10 +14,10 @@ export const MODEL_DEFAULTS = {
 }
 
 export const FILTERS = [
-  {label: 'Статус', field: 'status', type: 'select', options: REQUEST_STATUSES},
-  {label: 'Класс', field: 'grade_id', type: 'select', options: store.state.data.grades},
-  {label: 'Ответственный', field: 'responsible_admin_id', type: 'user'},
-  {label: 'Пользователь', field: 'created_admin_id', type: 'user'},
+  {label: 'Статус', field: 'status', type: 'multiple', options: REQUEST_STATUSES},
+  {label: 'Класс', field: 'grade_id', type: 'multiple', options: store.state.data.grades},
+  {label: 'Ответственный', field: 'responsible_admin_id', type: 'admin'},
+  {label: 'Пользователь', field: 'created_admin_id', type: 'admin'},
   {label: 'Период', field: 'created_at', type: 'interval'}
 ]
 

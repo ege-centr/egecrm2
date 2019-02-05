@@ -41,7 +41,6 @@
       <v-tabs-items v-model="tabs">
         <v-tab-item>
           <DisplayData ref='GroupPage'
-            :pagination='false' 
             :api-url='GROUP_API_URL' 
             :filters='GROUP_FILTERS' 
             filter-component='YearFilter'
@@ -54,7 +53,6 @@
         </v-tab-item>
         <v-tab-item>
           <DisplayData ref='PaymentPage'
-            :pagination='false' 
             :api-url='PAYMENT_API_URL' 
             :filters='PAYMENT_FILTERS' 
             :sort='PAYMENT_SORT'
@@ -73,7 +71,6 @@
         </v-tab-item>
         <v-tab-item>
            <DisplayData ref='PaymentAdditionalPage'
-            :pagination='false' 
             :api-url='PAYMENT_ADDITIONAL_API_URL' 
             :invisible-filters="{entity_id: $route.params.id, entity_type: CLASS_NAME}"
           >

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DisplayData :api-url='API_URL' :pagination='false'>
+    <DisplayData :api-url='API_URL'>
       <template slot='items' slot-scope='{ items }'>
         <MacroList :items='items' />
       </template>

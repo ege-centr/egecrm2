@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <DisplayData :api-url='API_URL' :filters='FILTERS'>
+    <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='30'>
       <template slot='buttons'>
         <AddBtn @click.native='$refs.ClientDialog.open(null)' label='добавить клиента' />
       </template>

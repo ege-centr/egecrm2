@@ -31,7 +31,7 @@ class Controller extends BaseController
 
     protected function showBy(Request $request, Builder $query)
     {
-        return $query->paginate($request->show_by ?: 9999);
+        return $query->paginate($request->paginate ?: 9999);
     }
 
     protected function showAll(Builder $query)

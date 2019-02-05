@@ -7,6 +7,13 @@ Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0 }
+    }
+  },
   routes: [
     ...require('./contracts').default,
     ...require('./macros').default,
