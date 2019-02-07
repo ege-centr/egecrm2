@@ -119,7 +119,7 @@ export default {
 
   computed: {
     data() {
-      return this.items.filter(item => item.grade_id == selected_tab)
+      return this.items.filter(item => item.grade_id == this.selected_tab)
     },
 
     tabsWithData() {
