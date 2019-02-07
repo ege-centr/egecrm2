@@ -67,10 +67,10 @@ class Controller extends BaseController
     {
         $value = json_decode($value);
         if (isset($value->start)) {
-            $query->where($field, '>=', $value->start);
+            $query->whereRaw("DATE(`{$field}`) >= '{$value->start}'");
         }
         if (isset($value->end)) {
-            $query->where($field, '<=', $value->end);
+            $query->whereRaw("DATE(`{$field}`) <= '{$value->end}'");
         }
     }
 

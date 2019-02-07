@@ -1,6 +1,6 @@
 <template lang="html">
   <div>
-    <DisplayData :api-url='API_URL' :filters='FILTERS' :sort='SORT'>
+    <DisplayData :api-url='API_URL' :filters='FILTERS' :sort='SORT' :paginate='30'>
       <template slot='items' slot-scope='{ items }'>
         <PaymentList :items='items' />
       </template>

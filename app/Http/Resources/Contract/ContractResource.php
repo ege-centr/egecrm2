@@ -4,7 +4,7 @@ namespace App\Http\Resources\Contract;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class Resource extends JsonResource
+class ContractResource extends JsonResource
 {
     public function toArray($request)
     {

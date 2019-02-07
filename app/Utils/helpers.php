@@ -105,3 +105,12 @@ function numToText($number)
     $f = new NumberFormatter("ru", NumberFormatter::SPELLOUT);
     return $f->format($number);
 }
+
+function extractFields($fields, $object)
+{
+    $return = [];
+    foreach ($fields as $field) {
+        $return[$field] = $object->{$field};
+    }
+    return $return;
+}

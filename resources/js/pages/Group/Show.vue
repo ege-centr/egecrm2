@@ -17,6 +17,8 @@
               <div class='mr-5 pr-5'>
                 <div class='item-label'>Преподаватель</div>
                 {{ item.teacher ? item.teacher.names.full : 'Не установлен' }}
+                <div class='mt-3 item-label'>Кабинет</div>
+                <span>{{ item.cabinet_id ? item.cabinet.text : 'Не установлен' }}</span>
               </div>
               <div class='mr-5 pr-5'>
                 <div class='item-label'>Предмет и класс</div>
@@ -140,7 +142,7 @@
         </v-tab-item>
       </v-tabs-items>
     </div>
-    <GroupDialog ref='GroupDialog' />
+    <GroupDialog ref='GroupDialog' @updated='loadData' />
     <GroupActDialog ref='GroupActDialog' />
     <MoveClientDialog ref='MoveClientDialog' @moved='removeClientFromGroup' />
   </div>

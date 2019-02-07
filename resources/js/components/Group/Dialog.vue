@@ -127,6 +127,7 @@ export default {
         })
       }
       this.dialog = false
+      this.$emit('updated', this.item)
       this.waitForDialogClose(() => this.saving = false)
     },
   },

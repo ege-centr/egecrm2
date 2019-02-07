@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Client;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Contract\Resource as ContractResource;
+use App\Http\Resources\Contract\ContractResource;
 use App\Http\Resources\Group\Collection as GroupCollection;
 use App\Http\Resources\Test\ClientTest;
 

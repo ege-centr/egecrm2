@@ -122,7 +122,7 @@
         </v-tab-item>
         <v-tab-item>
           <DisplayData ref='ContractPage'
-            :year-tabs='true'
+            :tabs="{data: 'years', field: 'year'}"
             :api-url='CONTRACT_API_URL' 
             :filters='CONTRACT_FILTERS' 
             :invisible-filters="{client_id: client.id}"
@@ -138,7 +138,7 @@
         </v-tab-item>
         <v-tab-item>
           <DisplayData ref='GroupPage'
-            :year-tabs='true'
+            :tabs="{data: 'years', field: 'year'}"
             :api-url='GROUP_API_URL' 
             :filters='GROUP_FILTERS' 
             :pre-installed-filters='[{item: GROUP_FILTERS[0], value: [$store.state.data.academic_year]}]'
@@ -155,7 +155,7 @@
         </v-tab-item>
         <v-tab-item>
           <DisplayData ref='PaymentPage'
-            :year-tabs='true'
+            :tabs="{data: 'years', field: 'year'}"
             :api-url='PAYMENT_API_URL' 
             :filters='PAYMENT_FILTERS' 
             :pre-installed-filters='[{item: PAYMENT_FILTERS[2], value: [$store.state.data.academic_year]}]'

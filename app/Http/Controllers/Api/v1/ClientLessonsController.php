@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\{Lesson\Lesson, Lesson\ClientLesson, Teacher, Client\Client};
-use App\Http\Resources\Lesson\{Resource as LessonResource, Client as ClientLessonResource};
+use App\Http\Resources\Lesson\{LessonResource,  ClientLessonResource};
 
 class ClientLessonsController extends Controller
 {

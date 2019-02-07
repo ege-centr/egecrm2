@@ -3,13 +3,13 @@
     <Loader v-if='loading' />
 
     <div class='flex-items align-center'>
-      <div v-if='yearTabs'>
-         <v-chip v-for="year in yearsWithData" class='pointer ml-0 mr-3'
-            :class="{'primary white--text': year.id == selected_year}"
-            @click='selected_year = year.id'
-            :key='year.id'
+      <div v-if='tabs !== null'>
+         <v-chip v-for="item in tabsWithData" class='pointer ml-0 mr-3'
+            :class="{'primary white--text': item.id == selected_tab}"
+            @click='selected_tab = item.id'
+            :key='item.id'
           >
-            {{ year.title }}
+            {{ item.title }}
           </v-chip>
       </div>
       <AllFilter v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' @updated='filtersUpdated' />
@@ -85,9 +85,9 @@ export default {
       type: Array,
       required: false,
     },
-    yearTabs: {
-      type: Boolean,
-      default: false,
+    tabs: {
+      type: Object,
+      default: null,
     }
   },
 
@@ -100,7 +100,7 @@ export default {
       // для пересоздания компонента
       infinite_loading: true,
       data: [],
-      selected_year: this.$store.state.data.academic_year,
+      selected_tab: null,
     }
   },
 
@@ -124,8 +124,8 @@ export default {
         } else {
           this.data.push(...response.data.data)
         }
-        if (this.yearTabs) {
-          this.selected_year = this.yearsWithData.slice(-1)[0].id
+        if (this.tabs !== null) {
+          this.selected_tab = this.tabsWithData.slice(-1)[0].id
         }
         if (this.paginate !== null) {
           if (response.data.meta.current_page === response.data.meta.last_page) {
@@ -204,14 +204,14 @@ export default {
     },
 
     items() {
-      return this.yearTabs ?
-        this.data.filter(e => e.year === this.selected_year) :
+      return this.tabs !== null ?
+        this.data.filter(e => e[this.tabs.field] === this.selected_tab) :
         this.data
     },
 
-    yearsWithData() {
-      return this.$store.state.data.years.filter(year => {
-        return this.data.findIndex(e => e.year === year.id) !== -1
+    tabsWithData() {
+      return this.$store.state.data[this.tabs.data].filter(d => {
+        return this.data.findIndex(e => e[this.tabs.field] === d.id) !== -1
       })
     },
   }

@@ -1,6 +1,6 @@
-
 window._ = require('lodash');
 window.moment = require('moment');
+window.moment.locale('ru')
 window.Popper = require('popper.js').default;
 window.Cookies = require('js-cookie');
 

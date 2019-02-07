@@ -5,10 +5,14 @@
         <div v-html='item.text'></div>
         <div class='flex-items align-center mt-2'>
           <div class='caption mr-3' :class="status.class">
-            {{ status.text }}
+            {{ status.title }}
           </div>
-          <div v-if='item.responsible_admin_id' class='caption'>
+          <div v-if='item.responsible_admin_id' class='caption mr-3'>
             Ответственный: {{ getData('admins', item.responsible_admin_id).name }}
+          </div>
+          <div class='caption grey--text'>
+             {{ getData('admins', item.created_admin_id).name }}
+             {{ item.created_at | date-time }}
           </div>
           <div class='text-md-right f-1'>
             <v-btn flat icon color="black" class='ma-0' @click="$emit('edit', item.id)">
@@ -40,7 +44,7 @@ export default {
   
   computed: {
     status() {
-      return STATUSES.find(e => e.value == this.item.status)
+      return STATUSES.find(e => e.id == this.item.status)
     }
   }
 }

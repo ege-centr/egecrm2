@@ -22,13 +22,14 @@ button {
 
 .v-content__wrap {
     // background: white !important;
-    background: #f2f2f2 !important;
+    background: $grey-background !important;
     color: black;
 }
 
-.v-tabs__container {
-  background: #f2f2f2 !important;
+.v-tabs__container, .grey-background {
+  background: $grey-background !important;
 }
+
 
 a {
   cursor: pointer;
@@ -164,6 +165,10 @@ textarea {
       padding-top: 80px;
     }
   }
+}
+
+.overflow-hidden {
+  overflow: hidden !important;
 }
 
 #print-block {

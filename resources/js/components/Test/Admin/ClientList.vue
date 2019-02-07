@@ -3,37 +3,49 @@
     <TestDialog ref='TestDialog'/>
 
     <Loader v-if='loading' />
-    <v-data-table v-else hide-headers hide-actions :items='items' class='mt-3' :class='config.elevationClass'>
-      <template slot='items' slot-scope="{ item }">
-        <td>
-          <a @click='$refs.TestDialog.open(item.id)'>{{ item.title }}</a>
-        </td>
-        <td>
-          <span v-if='item.subject_id'>
-            {{ getData('subjects', item.subject_id).three_letters }}
-          </span>
-        </td>
-        <td>
-          <span v-if='item.grade_id'>
-            {{ getData('grades', item.grade_id).title }}
-          </span>
-        </td>
-        <td>
-          {{ item.problems_count  }} вопросов
-        </td>
-        <td>
-          <div v-if='getClientTest(item) !== undefined && getClientTest(item).results !== null'>
-            результат: <b>{{ getClientTest(item).results.score }}</b> из {{ getClientTest(item).results.max_score }}
-          </div>
-        </td>
-        <td class='text-md-right'>
-          <v-btn small color='primary' @click='addTest(item)' :loading='adding_test_id === item.id' v-if='getClientTest(item) === undefined'>добавить</v-btn>
-          <v-btn v-else :loading='destroying_test_id === item.id' small @click='destroyTest(item)'>
-            сбросить
-          </v-btn>
-        </td>
-      </template>
-    </v-data-table>
+    
+    <div v-else>
+      <div>
+         <v-chip v-for="item in tabsWithData" class='pointer ml-0 mr-3'
+            :class="{'primary white--text': item.id == selected_tab}"
+            @click='selected_tab = item.id'
+            :key='item.id'
+          >
+            {{ item.title }}
+          </v-chip>
+      </div>
+      <v-data-table hide-headers hide-actions :items='items' class='mt-3' :class='config.elevationClass'>
+        <template slot='items' slot-scope="{ item }">
+          <td>
+            <a @click='$refs.TestDialog.open(item.id)'>{{ item.title }}</a>
+          </td>
+          <td>
+            <span v-if='item.subject_id'>
+              {{ getData('subjects', item.subject_id).three_letters }}
+            </span>
+          </td>
+          <td>
+            <span v-if='item.grade_id'>
+              {{ getData('grades', item.grade_id).title }}
+            </span>
+          </td>
+          <td>
+            {{ item.problems_count  }} вопросов
+          </td>
+          <td>
+            <div v-if='getClientTest(item) !== undefined && getClientTest(item).results !== null'>
+              результат: <b>{{ getClientTest(item).results.score }}</b> из {{ getClientTest(item).results.max_score }}
+            </div>
+          </td>
+          <td class='text-md-right'>
+            <v-btn small color='primary' @click='addTest(item)' :loading='adding_test_id === item.id' v-if='getClientTest(item) === undefined'>добавить</v-btn>
+            <v-btn v-else :loading='destroying_test_id === item.id' small @click='destroyTest(item)'>
+              сбросить
+            </v-btn>
+          </td>
+        </template>
+      </v-data-table>
+    </div>
   </div>
 </template>
 
@@ -61,6 +73,7 @@ export default {
       client_tests: null,
       adding_test_id: false,
       destroying_test_id: false,
+      selected_tab: null,
     }
   },
 
@@ -73,6 +86,7 @@ export default {
       this.loading = true
       axios.get(apiUrl(API_URL)).then(r => {
         this.items = r.data
+        this.selected_tab = this.tabsWithData.slice(-1)[0].id
         this.loading = false
       })
       // axios.get(apiUrl(CLIENT_TESTS_API_URL) + queryString({client_id: this.client.id}))
@@ -102,5 +116,13 @@ export default {
       return this.client.tests.find(e => e.test_id === test.id)
     }
   },
+
+  computed: {
+    tabsWithData() {
+      return this.$store.state.data.grades.filter(grade => {
+        return this.items.findIndex(item => item.grade_id === grade.id) !== -1
+      })
+    },
+  }
 }
 </script>

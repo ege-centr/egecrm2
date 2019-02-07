@@ -14,6 +14,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
 
     Route::get('counters', 'CountersController@index');
     Route::get('search', 'SearchController@index');
+    Route::get('visits', 'VisitsController@index');
 
     Route::prefix('abstract-groups')->group(function() {
         Route::get('/', 'AbstractGroupsController@index');

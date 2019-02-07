@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Factory\{Branch, Subject, Grade, Year};
-use App\Models\{Teacher, User, Admin\Admin};
+use App\Models\{Teacher, Cabinet, User, Admin\Admin};
 use App\Http\Resources\Admin\Collection as AdminCollection;
 use App\Http\Resources\Teacher\Collection as TeacherCollection;
 
@@ -26,6 +26,7 @@ class InitialDataController extends Controller
                 'admins' => AdminCollection::collection(Admin::all()),
                 'teachers' => TeacherCollection::collection(Teacher::all()),
                 'academic_year' => academicYear(),
+                'cabinets' => Cabinet::all(),
             ],
             'user' => User::fromSession()
         ]);

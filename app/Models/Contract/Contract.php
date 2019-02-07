@@ -3,10 +3,13 @@
 namespace App\Models\Contract;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{User, Admin\Admin};
+use App\Models\{User, Admin\Admin, Client\Client};
+use App\Traits\HasCreatedAdmin;
 
 class Contract extends Model
 {
+    use HasCreatedAdmin;
+
     protected $fillable = ['year', 'grade_id', 'sum', 'date', 'discount', 'number', 'client_id'];
 
     public function subjects()
@@ -19,9 +22,9 @@ class Contract extends Model
         return $this->hasMany(ContractPayment::class);
     }
 
-    public function createdAdmin()
+    public function client()
     {
-        return $this->belongsTo(Admin::class, 'created_admin_id');
+        return $this->belongsTo(Client::class);
     }
 
     /**

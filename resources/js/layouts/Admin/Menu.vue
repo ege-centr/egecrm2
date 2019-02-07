@@ -14,7 +14,7 @@
     <SearchBar />
     
     <v-list dense>
-      <v-list-tile v-for='(m, index) in menu' :key='index' @click="goTo(m.route)" :class="{'border-top': m.route === 'RecommendedPrices'}">
+      <v-list-tile v-for='m in menu' :key='m.route' @click="goTo(m.route)">
           <v-list-tile-action>
               <v-icon>{{ m.icon }}</v-icon>
           </v-list-tile-action>
@@ -25,6 +25,20 @@
               </v-list-tile-title>
           </v-list-tile-content>
       </v-list-tile>
+
+      <div class='separator'></div>
+
+      <v-list-tile v-for='m in admin_menu' :key='m.route' @click="goTo(m.route)">
+          <v-list-tile-action>
+              <v-icon>{{ m.icon }}</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-content>
+              <v-list-tile-title>
+                {{ m.label }}
+              </v-list-tile-title>
+          </v-list-tile-content>
+      </v-list-tile>
+
       <!-- <v-list-group
         prepend-icon="settings"
         value="true"
@@ -34,7 +48,7 @@
       </v-list-tile>
 
       <v-list subgroup>
-        <v-list-tile v-for='(m, index) in admin_menu' :key='index' @click="goTo(m.route)">
+        <v-list-tile v-for='m in admin_menu' :key='m.route' @click="goTo(m.route)">
             <v-list-tile-action>
                 <v-icon>{{ m.icon }}</v-icon>
             </v-list-tile-action>
@@ -110,6 +124,13 @@ export default {
         label: 'Договоры'
       },
       {
+        icon: 'how_to_reg',
+        route: 'VisitIndex',
+        label: 'Посещаемость'
+      },
+    ],
+    admin_menu: [
+      {
         icon: 'multiline_chart',
         route: 'RecommendedPrices',
         label: 'Рекомендованные цены'
@@ -140,9 +161,6 @@ export default {
         label: 'Задачи'
       },
     ],
-    admin_menu: [
-      
-    ],
   }),
   methods: {
     goTo(route) {
@@ -170,8 +188,11 @@ export default {
   text-transform: lowercase;
 }
 
-.border-top {
-  border-top: 1px solid rgba(white, .1);
+.separator {
+  width: 88%;
+  background: rgba(white, .1);
+  height: 1px;
+  margin: 15px auto;
 }
 
 </style>

@@ -5,11 +5,11 @@ namespace App\Models\Admin;
 use Shared\{Model, Rights};
 use App\Interfaces\UserInterface;
 use Illuminate\Database\Eloquent\Builder;
-use App\Traits\{HasEmail, HasPhoto, HasPhones};
+use App\Traits\{HasEmail, HasPhoto, HasPhones, HasName};
 
 class Admin extends Model implements UserInterface
 {
-    use HasEmail, HasPhoto, HasPhones;
+    use HasEmail, HasPhoto, HasPhones, HasName;
 
     protected $commaSeparated = ['rights'];
 

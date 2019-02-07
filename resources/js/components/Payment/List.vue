@@ -9,13 +9,24 @@
     >
       <template slot='items' slot-scope="{ item }">
         <td>
-          {{ ENUMS.types.find(e => e.id == item.type).title }}
+          <span v-if='item.type'>
+            {{ ENUMS.types.find(e => e.id == item.type).title }}
+          </span>
         </td>
         <td>
-          {{ ENUMS.methods.find(e => e.id == item.method).title }}
+          <span v-if='item.method'>
+            {{ ENUMS.methods.find(e => e.id == item.method).title }}
+          </span>
         </td>
         <td>
-          {{ ENUMS.categories.find(e => e.id == item.category).title }}
+          <span v-if='item.category'>
+            {{ ENUMS.categories.find(e => e.id == item.category).title }}
+          </span>
+        </td>
+         <td>
+           <span v-if='item.year'>
+            {{ getData('years', item.year).title }}
+           </span>
         </td>
         <td>
           {{ item.sum }} руб.

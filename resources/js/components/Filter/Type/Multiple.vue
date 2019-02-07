@@ -31,7 +31,20 @@ export default {
   methods: {
     getTitle(option) {
       return _.get(option, this.titleField)
-    }
+    },
+
+    // getSelectedLabel(filter) {
+    //   const label = []
+    //   if (Array.isArray(filter.value)) {
+    //     filter.value.forEach(v => {
+    //       label.push(_.get(
+    //         filter.item.options.find(e => e.id === v), 
+    //         filter.item.textField || 'title'
+    //       ))
+    //     })
+    //   }
+    //   return label.join(', ')
+    // },
   }
 }
 </script>

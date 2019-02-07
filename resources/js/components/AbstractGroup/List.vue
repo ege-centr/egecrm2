@@ -11,7 +11,9 @@
           {{ getData('subjects', item.subject_id).three_letters }}–{{ getData('grades', item.grade_id).short }}
         </td>
         <td>
-          {{ getData('years', item.year).title }}
+          <span v-if='item.year'>
+            {{ getData('years', item.year).title }}
+          </span>
         </td>
         <td>
           {{ item.clients_count }} учеников

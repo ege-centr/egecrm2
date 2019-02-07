@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
+    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay content-class='overflow-hidden'>
       <v-card>
         <v-toolbar dark color="primary">
           <v-btn icon dark @click.native="dialog = false">
@@ -17,7 +17,7 @@
           <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
             <v-layout wrap>
               <v-flex md12>
-                <VueEditor style='height: 500px' class='mb-5' v-model='text' />
+                <TextEditor v-model='text' />
               </v-flex>
               <div id='print-block' v-html='text'></div>
             </v-layout>
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { VueEditor } from 'vue2-editor'
+import { TextEditor } from '@/components/UI'
 import printJS from 'print-js'
 
 const API_URL = 'print'
@@ -47,7 +47,7 @@ export default {
     },
   },
 
-  components: { VueEditor },
+  components: { TextEditor },
 
   data() {
     return {

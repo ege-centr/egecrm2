@@ -44,7 +44,7 @@
               </v-flex>
 
               <v-flex md12>
-                <PhoneEdit :item='item' />
+                <PhoneEdit :item='item' :max='1' />
               </v-flex>
 
 

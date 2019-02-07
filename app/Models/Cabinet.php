@@ -11,9 +11,11 @@ class Cabinet extends Model
 
     public function toArray()
     {
+        $title = Factory\Branch::whereId($this->branch_id)->value('short') . '–' . $this->number;
         return [
             'id' => $this->id,
-            'text' => Factory\Branch::whereId($this->branch_id)->value('short') . '–' . $this->number
+            'title' => $title,
+            'text' => $title,
         ];
     }
 

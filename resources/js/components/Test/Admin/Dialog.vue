@@ -47,10 +47,7 @@
                   </v-stepper-header>
                   <v-stepper-items>
                     <v-stepper-content v-for='(problem, index) in item.problems' :step="(index + 1)" :key='index'>
-                      <VueEditor style='height: 400px' class='mb-5'
-                        :editorOptions="editorSettings"
-                        v-model='problem.text'
-                      />
+                      <TextEditor style='height: 400px !important' class='mb-5' v-model='problem.text' />
                       <AddBtn @click.native="addAnswer(problem)" label='добавить ответ' class='d-inline-block my-3'></AddBtn>
                       <v-card class='grey lighten-4 mb-2' v-for='(answer, index) in problem.answers' :key='index' :class='config.elevationClass'>
                         <v-card-text>
@@ -63,10 +60,7 @@
                               </div>
                             </v-flex>
                           </v-layout>
-                          <VueEditor style='height: 400px' class='mb-5'
-                            :editorOptions="editorSettings"
-                            v-model='answer.text'
-                          />
+                          <TextEditor style='height: 400px !important' class='mb-5' v-model='answer.text' />
                         </v-card-text>
                       </v-card>
                     </v-stepper-content>
@@ -82,15 +76,11 @@
 
 <script>
 
-import { DataSelect } from '@/components/UI'
+import { DataSelect, TextEditor } from '@/components/UI'
 import { MODEL_DEFAULTS, PROBLEM_DEFAULTS, ANSWER_DEFAULTS, API_URL } from '@/components/Test'
-import { VueEditor, Quill } from 'vue2-editor'
-import { ImageDrop } from 'quill-image-drop-module'
-
-Quill.register('modules/imageDrop', ImageDrop)
 
 export default {
-  components: { DataSelect, VueEditor },
+  components: { DataSelect, TextEditor },
   
   data() {
     return {
@@ -99,11 +89,6 @@ export default {
       saving: false,
       item: MODEL_DEFAULTS,
       step: null,
-      editorSettings: {
-        modules: {
-          imageDrop: true
-        }
-      },
     }
   },
 

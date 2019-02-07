@@ -23,8 +23,8 @@ to: resources/js/components/<%= Name %>/List.vue
     </v-data-table>
   </div>
 </template>
-<script>
 
+<script>
 import { <%= Name %>Dialog } from './'
 
 export default {

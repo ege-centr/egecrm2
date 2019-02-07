@@ -36,7 +36,7 @@
                   </span>
                 </td>
                 <td class='grey--text' :class="{'purple lighten-5': item.is_unplanned}">
-                  <span v-if='item.createdAdmin'>{{ item.createdAdmin.name }} {{ item.created_at | date-time }}</span>
+                  <span v-if='item.conducted_email_id'>{{ getData('admins', item.conducted_email_id).name }} {{ item.created_at | date-time }}</span>
                 </td>
                 <td class='text-md-right' :class="{'purple lighten-5': item.is_unplanned}">
                   <v-btn flat icon color="black" class='ma-0' @click='edit(item)'>
@@ -243,13 +243,13 @@
 
 import Calendar from '@/components/Calendar/Calendar'
 import { LESSON_STATUS } from '@/components/Lesson'
-import { DatePicker, DataSelect, TeacherSelect, NoData } from '@/components/UI'
+import { DatePicker, DataSelect, TeacherSelect } from '@/components/UI'
 import { API_URL as CLIENTS_API_URL } from '@/components/Client'
 
 const API_URL = 'lessons'
 
 export default {
-  components: { Calendar, DatePicker, DataSelect, TeacherSelect, NoData },
+  components: { Calendar, DatePicker, DataSelect, TeacherSelect },
 
   props: {
     group: {

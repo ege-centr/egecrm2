@@ -8,7 +8,7 @@
       v-model="used_filter_menu[filter.item.field]"
     >
       <v-chip slot='activator'>
-        {{ filter.item.label }}: {{ getFilterValueLabel(filter) }}
+        {{ filter.item.label }}: {{ getSelectedLabel(filter) }}
         <v-avatar class='ma-0 close-button'>
           <v-hover>
             <v-icon slot-scope="{ hover }" class='pointer'
@@ -60,12 +60,20 @@
 
 <script>
 import { LOCAL_STORAGE_KEY } from './'
+
 import { 
   TypeSelect,
   TypeAdmin,
   TypeMultiple,
   TypeInterval,
 } from './Type'
+
+const components = { 
+  TypeSelect,
+  TypeAdmin,
+  TypeMultiple,
+  TypeInterval,
+}
 
 export default {
   props: {
@@ -86,12 +94,7 @@ export default {
     },
   },
 
-  components: { 
-    TypeInterval,
-    TypeSelect, 
-    TypeMultiple, 
-    TypeAdmin,
-  },
+  components: components,
 
   created() {
     if (this.preInstalled === null) {
@@ -167,7 +170,9 @@ export default {
       this.$emit('updated', filters, initial_set)
     },
 
-    getFilterValueLabel(filter) {
+    getSelectedLabel(filter) {
+      // TODO: определение типа внутри компонента
+      // return components[this.getTypeComponentName(filter.item)].methods.getSelectedLabel(filter)
       switch(filter.item.type) {
         case 'select':
           return _.get(
@@ -206,6 +211,15 @@ export default {
           return label.join(' ')
         }
         default:
+          if (Array.isArray(filter.value)) {
+            console.log('array', filter)
+            return filter.value.map(v => {
+              return _.get(
+                filter.item.options.find(e => e.id === v), 
+                this.getItemText(filter.item)
+              )
+            }).join(', ')
+          }
           return filter.value
       }
     },

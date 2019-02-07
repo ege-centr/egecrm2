@@ -111,8 +111,6 @@
 
 <script>
 
-import { YearFilter } from '@/components/Filter'
-
 const url = 'settings'
 const settings_key = 'recommended-prices'
 
@@ -124,7 +122,7 @@ import Calendar from '@/components/Calendar/Calendar'
 import { DatePicker, DataSelect } from '@/components/UI'
 
 export default {
-  components: { Calendar, DatePicker, DataSelect, YearFilter },
+  components: { Calendar, DatePicker, DataSelect },
 
   data() {
     return {

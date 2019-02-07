@@ -15,6 +15,7 @@ const router = new Router({
     }
   },
   routes: [
+    ...require('./visits').default,
     ...require('./contracts').default,
     ...require('./macros').default,
     ...require('./abstract-groups').default,

@@ -3,11 +3,11 @@ export const API_URL = 'tasks'
 export const CLASS_NAME = 'Task'
 
 export const STATUSES = [
-  {text: 'Новая', value: 'new', class: ''},
-  {text: 'Выполнено (проверяется)', value: 'testing', class: 'green--text'},
-  {text: 'Выполнено', value: 'done', class: 'green--text'},
-  {text: 'Требует доработки', value: 'debug', class: 'orange--text'},
-  {text: 'Закрыто', value: 'closed', class: 'red--text'},
+  {title: 'Новая', id: 'new', class: 'blue--text'},
+  {title: 'Выполнено (проверяется)', id: 'testing', class: 'light-green--text'},
+  {title: 'Выполнено', id: 'done', class: 'green--text'},
+  {title: 'Требует доработки', id: 'debug', class: 'orange--text'},
+  {title: 'Закрыто', id: 'closed', class: 'red--text'},
 ]
 
 export const MODEL_DEFAULTS = {
@@ -16,8 +16,9 @@ export const MODEL_DEFAULTS = {
 }
 
 export const FILTERS = [
-  {label: 'Статус', field: 'status', type: 'select', options: STATUSES},
-  {label: 'Текст задачи', field: 'text', type: 'text'}
+  {label: 'Статус', field: 'status', type: 'multiple', options: STATUSES},
+  {label: 'Создатель', field: 'created_admin_id', type: 'admin'},
+  {label: 'Ответственный', field: 'responsible_admin_id', type: 'admin'},
 ]
 
 export const TaskDialog = require('./Dialog')

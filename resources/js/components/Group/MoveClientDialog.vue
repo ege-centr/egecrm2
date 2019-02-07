@@ -1,7 +1,7 @@
 <template>
   <v-layout row justify-center>
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
-      <v-card v-if='client !== null'>
+      <v-card v-if='client !== null' class='grey-background'>
         <v-toolbar dark color="primary">
           <v-btn icon dark @click.native="dialog = false">
             <v-icon>close</v-icon>

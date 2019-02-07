@@ -3,8 +3,6 @@
 namespace App\Http\Resources\Teacher;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Contract\Resource as ContractResource;
-use App\Http\Resources\Group\Collection as GroupCollection;
 
 class Resource extends JsonResource
 {

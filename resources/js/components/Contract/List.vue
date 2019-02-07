@@ -9,6 +9,9 @@
       hide-headers
     >
       <template slot='items' slot-scope="{ item }">
+        <td v-if='showClient'>
+          {{ item.client.names.abbreviation }}
+        </td>
         <td>
           <span v-if='item.id'>
             №{{ item.number }} версия {{ item.version }}
@@ -21,8 +24,8 @@
           {{ item.sum }} руб.
         </td>
         <td>
-          <span v-if='item.payments.length'>
-            {{ item.payments.length }} платежа
+          <span v-if='item.payment_count > 0'>
+            {{ item.payment_count }} платежа
           </span>
           <span v-else>
             платежей нет
@@ -41,10 +44,8 @@
           </span>
         </td>
         <td>
-          <span v-if='item.id'>
-            {{ getData('admins', item.created_admin_id).name }}
-            {{ item.created_at | date-time }}
-          </span>
+          {{ item.createdAdmin.names.short }}
+          {{ item.created_at | date-time }}
         </td>
         <td class='text-md-right'>
           <v-menu left>
@@ -95,9 +96,10 @@ export default {
       type: Array,
       required: true
     },
-    client: {
-      type: Object,
-      required: true,
+    showClient: {
+      type: Boolean,
+      required: false,
+      default: false,
     }
   },
 

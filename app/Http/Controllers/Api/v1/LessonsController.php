@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\{Lesson\Lesson, Lesson\ClientLesson, Teacher, Client\Client};
-use App\Http\Resources\Lesson\{Resource as LessonResource, Client as ClientLessonResource};
+use App\Http\Resources\Lesson\{LessonResource, LessonCollection};
 
 class LessonsController extends Controller
 {
@@ -17,7 +17,7 @@ class LessonsController extends Controller
     {
         $query = Lesson::query();
         $this->filter($request, $query);
-        return LessonResource::collection($query->get());
+        return LessonCollection::collection($query->get());
     }
 
     public function store(Request $request)

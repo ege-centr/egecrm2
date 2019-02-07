@@ -1,5 +1,5 @@
 <template>
-  <v-menu transition="slide-y-transition">
+  <v-menu transition="slide-y-transition" v-model="menu" :close-on-content-click="false">
     <div slot='activator' style='pointer-events: none'>
       <v-select hide-details label='Класс и год' :items='[null, true]' :value='(item.grade_id > 0 || item.year > 0)'>
         <template slot="selection" slot-scope="{ item }">
@@ -48,6 +48,7 @@ export default {
   data() {
     return {
       label: null,
+      menu: false,
     }
   },
 
@@ -63,6 +64,9 @@ export default {
         this.item[field] = value
       }
       this.updateLabel()
+      if (this.item.grade_id && this.item.year) {
+        this.menu = false
+      }
     },
 
     updateLabel() {

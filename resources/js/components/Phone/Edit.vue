@@ -16,39 +16,8 @@
           :label="`Комментарий`">
         </v-text-field>
       </div>
-      <!-- <v-menu left>
-        <v-btn slot='activator' flat icon color="black" class='ma-0' v-if='editable'>
-          <v-icon>more_horiz</v-icon>
-        </v-btn>
-        <v-list dense>
-          <v-list-tile @click='sms(phone)'>
-              <v-list-tile-action>
-                <v-icon>send</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>Написать</v-list-tile-title>
-              </v-list-tile-content>
-          </v-list-tile>
-          <v-list-tile @click=''>
-              <v-list-tile-action>
-                <v-icon>bar_chart</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>Детализация</v-list-tile-title>
-              </v-list-tile-content>
-          </v-list-tile>
-          <v-list-tile @click='item.phones.splice(index, 1)'>
-              <v-list-tile-action>
-                <v-icon>close</v-icon>
-              </v-list-tile-action>
-              <v-list-tile-content>
-                <v-list-tile-title>Удалить</v-list-tile-title>
-              </v-list-tile-content>
-          </v-list-tile>
-        </v-list>
-      </v-menu> -->
     </div>
-    <div v-if='editable'>
+    <div v-if='editable && item.phones.length < max'>
       <v-btn fab dark small color="red" @click="item.phones.push({phone: '', comment: ''})">
         <v-icon dark>add</v-icon>
       </v-btn>
@@ -69,6 +38,11 @@ export default {
       required: false,
       default: true
     },
+    max: {
+      type: Number,
+      default: 10,
+      required: false,
+    }
   },
 
   components: { Sms },

@@ -5,7 +5,7 @@ namespace App\Http\Resources\Lesson;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Client\Collection as ClientCollection;
 
-class Client extends JsonResource
+class ClientLessonResource extends JsonResource
 {
     public function toArray($request)
     {

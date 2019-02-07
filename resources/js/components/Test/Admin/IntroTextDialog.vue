@@ -1,6 +1,6 @@
 <template>
    <v-layout row justify-center>
-    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
+    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay content-class="overflow-hidden">
       <v-card>
         <v-toolbar dark color="primary">
           <v-btn icon dark @click.native="dialog = false">
@@ -16,10 +16,7 @@
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
           <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
             <v-flex md12>
-               <VueEditor style='height: 400px'
-                  :editorOptions="editorSettings"
-                  v-model='text'
-                />
+              <TextEditor v-model='text' />
             </v-flex>
           </v-container>
         </v-card-text>
@@ -31,14 +28,11 @@
 <script>
 
 import Settings from '@/other/settings'
-import { VueEditor, Quill } from 'vue2-editor'
-import { ImageDrop } from 'quill-image-drop-module'
+import { TextEditor } from '@/components/UI'
 import { SETTINGS_KEY } from '@/components/Test'
 
-Quill.register('modules/imageDrop', ImageDrop)
-
 export default {
-  components: { VueEditor },
+  components: { TextEditor },
   
   data() {
     return {
@@ -46,11 +40,6 @@ export default {
       loading: false,
       saving: false,
       text: '',
-      editorSettings: {
-        modules: {
-          imageDrop: true
-        }
-      },
     }
   },
 
