@@ -34,25 +34,6 @@
                   </div>
                 </div>
                 <TextEditor v-model='item.text' />
-                  <!-- <v-container grid-list-xl class="pa-0 ma-0">
-                    <v-layout pt-3>
-                      <v-flex md12>
-                        <div class='vertical-inputs'>
-                          <div class='vertical-inputs__input'>
-                            
-                          </div>
-                          <div class='vertical-inputs__input'>
-                            <v-select
-                              hide-details
-                              v-model="item.status"
-                              :items="STATUSES"
-                              label="Статус"
-                            ></v-select>
-                          </div>
-                        </div>
-                      </v-flex>
-                    </v-layout>
-                  </v-container> -->
               </v-flex>
             </v-layout>
           </v-container>

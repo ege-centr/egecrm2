@@ -5,7 +5,7 @@
       :editorToolbar="toolbar"
       v-model='text'
     />
-    <input id="file" type="file" class="form-control"/>
+    <!-- <input id="file" type="file" class="form-control"/> -->
   </div>
 </template>
 
