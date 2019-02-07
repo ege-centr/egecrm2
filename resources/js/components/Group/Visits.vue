@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class='visits'>
+    <div class='visits' v-if='group.lessons.length > 0'>
       <div class='visits__dates'>
         <div></div>
         <div v-for='(lesson, index) in group.lessons' :key='lesson.id' :class="getClass(index)">
@@ -27,6 +27,7 @@
         </div>
       </div>
     </div>
+    <NoData v-else />
   </div>
 </template>
 

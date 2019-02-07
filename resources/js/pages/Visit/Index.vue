@@ -1,7 +1,7 @@
 <template>
   <div>
    <div class='grey--text darken-3 mb-1 text-md-right caption flex-items justify-end'>
-      показать вперед до даты: 
+      показать вперед до: 
       <v-menu class='mx-1'>
         <span slot='activator' class='sort-label'>{{ date | date }}</span>
         <v-date-picker no-title
