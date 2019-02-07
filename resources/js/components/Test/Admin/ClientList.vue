@@ -14,7 +14,7 @@
             {{ item.title }}
           </v-chip>
       </div>
-      <v-data-table hide-headers hide-actions :items='items' class='mt-3' :class='config.elevationClass'>
+      <v-data-table hide-headers hide-actions :items='data' class='mt-3' :class='config.elevationClass'>
         <template slot='items' slot-scope="{ item }">
           <td>
             <a @click='$refs.TestDialog.open(item.id)'>{{ item.title }}</a>
@@ -118,6 +118,10 @@ export default {
   },
 
   computed: {
+    data() {
+      return this.items.filter(item => item.grade_id == selected_tab)
+    },
+
     tabsWithData() {
       return this.$store.state.data.grades.filter(grade => {
         return this.items.findIndex(item => item.grade_id === grade.id) !== -1
