@@ -32,7 +32,9 @@
           </span>
         </td>
         <td>
-          {{ getData('grades', item.grade_id).title }}, {{ getData('years', item.year).title }}
+          <span v-if='item.grade_id'>
+            {{ getData('grades', item.grade_id).title }}
+          </span><span v-if='item.year'>, {{ getData('years', item.year).title }}</span>
         </td>
         <td>
           <span v-for='subject in item.subjects' :class="{
