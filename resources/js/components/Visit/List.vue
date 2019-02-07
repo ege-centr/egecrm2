@@ -10,7 +10,6 @@
               'green': item.status === LESSON_STATUS.CONDUCTED,
               'grey': item.status === LESSON_STATUS.CANCELLED,
             }"></div>
-            <span v-if="item.status !== LESSON_STATUS.CANCELLED">{{ indexSkippingCancelledLessons(index) }}</span>
           </td>
           <td>
             <router-link :to="{ name: 'GroupShow', params: { id: item.group_id}}">
