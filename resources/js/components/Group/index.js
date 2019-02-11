@@ -1,5 +1,6 @@
 import store from '@/store'
 
+export const CLASS_NAME = 'Group\\Group'
 export const API_URL = 'groups'
 export const GROUP_CLIENTS_API_URL = 'group-clients'
 export const GROUP_ACTS_API_URL = 'group-acts'

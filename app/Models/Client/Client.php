@@ -95,4 +95,22 @@ class Client extends Model implements UserInterface
         }
         return $client_bars;
     }
+
+    public function getSubjectStatus($year, $grade_id, $subject_id)
+    {
+        $contract = $this->contracts()->active()->where([
+            ['year', $year],
+            ['grade_id', $grade_id]
+        ])->first();
+
+        if ($contract !== null) {
+            foreach($contract->subjects as $subject) {
+                if ($subject->subject_id === $subject_id) {
+                    return $subject->status;
+                }
+            }
+        }
+
+        return null;
+    }
 }

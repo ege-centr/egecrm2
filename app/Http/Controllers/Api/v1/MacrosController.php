@@ -19,7 +19,11 @@ class MacrosController extends Controller
         }
 
         return [
-            'data' => $files
+            'data' => $files,
+            'meta' => [
+                'current_page' => 1,
+                'last_page' => 1,
+            ],
         ];
     }
 

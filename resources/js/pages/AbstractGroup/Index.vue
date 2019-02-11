@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DisplayData :api-url='API_URL' :filters='FILTERS'>
+    <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='1'>
       <template slot='items' slot-scope='{ items }'>
         <AbstractGroupList :items='items' />
       </template>

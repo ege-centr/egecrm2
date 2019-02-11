@@ -12,11 +12,11 @@
             <v-btn dark flat @click.native="save" :loading='saving'>Сохранить</v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-card-text>
+        <v-card-text style='padding-top: 76px'>
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
           <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
             <v-layout>
-              <v-flex md12>
+              <v-flex md12 class='py-0'>
                 <codemirror style='height: 1000px' :options="cmOptions" v-model='text' />
               </v-flex>
             </v-layout>

@@ -39,6 +39,7 @@
       </v-hover>
     </div>
 
+    <div class='text-md-center red--text' v-if='uploading_error'>ошибка загрузки</div>
     <!-- <div v-else class='image-upload' @click="selectFileToUpload">
       загрузить фото
     </div> -->
@@ -62,6 +63,7 @@
               </vue-cropper>
           </v-card-text>
           <v-card-actions>
+            <span class='ml-3 red--text' v-show='uploading_error'>ошибка загрузки</span>
             <v-spacer></v-spacer>
             <v-btn color="grey darken-1" flat @click.native="dialog = false">Отмена</v-btn>
             <v-btn color="blue darken-1" flat @click.native="destroy">Удалить</v-btn>
@@ -88,12 +90,14 @@ export default {
       dialog: false,
       cropping: false,
       uploading: false,
+      uploading_error: false,
     }
   },
 
   created() {
     this.$upload.on('photo', {
        url: apiUrl(API_URL, 'upload'),
+       maxSizePerFile: 1024 * 1024 * 20,
        body: {
          class: this.className,
          entity_id: this.entityId
@@ -107,9 +111,11 @@ export default {
        },
         onError() {
           this.uploading = false
+          this.uploading_error = true
         },
         onStart() {
           this.uploading = true
+          this.uploading_error = false
         },
         onEnd() {
           this.uploading = false

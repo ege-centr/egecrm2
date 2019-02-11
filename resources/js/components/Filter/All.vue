@@ -166,7 +166,7 @@ export default {
         }
         filters[e.item.field] = value
       })
-      console.log('emitting', filters)
+      console.log('emitting', filters, initial_set)
       this.$emit('updated', filters, initial_set)
     },
 

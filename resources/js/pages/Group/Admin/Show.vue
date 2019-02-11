@@ -58,7 +58,12 @@
             >
               <template slot='items' slot-scope="props">
                 <td width='200'>
-                  <router-link :to="{name: 'ClientShow', params: { id: props.item.id }}">
+                  <router-link :to="{name: 'ClientShow', params: { id: props.item.id }}" 
+                    :class="{
+                      'orange--text': props.item.subject_status === SUBJECT_STATUSES.SUBJECT_STATUS_TO_BE_TERMINATED,
+                      'red--text': props.item.subject_status === SUBJECT_STATUSES.SUBJECT_STATUS_TERMINATED,
+                    }"
+                  >
                     {{ props.item.names.short }}
                   </router-link>
                 </td>
@@ -112,6 +117,9 @@
          <v-tab>
           Акты
         </v-tab>
+         <v-tab>
+          Комментарии
+        </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <v-tab-item>
@@ -130,7 +138,7 @@
           <NoData v-else />
         </v-tab-item>
         <v-tab-item>
-          <DisplayData :api-url='GROUP_ACTS_API_URL' :invisible-filters='{group_id: item.id}'>
+          <DisplayData :api-url='GROUP_ACTS_API_URL' :invisible-filters='{group_id: item.id}' container-class='py-0'>
             <template slot='items' slot-scope='{ items }'>
               <GroupActList :items='items' />
             </template>
@@ -139,6 +147,13 @@
             </template>
           </DisplayData>
           <!-- <GroupActList :group-id='item.id' /> -->
+        </v-tab-item>
+        <v-tab-item>
+          <v-card :class='config.elevationClass'>
+            <v-card-text>
+              <Comments :class-name='CLASS_NAME' :entity-id='item.id' />
+            </v-card-text>
+          </v-card>
         </v-tab-item>
       </v-tabs-items>
     </div>
@@ -154,6 +169,7 @@ import {
   API_URL, 
   GROUP_CLIENTS_API_URL, 
   LEVELS, 
+  CLASS_NAME,
   GroupSchedule, 
   MoveClientDialog
 } from '@/components/Group'
@@ -166,15 +182,19 @@ import {
   GroupActDialog
 } from '@/components/Group/Act'
 import GroupActList from '@/components/Group/Act/List'
+import Comments from '@/components/Comments'
+import { SUBJECT_STATUSES } from '@/components/Contract'
 
 
 export default {
-  components: { DisplayData, GroupSchedule, Bars, Visits, GroupDialog, MoveClientDialog, GroupActList, GroupActDialog },
+  components: { DisplayData, GroupSchedule, Bars, Visits, GroupDialog, MoveClientDialog, GroupActList, GroupActDialog, Comments },
 
   data() {
     return {
       LEVELS,
+      CLASS_NAME,
       GROUP_ACTS_API_URL,
+      SUBJECT_STATUSES,
       loading: true,
       item: null,
       tabs: null,

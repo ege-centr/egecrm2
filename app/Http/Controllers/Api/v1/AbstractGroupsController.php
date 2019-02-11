@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\{Contract\Contract, Group\Group, Client\Client};
-use App\Http\Resources\Person\Resource as PersonResource;
+use App\Http\Resources\Person\PersonResource;
 
 
 class AbstractGroupsController extends Controller
@@ -74,6 +74,10 @@ class AbstractGroupsController extends Controller
         // }
         return [
             'data' => $data,
+            'meta' => [
+                'current_page' => 1,
+                'last_page' => 1,
+            ],
         ];
     }
 

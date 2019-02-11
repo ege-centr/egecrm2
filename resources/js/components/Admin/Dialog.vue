@@ -9,7 +9,6 @@
           <v-toolbar-title>{{ edit_mode ? 'Редактирование' : 'Добавление' }} пользователя</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark flat v-if='edit_mode' @click.native="destroy" :loading='destroying'>Удалить</v-btn>
             <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ edit_mode ? 'Сохранить' : 'Добавить' }}</v-btn>
           </v-toolbar-items>
         </v-toolbar>
@@ -137,7 +136,6 @@ export default {
       loading: true,
       rights: null,
       edit_mode: false,
-      destroying: false,
       saving: false,
     }
   },

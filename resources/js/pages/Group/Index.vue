@@ -1,31 +1,28 @@
 <template>
   <div>
-    <GroupDialog ref='GroupDialog' />
-    <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='30'>
-      <template slot='buttons'>
-        <AddBtn @click.native='$refs.GroupDialog.open(null)' label='добавить группу' />
-      </template>
-      <template slot='items' slot-scope="{ items }">
-        <GroupList :items='items' />
-      </template>
-    </DisplayData>
+    <ClientIndex v-if='$store.state.user.class === CLIENT_CLASS_NAME' />
+    <TeacherIndex v-if='$store.state.user.class === TEACHER_CLASS_NAME' />
+    <AdminIndex v-if='$store.state.user.class === ADMIN_CLASS_NAME' />
   </div>
 </template>
 
 <script>
-
-import { DisplayData } from '@/components/UI'
-import { GroupList, GroupDialog, API_URL, FILTERS } from '@/components/Group'
+import AdminIndex from './Admin/Index'
+import ClientIndex from './Client/Index'
+import TeacherIndex from './Teacher/Index'
+import { CLASS_NAME as CLIENT_CLASS_NAME } from '@/components/Client'
+import { CLASS_NAME as TEACHER_CLASS_NAME } from '@/components/Teacher'
+import { CLASS_NAME as ADMIN_CLASS_NAME } from '@/components/Admin'
 
 export default {
-  components: { DisplayData, GroupList, GroupDialog },
-  
   data() {
     return {
-      API_URL,
-      FILTERS,
+      CLIENT_CLASS_NAME,
+      TEACHER_CLASS_NAME,
+      ADMIN_CLASS_NAME,
     }
   },
   
+  components: { AdminIndex, TeacherIndex, ClientIndex },
 }
 </script>

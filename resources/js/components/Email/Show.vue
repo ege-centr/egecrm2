@@ -36,12 +36,11 @@
           <v-card-actions class='v-card-actions--normal-padding email'>
             <div style='width: 100%'>
               <v-text-field label="Тема сообщения" v-model='subject' :counter='100'></v-text-field>
-              <v-textarea v-model='message' label='Сообщение' :counter='1000' ref='textarea' :loading='sending'
+              <v-textarea v-model='message' label='Сообщение' :counter='1000' ref='textarea'
                 @keydown.enter='handleCmdEnter($event)'
-                @click:append='send'
-                append-icon='send'>
+              >
               </v-textarea>
-              <div class='flex-items align-center'>
+              <div class='flex-items align-center mt-3'>
                 <v-chip close v-for='(attachment, index) in attachments' :key='attachment.filename' @input='remove(index)'>
                   {{ attachment.original_name }} 
                 </v-chip>
@@ -54,6 +53,8 @@
                   <v-icon style='font-size: 20px'>attach_file</v-icon>
                 </v-btn>
                 <span v-if='uploading_error' class='error--text'>размер файла больше 20мб</span>
+                <v-spacer></v-spacer>
+                <v-btn flat color='primary' :loading='sending' @click='send'>отправить</v-btn>
               </div>
             </div>
           </v-card-actions>

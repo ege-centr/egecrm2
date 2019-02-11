@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center v-if='item !== null'>
-    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
+    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay content-class='overflow-hidden'>
       <v-card>
        <v-toolbar dark color="primary">
           <v-btn icon dark @click.native="dialog = false">
@@ -57,7 +57,7 @@
                     <DataSelect type='grades' v-model="item.grade_id" />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-text-field v-model="item.sum" label="Cумма" hide-details></v-text-field>
+                    <v-text-field v-model="item.sum" label="Cумма" :hint="'рекомендуемая сумма: ' + getRecommendedPrice()"></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>
                       <ClearableSelect v-model='item.discount'
@@ -78,7 +78,7 @@
                       <v-text-field hide-details v-model="payment.sum" label="Cумма"></v-text-field>
                     </v-flex>
                     <v-flex>
-                      <v-text-field hide-details v-model="payment.lessons" label="Предметов"></v-text-field>
+                      <v-text-field hide-details v-model="payment.lessons" label="Занятий"></v-text-field>
                     </v-flex>
                     <v-flex>
                       <DatePicker label="Дата" v-model='payment.date' />
@@ -116,6 +116,7 @@ import {
   SUBJECT_STATUS_ACTIVE,
 } from './'
 
+import Settings from '@/other/settings'
 import { DatePicker, DataSelect } from '@/components/UI'
 
 export default {
@@ -133,7 +134,12 @@ export default {
       loading: true,
       edit_mode: true,
       destroying: false,
+      recommended_prices: null,
     }
+  },
+
+  created() {
+    Settings.get('recommended-prices', true).then(r => this.recommended_prices = r.data)
   },
 
   methods: {
@@ -192,6 +198,16 @@ export default {
         this.item = r.data
         this.loading = false
       })
+    },
+
+    getRecommendedPrice() {
+      if (this.recommended_prices !== null && this.item.year && this.item.grade_id) {
+        let lesson_count = 0
+        this.item.subjects.forEach(subject => {
+          lesson_count += subject.lessons
+        })
+        return lesson_count * parseInt(this.recommended_prices[this.item.year][this.item.grade_id])
+      }
     },
 
     destroy() {

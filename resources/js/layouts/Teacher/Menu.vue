@@ -30,16 +30,10 @@ export default {
         route: 'GroupIndex',
         label: 'Группы'
       },
-      {
-        icon: 'edit',
-        route: 'TestIndex',
-        label: 'Тесты'
-      },
     ],
   }),
   methods: {
     goTo(route) {
-      console.log('Going to ', route)
       this.$router.push({name: route})
     }
   }

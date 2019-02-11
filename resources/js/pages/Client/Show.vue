@@ -68,10 +68,30 @@
           </v-flex>
           <v-spacer></v-spacer>
           <v-flex class='text-md-right' align-end d-flex>
-            <div>
-              <v-btn @click='$refs.ClientDialog.open(client.id)' flat icon color="black" class='ma-0'>
-                <v-icon>more_horiz</v-icon>
-              </v-btn>
+            <div class='display-flex' style='flex-direction: column; align-items: flex-end'>
+              <v-menu left>
+                <v-btn slot='activator' flat icon color="black" class='ma-0'>
+                  <v-icon>more_horiz</v-icon>
+                </v-btn>
+                <v-list dense>
+                  <v-list-tile @click='$refs.ClientDialog.open(client.id)'>
+                    <v-list-tile-action>
+                      <v-icon>edit</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                      <v-list-tile-title>Редактировать</v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                  <v-list-tile @click="loading = true; Preview.login(client.id, CLASS_NAME)">
+                    <v-list-tile-action>
+                      <v-icon>visibility</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                      <v-list-tile-title>Режим просмотра</v-list-tile-title>
+                    </v-list-tile-content>
+                  </v-list-tile>
+                </v-list>
+              </v-menu>
             </div>
           </v-flex>
         </v-layout>
@@ -140,8 +160,6 @@
           <DisplayData ref='GroupPage'
             :tabs="{data: 'years', field: 'year'}"
             :api-url='GROUP_API_URL' 
-            :filters='GROUP_FILTERS' 
-            :pre-installed-filters='[{item: GROUP_FILTERS[0], value: [$store.state.data.academic_year]}]'
             :invisible-filters="{client_id: $route.params.id}"
           >
             <template slot='items' slot-scope='{ items }'>
@@ -149,6 +167,7 @@
             </template>
           </DisplayData>
           <GroupNotAssignedList style='position: relative; top: -24px'
+            :year="getGroupPageSelectedTab()"
             :client='client' 
             @moved='loadData' 
           />
@@ -210,22 +229,24 @@ import { TestAdminClientList } from '@/components/Test'
 import { DisplayData } from '@/components/UI'
 import { 
   API_URL as GROUP_API_URL, 
-  FILTERS as GROUP_FILTERS,
   GroupList,
 } from '@/components/Group'
 
 import { 
   API_URL as CONTRACT_API_URL, 
   FILTERS as CONTRACT_FILTERS,
-  ContractDialog,
-  ContractList
+  ContractDialog
 } from '@/components/Contract'
-import { API_URL, CLASS_NAME, GroupNotAssignedList, ClientDialog } from '@/components/Client'
+import ContractList from '@/components/Contract/List'
+
+import ClientDialog from '@/components/Client/Dialog'
+import { API_URL, CLASS_NAME, GroupNotAssignedList } from '@/components/Client'
 import { 
   RequestItem,
   RequestDialog,
   API_URL as REQUEST_API_URL
 } from '@/components/Request'
+import Preview from '@/other/Preview'
 
 export default {
   props: ['clientId'],
@@ -237,10 +258,10 @@ export default {
       CONTRACT_API_URL,
       PAYMENT_API_URL,
       PAYMENT_SORT,
-      GROUP_FILTERS,
       PAYMENT_FILTERS,
       CONTRACT_FILTERS,
       REQUEST_API_URL,
+      Preview,
       tabs: null,
       loading: true,
       client: null,
@@ -274,6 +295,15 @@ export default {
         this.loading = false
       })
     },
+
+    // TODO: надо придумать что-то покрасивее с компонентами, которые сразу не доступны в $refs
+    // https://forum.vuejs.org/t/solved-this-refs-key-returns-undefined-when-it-really-is/1226
+    getGroupPageSelectedTab() {
+      if (this.$refs.GroupPage) {
+        return this.$refs.GroupPage.selected_tab
+      }
+      return null
+    }
   }
 }
 </script>

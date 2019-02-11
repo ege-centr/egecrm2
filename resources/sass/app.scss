@@ -228,7 +228,7 @@ nav {
 // }
 
 .CodeMirror {
-  height: 90vh;
+  height: 93vh;
 }
 
 .quillWrapper {
@@ -243,4 +243,11 @@ nav {
 
 .ql-toolbar.ql-snow+.ql-container.ql-snow {
   border: none;
+}
+
+.v-chip:focus {
+  box-shadow: none !important;
+  &:after {
+    content: none !important;
+  }
 }

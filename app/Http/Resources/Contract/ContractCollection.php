@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Contract;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Person\Resource as PersonResource;
+use App\Http\Resources\Person\PersonResource;
 
 class ContractCollection extends JsonResource
 {

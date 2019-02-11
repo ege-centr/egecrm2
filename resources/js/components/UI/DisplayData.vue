@@ -17,7 +17,7 @@
       <slot name='buttons'></slot>
     </div>
 
-    <v-container grid-list-md fluid class="px-0" :class="{'invisible': loading}">
+    <v-container grid-list-md fluid :class="`px-0 ${containerClass} ${loading ? 'invisible' : ''}`">
       <v-layout row wrap class='relative'>
         <v-flex xs12>
           <div v-if='sort !== undefined' class='grey--text darken-3 mb-3 text-md-right caption flex-items justify-end'>
@@ -37,7 +37,7 @@
 
           <slot name='items' :items='items' v-if='items.length > 0'></slot>
 
-          <infinite-loading v-if='paginate !== null && infinite_loading'
+          <infinite-loading v-if='infinite_loading'
             @infinite='loadData' ref='InfiniteLoading' :distance='2000' spinner='spiral' class='mt-3'>
             <div slot='no-more'></div>
             <div slot='no-results'></div>
@@ -88,6 +88,10 @@ export default {
     tabs: {
       type: Object,
       default: null,
+    },
+    containerClass: {
+      type: String,
+      default: '',
     }
   },
 
@@ -119,12 +123,13 @@ export default {
         ...this.invisibleFilters,
         ...this.getSort(),
       })).then(response => {
+        this.loading = false
         if (this.page === 1 || this.paginate === null) {
           this.data = response.data.data
         } else {
           this.data.push(...response.data.data)
         }
-        if (this.tabs !== null) {
+        if (this.tabs !== null && this.tabsWithData.length) {
           this.selected_tab = this.tabsWithData.slice(-1)[0].id
         }
         if (this.paginate !== null) {
@@ -136,6 +141,9 @@ export default {
             state.loaded()
           }
           this.page++
+        } else {
+          // colorLog('COMPLETE', 'Turquoise')
+          // state.complete()
         }
         // if (this.paginate !== null) {
         //   if (response.data.meta.current_page >= response.data.meta.last_page) {

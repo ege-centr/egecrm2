@@ -5,7 +5,7 @@ namespace App\Http\Controllers\api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Payment\Payment;
-use App\Http\Resources\Payment\Collection as PaymentCollection;
+use App\Http\Resources\Payment\PaymentCollection;
 
 class PaymentsController extends Controller
 {

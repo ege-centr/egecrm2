@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Redis;
 use App\Http\Resources\Admin\Resource as AdminResource;
 use App\Utils\Sms;
-use App\Models\Admin\Admin;
+use App\Models\{Admin\Admin, Teacher};
 use DB;
 
 class User extends Model
@@ -97,7 +97,11 @@ class User extends Model
             // dd([$class, $entity_id]);
             // info('loading admin...');
             // @todo: намана доллар сделай
-            $user = $class::with('photo')->find($entity_id);
+            $query = $class::query();
+            if ($class !== Teacher::class) {
+                $query->with('photo');
+            }
+            $user = $query->find($entity_id);
             $user->class = substr($class, 11);
             return $user;
             // return new AdminResource(Admin::find($_SESSION['user']->id));

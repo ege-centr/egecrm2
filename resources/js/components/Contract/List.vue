@@ -90,7 +90,8 @@
 <script>
 
 import Print from '@/components/Print'
-import { MODEL_DEFAULTS, SUBJECT_STATUSES, ContractDialog } from './'
+import ContractDialog from '@/components/Contract/Dialog'
+import { MODEL_DEFAULTS, SUBJECT_STATUSES } from './'
 
 export default {
   props: {

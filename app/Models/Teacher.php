@@ -39,6 +39,16 @@ class Teacher extends Model
         return $query->where('in_egecentr', 2);
     }
 
+    public function isBanned()
+    {
+        return false;
+    }
+
+    public function allowedToLogin()
+    {
+        return true;
+    }
+
     public static function boot()
     {
         parent::boot();

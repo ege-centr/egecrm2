@@ -3,7 +3,7 @@
 namespace App\Models\Lesson;
 
 use Illuminate\Database\Eloquent\{Model, Builder};
-use App\Models\{Teacher, Admin\Admin, Client\Client};
+use App\Models\{Teacher, Admin\Admin, Client\Client, Group\Group};
 
 class Lesson extends Model
 {
@@ -31,11 +31,24 @@ class Lesson extends Model
         return $this->hasMany(ClientLesson::class, 'entry_id', 'entry_id');
     }
 
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
+    }
+
     public function getTimeAttribute()
     {
         if ($this->attributes['time']) {
             return mb_strimwidth($this->attributes['time'], 0, 5);
         }
+    }
+
+    public function getClientsCountAttribute()
+    {
+        if ($this->is_conducted) {
+            return $this->clientLessons()->count();
+        }
+        return $this->group->groupClients()->count();
     }
 
     // public function addClient($client)

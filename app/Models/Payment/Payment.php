@@ -11,6 +11,16 @@ class Payment extends Model
 
     protected $fillable = ['category', 'type', 'method', 'date', 'sum', 'year', 'entity_type', 'entity_id', 'card_number'];
 
+    public function entity()
+    {
+        return $this->morphTo();
+    }
+
+    public function getClassNameAttribute($value)
+    {
+        return trim(self::class, 'App\\Models\\');
+    }
+
     public static function boot()
     {
         parent::boot();

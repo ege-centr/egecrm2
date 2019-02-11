@@ -22,6 +22,14 @@
               </div>
             </div>
           </v-flex>
+          <v-spacer></v-spacer>
+           <v-flex class='text-md-right' align-end d-flex>
+             <div>
+              <v-btn slot='activator' flat icon color="black" class='ma-0' @click="loading = true; Preview.login(item.id, CLASS_NAME)">
+                <v-icon>visibility</v-icon>
+              </v-btn>
+             </div>
+          </v-flex>
         </v-layout>
       </v-card-text>
     </v-card>
@@ -42,8 +50,7 @@
         <v-tab-item>
           <DisplayData ref='GroupPage'
             :api-url='GROUP_API_URL' 
-            :filters='GROUP_FILTERS' 
-            filter-component='YearFilter'
+            :tabs="{data: 'years', field: 'year'}"
             :invisible-filters="{teacher_id: $route.params.id}"
           >
             <template slot='items' slot-scope='{ items }'>
@@ -53,8 +60,8 @@
         </v-tab-item>
         <v-tab-item>
           <DisplayData ref='PaymentPage'
+            :tabs="{data: 'years', field: 'year'}"
             :api-url='PAYMENT_API_URL' 
-            :filters='PAYMENT_FILTERS' 
             :sort='PAYMENT_SORT'
             :invisible-filters="{entity_id: $route.params.id, entity_type: CLASS_NAME}"
           >
@@ -71,6 +78,7 @@
         </v-tab-item>
         <v-tab-item>
            <DisplayData ref='PaymentAdditionalPage'
+            :tabs="{data: 'years', field: 'year'}"
             :api-url='PAYMENT_ADDITIONAL_API_URL' 
             :invisible-filters="{entity_id: $route.params.id, entity_type: CLASS_NAME}"
           >
@@ -97,12 +105,10 @@
 import { API_URL, CLASS_NAME } from '@/components/Teacher'
 import { 
   API_URL as GROUP_API_URL,
-  FILTERS as GROUP_FILTERS,
   GroupList, 
 } from '@/components/Group'
 import { 
   API_URL as PAYMENT_API_URL, 
-  FILTERS as PAYMENT_FILTERS,
   SORT as PAYMENT_SORT,
   PaymentDialog, 
   PaymentList, 
@@ -113,6 +119,7 @@ import {
   PaymentAdditionalDialog,
 } from '@/components/Payment/Additional'
 import { DisplayData } from '@/components/UI'
+import Preview from '@/other/Preview'
 
 export default {
   components: { GroupList, PaymentList, DisplayData, PaymentDialog, PaymentAdditionalList, PaymentAdditionalDialog },
@@ -120,12 +127,11 @@ export default {
   data() {
     return {
       GROUP_API_URL,
-      GROUP_FILTERS,
       PAYMENT_API_URL,
       PAYMENT_ADDITIONAL_API_URL,
       CLASS_NAME,
       PAYMENT_SORT,
-      PAYMENT_FILTERS,
+      Preview,
       loading: true,
       item: null,
       tabs: null,

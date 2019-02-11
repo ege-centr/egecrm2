@@ -19,9 +19,7 @@
 </template>
 
 <script>
-
 import ClientDialog from './Dialog'
-
 export default {
   props: {
     items: {
@@ -29,7 +27,6 @@ export default {
       required: false
     }
   },
-
   components: { ClientDialog }
 }
 </script>

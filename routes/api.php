@@ -16,6 +16,9 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
     Route::get('search', 'SearchController@index');
     Route::get('visits', 'VisitsController@index');
 
+    Route::get('preview/exit', 'PreviewController@exit');
+    Route::get('preview', 'PreviewController@index');
+
     Route::prefix('abstract-groups')->group(function() {
         Route::get('/', 'AbstractGroupsController@index');
         Route::get('/{year}/{grade_id}/{subject_id}', 'AbstractGroupsController@show');

@@ -8,6 +8,14 @@
       :items='items'
     >
       <template slot='items' slot-scope="{ item }">
+        <td v-if='showEntity'>
+          <router-link v-if='item.entity' :to="{
+            name: item.class_name === CLIENT_CLASS_NAME ? 'ClientShow' : 'TeacherShow',  
+            params: {id: item.entity.id}
+          }">
+            {{ item.entity.names.short }}
+          </router-link>
+        </td>
         <td>
           <span v-if='item.type'>
             {{ ENUMS.types.find(e => e.id == item.type).title }}
@@ -23,7 +31,7 @@
             {{ ENUMS.categories.find(e => e.id == item.category).title }}
           </span>
         </td>
-         <td>
+         <td v-if='showEntity !== false'>
            <span v-if='item.year'>
             {{ getData('years', item.year).title }}
            </span>
@@ -52,6 +60,8 @@
 <script>
 
 import { ENUMS, PaymentDialog } from './'
+import { CLASS_NAME as CLIENT_CLASS_NAME } from '@/components/Client'
+import { CLASS_NAME as TEACHER_CLASS_NAME } from '@/components/Teacher'
 
 export default {
   props: {
@@ -59,6 +69,11 @@ export default {
       type: Array,
       required: true
     },
+    showEntity: {
+      type: Boolean,
+      default: false,
+      required: false,
+    }
   },
 
   components: { PaymentDialog },
@@ -66,6 +81,8 @@ export default {
   data() {
     return {
       ENUMS,
+      CLIENT_CLASS_NAME,
+      TEACHER_CLASS_NAME,
     }
   },
   

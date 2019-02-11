@@ -1,7 +1,7 @@
 <template>
   <div>
     <Loader v-if='loading' />
-    <v-data-table v-else hide-headers hide-actions :items='items' class='mt-3'>
+    <v-data-table v-else hide-headers hide-actions :items='items' class='mt-3' :class='config.elevationClass'>
       <template slot='items' slot-scope="{ item }">
         <td>
           {{ item.test.title }}

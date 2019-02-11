@@ -5,10 +5,14 @@ namespace App\Models\Group;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\{Cabinet, Teacher, Lesson\Lesson, Client\Client, Factory\Subject, Factory\Grade};
 use App\Utils\Time;
+use App\Traits\Commentable;
 use DB;
+
 
 class Group extends Model
 {
+    use Commentable;
+
     protected $fillable = [
         'teacher_id', 'head_teacher_id', 'subject_id', 'grade_id', 'teacher_price',
         'duration', 'year', 'is_archived', 'is_ready_to_start', 'cabinet_id', 'level'

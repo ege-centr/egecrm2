@@ -15,7 +15,7 @@ class LessonsController extends Controller
 
     public function index(Request $request)
     {
-        $query = Lesson::query();
+        $query = Lesson::orderBy('date', 'asc')->orderBy('time', 'asc');
         $this->filter($request, $query);
         return LessonCollection::collection($query->get());
     }

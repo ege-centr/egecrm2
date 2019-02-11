@@ -423,7 +423,9 @@ export default {
     clientLessons() {
       this.recompute_client_lessons
       colorLog('Recalculating...', 'PaleVioletRed', this.recompute_client_lessons)
-      return this.dialog_item.clientLessons.filter(e => e.to_be_deleted !== true)
+      if (this.dialog_item.client_lessons) {
+        return this.dialog_item.clientLessons.filter(e => e.to_be_deleted !== true)
+      }
     }
   }
 }

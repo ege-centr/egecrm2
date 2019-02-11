@@ -39,6 +39,9 @@ export default {
       type: Object,
       required: true,
     },
+    year: {
+      type: Number,
+    }
     // groups: {
     //   type: Array,
     //   required: true,
@@ -49,31 +52,9 @@ export default {
   
   data() {
     return {
-      items: [],
       // TODO:
       currentIndex: null,
     }
-  },
-
-  created() {
-    const active_contracts = this.client.contracts.filter(e => e.is_active)
-
-    // получить человеко-предметы
-    active_contracts.forEach(contract => {
-      contract.subjects.forEach(subject => {
-        if (subject.status !== SUBJECT_STATUS_TERMINATED) {
-          // если человек не состоит в такой группе
-          // TODO: не подгружать группы клиента
-          if (!this.client.groups.find(e => e.year === contract.year && e.grade_id === contract.grade_id && e.subject_id === subject.subject_id)) {
-            this.items.push({
-              year: contract.year,
-              grade_id: contract.grade_id,
-              subject_id: subject.subject_id,
-            })
-          }
-        }
-      })
-    })
   },
 
   methods: {
@@ -91,6 +72,32 @@ export default {
     //     setTimeout(() => this.items.splice(this.currentIndex, 1), 300)
     //   })
     // }
+  },
+
+  computed: {
+    items() {
+      const items = []
+      const active_contracts = this.client.contracts.filter(e => e.is_active)
+
+      // получить человеко-предметы
+      active_contracts.forEach(contract => {
+        contract.subjects.forEach(subject => {
+          if (subject.status !== SUBJECT_STATUS_TERMINATED) {
+            // если человек не состоит в такой группе
+            // TODO: не подгружать группы клиента
+            if (!this.client.groups.find(e => e.year === contract.year && e.grade_id === contract.grade_id && e.subject_id === subject.subject_id)) {
+              items.push({
+                year: contract.year,
+                grade_id: contract.grade_id,
+                subject_id: subject.subject_id,
+              })
+            }
+          }
+        })
+      })
+
+      return items
+    }
   }
 }
 </script>

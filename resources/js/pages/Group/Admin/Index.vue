@@ -1,25 +1,25 @@
-<template lang="html">
+<template>
   <div>
+    <GroupDialog ref='GroupDialog' />
     <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='30'>
       <template slot='buttons'>
-        <AddBtn @click.native='$refs.ClientDialog.open(null)' label='добавить клиента' />
+        <AddBtn @click.native='$refs.GroupDialog.open(null)' label='добавить группу' />
       </template>
       <template slot='items' slot-scope="{ items }">
-        <ClientList :items='items' />
+        <GroupList :items='items' />
       </template>
     </DisplayData>
-    <ClientDialog ref='ClientDialog' />
   </div>
 </template>
 
 <script>
 
 import { DisplayData } from '@/components/UI'
-import { API_URL, FILTERS, ClientDialog, ClientList } from '@/components/Client'
+import { GroupList, GroupDialog, API_URL, FILTERS } from '@/components/Group'
 
 export default {
-  components: { DisplayData, ClientDialog, ClientList },
-
+  components: { DisplayData, GroupList, GroupDialog },
+  
   data() {
     return {
       API_URL,

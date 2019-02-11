@@ -122,13 +122,13 @@
 
 <script>
 
-// import ClientMap from '@/components/Client/Map'
+import ClientMap from '@/components/Client/Map'
 import PhoneEdit from '@/components/Phone/Edit'
 import { MODEL_DEFAULTS, API_URL } from '@/components/Client'
 import EmailField from '@/components/UI/EmailField'
 import GradeAndYear from '@/components/GradeAndYear'
 import AvatarLoader from '@/components/AvatarLoader'
-import { DatePicker } from '@/components/UI'
+import DatePicker from '@/components/UI/DatePicker'
 
 export default {
   data() {

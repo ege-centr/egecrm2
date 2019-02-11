@@ -18,7 +18,7 @@ class VisitsController extends Controller
         $return = [];
         foreach(range(1, $request->paginate) as $i) {
             $date_formatted = $date->format('Y-m-d');
-            $return[$date_formatted] = LessonCollection::collection(Lesson::where('date', $date_formatted)->get());
+            $return[$date_formatted] = LessonCollection::collection(Lesson::where('date', $date_formatted)->orderBy('time', 'desc')->get());
             $date->sub(new DateInterval('P1D'));
         }
 
