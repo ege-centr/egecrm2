@@ -125,7 +125,6 @@
           <DisplayData ref='RequestPage'
             :api-url='REQUEST_API_URL'
             :invisible-filters="{client_id: client.id}"
-            :paginate='999'
           >
             <template slot='items' slot-scope='{ items }'>
               <v-layout row wrap class='relative'>

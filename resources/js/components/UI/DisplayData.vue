@@ -37,7 +37,7 @@
 
           <slot name='items' :items='items' v-if='items.length > 0'></slot>
 
-          <infinite-loading v-if='infinite_loading'
+          <infinite-loading v-if='paginate && infinite_loading'
             @infinite='loadData' ref='InfiniteLoading' :distance='2000' spinner='spiral' class='mt-3'>
             <div slot='no-more'></div>
             <div slot='no-results'></div>
@@ -142,8 +142,8 @@ export default {
           }
           this.page++
         } else {
-          // colorLog('COMPLETE', 'Turquoise')
-          // state.complete()
+          colorLog('COMPLETE2', 'Turquoise')
+          state.complete()
         }
         // if (this.paginate !== null) {
         //   if (response.data.meta.current_page >= response.data.meta.last_page) {
