@@ -125,6 +125,7 @@
           <DisplayData ref='RequestPage'
             :api-url='REQUEST_API_URL'
             :invisible-filters="{client_id: client.id}"
+            :paginate='999'
           >
             <template slot='items' slot-scope='{ items }'>
               <v-layout row wrap class='relative'>
@@ -144,9 +145,7 @@
           <DisplayData ref='ContractPage'
             :tabs="{data: 'years', field: 'year'}"
             :api-url='CONTRACT_API_URL' 
-            :filters='CONTRACT_FILTERS' 
             :invisible-filters="{client_id: client.id}"
-            :pre-installed-filters='[{item: CONTRACT_FILTERS[0], value: $store.state.data.academic_year}]'
           >
             <template slot='items' slot-scope='{ items }'>
               <ContractList :items='items' :client='client' @updated='$refs.ContractPage.loadData' />
@@ -176,8 +175,6 @@
           <DisplayData ref='PaymentPage'
             :tabs="{data: 'years', field: 'year'}"
             :api-url='PAYMENT_API_URL' 
-            :filters='PAYMENT_FILTERS' 
-            :pre-installed-filters='[{item: PAYMENT_FILTERS[2], value: [$store.state.data.academic_year]}]'
             :invisible-filters="{entity_id: $route.params.id, entity_type: CLASS_NAME}"
           >
             <template slot='items' slot-scope='{ items }'>
@@ -218,7 +215,6 @@ import Comments from '@/components/Comments'
 import { 
   API_URL as PAYMENT_API_URL, 
   SORT as PAYMENT_SORT,
-  FILTERS as PAYMENT_FILTERS,
   PaymentDialog, 
   PaymentList
 } from '@/components/Payment'
@@ -234,13 +230,13 @@ import {
 
 import { 
   API_URL as CONTRACT_API_URL, 
-  FILTERS as CONTRACT_FILTERS,
   ContractDialog
 } from '@/components/Contract'
 import ContractList from '@/components/Contract/List'
 
 import ClientDialog from '@/components/Client/Dialog'
-import { API_URL, CLASS_NAME, GroupNotAssignedList } from '@/components/Client'
+import GroupNotAssignedList from '@/components/Client/GroupNotAssignedList'
+import { API_URL, CLASS_NAME } from '@/components/Client'
 import { 
   RequestItem,
   RequestDialog,
@@ -258,8 +254,6 @@ export default {
       CONTRACT_API_URL,
       PAYMENT_API_URL,
       PAYMENT_SORT,
-      PAYMENT_FILTERS,
-      CONTRACT_FILTERS,
       REQUEST_API_URL,
       Preview,
       tabs: null,

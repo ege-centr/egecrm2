@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-menu v-for='(filter, index) in filters' :key='filter.item.field'
+    <v-menu v-for='(filter, index) in filters' :key='index'
       bottom
       origin="center center"
       transition="scale-transition"

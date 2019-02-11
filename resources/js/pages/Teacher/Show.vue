@@ -52,6 +52,7 @@
             :api-url='GROUP_API_URL' 
             :tabs="{data: 'years', field: 'year'}"
             :invisible-filters="{teacher_id: $route.params.id}"
+            :paginate='999'
           >
             <template slot='items' slot-scope='{ items }'>
               <GroupList :items='items' />
