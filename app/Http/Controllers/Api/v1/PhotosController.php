@@ -10,13 +10,17 @@ class PhotosController extends Controller
 {
     public function upload(Request $request)
     {
-        $model = getMorphModel($request->class, $request->entity_id);
+        // Если нет ID сущности
+        if (isset($request->entity_id)) {
+            $model = getMorphModel($request->class, $request->entity_id);
+            // TODO: delete actual file
+            $model->photo()->delete();
+            $photo = $model->photo()->create();
+        } else {
+            $photo = Photo::create();
+        }
 
-        // @todo: delete actual file
-        $model->photo()->delete();
-        $photo = $model->photo()->create();
-
-        $request->file->storeAs(Photo::UPLOAD_PATH, $photo->filename_original);
+        $request->file->storeAs('public' . Photo::UPLOAD_PATH, $photo->filename_original);
 
         return $photo;
     }
@@ -30,7 +34,7 @@ class PhotosController extends Controller
         $image = new \claviska\SimpleImage();
         $image->fromFile($request->file)
             ->resize(240, null)
-            ->toFile(storage_path('app/public/img/users/') . $photo->filename_cropped, 'image/jpeg', 60);
+            ->toFile(storage_path('app/public' . Photo::UPLOAD_PATH) . $photo->filename_cropped, 'image/jpeg', 60);
 
         return $photo;
     }

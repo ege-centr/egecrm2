@@ -24,8 +24,11 @@
 
                   <v-flex md12>
                     <div class='vertical-inputs'>
-                      <div class='vertical-inputs__input' v-if='edit_mode'>
-                        <AvatarLoader class-name='Client\Client' :entity-id='item.id' :photo='item.photo' @photoChanged='photoChanged' />
+                      <div class='vertical-inputs__input'>
+                        <AvatarLoader 
+                          :entity-type='CLASS_NAME' 
+                          :item='item' 
+                        />
                       </div>
                       <div class='vertical-inputs__input'>
                         <v-text-field v-model="item.first_name" label="Имя" hide-details></v-text-field>
@@ -111,7 +114,6 @@
                   </v-flex>
                 </v-layout>
               </v-flex>
-
             </v-layout>            
           </v-container>
         </v-card-text>
@@ -124,64 +126,24 @@
 
 import ClientMap from '@/components/Client/Map'
 import PhoneEdit from '@/components/Phone/Edit'
-import { MODEL_DEFAULTS, API_URL } from '@/components/Client'
+import { MODEL_DEFAULTS, CLASS_NAME, API_URL } from '@/components/Client'
 import EmailField from '@/components/UI/EmailField'
 import GradeAndYear from '@/components/GradeAndYear'
 import AvatarLoader from '@/components/AvatarLoader'
 import DatePicker from '@/components/UI/DatePicker'
+import { DialogMixin } from '@/mixins'
 
 export default {
+  mixins: [ DialogMixin ],
+
   data() {
     return {
-      loading: true,
-      saving: false,
-      item: null,
-      dialog: false,
-      edit_mode: true,
+      API_URL,
+      MODEL_DEFAULTS,
+      CLASS_NAME,
     }
   },
 
   components: {  AvatarLoader, PhoneEdit, EmailField, GradeAndYear, DatePicker },
-
-  methods: {
-    open(client_id = null, defaults = {}) {
-      this.dialog = true
-      if (client_id !== null) {
-        this.edit_mode = true
-        this.loadData(client_id)
-      } else {
-        this.edit_mode = false
-        this.item = {...MODEL_DEFAULTS, ...defaults }
-        this.loading = false
-      }
-    },
-
-    loadData(client_id) {
-      this.loading = true
-      axios.get(apiUrl(API_URL, client_id)).then(r => {
-        this.item = r.data
-        this.loading = false
-      })
-    },
-
-    photoChanged(new_photo) {
-      this.item.photo = new_photo
-    },
-
-    async storeOrUpdate() {
-      this.saving = true
-      if (this.item.id) {
-        await axios.put(apiUrl(API_URL, this.item.id), this.item).then(r => {
-          this.item = r.data
-        })
-      } else {
-        await axios.post(apiUrl('clients'), this.item).then(r => {
-          this.$router.push({ name: 'ClientShow', params: { id: r.data.id }})
-        })
-      }
-      this.saving = false
-      this.dialog = false
-    }
-  }
 }
 </script>

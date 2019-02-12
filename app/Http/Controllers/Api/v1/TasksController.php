@@ -23,7 +23,12 @@ class TasksController extends Controller
 
     public function store(Request $request)
     {
-        return Task::create($request->all());
+        $model = Task::create($request->all());
+        $model->attachments = array_map(function($e) {
+            return $e['filename'];
+        }, $request->attachments);
+        $model->save();
+        return $model;
     }
 
     public function show($id)

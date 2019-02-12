@@ -16,11 +16,12 @@ class PaymentsController extends Controller
 
     public function index(Request $request)
     {
-        $query = Payment::query();
+        $query = Payment::orderBy('id', 'desc');
         $this->filter($request, $query);
-        $query->orderBy('id', 'desc');
         if (isset($request->entity_type) && $request->entity_type) {
-            $query->where('entity_type', getModelClass($request->entity_type, true));
+            $query->whereIn('entity_type', array_map(function($e) {
+                return getModelClass($e, true);
+            }, explode(',', $request->entity_type)));
         }
         return PaymentCollection::collection($this->showBy($request, $query));
     }

@@ -99,9 +99,6 @@ export default {
             this.uploading_file_name = null
             this.uploading_error = true
           },
-          onProgress(a, b) {
-            console.log('progress', a, b)
-          },
           onSelect(fileList) {
             this.uploading_file_name = fileList[0].name
             this.uploading_error = false

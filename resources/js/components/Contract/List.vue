@@ -63,14 +63,14 @@
                     <v-list-tile-title>Редактировать</v-list-tile-title>
                   </v-list-tile-content>
               </v-list-tile>
-              <!-- <v-list-tile @click='addVersion(item)'>
+              <v-list-tile @click='addVersion(item)'>
                   <v-list-tile-action>
                     <v-icon>file_copy</v-icon>
                   </v-list-tile-action>
                   <v-list-tile-content>
                     <v-list-tile-title>Добавить версию</v-list-tile-title>
                   </v-list-tile-content>
-              </v-list-tile> -->
+              </v-list-tile>
               <v-list-tile @click='$refs.Print.open({id: item.id})'>
                   <v-list-tile-action>
                     <v-icon>print</v-icon>

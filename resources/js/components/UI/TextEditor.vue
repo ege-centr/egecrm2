@@ -15,8 +15,8 @@ import ImageDrop from '@/other/Quill/ImageDrop'
 // import FileUpload from '@/other/Quill/FileUpload'
 
 Quill.register('modules/imageDrop', ImageDrop)
-const icons = Quill.import('ui/icons')
-icons['file'] = '<i class="v-icon material-icons">attach_file</i>'
+// const icons = Quill.import('ui/icons')
+// icons['file'] = '<i class="v-icon material-icons">attach_file</i>'
 
 export default {
   props: ['value'],
@@ -30,21 +30,14 @@ export default {
           imageDrop: true,
         }
       },
-      toolbar: {
-        container: [
-          [{ 'size': [false, 'large', 'huge'] }],  // custom dropdown
-          ['bold', 'italic', 'underline'],
-          [{ 'color': [] }, { 'background': [] }],
-          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-          ['link', 'image', 'file'],
-          // ['image', 'code-block']
-        ],
-        handlers: {
-          file(value) {
-            // vm
-          }
-        },
-      }
+      toolbar: [
+        [{ 'size': [false, 'large', 'huge'] }],  // custom dropdown
+        ['bold', 'italic', 'underline'],
+        [{ 'color': [] }, { 'background': [] }],
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        ['link', 'image'],
+        // ['image', 'code-block']
+      ],
     }
   },
 

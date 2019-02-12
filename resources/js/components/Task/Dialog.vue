@@ -33,11 +33,28 @@
                     ></v-select>
                   </div>
                 </div>
-                <TextEditor v-model='item.text' />
+                <TextEditor v-model='item.text' style='height: 82vh !important' />
               </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
+
+          <div class='flex-items align-center mt-3'>
+            <v-chip close v-for='(attachment, index) in item.attachments' :key='index' @input='remove(index)'>
+              <span v-if="typeof(attachment) === 'object'">{{ attachment.original_name }}</span>
+              <span v-else>{{ attachment }}</span>
+            </v-chip>
+            <v-chip v-if='uploading_file_name !== null'>
+              <span class='grey--text darken-5'>
+                загрузка {{ uploading_file_name }}...
+              </span>
+            </v-chip>
+            <v-btn @click='attach' :loading='uploading_file_name !== null' flat fab small class='my-0'>
+              <v-icon style='font-size: 20px'>attach_file</v-icon>
+            </v-btn>
+            <span v-if='uploading_error' class='error--text'>размер файла больше 20мб</span>
+          </div>
+
       </v-card>
     </v-dialog>
   </v-layout>
@@ -60,8 +77,49 @@ export default {
       API_URL,
       MODEL_DEFAULTS,
       STATUSES,
+      uploading_file_name: null,
+      uploading_error: false,
     }
   },
+
+  watch: {
+    dialog(newVal) {
+      if (newVal === true) {
+        this.$upload.on('file', {
+          extensions: false,
+          maxSizePerFile: 1024 * 1024 * 20,
+          url: apiUrl('upload'),
+          onSuccess(e, response) {
+            console.log(response.data)
+            this.item.attachments.push(response.data)
+          },
+          onError(a, b) {
+            this.uploading_file_name = null
+            this.uploading_error = true
+          },
+          onSelect(fileList) {
+            this.uploading_file_name = fileList[0].name
+            this.uploading_error = false
+          },
+          onEnd() {
+            this.uploading_file_name = null
+          }
+        })
+      } else {
+        this.$upload.off('file')
+      }
+    },
+  },
+
+  methods: {
+    attach() {
+      this.$upload.select('file')
+    },
+
+    remove(index) {
+      this.item.attachments.splice(index, 1)
+    },
+  }
 }
 </script>
 

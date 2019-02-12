@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\{Payment\Payment, Client\Client, Contract\Contract};
+use App\Models\{Payment\Payment, Client\Client, Contract\Contract, Photo};
 use App\Http\Resources\Client\{Resource, Collection};
 
 class ClientsController extends Controller
@@ -42,6 +42,10 @@ class ClientsController extends Controller
         $new_model->representative->email()->create($request->representative['email']);
 
         $new_model->email()->create($request->email);
+
+        if ($request->photo !== null) {
+            Photo::bind($request->photo['id'], $new_model);
+        }
 
         return response(new Resource($new_model), 201);
     }

@@ -1,10 +1,10 @@
 <template>
-  <div v-if='entityId'>
-    <div v-if='photo'>
+  <div>
+    <div v-if='item.photo !== null'>
       <v-hover>
         <v-avatar slot-scope="{ hover }" :size='180' style='overflow: hidden'>
-          <img :src='photo.url_version' />
-          <div class='photo-needs-cropping' v-if='!photo.has_cropped'>
+          <img :src='item.photo.url_version' />
+          <div class='photo-needs-cropping' v-if='!item.photo.has_cropped'>
             <img src='/img/svg/scissors.svg'/>
           </div>
           <v-slide-y-reverse-transition>
@@ -48,9 +48,9 @@
       <v-dialog v-model="dialog" persistent max-width="1000px">
         <v-card>
           <v-card-text>
-              <vue-cropper v-if='photo'
+              <vue-cropper v-if='item.photo'
                 ref="cropper" style='height: 600px'
-                :src="photo.url_original"
+                :src="item.photo.url_original"
                 :zoomable='false'
                 :view-mode='1'
                 :min-crop-box-width='100'
@@ -83,7 +83,16 @@ import VueCropper from 'vue-cropperjs'
 const API_URL = 'photo'
 
 export default {
-  props: ['className', 'entityId', 'photo'],
+  props: {
+    entityType: {
+      type: String,
+      required: true,
+    },
+    item: {
+      type: Object,
+      required: true,
+    }
+  },
 
   data() {
     return {
@@ -98,14 +107,14 @@ export default {
     this.$upload.on('photo', {
        url: apiUrl(API_URL, 'upload'),
        maxSizePerFile: 1024 * 1024 * 20,
-       body: {
-         class: this.className,
-         entity_id: this.entityId
-       },
+       body: this.item.id ? {
+         entity_type: this.entityType,
+         entity_id: this.item.id
+       } : {},
        onSuccess(e, response) {
-         this.$emit('photoChanged', null)
+         this.item.photo = null
          Vue.nextTick(() => {
-           this.$emit('photoChanged', response.data)
+           this.item.photo = response.data
            this.dialog = true
          })
        },
@@ -133,10 +142,9 @@ export default {
       this.$refs.cropper.getCroppedCanvas().toBlob((blob) => {
         const formData = new FormData()
         formData.append('file', blob)
-        formData.append('photo_id', this.photo.id)
+        formData.append('photo_id', this.item.photo.id)
         axios.post(apiUrl(API_URL, 'crop'), formData).then(r => {
-          this.photo = r.data
-          this.$emit('photoChanged', r.data)
+          this.item.photo = r.data
           this.dialog = false
           setTimeout(() => this.cropping = false, 300)
         })
@@ -145,10 +153,9 @@ export default {
 
     destroy() {
       this.dialog = false
-      axios.delete(apiUrl(API_URL, this.photo.id))
+      axios.delete(apiUrl(API_URL, this.item.photo.id))
       this.waitForDialogClose(() => {
-        this.photo = null
-        this.$emit('photoChanged', null)
+        this.item.photo = null
       })
     },
   }

@@ -16,6 +16,7 @@ export const MODEL_DEFAULTS = {
     phones: [{phone: '', comment: ''}] 
   },
   email: {},
+  photo: null,
   phones: [{phone: '', comment: ''}]
 }
 

@@ -141,10 +141,11 @@ export default {
             state.loaded()
           }
           this.page++
-        } else {
-          colorLog('COMPLETE2', 'Turquoise')
-          state.complete()
         }
+        // } else {
+        //   colorLog('COMPLETE2', 'Turquoise')
+        //   state.complete()
+        // }
         // if (this.paginate !== null) {
         //   if (response.data.meta.current_page >= response.data.meta.last_page) {
         //     colorLog('COMPLETE', 'Turquoise')

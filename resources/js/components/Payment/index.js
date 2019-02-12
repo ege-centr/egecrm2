@@ -1,4 +1,5 @@
 import store from '@/store'
+import { ROLES } from '@/config'
 
 export const API_URL = 'payments'
 
@@ -25,7 +26,10 @@ export const FILTERS = [
   {label: 'Метод', field: 'method', type: 'multiple', options: ENUMS.methods},
   {label: 'Год', field: 'year', type: 'multiple', options: store.state.data.years},
   {label: 'Категория', field: 'category', type: 'multiple', options: ENUMS.categories},
-  {label: 'Преподаватель', field: 'entity_id', type: 'multiple', options: store.state.data.teachers, textField: 'names.abbreviation'},
+  {label: 'От кого', field: 'entity_type', type: 'multiple', options: [
+    {id: ROLES.TEACHER, title: 'преподаватель'},
+    {id: ROLES.CLIENT, title: 'клиент'},
+  ]},
   {label: 'Пользователь', field: 'created_admin_id', type: 'select', options: store.state.data.admins, textField: 'name'},
   {label: 'Дата', field: 'date', type: 'date'},
 ]

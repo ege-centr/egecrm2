@@ -228,9 +228,9 @@ import {
 } from '@/components/Group'
 
 import { 
-  API_URL as CONTRACT_API_URL, 
-  ContractDialog
+  API_URL as CONTRACT_API_URL,
 } from '@/components/Contract'
+import ContractDialog from '@/components/Contract/Dialog'
 import ContractList from '@/components/Contract/List'
 
 import ClientDialog from '@/components/Client/Dialog'

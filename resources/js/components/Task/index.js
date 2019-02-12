@@ -12,6 +12,7 @@ export const STATUSES = [
 
 export const MODEL_DEFAULTS = {
   text: '',
+  attachments: [],
   status: STATUSES[0].value
 }
 

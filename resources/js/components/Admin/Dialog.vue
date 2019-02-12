@@ -19,9 +19,12 @@
                 Основное
               </v-flex>
 
-              <div class='mr-4 mb-5' v-if='edit_mode'>
+              <div class='mr-4 mb-5'>
                 <v-flex>
-                  <AvatarLoader class-name='Admin\Admin' :entity-id='item.id' :photo='item.photo' @photoChanged='photoChanged' />
+                  <AvatarLoader 
+                    :entity-type='ROLES.ADMIN' 
+                    :item='item'
+                  />
                 </v-flex>
               </div>
 
@@ -121,6 +124,7 @@
 
 <script>
 
+import { ROLES } from '@/config'
 import { MODEL_DEFAULTS, API_URL } from './'
 import VueCropper from 'vue-cropperjs'
 import AvatarLoader from '@/components/AvatarLoader'
@@ -129,6 +133,7 @@ import PhoneEdit from '@/components/Phone/Edit'
 export default {
   data() {
     return {
+      ROLES,
       dialog: false,
       crop_dialog: false,
       cropping: false,
@@ -186,9 +191,7 @@ export default {
       this.loading = false
       this.dialog = false
     },
-    photoChanged(new_photo) {
-      this.item.photo = new_photo
-    },
+
     toggleRight(right) {
       const index = this.item.rights.indexOf(right)
       if (index === -1) {
