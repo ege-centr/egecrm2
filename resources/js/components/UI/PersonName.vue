@@ -1,5 +1,5 @@
 <template>
-  <span>{{ hasName ? item.names[field] : 'не установлено' }}</span>
+  <span>{{ hasName ? item.names[field] : 'пусто' }}</span>
 </template> 
 
 <script>
