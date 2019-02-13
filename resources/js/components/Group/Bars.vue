@@ -19,13 +19,13 @@ export default {
 
 <style lang="scss">
 .bars {
-  $max-bar-height: 20px;
+  $bar-size: 8px;
   margin-right: 6px;
-  height: $max-bar-height;
+  height: $bar-size;
   align-items: center;
   &__item {
-    height: #{$max-bar-height - 6};
-    width: 9px;
+    height: $bar-size;
+    width: $bar-size;
     margin-right: 2px;
     background-color: #C1D2DD;
     &_filled {
@@ -33,7 +33,7 @@ export default {
     }
     &_current {
       @extend .bars__item_filled;
-      height: $max-bar-height;
+      height: #{$bar-size * 2};
     }
   }
 }

@@ -9,7 +9,7 @@
       </div>
       <div class="visits__items" v-for='client in clients' :key='client.id'>
         <div>
-          <router-link :to="{ name: 'ClientShow', params: { id: client.id } }">{{ client.names.short }}</router-link>
+          <router-link :to="{ name: 'ClientShow', params: { id: client.id } }"><PersonName :item='client' /></router-link>
         </div>
         <div v-for='(lesson, index) in group.lessons' :key='lesson.id' :class="getClass(index)">
           <SmallCircle v-if='getClientLesson(lesson, client)' 

@@ -30,7 +30,6 @@ export default {
       required: true,
     },
     itemText: {
-      type: String,
       required: false,
       default: 'title',
     }

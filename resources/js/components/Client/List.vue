@@ -4,7 +4,7 @@
       <template slot="items" slot-scope="{ item }">
         <td>
           <router-link :to="{ name: 'ClientShow', params: { id: item.id }}">
-            {{ item.names.short }}
+            <PersonName :item='item' />
           </router-link>
         </td>
         <td class='text-md-right'>

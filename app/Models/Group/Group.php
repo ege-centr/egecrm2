@@ -15,7 +15,8 @@ class Group extends Model
 
     protected $fillable = [
         'teacher_id', 'head_teacher_id', 'subject_id', 'grade_id', 'teacher_price',
-        'duration', 'year', 'is_archived', 'is_ready_to_start', 'cabinet_id', 'level'
+        'duration', 'year', 'is_archived', 'is_ready_to_start', 'cabinet_id', 'level',
+        'latest_start_lesson_id'
     ];
 
     public function clients()

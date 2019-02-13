@@ -1,6 +1,6 @@
 <template>
   <div class='calendar'>
-    <div v-for='month in monthsWithData' :key='month'>
+    <div v-for='month in sinceFirstLessonMonth' :key='month'>
       <div class='calendar__month-title font-weight-bold'>{{ month_labels[month] }} {{ getYear(month) }}</div>
       <table class='calendar__table'>
         <thead>
@@ -109,7 +109,7 @@ export default {
 
   methods: {
     loadSpecialDates() {
-      axios.get(apiUrl('special-dates') + queryString(_.pick(this.group, ['subject_id', 'grade_id', 'year']))).then(r => {
+      axios.get(apiUrl('special-dates') + queryString(_.pick(this.group, ['grade_id', 'year']))).then(r => {
         this.specialDates = r.data
       })
     },
@@ -178,9 +178,16 @@ export default {
           months_with_data.push(month)
         }
       })
-      console.log(months_with_data)
       return _.intersection(CALENDAR_MONTHS, months_with_data)
     },
+    sinceFirstLessonMonth() {
+      if (this.lessons.length === 0) {
+        return CALENDAR_MONTHS
+      }
+      const first_lesson_month = parseInt(moment(this.lessons.filter(lesson => lesson.status !== 'cancelled')[0].date).format('M'))
+      const first_lesson_month_index = CALENDAR_MONTHS.findIndex(m => m === first_lesson_month)
+      return CALENDAR_MONTHS.slice(first_lesson_month_index)
+    }
   }
 }
 </script>

@@ -64,7 +64,7 @@
                       'red--text': props.item.subject_status === SUBJECT_STATUSES.SUBJECT_STATUS_TERMINATED,
                     }"
                   >
-                    {{ props.item.names.short }}
+                    <PersonName :item='props.item'/>
                   </router-link>
                 </td>
                 <td width='200'>
@@ -170,17 +170,17 @@ import {
   GROUP_CLIENTS_API_URL, 
   LEVELS, 
   CLASS_NAME,
-  GroupSchedule, 
-  MoveClientDialog
 } from '@/components/Group'
+
+import GroupSchedule from '@/components/Group/Schedule'
+import MoveClientDialog from '@/components/Group/MoveClientDialog'
+import GroupDialog from '@/components/Group/Dialog'
+
 import Bars from '@/components/Group/Bars'
 import Visits from '@/components/Group/Visits'
-import GroupDialog from '@/components/Group/Dialog'
 import { DisplayData } from '@/components/UI'
-import { 
-  API_URL as GROUP_ACTS_API_URL,
-  GroupActDialog
-} from '@/components/Group/Act'
+import { API_URL as GROUP_ACTS_API_URL } from '@/components/Group/Act'
+import GroupActDialog from '@/components/Group/Act/Dialog'
 import GroupActList from '@/components/Group/Act/List'
 import Comments from '@/components/Comments'
 import { SUBJECT_STATUSES } from '@/components/Contract'

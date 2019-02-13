@@ -27,7 +27,7 @@
                 </td>
                 <td :class="{'purple lighten-5': item.is_unplanned}">
                   <span v-if='item.cabinet_id'>
-                    {{ cabinets.find(e => e.id == item.cabinet_id).text }}
+                    {{ getData('cabinets', item.cabinet_id).title }}
                   </span>
                 </td>
                 <td :class="{'purple lighten-5': item.is_unplanned}">
@@ -86,11 +86,7 @@
                         <v-text-field hide-details v-model='dialog_item.time' label='Время занятия' v-mask="'##:##'"></v-text-field>
                       </div>
                       <div class='vertical-inputs__input'>
-                        <ClearableSelect v-model="dialog_item.cabinet_id"
-                          label="Кабинет"
-                          :items='cabinets' 
-                          item-text='text'
-                        />
+                        <DataSelect type='cabinets' v-model='dialog_item.cabinet_id' />
                       </div>
                       <div class='vertical-inputs__input'>
                         <TeacherSelect v-model="dialog_item.teacher_id" />
@@ -293,9 +289,6 @@ export default {
 
   methods: {
     async loadData() {
-      await axios.get(apiUrl('cabinets')).then(r => {
-        this.cabinets = r.data
-      })
       await axios.get(apiUrl(API_URL), {
         params: {
           group_id: this.group.id,
@@ -315,7 +308,11 @@ export default {
 
     edit(lesson) {
       this.dialog = true
-      this.dialog_item = clone(lesson)
+      this.loading = true
+      axios.get(apiUrl(API_URL, lesson.id)).then(r => {
+        this.dialog_item = r.data
+        this.loading = false
+      })
     },
 
     async destroy() {
@@ -422,10 +419,7 @@ export default {
   computed: {
     clientLessons() {
       this.recompute_client_lessons
-      colorLog('Recalculating...', 'PaleVioletRed', this.recompute_client_lessons)
-      if (this.dialog_item.client_lessons) {
-        return this.dialog_item.clientLessons.filter(e => e.to_be_deleted !== true)
-      }
+      return this.dialog_item.clientLessons.filter(e => e.to_be_deleted !== true)
     }
   }
 }

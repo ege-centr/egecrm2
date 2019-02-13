@@ -1,82 +1,44 @@
 <template>
-  <v-navigation-drawer
-    clipped
-    fixed
-    :value="true"
-    app
-    dark
-  >
-    <div class='menu-logo'>
-      <img src='/img/svg/logo-full.svg' />
-    </div>
-
-    
-    <SearchBar />
-    
-    <v-list dense>
-      <v-list-tile v-for='m in menu' :key='m.route' @click="goTo(m.route)">
-          <v-list-tile-action>
-              <v-icon>{{ m.icon }}</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-              <v-list-tile-title>
-                {{ m.label }}
-                <span class='menu-counter' v-if="m.hasOwnProperty('counter')">{{ $store.state.counters[m.counter] || '' }}</span>
-              </v-list-tile-title>
-          </v-list-tile-content>
-      </v-list-tile>
-
-      <div class='separator'></div>
-
-      <v-list-tile v-for='m in admin_menu' :key='m.route' @click="goTo(m.route)">
-          <v-list-tile-action>
-              <v-icon>{{ m.icon }}</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-content>
-              <v-list-tile-title>
-                {{ m.label }}
-              </v-list-tile-title>
-          </v-list-tile-content>
-      </v-list-tile>
-
-      <!-- <v-list-group
-        prepend-icon="settings"
-        value="true"
-      >
-      <v-list-tile slot="activator">
-        <v-list-tile-title>Настройки</v-list-tile-title>
-      </v-list-tile>
-
-      <v-list subgroup>
-        <v-list-tile v-for='m in admin_menu' :key='m.route' @click="goTo(m.route)">
-            <v-list-tile-action>
-                <v-icon>{{ m.icon }}</v-icon>
-            </v-list-tile-action>
-            <v-list-tile-content>
-                <v-list-tile-title>{{ m.label }}</v-list-tile-title>
-            </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
-    </v-list-group> -->
-      <v-list-tile @click="$store.dispatch('logout')">
+  <v-list dense>
+    <v-list-tile v-for='m in menu' :key='m.route' @click="$router.push({name: m.route})">
         <v-list-tile-action>
-          <v-icon>exit_to_app</v-icon>
+            <v-icon>{{ m.icon }}</v-icon>
         </v-list-tile-action>
         <v-list-tile-content>
-          <v-list-tile-title>Выход</v-list-tile-title>
+            <v-list-tile-title>
+              {{ m.label }}
+              <span class='menu-counter' v-if="m.hasOwnProperty('counter')">{{ $store.state.counters[m.counter] || '' }}</span>
+            </v-list-tile-title>
         </v-list-tile-content>
-      </v-list-tile> 
-    </v-list>
-  </v-navigation-drawer>
+    </v-list-tile>
+
+    <div class='menu-separator'></div>
+
+    <v-list-tile v-for='m in admin_menu' :key='m.route' @click="$router.push({name: m.route})">
+        <v-list-tile-action>
+            <v-icon>{{ m.icon }}</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-content>
+            <v-list-tile-title>
+              {{ m.label }}
+            </v-list-tile-title>
+        </v-list-tile-content>
+    </v-list-tile>
+
+    <v-list-tile @click="$store.dispatch('logout')">
+      <v-list-tile-action>
+        <v-icon>exit_to_app</v-icon>
+      </v-list-tile-action>
+      <v-list-tile-content>
+        <v-list-tile-title>Выход</v-list-tile-title>
+      </v-list-tile-content>
+    </v-list-tile> 
+  </v-list>
 </template>
 
 <script>
 
-import SearchBar from '@/components/Search/Bar'
-
 export default {
-  components: { SearchBar },
-
   data: () => ({
     drawer: true,
     menu: [
@@ -162,37 +124,5 @@ export default {
       },
     ],
   }),
-  methods: {
-    goTo(route) {
-      this.$router.push({name: route})
-    }
-  }
 }
 </script>
-
-<style lang='scss' scoped>
-
-.v-navigation-drawer {
-  background: #213846;
-}
-
-.menu-logo {
-  text-align: center;
-  padding: 20px 0 34px;
-  & img {
-    width: 40%;
-  }
-}
-
-.v-list__tile__title {
-  text-transform: lowercase;
-}
-
-.separator {
-  width: 88%;
-  background: rgba(white, .1);
-  height: 1px;
-  margin: 15px auto;
-}
-
-</style>

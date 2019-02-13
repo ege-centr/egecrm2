@@ -41,6 +41,11 @@ export default {
           text: 'title',
           label: 'Класс',
         }}
+      case 'cabinets':
+        return this.item = {...this.item, ...{
+          text: 'title',
+          label: 'Кабинет',
+        }}
       case 'years':
         return this.item = {...this.item, ...{
           text: 'title',

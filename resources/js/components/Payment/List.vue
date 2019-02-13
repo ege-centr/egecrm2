@@ -13,7 +13,7 @@
             name: item.class_name === CLIENT_CLASS_NAME ? 'ClientShow' : 'TeacherShow',  
             params: {id: item.entity.id}
           }">
-            {{ item.entity.names.short }}
+            <PersonName :item='item.entity' />
           </router-link>
         </td>
         <td>

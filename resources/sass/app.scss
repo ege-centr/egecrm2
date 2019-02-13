@@ -251,3 +251,26 @@ nav {
     content: none !important;
   }
 }
+
+.v-navigation-drawer {
+  background: #213846 !important;
+}
+
+.menu-logo {
+  text-align: center;
+  padding: 20px 0 34px;
+  & img {
+    width: 40%;
+  }
+}
+
+.v-list__tile__title {
+  text-transform: lowercase;
+}
+
+.menu-separator {
+  width: 88%;
+  background: rgba(white, .1);
+  height: 1px;
+  margin: 15px auto;
+}

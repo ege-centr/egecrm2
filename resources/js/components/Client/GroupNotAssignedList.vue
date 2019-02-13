@@ -31,7 +31,8 @@
 <script>
 
 import { SUBJECT_STATUS_TERMINATED } from '@/components/Contract'
-import { API_URL, GROUP_CLIENTS_API_URL, MoveClientDialog } from '@/components/Group'
+import { API_URL, GROUP_CLIENTS_API_URL } from '@/components/Group'
+import MoveClientDialog from '@/components/Group/MoveClientDialog'
 
 export default {
   props: {

@@ -32,10 +32,12 @@
                     <DataSelect type='grades' v-model="item.grade_id" />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <ClearableSelect v-model="item.cabinet_id"
-                        label='Кабинет'
-                        item-text='text'
-                        :items='cabinets' />
+                    <DataSelect type='cabinets' v-model="item.cabinet_id" />
+                  </div>
+                  <div class='vertical-inputs__input' v-if='lessons.length > 0'>
+                    <ClearableSelect label='Критическая дата старта' v-model="item.latest_start_lesson_id" 
+                      :item-text='(e) => $options.filters.date(e.date)' 
+                      :items='lessons' />
                   </div>
                   <div class='vertical-inputs__input'>
                     <v-text-field hide-details v-model="item.teacher_price" label="Цена за занятие, руб."></v-text-field>
@@ -86,7 +88,7 @@ export default {
 
       item: MODEL_DEFAULTS,
       teachers: [],
-      cabinets: [],
+      lessons: [],
       saving: false,
     }
   },
@@ -95,10 +97,10 @@ export default {
     async open(item_id = null) {
       this.dialog = true
       this.loading = true
-      await axios.get(apiUrl('cabinets')).then(r => {
-        this.cabinets = r.data
-      })
       if (item_id !== null) {
+        await axios.get(apiUrl('lessons') + queryString({group_id: item_id})).then(r => {
+          this.lessons = r.data
+        })
         this.edit_mode = true
         this.loadData(item_id)
       } else {

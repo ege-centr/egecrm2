@@ -43,6 +43,3 @@ export const SUBJECT_DEFAULTS = {
 }
 
 export const DISCOUNTS = [4, 6, 8, 10, 15, 20, 30, 40, 50, 70, 90]
-
-export const ContractDialog = require('./Dialog')
-export const ContractList = require('./List')

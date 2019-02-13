@@ -1,6 +1,5 @@
 <template>
   <div>
-    <GroupDialog ref='GroupDialog' />
     <DisplayData :api-url='API_URL' :paginate='30' :invisible-filters="{client_id: $store.state.user.id}">
       <template slot='items' slot-scope="{ items }">
         <GroupList :items='items' />
@@ -12,7 +11,8 @@
 <script>
 
 import { DisplayData } from '@/components/UI'
-import { GroupList, API_URL } from '@/components/Group'
+import { API_URL } from '@/components/Group'
+import GroupList from '@/components/Group/List'
 
 export default {
   components: { DisplayData, GroupList },

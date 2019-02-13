@@ -21,7 +21,12 @@
                     <span class='font-weight-medium'>{{ message.createdAdmin ? message.createdAdmin.name : 'Неизвестный отправитель' }}</span>
                     <span class='ml-2 caption grey--text'>{{ message.created_at | date-time }}</span>
                   </div>
-                  {{ message.message }}
+                  <div v-if='message.subject' class='font-weight-medium'>
+                    {{ message.subject }}
+                  </div>
+                  <div>
+                    {{ message.message }}
+                  </div>
                   <div v-if='message.attachments.length' class='mt-2 grey--text small caption flex-items '>
                     <a v-for='(attachment, index) in message.attachments' :key='index' class='mr-2 flex-items align-center' target="_blank" :href="`/storage/img/upload/${attachment}`">
                       <v-icon style='font-size: 14px' class='mr-1'>attach_file</v-icon>

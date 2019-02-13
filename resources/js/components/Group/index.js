@@ -26,10 +26,3 @@ export const LEVELS = [
   {text: 'высокий', value: 'high'},
   {text: 'спец. группа', value: 'special'}
 ]
-
-export const GroupSchedule = require('./Schedule')
-export const GroupList = require('./List')
-export const GroupDialog = require('./Dialog')
-export const MoveClientDialog = require('./MoveClientDialog')
-export const GroupActList = require('./Act/List')
-export const GroupActDialog = require('./Act/Dialog')

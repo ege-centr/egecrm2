@@ -2,7 +2,7 @@
   <div>
     <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='30'>
       <template slot='items' slot-scope='{ items }'>
-        <ContractList :items='items' :show-client='true' />
+        <ContractList :items='items' :display-options='{client: true, year: true}' />
       </template>
     </DisplayData>
   </div>
@@ -10,8 +10,9 @@
 
 <script>
 
-import { DisplayData } from '@/components/UI'
-import { API_URL, FILTERS, ContractList } from '@/components/Contract'
+import DisplayData from '@/components/UI/DisplayData'
+import { API_URL, FILTERS } from '@/components/Contract'
+import ContractList from '@/components/Contract/List'
 
 export default {
   components: { DisplayData, ContractList },

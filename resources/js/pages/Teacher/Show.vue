@@ -54,7 +54,7 @@
             :invisible-filters="{teacher_id: $route.params.id}"
           >
             <template slot='items' slot-scope='{ items }'>
-              <GroupList :items='items' />
+              <GroupList :items='items' :display-options='{teacher: false}' />
             </template>
           </DisplayData>
         </v-tab-item>
@@ -103,10 +103,8 @@
 <script>
 
 import { API_URL, CLASS_NAME } from '@/components/Teacher'
-import { 
-  API_URL as GROUP_API_URL,
-  GroupList, 
-} from '@/components/Group'
+import { API_URL as GROUP_API_URL } from '@/components/Group'
+import GroupList from '@/components/Group/List'
 import { 
   API_URL as PAYMENT_API_URL, 
   SORT as PAYMENT_SORT,

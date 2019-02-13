@@ -33,7 +33,7 @@
               <template slot='items' slot-scope="props">
                 <td width='200'>
                   <router-link :to="{name: 'ClientShow', params: { id: props.item.id }}">
-                    {{ props.item.names.short }}
+                    <PersonName :item='props.item' field='abbreviation' />
                   </router-link>
                 </td>
                 <td width='200'>
@@ -65,7 +65,7 @@
 <script>
 
 import { API_URL } from '@/components/AbstractGroup'
-import { MoveClientDialog } from '@/components/Group'
+import MoveClientDialog from '@/components/Group/MoveClientDialog'
 
 export default {
   components: { MoveClientDialog },

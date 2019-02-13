@@ -1,5 +1,5 @@
 <template>
-  <div class='preview-mode'>
+  <div class='preview-mode' v-if='$store.state.user.preview'>
     <div class='flex-items align-center justify-space-between'>
       <div>
         <v-icon color='white' class='mr-1'>person</v-icon>

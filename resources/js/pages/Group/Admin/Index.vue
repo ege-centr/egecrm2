@@ -15,7 +15,9 @@
 <script>
 
 import { DisplayData } from '@/components/UI'
-import { GroupList, GroupDialog, API_URL, FILTERS } from '@/components/Group'
+import { API_URL, FILTERS } from '@/components/Group'
+import GroupList from '@/components/Group/List'
+import GroupDialog from '@/components/Group/Dialog'
 
 export default {
   components: { DisplayData, GroupList, GroupDialog },

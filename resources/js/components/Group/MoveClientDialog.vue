@@ -6,7 +6,7 @@
           <v-btn icon dark @click.native="dialog = false">
             <v-icon>close</v-icon>
           </v-btn>
-          <v-toolbar-title>Перенос клиента {{ client.names.short }} в другую группу</v-toolbar-title>
+          <v-toolbar-title>Перенос клиента <PersonName :item='client' /> в другую группу</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn dark flat @click.native="move" :disabled='selected_group_id === null' :loading='saving'>Перенести</v-btn>
@@ -30,7 +30,8 @@
 
 <script>
 
-import { API_URL, GROUP_CLIENTS_API_URL, FILTERS, GroupList } from '@/components/Group'
+import { API_URL, GROUP_CLIENTS_API_URL, FILTERS } from '@/components/Group'
+import GroupList from '@/components/Group/List'
 import { AllFilter } from '@/components/Filter'
 
 export default {

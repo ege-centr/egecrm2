@@ -9,7 +9,7 @@
               Группа {{ item.group_id }}
             </router-link>
           </td>
-          <td :class="{'purple lighten-5': item.is_unplanned}">
+          <td>
             {{ item.time }}
           </td>
           <td>
@@ -17,20 +17,25 @@
               {{ item.clients_count }} учеников
             </span>
           </td>
-          <td :class="{'purple lighten-5': item.is_unplanned}">
+          <td>
+            <span v-if='item.subject_id'>
+              {{ getData('subjects', item.subject_id).three_letters }}–{{ item.grade_id }}
+            </span>
+          </td>
+          <td>
             <span v-if='item.cabinet_id'>
               {{ getData('cabinets', item.cabinet_id).title }}
             </span>
           </td>
-          <td :class="{'purple lighten-5': item.is_unplanned}">
+          <td>
             <span v-if='item.teacher_id'>
               {{ getData('teachers', item.teacher_id).names.abbreviation }}
             </span>
           </td>
-          <td class='grey--text' :class="{'purple lighten-5': item.is_unplanned}">
+          <td class='grey--text'>
             <span v-if='item.conducted_email_id'>{{ getData('admins', item.conducted_email_id).name }} {{ item.created_at | date-time }}</span>
           </td>
-          <td width='10' class='pr-0 grey--text' :class="{'purple lighten-5': item.is_unplanned}">
+          <td width='10' class='pr-0 grey--text'>
             <div class='lesson-status' :class="{
               'blue': item.status === LESSON_STATUS.PLANNED,
               'green': item.status === LESSON_STATUS.CONDUCTED,

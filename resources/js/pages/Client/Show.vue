@@ -222,10 +222,8 @@ import EmailShow from '@/components/Email/Show'
 import BranchList from '@/components/UI/BranchList'
 import { TestAdminClientList } from '@/components/Test'
 import { DisplayData } from '@/components/UI'
-import { 
-  API_URL as GROUP_API_URL, 
-  GroupList,
-} from '@/components/Group'
+import { API_URL as GROUP_API_URL } from '@/components/Group'
+import GroupList from '@/components/Group/List'
 
 import { 
   API_URL as CONTRACT_API_URL,

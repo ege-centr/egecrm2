@@ -25,6 +25,11 @@ class LessonsController extends Controller
         return new LessonResource(Lesson::create($request->all()));
     }
 
+    public function show($id)
+    {
+        return new LessonResource(Lesson::find($id));
+    }
+
     public function update(Request $request, $id)
     {
         $model = Lesson::find($id);

@@ -9,8 +9,8 @@
       hide-headers
     >
       <template slot='items' slot-scope="{ item }">
-        <td v-if='showClient'>
-          {{ item.client.names.abbreviation }}
+        <td v-if='show.client'>
+          <PersonName :item='item' field='abbreviation' />
         </td>
         <td>
           <span v-if='item.id'>
@@ -34,7 +34,7 @@
         <td>
           <span v-if='item.grade_id'>
             {{ getData('grades', item.grade_id).title }}
-          </span><span v-if='item.year'>, {{ getData('years', item.year).title }}</span>
+          </span><span v-if='show.year && item.year'>, {{ getData('years', item.year).title }}</span>
         </td>
         <td>
           <span v-for='subject in item.subjects' :class="{
@@ -91,6 +91,7 @@
 
 import Print from '@/components/Print'
 import ContractDialog from '@/components/Contract/Dialog'
+import DisplayOptions from '@/mixins/DisplayOptions'
 import { MODEL_DEFAULTS, SUBJECT_STATUSES } from './'
 
 export default {
@@ -99,21 +100,23 @@ export default {
       type: Array,
       required: true
     },
-    showClient: {
-      type: Boolean,
-      required: false,
-      default: false,
-    }
   },
 
   components: { ContractDialog, Print },
 
+  mixins: [ DisplayOptions ],
+
   data() {
     return {
       SUBJECT_STATUSES,
+      defaultDisplayOptions: {
+        client: false,
+        year: false,
+      },
       contract: MODEL_DEFAULTS,
     }
   },
+
   methods: {
     addVersion(item) {
       this.$refs.ContractDialog.open(null, {
@@ -128,6 +131,6 @@ export default {
       this.items.splice(index, 1)
       axios.delete(apiUrl(API_URL, item.id))
     },
-  }
+  },
 }
 </script>
