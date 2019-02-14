@@ -46,19 +46,19 @@
               >
               </v-textarea>
               <div class='flex-items align-center mt-3'>
-                <v-chip close v-for='(attachment, index) in attachments' :key='attachment.filename' @input='remove(index)'>
-                  {{ attachment.original_name }} 
-                </v-chip>
-                <v-chip v-if='uploading_file_name !== null' close  @input='cancelUpload()'>
-                  <span class='grey--text darken-5'>
-                    {{ uploading_file_name | truncate(25) }}
-                  </span>
-                </v-chip>
-                <v-btn @click='attach' :loading='uploading_file_name !== null' flat fab small>
+                <LoadingChip v-for="(file, index) in $upload.files('file').all" :key='file.$id' :file='file' @remove='remove(index)' />
+                <!-- <v-chip close v-for='(attachment, index) in attachments' :key='attachment.filename' @input='remove(index)'>
+                  {{ attachment.original_name | truncate(25) }} 
+                </v-chip> -->
+                <!-- <LoadingChip v-if='uploading_file_name !== null' 
+                  :title='uploading_file_name'
+                  :on-close='cancelUpload'
+                  :percent="percent"
+                /> -->
+                <v-btn @click='attach' flat fab small style='height: 34px; width: 34px'>
                   <v-icon style='font-size: 20px'>attach_file</v-icon>
                 </v-btn>
                 <span v-if='uploading_error' class='error--text'>размер файла больше 20мб</span>
-                <v-spacer></v-spacer>
                 <v-btn flat color='primary' :loading='sending' @click='send'>отправить</v-btn>
               </div>
             </div>
@@ -73,8 +73,12 @@
 
 const API_URL = 'email-messages'
 
+import LoadingChip from '@/components/UI/LoadingChip'
+
 export default {
   props: ['item'],
+
+  components: { LoadingChip },
 
   data() {
     return {
@@ -84,7 +88,6 @@ export default {
       subject: '',
       attachments: [],
       messages: null,
-      uploading_file_name: null,
       uploading_error: false,
     }
   },
@@ -94,22 +97,17 @@ export default {
       if (newVal === true) {
         this.$upload.on('file', {
           extensions: false,
+          multiple: true,
           maxSizePerFile: 1024 * 1024 * 20,
           url: apiUrl('upload'),
           onSuccess(e, response) {
-            console.log(response.data)
             this.attachments.push(response.data)
           },
           onError(a, b) {
-            this.uploading_file_name = null
             this.uploading_error = true
           },
           onSelect(fileList) {
-            this.uploading_file_name = fileList[0].name
             this.uploading_error = false
-          },
-          onEnd() {
-            this.uploading_file_name = null
           }
         })
       } else {

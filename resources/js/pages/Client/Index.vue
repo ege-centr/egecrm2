@@ -26,6 +26,5 @@ export default {
       FILTERS,
     }
   },
-  
 }
 </script>

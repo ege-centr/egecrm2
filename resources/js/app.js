@@ -13,10 +13,10 @@ import {GlobalPlugin} from '@/other/plugins'
 import VueTheMask from 'vue-the-mask'
 import Vuetify from 'vuetify'
 import ru from 'vuetify/es5/locale/ru'
-import vueUpload from '@websanova/vue-upload'
+import vueUpload from '@/vendor/vue-upload.min'
 // import * as VueGoogleMaps from 'vue2-google-maps'
 
-[GlobalPlugin, VueTheMask, vueUpload].forEach(use => Vue.use(use))
+[GlobalPlugin, VueTheMask].forEach(use => Vue.use(use))
 
 // Vue.use(VueGoogleMaps, {
 //   load: {
@@ -30,6 +30,18 @@ Vue.use(Vuetify, {
   lang: {
     locales: { ru },
     current: 'ru'
+  }
+})
+
+Vue.use(vueUpload, {
+  http: function(data) {
+    console.log('data', data)
+    return axios.post(data.url, data.body, {
+      onUploadProgress: data.progress,
+      cancelToken: data.cancelToken,
+    })
+    .then(data.success)
+    // .catch(data.error)
   }
 })
 

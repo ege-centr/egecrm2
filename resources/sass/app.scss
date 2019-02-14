@@ -247,6 +247,7 @@ nav {
 
 .v-chip:focus {
   box-shadow: none !important;
+  border-color: transparent !important;
   &:after {
     content: none !important;
   }

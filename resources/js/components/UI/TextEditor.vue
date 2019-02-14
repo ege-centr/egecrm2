@@ -11,8 +11,7 @@
 
 <script>
 import { VueEditor, Quill } from 'vue2-editor'
-import ImageDrop from '@/other/Quill/ImageDrop'
-// import FileUpload from '@/other/Quill/FileUpload'
+import ImageDrop from '@/vendor/ImageDrop'
 
 Quill.register('modules/imageDrop', ImageDrop)
 // const icons = Quill.import('ui/icons')
