@@ -59,6 +59,7 @@
                   <v-icon style='font-size: 20px'>attach_file</v-icon>
                 </v-btn>
                 <span v-if='uploading_error' class='error--text'>размер файла больше 20мб</span>
+                <v-spacer></v-spacer>
                 <v-btn flat color='primary' :loading='sending' @click='send'>отправить</v-btn>
               </div>
             </div>
