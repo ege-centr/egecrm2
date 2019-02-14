@@ -12,7 +12,7 @@
             <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ true ? 'Сохранить' : 'Добавить' }}</v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-card-text class='relative'>
+        <v-card-text class='relative test-dialog'>
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
           <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
               <v-flex md12 class='mb-4'>
@@ -27,46 +27,79 @@
                     <DataSelect v-model='item.grade_id' type='grades' />
                   </div>
                 </div>
-                <div>
-                  <v-btn fab dark small color="red" class='ml-0' @click='addProblem'>
-                    <v-icon dark>add</v-icon>
-                  </v-btn>
-                  <span>добавить вопрос</span>
-                </div>
               </v-flex>
               
-              <v-flex md12 v-if='item.problems.length'>
-                <v-stepper v-model="step">
+              <v-flex md12>
+                <v-stepper v-model="step" non-linear>
                   <v-stepper-header>
                     <template v-for='(problem, index) in item.problems'>
-                      <v-stepper-step editable :complete="step > index" :step="(index + 1)">
+                      <v-stepper-step editable :step="(index + 1)">
                         Вопрос {{ index + 1 }}
                       </v-stepper-step>
-                      <v-divider v-if="index + 1 < item.problems.length"></v-divider>
+                      <v-divider></v-divider>
                     </template>
+                    <v-stepper-step :step='999' editable>
+                      Добавить
+                    </v-stepper-step>
                   </v-stepper-header>
                   <v-stepper-items>
                     <v-stepper-content v-for='(problem, index) in item.problems' :step="(index + 1)" :key='index'>
-                      <TextEditor style='height: 400px !important' class='mb-5' v-model='problem.text' />
-                      <AddBtn @click.native="addAnswer(problem)" label='добавить ответ' class='d-inline-block my-3'></AddBtn>
-                      <v-card class='grey lighten-4 mb-2' v-for='(answer, index) in problem.answers' :key='index' :class='config.elevationClass'>
-                        <v-card-text>
-                          <v-layout wrap>
-                            <v-flex md12>
-                              <div class="vertical-inputs">
-                                <div class='vertical-inputs__input'>
-                                  <v-text-field v-mask="'###'" hide-details v-model='answer.score' label='Балл'></v-text-field>
-                                </div>
-                              </div>
-                            </v-flex>
-                          </v-layout>
-                          <TextEditor style='height: 400px !important' class='mb-5' v-model='answer.text' />
-                        </v-card-text>
-                      </v-card>
+                      <div class='relative'>
+                        <TextEditor v-model='problem.text' />
+                        <div class='custom-toolbar'>
+                          <v-btn small 
+                            @click='removeProblem'
+                            :disabled='step === 1 && item.problems.length <= 1'>удалить вопрос</v-btn>
+                        </div>
+                      </div>
                     </v-stepper-content>
                   </v-stepper-items>
                 </v-stepper>
               </v-flex>
+
+              <v-flex md12 v-if='step > 0 && show_answers' class='mt-5'>
+                <v-stepper v-model="answer_step" non-linear>
+                  <v-stepper-header>
+                    <template v-for='(answer, index) in currentProblem.answers' :step="(index + 1)">
+                      <v-stepper-step editable :step="(index + 1)">
+                        Ответ {{ index + 1 }}
+                      </v-stepper-step>
+                      <v-divider></v-divider>
+                    </template>
+                    <v-stepper-step :step='999' editable>
+                      Добавить
+                    </v-stepper-step>
+                  </v-stepper-header>
+                  <v-stepper-items>
+                    <v-stepper-content v-for='(answer, index) in currentProblem.answers' :step="(index + 1)" :key='index'>
+                      <div class='relative'>
+                        <TextEditor v-model='answer.text' />
+                        <div class='custom-toolbar flex-items align-center'>
+                          <v-text-field style='width: 100px' v-mask="'###'" hide-details v-model='answer.score' label='Балл'></v-text-field>
+                          <v-btn small 
+                            @click='removeAnswer'
+                            :disabled='answer_step === 1 && currentProblem.answers.length <= 1'>удалить ответ</v-btn>
+                        </div>
+                      </div>
+                    </v-stepper-content>
+                  </v-stepper-items>
+                </v-stepper>
+              </v-flex>
+
+              <!-- <v-card class='grey lighten-4 mb-2' v-for='(answer, index) in problem.answers' :key='index' :class='config.elevationClass'>
+                <v-card-text>
+                  <v-layout wrap>
+                    <v-flex md12>
+                      <div class="vertical-inputs">
+                        <div class='vertical-inputs__input'>
+                          <v-text-field v-mask="'###'" hide-details v-model='answer.score' label='Балл'></v-text-field>
+                        </div>
+                      </div>
+                    </v-flex>
+                  </v-layout>
+                  <TextEditor style='height: 400px !important' class='mb-5' v-model='answer.text' />
+                </v-card-text>
+              </v-card> -->
           </v-container>
         </v-card-text>
       </v-card>
@@ -88,8 +121,27 @@ export default {
       loading: false,
       saving: false,
       item: MODEL_DEFAULTS,
-      step: null,
+      step: 1,
+      answer_step: 1,
+      show_answers: true,
     }
+  },
+
+  watch: {
+    step(newVal, oldVal) {
+      if (newVal === 999) {
+        this.step = oldVal
+        this.addProblem()
+      }
+      this.relodAnswers()
+    },
+
+    answer_step(newVal, oldVal) {
+      if (newVal === 999) {
+        this.answer_step = oldVal
+        this.addAnswer(this.currentProblem)
+      }
+    },
   },
 
   methods: {
@@ -100,6 +152,7 @@ export default {
         this.loadData(id)
       } else {
         this.item = MODEL_DEFAULTS
+        this.step = 1
         this.loading = false
       }
     },
@@ -122,6 +175,7 @@ export default {
 
     addAnswer(problem) {
       problem.answers.push(clone(ANSWER_DEFAULTS))
+      Vue.nextTick(() => this.answer_step = this.currentProblem.answers.length)
     },
 
     async storeOrUpdate() {
@@ -138,7 +192,62 @@ export default {
       this.$emit('updated')
       this.dialog = false
       setTimeout(() => this.saving = false, 300)
+    },
+
+    removeProblem() {
+      const removeIndex = this.step - 1
+      this.step = 1
+      this.item.problems.splice(removeIndex, 1)
+    },
+
+    removeAnswer() {
+      const removeIndex = this.answer_step - 1
+      this.answer_step = 1
+      this.currentProblem.answers.splice(removeIndex, 1)
+      this.relodAnswers()
+    },
+
+    relodAnswers() {
+      this.show_answers = false
+      Vue.nextTick(() => this.show_answers = true)
     }
   },
+
+  computed: {
+    currentProblem() {
+      return this.item.problems[this.step - 1]
+    }
+  }
 }
 </script>
+
+<style lang='scss'>
+  .test-dialog {
+    & .v-stepper, .v-stepper__header {
+      box-shadow: none;
+    }
+    & .v-stepper__content {
+      padding: 0 18px;
+    }
+    & .v-stepper__header {
+      & .v-stepper__step:last-of-type {
+        & .v-stepper__step__step {
+          display: none !important;
+        }
+      }
+    }
+    & .quillWrapper {
+      height: 50vh !important;
+    }
+    .custom-toolbar {
+      position: absolute;
+      right: 8px;
+      top: -5px;
+      & > div {
+        margin-right: 10px;
+        width: 250px;
+      }
+    }
+  }
+</style>
+

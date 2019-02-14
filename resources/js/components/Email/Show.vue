@@ -49,9 +49,9 @@
                 <v-chip close v-for='(attachment, index) in attachments' :key='attachment.filename' @input='remove(index)'>
                   {{ attachment.original_name }} 
                 </v-chip>
-                <v-chip v-if='uploading_file_name !== null'>
+                <v-chip v-if='uploading_file_name !== null' close  @input='cancelUpload()'>
                   <span class='grey--text darken-5'>
-                    загрузка {{ uploading_file_name }}...
+                    {{ uploading_file_name | truncate(25) }}
                   </span>
                 </v-chip>
                 <v-btn @click='attach' :loading='uploading_file_name !== null' flat fab small>
@@ -159,6 +159,11 @@ export default {
     remove(index) {
       this.attachments.splice(index, 1)
     },
+
+    cancelUpload() {
+      this.$upload.reset('file')
+      this.uploading_file_name = null
+    }
   }
 }
 </script>

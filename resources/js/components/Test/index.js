@@ -4,12 +4,13 @@ export const CLIENT_TEST_ANSWERS_API_URL = 'client-test-answers'
 
 export const SETTINGS_KEY = 'test-intro-text'
 
-export const MODEL_DEFAULTS = {
-  problems: []
+export const PROBLEM_DEFAULTS = {
+  text: '',
+  answers: [{text: ''}]
 }
 
-export const PROBLEM_DEFAULTS = {
-  answers: []
+export const MODEL_DEFAULTS = {
+  problems: [PROBLEM_DEFAULTS]
 }
 
 export const ANSWER_DEFAULTS = {}

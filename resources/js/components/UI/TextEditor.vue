@@ -1,6 +1,6 @@
 <template>
   <div>
-    <VueEditor @ready='editorReady'
+    <VueEditor
       :editorOptions="options"
       :editorToolbar="toolbar"
       v-model='text'

@@ -21,6 +21,7 @@
                 <v-card class='grey lighten-4 mb-4' :class='config.elevationClass'>
                   <v-card-text>
                     <div v-html='problem.text' class='client-problem'></div>
+                    <div class='grey--text'>максимальный балл: {{ getProblemMaxScore(problem) }}</div>
                   </v-card-text>
                 </v-card>
                 <v-radio-group v-model='answers[problem.id]' hide-details>
@@ -150,6 +151,16 @@ export default {
       })
     },
 
+    getProblemMaxScore(problem) {
+      let max_score = 0
+      problem.answers.forEach(answer => {
+        if (answer.score > max_score) {
+          max_score = answer.score
+        }
+      })
+      return max_score
+    },
+
     submitAnswer(problem_id, is_last_answer) {
       axios.post(apiUrl(CLIENT_TEST_ANSWERS_API_URL), {
         client_id: this.$store.state.user.id,
@@ -181,7 +192,8 @@ export default {
 <style lang="scss"> 
   .client-problem {
     & img {
-      width: 50%;
+      max-width: 100%;
+      zoom: 50%;
     }
   }
 

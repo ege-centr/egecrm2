@@ -60,7 +60,8 @@ export default {
   .task {
     &.v-card__text > div:first-of-type {
       & img {
-        max-width: 50%;
+        max-width: 100%;
+        zoom: 50%;
       }
       & p {
         margin: 0;
