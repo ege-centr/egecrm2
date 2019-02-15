@@ -13,8 +13,8 @@ class UploadController extends Controller
     {
         $extension = $request->file->extension();
         $original_name = $request->file->getClientOriginalName();
-        $filename = uniqid() . '.' . $extension;
-        $request->file->storeAs(self::UPLOAD_PATH, $filename);
-        return compact('filename', 'extension', 'original_name');
+        $name = uniqid() . '.' . $extension;
+        $request->file->storeAs(self::UPLOAD_PATH, $name);
+        return compact('name', 'original_name');
     }
 }

@@ -26,6 +26,7 @@ export const SUBJECT_STATUSES = [
 ]
 
 export const FILTERS = [
+  {label: '№ договора', field: 'number', type: 'input'},
   {label: 'Год', field: 'year', type: 'multiple', options: store.state.data.years},
   {label: 'Класс', field: 'grade_id', type: 'multiple', options: store.state.data.grades},
   {label: 'Версия', field: 'version', type: 'multiple', options: [

@@ -3,9 +3,17 @@
     <div v-if='started'>
       <Loader v-if='finishing' />
       <div v-else>
-        <div v-if='client_test.results === null'>
+        <!-- <div v-if='client_test.results === null'> -->
+        <div>
           <h2 class='text-md-center mb-3'>
-            <v-icon>access_time</v-icon> {{ time_left.format("mm:ss") }}
+            <span v-if='!finished'>
+              <v-icon>access_time</v-icon> {{ time_left.format("mm:ss") }}
+            </span>
+            <span v-else>
+              Результаты теста<br>
+              <span class='body-2 grey--text'>
+                <b>{{ client_test.results.score }}</b> из {{ client_test.results.max_score }}</span>
+            </span>
           </h2>
           <v-stepper v-model="step">
             <v-stepper-header>
@@ -26,12 +34,18 @@
                 </v-card>
                 <v-radio-group v-model='answers[problem.id]' hide-details>
                   <div class='flex-items mb-3' v-for='(answer, index) in problem.answers' :key='index'>
-                    <v-radio class='ma-0' hide-details color="primary" :value='answer.id'></v-radio>
+                    <v-radio class='ma-0' hide-details color="primary" :value='answer.id' :disabled='finished'></v-radio>
                     <div v-html='answer.text' class='client-answer'></div>
+                    <div class='ml-3' v-if='finished'
+                      :class="{
+                        'green--text': answer.score === getProblemMaxScore(problem),
+                        'orange--text': answer.score !== getProblemMaxScore(problem) && answer.score > 0,
+                        'red--text': answer.score === 0,
+                      }">{{ answer.score }} баллов</div>
                   </div>
                 </v-radio-group>
-                <div class='text-md-center'>
-                  <v-btn color='primary' :disabled="!answers.hasOwnProperty(problem.id)" 
+                <div class='text-md-center' v-if='!finished'>
+                  <v-btn color='primary' :disabled="!answers.hasOwnProperty(problem.id)"
                     @click='submitAnswer(problem.id, index === problem.answers.length - 1)'>
                     {{ index === problem.answers.length - 1 ? 'завершить тест' : 'ответить' }}
                   </v-btn>
@@ -40,19 +54,12 @@
             </v-stepper-items>
           </v-stepper>
         </div>
-        <v-card v-else class='test-results'>
-          <v-card-text>
-            <div class='headline text-md-center'>
-              результат: <b>{{ client_test.results.score }}</b> из {{ client_test.results.max_score }}
-            </div>
-          </v-card-text>
-        </v-card>
       </div>
     </div>
     <div v-else>
       <Loader v-if='loading' />
       <div v-else>
-        <div v-html="intro_text"></div>
+        <div class='intro-text' v-html="intro_text"></div>
         <div class='text-md-center mt-5'>
           <v-btn color='primary' :loading='starting' @click='beginTest'>начать</v-btn>
         </div>
@@ -94,7 +101,7 @@ export default {
       this.intro_text = r.data
     })
     await axios.get(apiUrl(CLIENT_TESTS_API_URL, this.$route.params.id) + queryString({
-      client_id: this.$store.state.user.id,
+      client_id: this.clientId,
       // started: 1,
     })).then(r => this.client_test = r.data)
     if (this.client_test.started_at !== null) {
@@ -130,7 +137,7 @@ export default {
     async loadAnswers() {
       // TODO: тут подгружаются все ответы, это неправильно
       await axios.get(apiUrl(CLIENT_TEST_ANSWERS_API_URL) + queryString({
-        client_id: this.$store.state.user.id,
+        client_id: this.clientId,
       })).then(r => {
         this.answers = r.data
       })
@@ -138,6 +145,9 @@ export default {
 
     start() {
       this.step = Cookies.get(STEP_COOKIE_KEY) || 0
+      if (this.finished) {
+        this.step = 0
+      }
       setInterval(() => this.now = moment(), 1000)
       Vue.nextTick(() => this.started = true)
     },
@@ -147,6 +157,7 @@ export default {
       axios.put(apiUrl(CLIENT_TESTS_API_URL, this.test.id), {started_at: '0000-00-00 00:00:00'}).then(r => {
         this.client_test = r.data
         this.finishing = false
+        this.step = 0
         Cookies.remove(STEP_COOKIE_KEY)
       })
     },
@@ -163,7 +174,7 @@ export default {
 
     submitAnswer(problem_id, is_last_answer) {
       axios.post(apiUrl(CLIENT_TEST_ANSWERS_API_URL), {
-        client_id: this.$store.state.user.id,
+        client_id: this.clientId,
         test_problem_answer_id: this.answers[problem_id],
       })
       if (is_last_answer) {
@@ -184,6 +195,14 @@ export default {
         this.end()
       }
       return moment(timestamp).utcOffset(-180)
+    },
+
+    finished() {
+      return this.client_test.results !== null
+    },
+
+    clientId() {
+      return this.$route.params.clientId || this.$store.state.user.id
     }
   }
 }
@@ -195,6 +214,11 @@ export default {
       max-width: 100%;
       zoom: 50%;
     }
+  }
+
+  .intro-text img {
+    max-width: 100%;
+    zoom: 50%;
   }
 
   .client-answer {

@@ -1,6 +1,6 @@
 ---
 to: resources/js/components/Filter/All.vue
 inject: true
-afeter: components
+after: const components = { 
 ---
   Type<%= Name %>,

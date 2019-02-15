@@ -35,9 +35,6 @@
                     {{ getData('teachers', item.teacher_id).names.abbreviation }}
                   </span>
                 </td>
-                <td class='grey--text' :class="{'purple lighten-5': item.is_unplanned}">
-                  <span v-if='item.conducted_email_id'>{{ getData('admins', item.conducted_email_id).name }} {{ item.created_at | date-time }}</span>
-                </td>
                 <td class='text-md-right' :class="{'purple lighten-5': item.is_unplanned}">
                   <v-btn flat icon color="black" class='ma-0' @click='edit(item)'>
                     <v-icon>more_horiz</v-icon>
@@ -196,6 +193,9 @@
               </v-container>
             </v-card-text>
           </v-card>
+          <div class='grey--text bottom-right-corner' v-if='dialog_item.conducted_email_id'>
+            {{ getData('admins', dialog_item.conducted_email_id).name }} {{ dialog_item.created_at | date-time }}
+          </div>
         </v-dialog>
       </v-layout>
        <v-layout row justify-center>

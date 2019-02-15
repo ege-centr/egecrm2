@@ -74,7 +74,7 @@
                   смс отправлено
                 </td>
                 <td width='200'>
-                  ТУР
+                  <BranchList :items='props.item.branches' />
                 </td>
                 <td>
                   <Bars :group-bars='item.schedule.bars' :client-bars='props.item.bars' />
@@ -184,10 +184,11 @@ import GroupActDialog from '@/components/Group/Act/Dialog'
 import GroupActList from '@/components/Group/Act/List'
 import Comments from '@/components/Comments'
 import { SUBJECT_STATUSES } from '@/components/Contract'
+import BranchList from '@/components/UI/BranchList'
 
 
 export default {
-  components: { DisplayData, GroupSchedule, Bars, Visits, GroupDialog, MoveClientDialog, GroupActList, GroupActDialog, Comments },
+  components: { DisplayData, GroupSchedule, Bars, Visits, GroupDialog, MoveClientDialog, GroupActList, GroupActDialog, Comments, BranchList },
 
   data() {
     return {

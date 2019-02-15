@@ -164,10 +164,13 @@
               <GroupList :items='items' />
             </template>
           </DisplayData>
-          <GroupNotAssignedList style='position: relative; top: -24px'
+          <GroupNotAssignedList style='position: relative; top: -24px' 
+            v-if='$refs.GroupPage && $refs.ContractPage'
             :year="getGroupPageSelectedTab()"
-            :client='client' 
-            @moved='loadData' 
+            :contracts='$refs.ContractPage.data'
+            :groups='$refs.GroupPage.data'
+            :client-id='client.id'
+            @moved='$refs.GroupPage.loadData' 
           />
         </v-tab-item>
         <v-tab-item>
@@ -294,7 +297,7 @@ export default {
         return this.$refs.GroupPage.selected_tab
       }
       return null
-    }
+    },
   }
 }
 </script>

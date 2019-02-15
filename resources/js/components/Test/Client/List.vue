@@ -20,14 +20,12 @@
           {{ item.test.problems_count  }} вопросов
         </td>
         <td class='text-md-right'>
-          <div v-if='item.results === null'>
-            <router-link :to="{ name: 'TestClientStart', params: { id: item.test.id} }">
-              <v-btn small color='primary'>начать</v-btn>
-            </router-link>
-          </div>
-          <div v-else>
-            результат: <b>{{ item.results.score }}</b> из {{ item.results.max_score }}
-          </div>
+          <router-link :to="{ name: 'TestClientStart', params: { id: item.test.id} }">
+            <v-btn v-if='item.results === null' small color='primary'>начать</v-btn>
+            <span v-else>
+              результат: <b>{{ item.results.score }}</b> из {{ item.results.max_score }}
+            </span>
+          </router-link>
         </td>
       </template>
     </v-data-table>

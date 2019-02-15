@@ -33,8 +33,8 @@ class CustomEmail extends Mailable
     public function build()
     {
         $mail = $this->subject($this->message->subject)->from(config('mail.from.address'))->view("mail.custom")->with(['html' => $this->message->message]);
-        foreach($this->message->attachments as $attachment) {
-            $mail->attach(storage_path() . '/app/' . UploadController::UPLOAD_PATH . $attachment);
+        foreach($this->message->files as $file) {
+            $mail->attach(storage_path() . '/app/' . UploadController::UPLOAD_PATH . $file);
         }
         return $mail;
     }

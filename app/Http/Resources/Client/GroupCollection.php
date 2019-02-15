@@ -12,6 +12,7 @@ class GroupCollection extends JsonResource
             'id' => $this->id,
             'names' => $this->names,
             'bars' => $this->getBars(),
+            'branches' => $this->branches,
             'subject_status' => $this->subject_status,
         ];
     }

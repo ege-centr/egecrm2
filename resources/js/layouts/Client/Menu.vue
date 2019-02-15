@@ -14,6 +14,15 @@
 
     <div class='menu-separator'></div>
 
+    <v-list-tile @click="$router.push({name: 'ProfileIndex'})">
+      <v-list-tile-action>
+        <v-icon>person</v-icon>
+      </v-list-tile-action>
+      <v-list-tile-content>
+        <v-list-tile-title>Профиль</v-list-tile-title>
+      </v-list-tile-content>
+    </v-list-tile> 
+    
     <v-list-tile @click="$store.dispatch('logout')">
       <v-list-tile-action>
         <v-icon>exit_to_app</v-icon>

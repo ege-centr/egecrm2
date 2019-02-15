@@ -29,7 +29,7 @@
                 </div>
               </v-flex>
               
-              <v-flex md12>
+              <v-flex md12 style='margin-top: 100px'>
                 <v-stepper v-model="step" non-linear>
                   <v-stepper-header>
                     <template v-for='(problem, index) in item.problems'>
@@ -75,10 +75,14 @@
                       <div class='relative'>
                         <TextEditor v-model='answer.text' />
                         <div class='custom-toolbar flex-items align-center'>
-                          <v-text-field style='width: 100px' v-mask="'###'" hide-details v-model='answer.score' label='Балл'></v-text-field>
                           <v-btn small 
                             @click='removeAnswer'
                             :disabled='answer_step === 1 && currentProblem.answers.length <= 1'>удалить ответ</v-btn>
+                        </div>
+                      </div>
+                      <div class='vertical-inputs mt-3'>
+                        <div class='vertical-inputs__input'>
+                          <v-text-field style='width: 100px' v-mask="'###'" hide-details v-model='answer.score' label='Балл'></v-text-field>
                         </div>
                       </div>
                     </v-stepper-content>
@@ -237,7 +241,8 @@ export default {
       }
     }
     & .quillWrapper {
-      height: 50vh !important;
+      min-height: 50vh;
+      height: auto !important;
     }
     .custom-toolbar {
       position: absolute;

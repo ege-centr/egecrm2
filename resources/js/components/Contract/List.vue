@@ -10,7 +10,7 @@
     >
       <template slot='items' slot-scope="{ item }">
         <td v-if='show.client'>
-          <PersonName :item='item' field='abbreviation' />
+          <PersonName :item='item.client' field='abbreviation' />
         </td>
         <td>
           <span v-if='item.id'>

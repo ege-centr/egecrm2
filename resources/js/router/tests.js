@@ -21,6 +21,14 @@ export default [
       roles: [ROLES.CLIENT],
     }
   },
+  {
+    path: '/tests/:clientId/:id',
+    name: 'TestResults',
+    component: TestClientStart,
+    meta: {
+      roles: [ROLES.ADMIN],
+    }
+  },
   // {
   //   path: '/tests/:id/edit',
   //   name: 'TestEdit',

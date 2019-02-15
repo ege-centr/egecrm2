@@ -1,7 +1,6 @@
 <template>
   <div class='loading-chip' v-if='show'>
-    <!--  v-if="file.state === 'sending'" -->
-    <span class='loading-chip__percent' transition="fade" v-show='loading'>{{ file.percentComplete }}%</span>
+    <span class='loading-chip__percent' v-show='loading'>{{ file.percentComplete }}%</span>
     <div class='loading-chip__progress' v-if='loading'
       :style="{width: file.percentComplete + '%'}">
       <v-chip close  @input='close'>
@@ -21,10 +20,9 @@ export default {
       type: Object,
       required: true,
     },
-    // onClose: {
-    //   type: Function,
-    //   required: true,
-    // },
+    dev: {
+      type: Object,
+    }
   },
 
   data() {
@@ -47,7 +45,9 @@ export default {
 
   computed: {
     loading() {
-      return this.file.state === 'progress'
+      // return this.dev.loading
+      // return this.file.sending
+      return ['progress', 'queue'].indexOf(this.file.state) !== -1
     }
   },
 }
@@ -65,11 +65,14 @@ export default {
       z-index: 1;
     }
     &__real {
-      transition: all .3s linear;
+      transition: none;
+      & span {
+        transition: all .3s linear;
+      }
       &_loading {
         opacity: .25;
         & span {
-          visibility: hidden;
+          opacity: 0;
         }
       }
     }

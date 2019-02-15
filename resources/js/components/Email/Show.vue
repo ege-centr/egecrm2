@@ -27,10 +27,10 @@
                   <div>
                     {{ message.message }}
                   </div>
-                  <div v-if='message.attachments.length' class='mt-2 grey--text small caption flex-items '>
-                    <a v-for='(attachment, index) in message.attachments' :key='index' class='mr-2 flex-items align-center' target="_blank" :href="`/storage/img/upload/${attachment}`">
+                  <div v-if='message.files.length' class='mt-2 grey--text small caption flex-items '>
+                    <a v-for='file in message.files' :key='file.name' class='mr-2 flex-items align-center' target="_blank" :href="`/storage/img/upload/${file.name}`">
                       <v-icon style='font-size: 14px' class='mr-1'>attach_file</v-icon>
-                      <span class='grey--text'>Вложение {{ index + 1 }}</span>
+                      <span class='grey--text'>{{ file.original_name }}</span>
                     </a>
                   </div>
                 </v-card-text>
@@ -46,21 +46,17 @@
               >
               </v-textarea>
               <div class='flex-items align-center mt-3'>
-                <LoadingChip v-for="(file, index) in $upload.files('file').all" :key='file.$id' :file='file' @remove='remove(index)' />
-                <!-- <v-chip close v-for='(attachment, index) in attachments' :key='attachment.filename' @input='remove(index)'>
-                  {{ attachment.original_name | truncate(25) }} 
-                </v-chip> -->
-                <!-- <LoadingChip v-if='uploading_file_name !== null' 
-                  :title='uploading_file_name'
-                  :on-close='cancelUpload'
-                  :percent="percent"
-                /> -->
-                <v-btn @click='attach' flat fab small style='height: 34px; width: 34px'>
-                  <v-icon style='font-size: 20px'>attach_file</v-icon>
-                </v-btn>
-                <span v-if='uploading_error' class='error--text'>размер файла больше 20мб</span>
+                <div style='width: calc(100% - 130px)'>
+                  <LoadingChip v-for="(file, index) in $upload.files('file').all" :key='file.$id' :file='file' @remove='remove(index)' />
+                  <v-btn @click='attach' flat fab small style='height: 34px; width: 34px; margin: 4px'>
+                    <v-icon style='font-size: 20px'>attach_file</v-icon>
+                  </v-btn>
+                  <span v-if='uploading_error' class='ml-2 error--text d-inline-block'>
+                    суммарный размер файлов больше 20Мб
+                  </span>
+                </div>
                 <v-spacer></v-spacer>
-                <v-btn flat color='primary' :loading='sending' @click='send'>отправить</v-btn>
+                <v-btn flat color='primary' :loading='sending' @click='send' style='align-self: flex-start'>отправить</v-btn>
               </div>
             </div>
           </v-card-actions>
@@ -87,7 +83,7 @@ export default {
       sending: false,
       message: '',
       subject: '',
-      attachments: [],
+      files: [],
       messages: null,
       uploading_error: false,
     }
@@ -99,16 +95,26 @@ export default {
         this.$upload.on('file', {
           extensions: false,
           multiple: true,
-          maxSizePerFile: 1024 * 1024 * 20,
+          // 100mb, но ограничение на самом деле 20
+          maxSizePerFile: 1024 * 1024 * 100,
+          maxFilesSelect: 20,
           url: apiUrl('upload'),
           onSuccess(e, response) {
-            this.attachments.push(response.data)
+            this.files.push(response.data)
           },
-          onError(a, b) {
-            this.uploading_error = true
-          },
-          onSelect(fileList) {
+          // onError(a, b) {
+          //   this.uploading_error = true
+          // },
+          onBeforeSelect(fileList) {
             this.uploading_error = false
+            let size = 0
+            this.$upload.files('file').all.forEach(file => size += file.size)
+            _.each(fileList, file => size += file.size)
+            if (size / 1024 / 1024 >= 20) {
+              this.uploading_error = true
+              return false
+            }
+            return true
           }
         })
       } else {
@@ -135,17 +141,19 @@ export default {
 
     send() {
       this.sending = true
+      console.log('files', this.files)
       axios.post(apiUrl(API_URL), {
         subject: this.subject,
         message: this.message,
         email: this.item.email,
-        attachments: _.map(this.attachments, e => e.filename),
+        files: this.files,
       }).then(r => {
         this.sending = false
         this.messages.unshift(r.data)
         this.message = ''
         this.subject = ''
-        this.attachments = []
+        this.files = []
+        this.$upload.reset('file')
       })
     },
 
@@ -156,7 +164,7 @@ export default {
     },
 
     remove(index) {
-      this.attachments.splice(index, 1)
+      this.files.splice(index, 1)
     },
 
     cancelUpload() {

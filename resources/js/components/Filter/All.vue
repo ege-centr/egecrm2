@@ -66,9 +66,11 @@ import {
   TypeAdmin,
   TypeMultiple,
   TypeInterval,
+  TypeInput,
 } from './Type'
 
 const components = { 
+  TypeInput,
   TypeSelect,
   TypeAdmin,
   TypeMultiple,

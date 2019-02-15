@@ -87,6 +87,7 @@ export default {
     handleRowClick(item) {
       if (this.selectable) {
         this.selected_group_id = item.id
+        this.$emit('update:selected_group_id', item.id)
       }
     }
   }

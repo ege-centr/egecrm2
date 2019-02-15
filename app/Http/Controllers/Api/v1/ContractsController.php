@@ -10,7 +10,7 @@ use App\Http\Resources\Contract\{ContractResource, ContractCollection};
 class ContractsController extends Controller
 {
     protected $filters = [
-        'equals' => ['client_id'],
+        'equals' => ['client_id', 'number'],
         'multiple' => ['year', 'grade_id', 'created_admin_id'],
         'interval' => ['created_at', 'date'],
     ];

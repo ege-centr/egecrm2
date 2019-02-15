@@ -33,9 +33,9 @@
             {{ item.problems_count  }} вопросов
           </td>
           <td>
-            <div v-if='getClientTest(item) !== undefined && getClientTest(item).results !== null'>
+            <router-link :to="{ name: 'TestResults', params: {id: item.id, clientId: client.id} }" v-if='getClientTest(item) !== undefined && getClientTest(item).results !== null'>
               результат: <b>{{ getClientTest(item).results.score }}</b> из {{ getClientTest(item).results.max_score }}
-            </div>
+            </router-link>
           </td>
           <td class='text-md-right'>
             <v-btn small color='primary' @click='addTest(item)' :loading='adding_test_id === item.id' v-if='getClientTest(item) === undefined'>добавить</v-btn>

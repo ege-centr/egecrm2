@@ -1,12 +1,12 @@
 <template>
   <v-layout row justify-center>
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
-      <v-card v-if='client !== null' class='grey-background'>
+      <v-card v-if='clientId !== null' class='grey-background'>
         <v-toolbar dark color="primary">
           <v-btn icon dark @click.native="dialog = false">
             <v-icon>close</v-icon>
           </v-btn>
-          <v-toolbar-title>Перенос клиента <PersonName :item='client' /> в другую группу</v-toolbar-title>
+          <v-toolbar-title>Перенос клиента в другую группу</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn dark flat @click.native="move" :disabled='selected_group_id === null' :loading='saving'>Перенести</v-btn>
@@ -45,7 +45,7 @@ export default {
       groups: null,
       dialog: false,
       edit_mode: true,
-      client: null,
+      clientId: null,
       group: null,
       selected_group_id: null,
       loading: false,
@@ -53,11 +53,11 @@ export default {
   },
 
   methods: {
-    open(group, client) {
+    open(group, clientId) {
       this.pre_installed_filters = {}
       this.groups = null
       this.selected_group_id = null
-      this.client = client
+      this.clientId = clientId
       this.group = clone(group);
       // TODO: переделать в DisplayData (может тогда уж переименовать DisplayData?)
       ['grade_id', 'subject_id', 'year'].forEach(field => {
@@ -81,11 +81,11 @@ export default {
     },
 
     async move() {
-      this.$emit('moved', this.client)
+      this.$emit('moved', this.clientId)
       this.saving = true
       await axios.post(apiUrl(GROUP_CLIENTS_API_URL), {
         group_id: this.selected_group_id,
-        client_id: this.client.id,
+        client_id: this.clientId,
       })
       this.saving = false
       this.dialog = false

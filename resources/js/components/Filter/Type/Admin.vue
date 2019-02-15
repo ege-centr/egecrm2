@@ -1,6 +1,6 @@
 <template>
   <FilterTypeBase 
-    :apply-enabled='this.value.length > 0'
+    :apply-enabled='value.length > 0'
   >
     <v-list dense style='min-width: 300px'>
       <v-list-tile @click='selectMultiple(option)' v-for='(option, index) in $store.state.data.admins' :key='index'>

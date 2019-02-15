@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\EmailMessage;
+use App\Models\{EmailMessage, File};
 
 class EmailMessagesController extends Controller
 {
@@ -15,6 +15,11 @@ class EmailMessagesController extends Controller
 
     public function store(Request $request)
     {
-        return EmailMessage::create($request->all());
+        $emailMessage = EmailMessage::create($request->all());
+        foreach($request->input('files') as $file) {
+            $emailMessage->files()->create($file);
+        }
+        $emailMessage->send();
+        return $emailMessage;
     }
 }

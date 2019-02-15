@@ -12,7 +12,7 @@ class PhotosController extends Controller
     {
         // Если нет ID сущности
         if (isset($request->entity_id)) {
-            $model = getMorphModel($request->class, $request->entity_id);
+            $model = getMorphModel($request->entity_type, $request->entity_id);
             // TODO: delete actual file
             $model->photo()->delete();
             $photo = $model->photo()->create();

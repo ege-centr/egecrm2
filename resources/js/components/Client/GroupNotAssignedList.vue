@@ -36,10 +36,21 @@ import MoveClientDialog from '@/components/Group/MoveClientDialog'
 
 export default {
   props: {
-    client: {
-      type: Object,
+    clientId: {
+      type: Number,
       required: true,
     },
+
+    groups: {
+      type: Array,
+      required: true,
+    },
+
+    contracts: {
+      type: Array,
+      required: true,
+    },
+
     year: {
       type: Number,
     }
@@ -61,32 +72,22 @@ export default {
   methods: {
     loadFittingGroups(item, index) {
       this.currentIndex = index
-      this.$refs.MoveClientDialog.open(item, this.client)
+      this.$refs.MoveClientDialog.open(item, this.clientId)
     },
-
-    // assignGroup(group) {
-    //   axios.post(apiUrl(GROUP_CLIENTS_API_URL), {
-    //     group_id: group.id,
-    //     client_id: this.client.id,
-    //   }).then(r => {
-    //     this.$emit('assigned')
-    //     setTimeout(() => this.items.splice(this.currentIndex, 1), 300)
-    //   })
-    // }
   },
 
   computed: {
     items() {
       const items = []
-      const active_contracts = this.client.contracts.filter(e => e.is_active)
-
+      const active_contracts = this.contracts.filter(e => e.is_active)
+      console.log(active_contracts)
       // получить человеко-предметы
       active_contracts.forEach(contract => {
         contract.subjects.forEach(subject => {
           if (subject.status !== SUBJECT_STATUS_TERMINATED) {
             // если человек не состоит в такой группе
             // TODO: не подгружать группы клиента
-            if (!this.client.groups.find(e => e.year === contract.year && e.grade_id === contract.grade_id && e.subject_id === subject.subject_id)) {
+            if (!this.groups.find(e => e.year === contract.year && e.grade_id === contract.grade_id && e.subject_id === subject.subject_id)) {
               items.push({
                 year: contract.year,
                 grade_id: contract.grade_id,
