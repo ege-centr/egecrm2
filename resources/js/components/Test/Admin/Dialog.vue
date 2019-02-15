@@ -30,16 +30,18 @@
               </v-flex>
               
               <v-flex md12 style='margin-top: 100px'>
+                <div class='headline mb-1'>
+                  Вопросы
+                </div>
                 <v-stepper v-model="step" non-linear>
                   <v-stepper-header>
                     <template v-for='(problem, index) in item.problems'>
                       <v-stepper-step editable :step="(index + 1)">
-                        Вопрос {{ index + 1 }}
                       </v-stepper-step>
                       <v-divider></v-divider>
                     </template>
                     <v-stepper-step :step='999' editable>
-                      Добавить
+                      <v-icon color='red' style='font-size: 28px'>add_circle</v-icon>
                     </v-stepper-step>
                   </v-stepper-header>
                   <v-stepper-items>
@@ -58,16 +60,18 @@
               </v-flex>
 
               <v-flex md12 v-if='step > 0 && show_answers' class='mt-5'>
+                <div class='headline mb-1'>
+                  Ответы
+                </div>
                 <v-stepper v-model="answer_step" non-linear>
                   <v-stepper-header>
                     <template v-for='(answer, index) in currentProblem.answers' :step="(index + 1)">
                       <v-stepper-step editable :step="(index + 1)">
-                        Ответ {{ index + 1 }}
                       </v-stepper-step>
                       <v-divider></v-divider>
                     </template>
                     <v-stepper-step :step='999' editable>
-                      Добавить
+                      <v-icon color='red' style='font-size: 28px'>add_circle</v-icon>
                     </v-stepper-step>
                   </v-stepper-header>
                   <v-stepper-items>
@@ -230,8 +234,20 @@ export default {
     & .v-stepper, .v-stepper__header {
       box-shadow: none;
     }
+
+    & .v-stepper__step__step {
+      margin-right: 0;
+    }
+
+    & .v-stepper__step--editable:hover {
+      background: none !important;
+      // & .v-ripple__container {
+      //   display: none;
+      // }
+    }
     & .v-stepper__content {
-      padding: 0 18px;
+      padding-left: 0;
+      padding-right: 0;
     }
     & .v-stepper__header {
       & .v-stepper__step:last-of-type {
