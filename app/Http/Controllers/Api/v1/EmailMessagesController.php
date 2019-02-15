@@ -5,12 +5,15 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\{EmailMessage, File};
+use App\Http\Resources\EmailMessage\EmailMessageResource;
 
 class EmailMessagesController extends Controller
 {
     public function index(Request $request)
     {
-        return EmailMessage::where('email', $request->email)->get();
+        return EmailMessageResource::collection(
+            EmailMessage::where('email', $request->email)->get()
+        );
     }
 
     public function store(Request $request)
@@ -20,6 +23,6 @@ class EmailMessagesController extends Controller
             $emailMessage->files()->create($file);
         }
         $emailMessage->send();
-        return $emailMessage;
+        return new EmailMessageResource($emailMessage->fresh());
     }
 }
