@@ -22,7 +22,8 @@ class EmailMessagesController extends Controller
         foreach($request->input('files') as $file) {
             $emailMessage->files()->create($file);
         }
+        $emailMessage = $emailMessage->fresh();
         $emailMessage->send();
-        return new EmailMessageResource($emailMessage->fresh());
+        return new EmailMessageResource($emailMessage);
     }
 }
