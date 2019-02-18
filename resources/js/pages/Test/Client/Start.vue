@@ -15,23 +15,21 @@
                 <b>{{ client_test.results.score }}</b> из {{ client_test.results.max_score }}</span>
             </span>
           </h2>
-          <v-stepper v-model="step">
+          <v-stepper v-model="step" class='test-process'>
             <v-stepper-header>
               <template v-for='(problem, index) in test.problems'>
                 <v-stepper-step editable :complete="step > index" :step="(index + 1)">
-                  <!-- Вопрос {{ index + 1 }} -->
                 </v-stepper-step>
                 <v-divider v-if="index + 1 < test.problems.length"></v-divider>
               </template>
             </v-stepper-header>
             <v-stepper-items>
               <v-stepper-content v-for='(problem, index) in test.problems' :step="(index + 1)" :key='index'>
-                <v-card class='grey lighten-4 mb-4' :class='config.elevationClass'>
-                  <v-card-text>
-                    <div v-html='problem.text' class='client-problem'></div>
-                    <div class='grey--text'>максимальный балл: {{ getProblemMaxScore(problem) }}</div>
-                  </v-card-text>
-                </v-card>
+                <div class='headline mb-3'>Вопрос {{ index + 1 }}</div>
+                <div v-html='problem.text' class='client-problem'></div>
+
+                <div class='headline mb-3 mt-5'>Варианты ответа</div>
+                <div class='font-weight-medium caption'>максимальный балл: {{ getProblemMaxScore(problem) }}</div>
                 <v-radio-group v-model='answers[problem.id]' hide-details>
                   <div class='flex-items mb-3' v-for='(answer, index) in problem.answers' :key='index'>
                     <v-radio class='ma-0' hide-details color="primary" :value='answer.id' :disabled='finished'></v-radio>
@@ -80,6 +78,14 @@ import {
 const STEP_COOKIE_KEY = 'test_step'
 
 export default {
+  props: {
+    options: {
+      type: Object,
+      required: false,
+      default: () => {},
+    }
+  },
+
   data() {
     return {
       intro_text: null,
@@ -100,7 +106,7 @@ export default {
     await Settings.get(SETTINGS_KEY).then(r => {
       this.intro_text = r.data
     })
-    await axios.get(apiUrl(CLIENT_TESTS_API_URL, this.$route.params.id) + queryString({
+    await axios.get(apiUrl(CLIENT_TESTS_API_URL, this.testId) + queryString({
       client_id: this.clientId,
       // started: 1,
     })).then(r => this.client_test = r.data)
@@ -129,7 +135,7 @@ export default {
     },
 
     async loadTest() {
-      await axios.get(apiUrl(API_URL, this.$route.params.id)).then(r => {
+      await axios.get(apiUrl(API_URL, this.testId)).then(r => {
         this.test = r.data
       })
     },
@@ -202,7 +208,11 @@ export default {
     },
 
     clientId() {
-      return this.$route.params.clientId || this.$store.state.user.id
+      return this.options.clientId || this.$store.state.user.id
+    },
+
+    testId() {
+      return this.options.testId || this.$route.params.id
     }
   }
 }
@@ -231,6 +241,12 @@ export default {
     height: 300px;
     display: flex;
     align-items: center;
+  }
+
+  .test-process {
+    .v-stepper__header {
+      box-shadow: none !important;
+    }
   }
 </style>
 

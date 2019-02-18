@@ -1,6 +1,7 @@
 <template>
   <div>
     <v-data-table v-if='items.length'
+      class='group-not-assigned-table'
       :class='config.elevationClass'
       hide-actions
       hide-headers
@@ -104,10 +105,12 @@ export default {
 }
 </script>
 
-<style lang='scss' scoped>
-  .v-card {
-    height: 300px;
-    width: 300px;
-    overflow-y: scroll;
+<style lang='scss'>
+  .group-not-assigned-table {
+    clip-path: inset(0px -10px -10px -10px);
+    & .v-table tbody tr:first-child {
+      border-top: 1px solid #e0e0e0;
+    }
   }
+    
 </style>

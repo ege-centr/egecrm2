@@ -12,7 +12,7 @@ class LessonResource extends JsonResource
     {
         return array_merge(parent::toArray($request), [
             'createdAdmin' => new AdminResource($this->createdAdmin),
-            'clientLessons' => ClientLessonResource::collection($this->clientLessons),
+            'clientLessons' => ClientLessonInSchedule::collection($this->clientLessons),
             'teacher' => new TeacherResource($this->teacher),
         ]);
     }

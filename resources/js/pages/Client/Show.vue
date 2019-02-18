@@ -107,6 +107,12 @@
           Договоры
         </v-tab>
         <v-tab>
+          Расписание
+        </v-tab>
+        <v-tab>
+          Баланс
+        </v-tab>
+        <v-tab>
           Группы
         </v-tab>
         <v-tab>
@@ -121,6 +127,7 @@
       </v-tabs>
 
       <v-tabs-items v-model="tabs">
+        <!-- Заявки -->
         <v-tab-item>
           <DisplayData ref='RequestPage'
             :api-url='REQUEST_API_URL'
@@ -140,6 +147,8 @@
             </template>
           </DisplayData>
         </v-tab-item>
+
+        <!-- Договоры -->
         <v-tab-item>
           <DisplayData ref='ContractPage'
             :tabs="{data: 'years', field: 'year'}"
@@ -154,6 +163,18 @@
             </template>
           </DisplayData>
         </v-tab-item>
+
+        <!-- Расписание -->
+        <v-tab-item>
+          <ClientSchedule :client-id='$route.params.id' />
+        </v-tab-item>
+        
+        <!-- Баланс -->
+        <v-tab-item>
+          <ClientBalance :client-id='$route.params.id' />
+        </v-tab-item>
+
+        <!-- Группы -->
         <v-tab-item>
           <DisplayData ref='GroupPage'
             :tabs="{data: 'years', field: 'year'}"
@@ -173,6 +194,8 @@
             @moved='$refs.GroupPage.loadData' 
           />
         </v-tab-item>
+
+        <!-- Платежи -->
         <v-tab-item>
           <DisplayData ref='PaymentPage'
             :tabs="{data: 'years', field: 'year'}"
@@ -190,6 +213,8 @@
             </template>
           </DisplayData>
         </v-tab-item>
+
+        <!-- Тесты -->
         <v-tab-item>
           <v-card :class='config.elevationClass'>
             <v-card-text>
@@ -243,6 +268,8 @@ import {
   API_URL as REQUEST_API_URL
 } from '@/components/Request'
 import Preview from '@/other/Preview'
+import ClientSchedule from '@/components/Client/Schedule'
+import ClientBalance from '@/components/Client/Balance'
 
 export default {
   props: ['clientId'],
@@ -265,7 +292,7 @@ export default {
   components: { 
     RequestDialog, RequestItem, Comments, ContractList, GroupList, GroupNotAssignedList, 
     PaymentList, ClientDialog, PhoneList, BranchList, EmailShow, TestAdminClientList,
-    DisplayData, ContractDialog, PaymentDialog,
+    DisplayData, ContractDialog, PaymentDialog, ClientSchedule, ClientBalance
   },
 
   created() {

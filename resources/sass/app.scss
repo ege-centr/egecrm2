@@ -286,3 +286,11 @@ nav {
   bottom: 10px;
   right: 20px;
 }
+
+.v-table {
+  border-radius: 0 !important;
+}
+
+.theme--light.v-table tbody tr:not(:last-child) {
+  border-bottom: 1px solid #e0e0e0;
+}

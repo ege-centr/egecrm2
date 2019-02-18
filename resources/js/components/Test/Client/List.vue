@@ -1,8 +1,8 @@
 <template>
   <div>
     <Loader v-if='loading' />
-    <v-data-table v-else hide-headers hide-actions :items='items' class='mt-3' :class='config.elevationClass'>
-      <template slot='items' slot-scope="{ item }">
+    <DataTable v-else :items='items'>
+      <template slot-scope='{ item }'>
         <td>
           {{ item.test.title }}
         </td>
@@ -28,7 +28,7 @@
           </router-link>
         </td>
       </template>
-    </v-data-table>
+    </DataTable>
   </div>
 </template>
 

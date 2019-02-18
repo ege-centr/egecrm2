@@ -4,7 +4,7 @@
     <div class='flex-items align-center justify-space-between'>
       <div>
         <v-icon color='white' class='mr-1'>person</v-icon>
-        {{ $store.state.user.class === CLIENT_CLASS_NAME ? 'Клиент' : 'Учитель' }} 
+        {{ $store.state.user.class === CLIENT_CLASS_NAME ? 'Клиент' : 'Преподаватель' }} 
         {{ $store.state.user.id }}
       </div>
       <div>

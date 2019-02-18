@@ -63,6 +63,11 @@ class Controller extends BaseController
         $query->where($field, 'like', '%' . $value . '%');
     }
 
+    protected function filterEntity(string $field, $value, Builder &$query)
+    {
+        $query->where($field, getModelClass($value, true));
+    }
+
     protected function filterInterval(string $field, $value, Builder &$query)
     {
         $value = json_decode($value);

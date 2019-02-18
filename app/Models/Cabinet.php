@@ -11,12 +11,22 @@ class Cabinet extends Model
 
     public function toArray()
     {
-        $title = Factory\Branch::whereId($this->branch_id)->value('short') . '–' . $this->number;
         return [
             'id' => $this->id,
-            'title' => $title,
-            'text' => $title,
+            'title' => $this->title,
+            'text' => $this->title,
+            'color' => optional($this->branch)->color,
         ];
+    }
+
+    public function getTitleAttribute()
+    {
+        return optional($this->branch)->short . '–' . $this->number;
+    }
+
+    public function getBranchAttribute()
+    {
+        return Factory\Branch::whereId($this->branch_id)->first();
     }
 
     public static function boot()

@@ -46,6 +46,11 @@ export default {
         label: 'Группы'
       },
       {
+        icon: 'list',
+        route: 'ScheduleIndex',
+        label: 'Расписание'
+      },
+      {
         icon: 'edit',
         route: 'TestIndex',
         label: 'Тесты'

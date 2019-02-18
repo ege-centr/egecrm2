@@ -1,8 +1,18 @@
 <template>
-  <div class='loader-wrapper'>
+  <div class='loader-wrapper' :class="{
+    'loader-wrapper_transparent': transparent === ''
+  }">
     <v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular>
   </div>
 </template>
+
+<script>
+export default {
+  props: ['transparent'],
+}
+</script>
+
+
 
 <style lang="scss" scoped>
   @import '~sass/_variables';
@@ -19,6 +29,10 @@
     align-items: center;
     background: rgba(white, .8);
     border-radius: $border-radius;
+    &_transparent {
+      min-height: 300px;
+      background: none;
+    }
     &_halfscreen-dialog {
       height: calc(80vh - 64px);
       top: 10px;

@@ -27,16 +27,17 @@
                   <div>
                     {{ message.message }}
                   </div>
-                  <div v-if='message.files.length' class='mt-2 grey--text small caption flex-items '>
+                  <div v-if='message.files.length' class='mt-2 grey--text small caption flex-items' style='flex-wrap: wrap'>
                     <a v-for='file in message.files' :key='file.name' class='mr-2 flex-items align-center' target="_blank" :href="`/storage/img/upload/${file.name}`">
-                      <v-icon style='font-size: 14px' class='mr-1'>attach_file</v-icon>
-                      <span class='grey--text'>{{ file.original_name }}</span>
+                      <v-chip class='pointer'>
+                        <span>{{ file.original_name | truncate(25) }}</span>
+                      </v-chip>
                     </a>
                   </div>
                 </v-card-text>
               </v-card>
             </div>
-            </div>
+          </div>
           </v-card-text>
           <v-card-actions class='v-card-actions--normal-padding email'>
             <div style='width: 100%'>

@@ -2,6 +2,7 @@ import Loader from '@/components/UI/Loader'
 import Avatar from '@/components/UI/Avatar'
 import AddBtn from '@/components/UI/AddBtn'
 import NoData from '@/components/UI/NoData'
+import DataTable from '@/components/UI/DataTable'
 import PersonName from '@/components/UI/PersonName'
 import ClearableSelect from '@/components/UI/ClearableSelect'
 
@@ -36,5 +37,6 @@ export const GlobalPlugin = {
     Vue.component('ClearableSelect', ClearableSelect)
     Vue.component('NoData', NoData)
     Vue.component('PersonName', PersonName)
+    Vue.component('DataTable', DataTable)
   }
 }

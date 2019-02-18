@@ -17,7 +17,7 @@
                     'green': item.status === LESSON_STATUS.CONDUCTED,
                     'grey': item.status === LESSON_STATUS.CANCELLED,
                   }"></div>
-                  <span v-if="item.status !== LESSON_STATUS.CANCELLED">{{ indexSkippingCancelledLessons(index) }}</span>
+                  <span v-if="item.status !== LESSON_STATUS.CANCELLED">{{ indexSkippingCancelledLessons(index, items) }}</span>
                 </td>
                 <td :class="{'purple lighten-5': item.is_unplanned}">
                   {{ item.date | date }}
@@ -238,11 +238,9 @@
 <script>
 
 import Calendar from '@/components/Calendar/Calendar'
-import { LESSON_STATUS } from '@/components/Lesson'
+import { LESSON_STATUS, API_URL, indexSkippingCancelledLessons } from '@/components/Lesson'
 import { DatePicker, DataSelect, TeacherSelect } from '@/components/UI'
 import { API_URL as CLIENTS_API_URL } from '@/components/Client'
-
-const API_URL = 'lessons'
 
 export default {
   components: { Calendar, DatePicker, DataSelect, TeacherSelect },
@@ -288,6 +286,8 @@ export default {
   },
 
   methods: {
+    indexSkippingCancelledLessons,
+
     async loadData() {
       await axios.get(apiUrl(API_URL), {
         params: {

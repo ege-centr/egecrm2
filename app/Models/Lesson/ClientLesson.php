@@ -3,7 +3,7 @@
 namespace App\Models\Lesson;
 
 use Illuminate\Database\Eloquent\{Model, Builder};
-use App\Models\{Client\Client};
+use App\Models\{Client\Client, Cabinet};
 
 class ClientLesson extends Model
 {
@@ -18,6 +18,11 @@ class ClientLesson extends Model
     public function client()
     {
         return $this->belongsTo(Client::class, 'entity_id');
+    }
+
+    public function cabinet()
+    {
+        return $this->belongsTo(Cabinet::class);
     }
 
     public static function boot()

@@ -33,9 +33,13 @@
             {{ item.problems_count  }} вопросов
           </td>
           <td>
-            <router-link :to="{ name: 'TestResults', params: {id: item.id, clientId: client.id} }" v-if='getClientTest(item) !== undefined && getClientTest(item).results !== null'>
-              результат: <b>{{ getClientTest(item).results.score }}</b> из {{ getClientTest(item).results.max_score }}
-            </router-link>
+            <!-- <router-link :to="{ name: 'TestResults', params: {id: item.id, clientId: client.id} }" v-if='getClientTest(item) !== undefined && getClientTest(item).results !== null'> -->
+              <a 
+                v-if='getClientTest(item) !== undefined && getClientTest(item).results !== null'
+                @click='testPageOptions = {clientId: client.id, testId: item.id}'
+              >
+                результат: <b>{{ getClientTest(item).results.score }}</b> из {{ getClientTest(item).results.max_score }}
+              </a>
           </td>
           <td class='text-md-right'>
             <v-btn small color='primary' @click='addTest(item)' :loading='adding_test_id === item.id' v-if='getClientTest(item) === undefined'>добавить</v-btn>
@@ -46,6 +50,10 @@
         </template>
       </v-data-table>
     </div>
+
+    <div v-if='testPageOptions !== null' class='relative mt-5'>
+      <TestClientStartPage :options='testPageOptions' />
+    </div>
   </div>
 </template>
 
@@ -55,6 +63,7 @@ import { API_URL, CLIENT_TESTS_API_URL } from '@/components/Test'
 // TODO: почему это не работает?
 // import { API_URL, CLIENT_TESTS_API_URL, TestDialog } from '@/components/Test'
 import TestDialog from '@/components/Test/Admin/Dialog'
+import TestClientStartPage from '@/pages/Test/Client/Start'
 
 export default {
   props: {
@@ -64,7 +73,7 @@ export default {
     },
   },
 
-  components: { TestDialog },
+  components: { TestDialog, TestClientStartPage },
   
   data() {
     return {
@@ -74,6 +83,7 @@ export default {
       adding_test_id: false,
       destroying_test_id: false,
       selected_tab: null,
+      testPageOptions: null,
     }
   },
 
