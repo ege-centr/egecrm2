@@ -4,9 +4,11 @@ namespace App\Models\Lesson;
 
 use Illuminate\Database\Eloquent\{Model, Builder};
 use App\Models\{Client\Client, Cabinet};
+use App\Traits\LessonTrait;
 
 class ClientLesson extends Model
 {
+    use LessonTrait;
     protected $table = 'lessons';
     protected $fillable = [
         'teacher_id', 'cabinet_id', 'date', 'time', 'price',
@@ -20,11 +22,6 @@ class ClientLesson extends Model
         return $this->belongsTo(Client::class, 'entity_id');
     }
 
-    public function cabinet()
-    {
-        return $this->belongsTo(Cabinet::class);
-    }
-
     public static function boot()
     {
         parent::boot();
@@ -34,7 +31,7 @@ class ClientLesson extends Model
         });
 
         static::addGlobalScope('clients', function (Builder $builder) {
-            $builder->where('entity_type', Client::class);
+            $builder->where('entity_type', Client::class)->orWhereNull('entity_type');;
         });
     }
 }

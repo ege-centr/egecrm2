@@ -34,11 +34,11 @@ export default {
   methods: {
     close() {
       if (this.loading) {
-        console.log('malec')
         this.file.source.cancel()
       } else {
         this.$emit('remove')
       }
+      this.file.clear()
       this.show = false
     },
   },

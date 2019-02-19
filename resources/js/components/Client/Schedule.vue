@@ -4,7 +4,7 @@
     <div v-else>
       <div v-if='items.length > 0'>
         <div v-for='(lessons, yearMonth) in byMonths' :key='yearMonth'>
-          <div class='title mb-3'>{{ yearMonth + '-01' | dateFormat('MMMM YYYY') }}</div>
+          <div class='headline mb-2'>{{ yearMonth + '-01' | dateFormat('MMMM YYYY') }}</div>
           <v-data-table 
             class='mb-5'
             :class='config.elevationClass' 
@@ -31,7 +31,9 @@
                 {{ getData('subjects', item.subject_id).three_letters }}–{{ item.client_grade_id }}
               </td>
               <td width='300'>
-                {{ getData('teachers', item.teacher_id).names.abbreviation }}
+                <span v-if='item.teacher_id'>
+                  {{ getData('teachers', item.teacher_id).names.abbreviation }}
+                </span>
               </td>
               <td>
                 <span v-if='item.status !== LESSON_STATUS.CONDUCTED'>
@@ -105,7 +107,7 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  .title {
+  .headline {
     text-transform: capitalize;
   }
 </style>

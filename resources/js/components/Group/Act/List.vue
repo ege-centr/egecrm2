@@ -60,7 +60,7 @@
         </td>
       </template>
     </v-data-table>
-    <GroupActDialog ref='GroupActDialog' />
+    <GroupActDialog ref='GroupActDialog' @updated="$emit('updated')" />
     <Print ref='Print' :params="{type: 'act'}" />
   </div>
 </template>

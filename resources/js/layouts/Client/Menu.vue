@@ -51,6 +51,11 @@ export default {
         label: 'Расписание'
       },
       {
+        icon: 'attach_money',
+        route: 'BalanceIndex',
+        label: 'Баланс'
+      },
+      {
         icon: 'edit',
         route: 'TestIndex',
         label: 'Тесты'

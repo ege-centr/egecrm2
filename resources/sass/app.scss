@@ -8,8 +8,10 @@
 @import "_vertical-inputs";
 @import '~codemirror/lib/codemirror.css';
 
+$font-family: 'Rubik';
+
 body, .application, .display-1, .headline {
-  font-family: 'Rubik', sans-serif !important;
+  font-family: $font-family, sans-serif !important;
 }
 
 button {
@@ -223,12 +225,11 @@ nav {
   visibility: hidden;
 }
 
-// .v-navigation-drawer .v-input__slot {
-//   border-radius: 0 !important;
-// }
-
 .CodeMirror {
   height: 93vh;
+  & pre {
+    font-family: $font-family;
+  }
 }
 
 .quillWrapper {
@@ -261,7 +262,7 @@ nav {
   text-align: center;
   padding: 20px 0 34px;
   & img {
-    width: 40%;
+    width: 50%;
   }
 }
 
@@ -293,4 +294,13 @@ nav {
 
 .theme--light.v-table tbody tr:not(:last-child) {
   border-bottom: 1px solid #e0e0e0;
+}
+
+.v-tabs__item {
+  padding: 6px 18px;
+  font-size: 12px;
+}
+
+.v-tabs__container--fixed-tabs .v-tabs__div {
+  min-width: unset;
 }

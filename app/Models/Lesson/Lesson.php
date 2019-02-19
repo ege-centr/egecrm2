@@ -4,9 +4,12 @@ namespace App\Models\Lesson;
 
 use Illuminate\Database\Eloquent\{Model, Builder};
 use App\Models\{Teacher, Admin\Admin, Client\Client, Group\Group};
+use App\Traits\LessonTrait;
 
 class Lesson extends Model
 {
+    use LessonTrait;
+
     protected $fillable = [
         'teacher_id', 'cabinet_id', 'date', 'time', 'price',
         'status', 'is_unplanned', 'group_id', 'year'
@@ -29,11 +32,6 @@ class Lesson extends Model
     public function clientLessons()
     {
         return $this->hasMany(ClientLesson::class, 'entry_id', 'entry_id');
-    }
-
-    public function group()
-    {
-        return $this->belongsTo(Group::class);
     }
 
     public function getTimeAttribute()

@@ -171,7 +171,7 @@
         
         <!-- Баланс -->
         <v-tab-item>
-          <ClientBalance :client-id='$route.params.id' />
+          <Balance :entity-id='$route.params.id' :entity-type='CLASS_NAME' />
         </v-tab-item>
 
         <!-- Группы -->
@@ -269,7 +269,7 @@ import {
 } from '@/components/Request'
 import Preview from '@/other/Preview'
 import ClientSchedule from '@/components/Client/Schedule'
-import ClientBalance from '@/components/Client/Balance'
+import Balance from '@/components/Balance/Balance'
 
 export default {
   props: ['clientId'],
@@ -292,7 +292,7 @@ export default {
   components: { 
     RequestDialog, RequestItem, Comments, ContractList, GroupList, GroupNotAssignedList, 
     PaymentList, ClientDialog, PhoneList, BranchList, EmailShow, TestAdminClientList,
-    DisplayData, ContractDialog, PaymentDialog, ClientSchedule, ClientBalance
+    DisplayData, ContractDialog, PaymentDialog, ClientSchedule, Balance
   },
 
   created() {

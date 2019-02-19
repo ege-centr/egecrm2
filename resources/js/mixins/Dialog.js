@@ -49,6 +49,7 @@ export default {
         await axios.post(apiUrl(this.API_URL), this.item).then(r => this.item = r.data)
       }
       this.$emit('updated', this.item)
+      colorLog("Emitting updated", 'Turquoise')
       this.dialog = false
       this.waitForDialogClose(() => this.saving = false)
     }

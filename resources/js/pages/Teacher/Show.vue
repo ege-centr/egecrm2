@@ -43,10 +43,14 @@
           Платежи
         </v-tab>
         <v-tab>
+          Баланс
+        </v-tab>
+        <v-tab>
           Допуслуги
         </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
+        <!-- ГРУППЫ -->
         <v-tab-item>
           <DisplayData ref='GroupPage'
             :api-url='GROUP_API_URL' 
@@ -58,6 +62,8 @@
             </template>
           </DisplayData>
         </v-tab-item>
+
+        <!-- ПЛАТЕЖИ -->
         <v-tab-item>
           <DisplayData ref='PaymentPage'
             :tabs="{data: 'years', field: 'year'}"
@@ -76,6 +82,13 @@
             </template>
           </DisplayData>
         </v-tab-item>
+
+        <!-- БАЛАНС -->
+        <v-tab-item>
+          <Balance :entity-type='CLASS_NAME' :entity-id='$route.params.id' />
+        </v-tab-item>
+
+        <!-- ДОПУСЛУГИ -->
         <v-tab-item>
            <DisplayData ref='PaymentAdditionalPage'
             :tabs="{data: 'years', field: 'year'}"
@@ -118,9 +131,10 @@ import {
 } from '@/components/Payment/Additional'
 import { DisplayData } from '@/components/UI'
 import Preview from '@/other/Preview'
+import Balance from '@/components/Balance/Balance'
 
 export default {
-  components: { GroupList, PaymentList, DisplayData, PaymentDialog, PaymentAdditionalList, PaymentAdditionalDialog },
+  components: { GroupList, PaymentList, DisplayData, PaymentDialog, PaymentAdditionalList, PaymentAdditionalDialog, Balance },
 
   data() {
     return {

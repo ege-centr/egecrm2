@@ -10,7 +10,7 @@ use App\Http\Resources\Lesson\{LessonResource, LessonCollection};
 class LessonsController extends Controller
 {
     protected $filters = [
-        'equals' => ['group_id']
+        'equals' => ['group_id', 'status']
     ];
 
     public function index(Request $request)

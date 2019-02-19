@@ -9,16 +9,14 @@
             <span v-if='!finished'>
               <v-icon>access_time</v-icon> {{ time_left.format("mm:ss") }}
             </span>
-            <span v-else>
-              Результаты теста<br>
-              <span class='body-2 grey--text'>
-                <b>{{ client_test.results.score }}</b> из {{ client_test.results.max_score }}</span>
+            <span class='headline' v-else>
+              Результаты теста: {{ client_test.results.score }}</b> из {{ client_test.results.max_score }}
             </span>
           </h2>
-          <v-stepper v-model="step" class='test-process'>
+          <v-stepper v-model="step" non-linear class='test-process'>
             <v-stepper-header>
               <template v-for='(problem, index) in test.problems'>
-                <v-stepper-step editable :complete="step > index" :step="(index + 1)">
+                <v-stepper-step editable :step="(index + 1)">
                 </v-stepper-step>
                 <v-divider v-if="index + 1 < test.problems.length"></v-divider>
               </template>
@@ -82,7 +80,9 @@ export default {
     options: {
       type: Object,
       required: false,
-      default: () => {},
+      default() {
+        return {}
+      }
     }
   },
 
@@ -246,6 +246,12 @@ export default {
   .test-process {
     .v-stepper__header {
       box-shadow: none !important;
+    }
+    & .v-stepper__step__step {
+      margin-right: 0;
+    }
+    & .v-stepper__step--editable:hover {
+      background: none !important;
     }
   }
 </style>

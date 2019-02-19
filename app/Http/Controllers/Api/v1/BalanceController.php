@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\{Lesson\ClientLesson};
+use App\Models\{Lesson\ClientLesson, Teacher};
 use App\Models\Factory\{Grade, Subject, Branch};
 use Illuminate\Database\Eloquent\Collection;
 
@@ -12,7 +12,9 @@ class BalanceController extends Controller
 {
     public function index(Request $request)
     {
-        $lessons = app()->call('App\Http\Controllers\Api\v1\ClientLessonsController@index');
+        $request->merge(['status' => 'conducted']);
+        $isTeacher = getModelClass($request->entity_type, true) === Teacher::class;
+        $lessons = app()->call('App\Http\Controllers\Api\v1\\' . ($isTeacher ? 'Lessons' : 'ClientLessons') . 'Controller@index');
         $payments = app()->call('App\Http\Controllers\Api\v1\PaymentsController@index')->items();
         // $additionalPayments = app()->call('App\Http\Controllers\Api\v1\PaymentAdditionalsController@index')->items();
 
@@ -22,13 +24,13 @@ class BalanceController extends Controller
         foreach($lessons as $lesson) {
             $comment = ($lesson->is_unplanned ? 'дополнительное занятие' : 'занятие')
                 . ' ' . date("d.m.y", strtotime($lesson->date))
-                . " в {$lesson->time}, группа {$lesson->group_id}"
+                . " в {$lesson->time}, группа {$lesson->group_id} "
                 . '(' . Subject::getTitle($lesson->subject_id, 'three_letters') . '-'
                 . Grade::getTitle($lesson->client_grade_id, 'short') . '), кабинет '
                 . $lesson->cabinet->title;
 
             $items[] = [
-                'sum' => $lesson->price * -1,
+                'sum' => $isTeacher ? $lesson->price : $lesson->price * -1,
                 'comment' => $comment,
                 'date' => $lesson->date,
                 'year' => $lesson->year,
@@ -39,7 +41,7 @@ class BalanceController extends Controller
 
         foreach($payments as $payment) {
             if ($payment->type === 'payment') {
-                $sum = $payment->sum;
+                $sum = $isTeacher ? $payment->sum * -1 : $payment->sum;
                 $comment =  $this->getPaymentMethodTitle($payment->method) . ' (' . $this->getPaymentCategoryTitle($payment->category) . ')';
             } else {
                 $sum = $payment->sum * -1;
@@ -55,9 +57,11 @@ class BalanceController extends Controller
             ];
         }
 
-        $items = collect($items)->sortByDesc('date');
+        $items = collect($items)->sortByDesc(function($item) {
+            return [$item['year'], $item['date']];
+        })->groupBy(['year', 'date']);
 
-        return $items->values()->all();
+        return $items->toArray();
     }
 
     private function getPaymentCategoryTitle($category)

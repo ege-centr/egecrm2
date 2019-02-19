@@ -9,7 +9,9 @@ import ClearableSelect from '@/components/UI/ClearableSelect'
 export const GlobalPlugin = {
   install(Vue, options) {
     Vue.prototype.getData = function(field, id) {
-      return this.$store.state.data[field].find(e => e.id == id)
+      const result = this.$store.state.data[field].find(e => e.id == id)
+      return result
+      // return result || {}
     }
 
     Vue.prototype.config = {

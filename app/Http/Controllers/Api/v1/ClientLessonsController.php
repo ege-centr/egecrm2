@@ -11,13 +11,27 @@ class ClientLessonsController extends Controller
 {
     protected $filters = [
         'entity' => ['entity_type'],
-        'equals' => ['entity_id'],
+        'equals' => ['entity_id', 'status'],
     ];
 
     public function index(Request $request)
     {
         $query = ClientLesson::orderBy('id', 'desc');
-        $this->filter($request, $query);
+
+        if (isset($request->status) && $request->status === 'conducted') {
+            $this->filter($request, $query);
+        } else {
+            // Вместе с планируемыми
+            // AND `date` >= DATE(NOW())
+            $query->withoutGlobalScope('clients')->whereRaw("
+                (entity_type = '" . addslashes(Client::class) . "' AND entity_id = {$request->entity_id}) OR
+                (entity_type IS NULL AND group_id IN (
+                    SELECT GROUP_CONCAT(group_id) FROM group_clients
+                    WHERE client_id = {$request->entity_id}
+                ))
+            ");
+        }
+
         return ClientLessonCollection::collection($query->get());
     }
 

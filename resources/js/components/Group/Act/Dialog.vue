@@ -29,7 +29,7 @@
                     <v-text-field v-model='item.sum' label='Сумма' hide-details v-mask="'######'"></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <DatePicker label="Дата занятия" v-model='item.date' />
+                    <DatePicker label="Дата в акте" v-model='item.date' />
                   </div>
                 </div>
               </v-flex>

@@ -1,5 +1,9 @@
 <template>
   <div>
+    <GroupDialog ref='GroupDialog' @updated='loadData' />
+    <GroupActDialog v-if='$refs.GroupActPage' ref='GroupActDialog' @updated='$refs.GroupActPage.loadData()' />
+    <MoveClientDialog ref='MoveClientDialog' @moved='removeClientFromGroup' />
+    
     <div class='headline mb-4'>
       Группа {{ $route.params.id }}
     </div>
@@ -138,12 +142,12 @@
           <NoData v-else />
         </v-tab-item>
         <v-tab-item>
-          <DisplayData :api-url='GROUP_ACTS_API_URL' :invisible-filters='{group_id: item.id}' container-class='py-0'>
+          <DisplayData ref='GroupActPage' :api-url='GROUP_ACTS_API_URL' :invisible-filters='{group_id: item.id}' container-class='py-0'>
             <template slot='items' slot-scope='{ items }'>
-              <GroupActList :items='items' />
+              <GroupActList :items='items' @updated='$refs.GroupActPage.loadData()' />
             </template>
             <template slot='buttons-bottom'>
-              <AddBtn @click.native='$refs.GroupActDialog.open(null, {group_id: item.id})' />
+              <AddBtn class='mt-3' @click.native='$refs.GroupActDialog.open(null, {group_id: item.id})' />
             </template>
           </DisplayData>
           <!-- <GroupActList :group-id='item.id' /> -->
@@ -157,9 +161,6 @@
         </v-tab-item>
       </v-tabs-items>
     </div>
-    <GroupDialog ref='GroupDialog' @updated='loadData' />
-    <GroupActDialog ref='GroupActDialog' />
-    <MoveClientDialog ref='MoveClientDialog' @moved='removeClientFromGroup' />
   </div>
 </template>
 

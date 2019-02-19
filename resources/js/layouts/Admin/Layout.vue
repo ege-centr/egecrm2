@@ -4,6 +4,7 @@
       clipped
       fixed
       :value="true"
+      :width="250"
       app
       dark
     >

@@ -4,6 +4,7 @@ namespace App\Models\Payment;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasCreatedAdmin;
+use App\Models\User;
 
 class Payment extends Model
 {
