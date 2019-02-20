@@ -31,7 +31,7 @@ class ClientLesson extends Model
         });
 
         static::addGlobalScope('clients', function (Builder $builder) {
-            $builder->where('entity_type', Client::class)->orWhereNull('entity_type');;
+            $builder->where('entity_type', Client::class);
         });
     }
 }

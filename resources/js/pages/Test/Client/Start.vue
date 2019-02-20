@@ -5,19 +5,18 @@
       <div v-else>
         <!-- <div v-if='client_test.results === null'> -->
         <div>
-          <h2 class='text-md-center mb-3'>
-            <span v-if='!finished'>
+          <div class='mb-4'>
+            <span class='headline' v-if='finished'>
+              Результаты теста: {{ client_test.results.score }} из {{ client_test.results.max_score }}
+            </span>
+            <h2 v-else class='text-md-center'>
               <v-icon>access_time</v-icon> {{ time_left.format("mm:ss") }}
-            </span>
-            <span class='headline' v-else>
-              Результаты теста: {{ client_test.results.score }}</b> из {{ client_test.results.max_score }}
-            </span>
-          </h2>
+            </h2>
+          </div>
           <v-stepper v-model="step" non-linear class='test-process'>
             <v-stepper-header>
               <template v-for='(problem, index) in test.problems'>
-                <v-stepper-step editable :step="(index + 1)">
-                </v-stepper-step>
+                <v-stepper-step editable :step="(index + 1)"></v-stepper-step>
                 <v-divider v-if="index + 1 < test.problems.length"></v-divider>
               </template>
             </v-stepper-header>
@@ -71,9 +70,8 @@ import {
   API_URL, 
   CLIENT_TESTS_API_URL, 
   CLIENT_TEST_ANSWERS_API_URL,
+  stepCookieKey,
 } from '@/components/Test'
-
-const STEP_COOKIE_KEY = 'test_step'
 
 export default {
   props: {
@@ -120,7 +118,7 @@ export default {
 
   watch: {
     step(newVal) {
-      Cookies.set(STEP_COOKIE_KEY, newVal)
+      Cookies.set(stepCookieKey(this.testId), newVal)
     },
   },
 
@@ -150,7 +148,7 @@ export default {
     },
 
     start() {
-      this.step = Cookies.get(STEP_COOKIE_KEY) || 0
+      this.step = Cookies.get(stepCookieKey(this.testId)) || 0
       if (this.finished) {
         this.step = 0
       }
@@ -164,7 +162,7 @@ export default {
         this.client_test = r.data
         this.finishing = false
         this.step = 0
-        Cookies.remove(STEP_COOKIE_KEY)
+        Cookies.remove(stepCookieKey(this.testId))
       })
     },
 
@@ -219,7 +217,7 @@ export default {
 </script>
 
 <style lang="scss"> 
-  .client-problem {
+  .client-problem, .client-answer {
     & img {
       max-width: 100%;
       zoom: 50%;

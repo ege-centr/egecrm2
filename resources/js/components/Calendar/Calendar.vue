@@ -184,7 +184,7 @@ export default {
       if (this.lessons.length === 0) {
         return CALENDAR_MONTHS
       }
-      const first_lesson_month = parseInt(moment(this.lessons.filter(lesson => lesson.status !== 'cancelled')[0].date).format('M'))
+      const first_lesson_month = parseInt(moment(this.lessons[0].date).format('M'))
       const first_lesson_month_index = CALENDAR_MONTHS.findIndex(m => m === first_lesson_month)
       return CALENDAR_MONTHS.slice(first_lesson_month_index)
     }

@@ -1,5 +1,6 @@
 <template>
   <Balance 
+    :display-options="{created_at: false}"
     :entity-type='$store.state.user.class'
     :entity-id='$store.state.user.id'  />
 </template>

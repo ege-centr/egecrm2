@@ -43,7 +43,7 @@
             <td>
               {{ i.comment }}
             </td>
-            <td class='grey--text'>
+            <td class='grey--text' v-if='show.created_at'>
               {{ getData('admins', i.admin_id).name }}
               {{ i.created_at | date-time }}
             </td>
@@ -54,17 +54,24 @@
   </div>
 </template>
 
-<script>
 
+
+<script>
 import { API_URL } from '@/components/Balance'
+import DisplayOptions from '@/mixins/DisplayOptions'
 
 export default {
   props: ['entityId', 'entityType'],
+
+  mixins: [ DisplayOptions ],
 
   data() {
     return {
       items: null,
       selected_year: null,
+      defaultDisplayOptions: {
+        created_at: true,
+      },
     }
   },
 

@@ -19,3 +19,7 @@ export const TestAdminClientList = require('./Admin/ClientList')
 export const TestIntroTextDialog = require('./Admin/IntroTextDialog')
 export const TestDialog = require('./Admin/Dialog')
 export const TestList = require('./Admin/List')
+
+export function stepCookieKey(test_id) {
+  return `test_step:${test_id}`
+}

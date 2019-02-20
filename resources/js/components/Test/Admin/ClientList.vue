@@ -1,8 +1,7 @@
 <template>
   <div>
-    <TestDialog ref='TestDialog'/>
 
-    <Loader v-if='loading' />
+    <Loader transparent v-if='loading' />
     
     <div v-else>
       <div>
@@ -17,7 +16,7 @@
       <v-data-table hide-headers hide-actions :items='data' class='mt-3' :class='config.elevationClass'>
         <template slot='items' slot-scope="{ item }">
           <td>
-            <a @click='$refs.TestDialog.open(item.id)'>{{ item.title }}</a>
+            {{ item.title }}
           </td>
           <td>
             <span v-if='item.subject_id'>
@@ -51,7 +50,7 @@
       </v-data-table>
     </div>
 
-    <div v-if='testPageOptions !== null' class='relative mt-5'>
+    <div v-if='testPageOptions !== null' class='relative' style='margin-top: 100px'>
       <TestClientStartPage :options='testPageOptions' />
     </div>
   </div>
@@ -60,9 +59,6 @@
 <script>
 import { API_URL, CLIENT_TESTS_API_URL } from '@/components/Test'
 
-// TODO: почему это не работает?
-// import { API_URL, CLIENT_TESTS_API_URL, TestDialog } from '@/components/Test'
-import TestDialog from '@/components/Test/Admin/Dialog'
 import TestClientStartPage from '@/pages/Test/Client/Start'
 
 export default {
@@ -73,7 +69,7 @@ export default {
     },
   },
 
-  components: { TestDialog, TestClientStartPage },
+  components: { TestClientStartPage },
   
   data() {
     return {

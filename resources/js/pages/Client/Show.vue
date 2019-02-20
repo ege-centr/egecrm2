@@ -223,9 +223,7 @@
           </v-card>
         </v-tab-item>
         <v-tab-item>
-          <div class='headline'>
-            <TestAdminClientList :client='client' />
-          </div>
+          <TestAdminClientList :client='client' />
         </v-tab-item>
       </v-tabs-items>
     </div>

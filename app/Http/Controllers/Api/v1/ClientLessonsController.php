@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\{Lesson\Lesson, Lesson\ClientLesson, Teacher, Client\Client};
+use App\Models\{Lesson\Lesson, Lesson\ClientLesson, Teacher, Client\Client, Group\GroupClient};
 use App\Http\Resources\Lesson\{LessonResource,  ClientLessonInSchedule, ClientLessonCollection};
 
 class ClientLessonsController extends Controller
@@ -16,19 +16,17 @@ class ClientLessonsController extends Controller
 
     public function index(Request $request)
     {
-        $query = ClientLesson::orderBy('id', 'desc');
+        $query = ClientLesson::orderBy('date', 'asc')->orderBy('time', 'asc');
 
         if (isset($request->status) && $request->status === 'conducted') {
             $this->filter($request, $query);
         } else {
             // Вместе с планируемыми
             // AND `date` >= DATE(NOW())
+            $group_ids = GroupClient::where('client_id', $request->entity_id)->pluck('group_id')->implode(',');
             $query->withoutGlobalScope('clients')->whereRaw("
                 (entity_type = '" . addslashes(Client::class) . "' AND entity_id = {$request->entity_id}) OR
-                (entity_type IS NULL AND group_id IN (
-                    SELECT GROUP_CONCAT(group_id) FROM group_clients
-                    WHERE client_id = {$request->entity_id}
-                ))
+                (entity_type IS NULL AND group_id IN ({$group_ids}))
             ");
         }
 

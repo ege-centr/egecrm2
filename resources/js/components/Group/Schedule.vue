@@ -9,7 +9,7 @@
           </v-flex>
           <v-spacer></v-spacer>
           <v-flex>
-            <v-data-table hide-actions hide-headers :items='items' :paginate.sync="sortingOptions" class='mt-3' v-if='items.length > 0'>
+            <v-data-table hide-actions hide-headers :items='items' class='mt-3'>
               <template slot='items' slot-scope="{ index, item }">
                 <td width='10' class='pr-0 grey--text' :class="{'purple lighten-5': item.is_unplanned}">
                   <div class='lesson-status' :class="{
@@ -41,17 +41,31 @@
                   </v-btn>
                 </td>
               </template>
+              <template slot='footer'>
+                <tr>
+                  <td colspan='6' class='pl-0 pt-2 text-md-center'>
+                    <v-menu>
+                      <v-btn slot='activator' small flat color='primary' :loading='filling'>
+                        <v-icon class="mr-1">add</v-icon>
+                        добавить
+                      </v-btn>
+                      <v-list dense>
+                        <v-list-tile @click='add'>
+                          <v-list-tile-title>
+                            добавить 1 занятие
+                          </v-list-tile-title>
+                        </v-list-tile>
+                        <v-list-tile @click='fillSchedule'>
+                          <v-list-tile-title>
+                            проставить занятия до 1 июня текущего года
+                          </v-list-tile-title>
+                        </v-list-tile>
+                      </v-list>
+                    </v-menu>
+                  </td>
+                </tr>
+              </template>
             </v-data-table>
-            <NoData v-else />
-            <div class='mt-3'>
-              <v-btn color='primary' small class='ma-0 mr-3' @click='add'>
-                <v-icon class="mr-1">add</v-icon>
-                добавить занятие
-              </v-btn>
-              <v-btn color='primary' small flat @click='fillSchedule' :loading='filling' v-if='items.length > 0'>
-                проставить до 1 июня текущего года
-              </v-btn>
-            </div>
           </v-flex>
         </v-layout>
       </v-container>
@@ -274,10 +288,6 @@ export default {
       filling: false,
       dialog_item: {},
       loading: false,
-      sortingOptions: {
-        rowsPerPage: -1,
-        sortBy: 'date'
-      },
     }
   },
 

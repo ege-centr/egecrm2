@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Lesson;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Client\Collection as ClientCollection;
+use App\Http\Resources\Person\PersonResource;
 
 class ClientLessonInSchedule extends JsonResource
 {
@@ -11,7 +11,7 @@ class ClientLessonInSchedule extends JsonResource
     {
         return array_merge([
             'id' => $this->id,
-            'client' => new ClientCollection($this->client),
+            'client' => new PersonResource($this->client),
             'late' => $this->late,
             'is_absent' => $this->is_absent,
             'price' => $this->price,
