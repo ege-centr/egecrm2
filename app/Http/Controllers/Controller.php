@@ -15,8 +15,13 @@ class Controller extends BaseController
 
     protected function filter(Request $request, Builder &$query)
     {
-        if (isset($request->sort_by) && $request->sort_by) {
-            $query->orderBy($request->sort_by, $request->sort_type);
+        // if (isset($request->sort_by) && $request->sort_by) {
+        //     $query->orderBy($request->sort_by, $request->sort_type);
+        // }
+
+        // TODO: доделать
+        if (isset($request->sort)) {
+            $query->orderBy($request->sort, 'desc');
         }
 
         foreach($this->filters as $type => $fields) {

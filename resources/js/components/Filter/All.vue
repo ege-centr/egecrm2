@@ -47,13 +47,17 @@
       </v-chip>
 
       <v-list dense v-if='item === null'>
-        <v-list-tile v-for='(item, index) in notUsedFilters' @click='select(item)' :key='index'>
-          <v-list-tile-title>{{ item.label }}</v-list-tile-title>
+        <v-list-tile v-for='(item, index) in notUsedFilters' @click='select(item)' :key='index' :class="{'sort-tile': item.type === 'sort'}">
+          <v-list-tile-title>
+            {{ item.label }}
+          </v-list-tile-title>
         </v-list-tile>
+        <!-- <div class='menu-separator grey lighten-2' v-if='sort !== null'></div>
+        <v-list-tile v-if='sort !== null' @click='select(sort)'>
+          <v-list-tile-title>сортировать</v-list-tile-title>
+        </v-list-tile> -->
       </v-list>
-
-      <!-- <SelectFilterDialog :item='item' @selected='apply' v-else /> -->
-      <component :is="getTypeComponentName(item)" :item='item' @selected='apply' v-else /></component>
+      <component :is="getTypeComponentName(item)" :item='item' @selected='apply' v-else />
     </v-menu>
   </div>
 </template>
@@ -67,9 +71,11 @@ import {
   TypeMultiple,
   TypeInterval,
   TypeInput,
+  TypeSort,
 } from './Type'
 
 const components = { 
+  TypeSort,
   TypeInput,
   TypeSelect,
   TypeAdmin,
@@ -94,6 +100,12 @@ export default {
       default: null,
       required: false,
     },
+
+    // sort: {
+    //   type: Object,
+    //   required: false,
+    //   default: null,
+    // }
   },
 
   components: components,
@@ -172,10 +184,16 @@ export default {
       this.$emit('updated', filters, initial_set)
     },
 
+    sortDialog() {
+
+    },
+
     getSelectedLabel(filter) {
       // TODO: определение типа внутри компонента
       // return components[this.getTypeComponentName(filter.item)].methods.getSelectedLabel(filter)
       switch(filter.item.type) {
+        case 'sort': 
+          return filter.item.options.find(e => e.field == filter.value).title
         case 'select':
           return _.get(
             filter.item.options.find(e => e[this.getItemValue(filter.item)] == filter.value), 
@@ -235,6 +253,10 @@ export default {
     },
 
     getTypeComponentName(item) {
+      // если массив, значит сортировка
+      // if (Array.isArray(item)) {
+      //   return 'Sort'
+      // } 
       const type = item.type
       return 'Type' + (type.charAt(0).toUpperCase() + type.slice(1))
     },
@@ -285,5 +307,17 @@ export default {
       left: 10px;
       position: relative;
     }
+  }
+
+  .sort-tile {
+    &:before {
+      content: '';
+      width: 90%;
+      border-bottom: 1px solid #e0e0e0;
+      display: block;
+      /* padding: 10px 0; */
+      margin: 5px auto;
+    }
+    // height: 100px;
   }
 </style>

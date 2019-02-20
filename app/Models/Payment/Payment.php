@@ -10,7 +10,9 @@ class Payment extends Model
 {
     use HasCreatedAdmin;
 
-    protected $fillable = ['category', 'type', 'method', 'date', 'sum', 'year', 'entity_type', 'entity_id', 'card_number'];
+    protected $fillable = [
+        'category', 'type', 'method', 'date', 'sum', 'year', 'entity_type', 'entity_id', 'card_number', 'is_confirmed'
+    ];
 
     public function entity()
     {

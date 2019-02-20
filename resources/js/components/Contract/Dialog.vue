@@ -18,11 +18,14 @@
           <v-container v-else grid-list-xl class="pa-0 ma-0" style='max-width: 100%'>
             <v-layout class='mb-3'>
               <v-flex md6>
-                <v-layout wrap align-center v-for='(subject, index) in $store.state.data.subjects' :key='subject.id'>
-                  <v-flex style='max-width: 50px'>
-                    <span :class="getSubjectColor(subject)">{{ subject.three_letters }}</span>
+                <v-layout wrap align-center v-for='subject in $store.state.data.subjects' :key='subject.id'>
+                  <v-flex style='max-width: 100px; height: 56px'>
+                    <v-btn class='ma-0' flat small :class="getSubjectColor(subject)" @click='toggleSubjectStatus(subject.id)'>
+                      {{ subject.three_letters }}
+                    </v-btn>
+                    <!-- <span :class="getSubjectColor(subject)" @click='toggleSubjectStatus(subject.id)'>{{ subject.three_letters }}</span> -->
                   </v-flex>
-                  <v-flex class='ml-3' style='max-width: 190px'>
+                  <!-- <v-flex class='ml-3' style='max-width: 190px'>
                     <v-select hide-details class='pa-0 ma-0' @change='(e) => changeSubject(e, subject.id)'
                       :items="SUBJECT_STATUS_LABELS"
                       :value="findSubject(subject) ? findSubject(subject).status : undefined"
@@ -37,7 +40,7 @@
                         </v-list-tile-title>
                       </v-list-tile>
                     </v-select>
-                  </v-flex>
+                  </v-flex> -->
                   <v-flex class='ml-3' style='max-width: 120px' v-if='findSubject(subject)'>
                     <v-text-field class='pa-0 ma-0' v-model="findSubject(subject).lessons" label="уроков" hide-details></v-text-field>
                   </v-flex>
@@ -173,6 +176,25 @@ export default {
         }
       }
       return 'grey--text'
+    },
+
+    toggleSubjectStatus(subject_id) {
+      const index = this.item.subjects.findIndex(e => e.subject_id == subject_id)
+      if (index === -1) {
+        this.item.subjects.push({
+          subject_id: subject_id,
+          ...SUBJECT_DEFAULTS
+        }) - 1
+      } else {
+        const subject = this.item.subjects[index]
+        if (subject.status === SUBJECT_STATUS_ACTIVE) {
+          subject.status = SUBJECT_STATUS_TO_BE_TERMINATED
+        } else if (subject.status === SUBJECT_STATUS_TO_BE_TERMINATED) {
+          subject.status = SUBJECT_STATUS_TERMINATED
+        } else if (subject.status === SUBJECT_STATUS_TERMINATED) {
+          this.item.subjects.splice(index, 1)
+        }
+      }
     },
 
     changeSubject(status, subject_id) {

@@ -54,6 +54,9 @@
                   <div class='vertical-inputs__input'>
                     <DatePicker label="Дата" v-model="item.date"  />
                   </div>
+                  <div class='vertical-inputs__input'>
+                    <v-switch color='green' v-model="item.is_confirmed" label="подтвержден"></v-switch>
+                  </div>
                 </div>
               </v-flex>
             </v-layout>

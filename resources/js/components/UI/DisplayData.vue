@@ -12,7 +12,7 @@
             {{ item.title }}
           </v-chip>
       </div>
-      <AllFilter v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' @updated='filtersUpdated' />
+      <AllFilter v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' :sort='sort' @updated='filtersUpdated' />
       <v-spacer></v-spacer>
       <slot name='buttons'></slot>
     </div>
@@ -20,7 +20,7 @@
     <v-container grid-list-md fluid :class="`px-0 ${containerClass} ${loading ? 'invisible' : ''}`">
       <v-layout row wrap class='relative'>
         <v-flex xs12>
-          <div v-if='sort !== undefined' class='grey--text darken-3 mb-3 text-md-right caption flex-items justify-end'>
+          <!-- <div v-if='sort !== undefined' class='grey--text darken-3 mb-3 text-md-right caption flex-items justify-end'>
             cортировка: 
             <v-menu class='mx-1'>
               <span slot='activator' class='sort-label'>{{ selectedSort.label }}</span>
@@ -33,7 +33,7 @@
             <v-icon class='pr-3' small @click='toggleSortType'>
               {{ sort.find(e => e.selected).type === 'asc' ? 'arrow_upward' : 'arrow_downward' }}
             </v-icon>
-          </div>
+          </div> -->
 
           <slot name='items' :items='items' v-if='items.length > 0'></slot>
 
@@ -121,7 +121,7 @@ export default {
         paginate: this.paginate || '',
         ...this.current_filters,
         ...this.invisibleFilters,
-        ...this.getSort(),
+        // ...this.getSort(),
       })).then(response => {
         this.loading = false
         if (this.page === 1 || this.paginate === null) {

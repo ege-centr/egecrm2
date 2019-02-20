@@ -43,6 +43,10 @@
           {{ item.date | date }}
         </td>
         <td>
+          <span v-if='item.is_confirmed' class='green--text'>подтвержден</span>
+          <span v-else>не подтвержден</span>
+        </td>
+        <td>
           <span v-if='item.id'>
             {{ getData('admins', item.created_admin_id).name }}
             {{ item.created_at | date-time }}

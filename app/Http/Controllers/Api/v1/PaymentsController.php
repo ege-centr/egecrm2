@@ -10,19 +10,20 @@ use App\Http\Resources\Payment\PaymentCollection;
 class PaymentsController extends Controller
 {
     protected $filters = [
-        'multiple' => ['year', 'category', 'method', 'type'],
+        'multiple' => ['year', 'category', 'method', 'type', 'is_confirmed'],
         'equals' => ['created_admin_id', 'date', 'entity_id'],
     ];
 
     public function index(Request $request)
     {
-        $query = Payment::orderBy('id', 'desc');
+        $query = Payment::query();
         $this->filter($request, $query);
         if (isset($request->entity_type) && $request->entity_type) {
             $query->whereIn('entity_type', array_map(function($e) {
                 return getModelClass($e, true);
             }, explode(',', $request->entity_type)));
         }
+        $query->orderBy('id', 'desc');
         return PaymentCollection::collection($this->showBy($request, $query));
     }
 

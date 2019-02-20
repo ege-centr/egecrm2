@@ -1,6 +1,9 @@
 <template>
   <v-card class='relative'>
-    <v-card-text class='pa-0' style='max-height: 700px; overflow-y: scroll; padding-bottom: 60px !important;'>
+    <!-- padding-bottom: 60px !important; -->
+    <v-card-text class='pa-0' 
+      :class="{'with-apply-button': applyButton || $parent.filterValue !== null}"
+      style='max-height: 700px; overflow-y: scroll'>
       <slot></slot>
     </v-card-text>
     <v-card-actions v-if='applyButton || $parent.filterValue !== null' class='justify-center' >
@@ -83,6 +86,9 @@ export default {
     width: 100%;
     background: white;
     box-shadow: 0 0 12px 12px white;
+  }
+  .with-apply-button {
+    padding-bottom: 60px !important;
   }
 </style>
 >

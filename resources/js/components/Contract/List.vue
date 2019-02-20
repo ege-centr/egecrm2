@@ -10,7 +10,9 @@
     >
       <template slot='items' slot-scope="{ item }">
         <td v-if='show.client'>
-          <PersonName :item='item.client' field='abbreviation' />
+          <router-link :to="{name: 'ClientShow', params: {id: item.client.id}}">
+            <PersonName :item='item.client' field='abbreviation' />
+          </router-link>
         </td>
         <td>
           <span v-if='item.id'>

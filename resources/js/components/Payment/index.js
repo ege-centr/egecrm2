@@ -30,13 +30,21 @@ export const FILTERS = [
     {id: ROLES.TEACHER, title: 'преподаватель'},
     {id: ROLES.CLIENT, title: 'клиент'},
   ]},
+  {label: 'Статус', field: 'is_confirmed', type: 'multiple', options: [
+    {id: 0, title: 'не подтвержден'},
+    {id: 1, title: 'подтвержден'},
+  ]},
   {label: 'Пользователь', field: 'created_admin_id', type: 'select', options: store.state.data.admins, textField: 'name'},
   {label: 'Дата', field: 'date', type: 'date'},
+  {label: 'Сортировка', field: 'sort', type: 'sort', valueField: 'field', options: [
+    {field: 'created_at', type: 'desc', title: 'по дате проводки'},
+    {field: 'date', type: 'desc', title: 'по дате'},
+  ]},
 ]
 
 export const SORT = [
-  {field: 'created_at', type: 'desc', label: 'по дате проводки', selected: true},
-  {field: 'date', type: 'desc', label: 'по дате', selected: false},
+  {field: 'created_at', type: 'desc', title: 'по дате проводки', selected: true},
+  {field: 'date', type: 'desc', title: 'по дате', selected: false},
 ]
 
 export const MODEL_DEFAULTS = {}
