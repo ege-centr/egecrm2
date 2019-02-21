@@ -130,7 +130,11 @@ export default {
     async beginTest() {
       this.starting = true
       await this.loadTest()
-      await axios.put(apiUrl(CLIENT_TESTS_API_URL, this.testId), {started_at: moment().format('YYYY-MM-DD HH:mm:ss')})
+      await axios.put(apiUrl(CLIENT_TESTS_API_URL, this.testId), {
+        // started_at: moment().format('YYYY-MM-DD HH:mm:ss')
+        // debug
+        started_at: moment().subtract(29, 'minutes').subtract(40, 'seconds').format('YYYY-MM-DD HH:mm:ss')
+      })
         .then(r => this.client_test = r.data)
         .catch(e => this.$router.push({name: 'TestIndex'}))
       this.starting = false
