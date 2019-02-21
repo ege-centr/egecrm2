@@ -44,7 +44,7 @@ class ClientTestsController extends Controller
         $model = ClientTest::where([
             ['client_id', User::id()],
             ['test_id', $id]
-        ])->first();
+        ])->firstOrFail();
         $model->started_at = $request->started_at;
         $model->save();
         return $model;
@@ -63,13 +63,17 @@ class ClientTestsController extends Controller
             $query->whereNotNull('started_at');
         }
 
-        return $query->firstOrFail();
+        return new ClientTestResource($query->firstOrFail());
     }
 
     public function destroy($id)
     {
         $client_test = ClientTest::find($id);
+        if ($client_test->is_in_progress) {
+            return response(new ClientTestResource($client_test), 403);
+        }
         $client_test->answers()->delete();
         $client_test->delete();
+        return response(null, 204);
     }
 }

@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Client\ClientTestAnswer;
+use App\Models\Client\{ClientTest, ClientTestAnswer};
 use User;
+use DB;
 
 class ClientTestAnswersController extends Controller
 {
@@ -28,10 +29,25 @@ class ClientTestAnswersController extends Controller
 
     public function store(Request $request)
     {
-        ClientTestAnswer::where([
-            ['client_id', $request->client_id],
-            ['test_problem_answer_id', $request->test_problem_answer_id]
-        ])->delete();
+        $clientTest = ClientTest::find($request->client_test_id);
+
+        // не принимаем ответы, если тест уже завершен
+        if ($clientTest->is_finished) {
+            return response(null, 403);
+        }
+
+        // удаляем все предыдущие ответы на этот вопрос
+        $test_problem_answer_ids = DB::select("SELECT id FROM test_problem_answers
+            WHERE test_problem_id = (
+                SELECT tp.id FROM test_problem_answers tpa
+                JOIN test_problems tp ON tp.id = tpa.test_problem_id
+                WHERE tpa.id = {$request->test_problem_answer_id}
+            )
+        ");
+        ClientTestAnswer::where('client_id', $request->client_id)
+            ->whereIn('test_problem_answer_id', collect($test_problem_answer_ids)->pluck('id'))
+            ->delete();
+
         return ClientTestAnswer::create($request->all());
     }
 }

@@ -10,7 +10,8 @@
               Результаты теста: {{ client_test.results.score }} из {{ client_test.results.max_score }}
             </span>
             <h2 v-else class='text-md-center'>
-              <v-icon>access_time</v-icon> {{ time_left.format("mm:ss") }}
+              <v-icon>access_time</v-icon>
+              <TestCountDown :from='client_test.started_at' @end='end()' />
             </h2>
           </div>
           <v-stepper v-model="step" non-linear class='test-process'>
@@ -40,9 +41,9 @@
                   </div>
                 </v-radio-group>
                 <div class='text-md-center' v-if='!finished'>
-                  <v-btn color='primary' :disabled="!answers.hasOwnProperty(problem.id)"
-                    @click='submitAnswer(problem.id, index === problem.answers.length - 1)'>
-                    {{ index === problem.answers.length - 1 ? 'завершить тест' : 'ответить' }}
+                  <v-btn color='primary' :disabled="!answers.hasOwnProperty(problem.id)" :loading='submittingAnswer'
+                    @click='submitAnswer(problem.id, index === test.problems.length - 1)'>
+                    {{ index === test.problems.length - 1 ? 'завершить тест' : 'ответить' }}
                   </v-btn>
                 </div>
               </v-stepper-content>
@@ -72,6 +73,7 @@ import {
   CLIENT_TEST_ANSWERS_API_URL,
   stepCookieKey,
 } from '@/components/Test'
+import TestCountDown from '@/components/Test/CountDown'
 
 export default {
   props: {
@@ -84,6 +86,8 @@ export default {
     }
   },
 
+  components: { TestCountDown },
+  
   data() {
     return {
       intro_text: null,
@@ -92,10 +96,10 @@ export default {
       loading: true,
       starting: false,
       finishing: false,
+      submittingAnswer: false,
       started: false,
       answers: {},
       step: 0,
-      now: moment(),
       client_test: null,
     }
   },
@@ -126,7 +130,9 @@ export default {
     async beginTest() {
       this.starting = true
       await this.loadTest()
-      await axios.put(apiUrl(CLIENT_TESTS_API_URL, this.test.id), {started_at: moment().format('YYYY-MM-DD HH:mm:ss')}).then(r => this.client_test = r.data)
+      await axios.put(apiUrl(CLIENT_TESTS_API_URL, this.testId), {started_at: moment().format('YYYY-MM-DD HH:mm:ss')})
+        .then(r => this.client_test = r.data)
+        .catch(e => this.$router.push({name: 'TestIndex'}))
       this.starting = false
       this.step = 0
       this.start()
@@ -152,13 +158,12 @@ export default {
       if (this.finished) {
         this.step = 0
       }
-      setInterval(() => this.now = moment(), 1000)
       Vue.nextTick(() => this.started = true)
     },
 
     end() {
       this.finishing = true
-      axios.put(apiUrl(CLIENT_TESTS_API_URL, this.test.id), {started_at: '0000-00-00 00:00:00'}).then(r => {
+      axios.put(apiUrl(CLIENT_TESTS_API_URL, this.testId), {started_at: '0000-00-00 00:00:00'}).then(r => {
         this.client_test = r.data
         this.finishing = false
         this.step = 0
@@ -177,30 +182,23 @@ export default {
     },
 
     submitAnswer(problem_id, is_last_answer) {
+      this.submittingAnswer = true
       axios.post(apiUrl(CLIENT_TEST_ANSWERS_API_URL), {
         client_id: this.clientId,
+        client_test_id: this.client_test.id,
         test_problem_answer_id: this.answers[problem_id],
-      })
-      if (is_last_answer) {
-        this.end()
-      } else {
-        this.step++
-      }
+      }).then(r => {
+        this.submittingAnswer = false
+        if (is_last_answer) {
+          this.end()
+        } else {
+          this.step++
+        }
+      }).catch(e => this.submittingAnswer = false)
     },
   },
 
   computed: {
-    time_left() {
-      const time_started = moment(this.client_test.started_at).toDate().getTime()
-      const time_now = this.now.toDate().getTime()
-      const mins_30 = moment.duration(30, 'minute').valueOf()
-      const timestamp = mins_30 - (time_now - time_started)
-      if (timestamp < 1000) {
-        this.end()
-      }
-      return moment(timestamp).utcOffset(-180)
-    },
-
     finished() {
       return this.client_test.results !== null
     },

@@ -24,9 +24,25 @@ class ClientTest extends Model
             ->where('test_problems.test_id', $this->test_id);
     }
 
+    /**
+     * Тест закончен
+     */
+    public function getIsFinishedAttribute()
+    {
+        return $this->started_at !== null && time() - strtotime($this->started_at) >= (60 * 30);
+    }
+
+    /**
+     * Тест в процессе
+     */
+    public function getIsInProgressAttribute()
+    {
+        return $this->started_at !== null && ! $this->is_finished;
+    }
+
     public function getResultsAttribute()
     {
-        if ($this->started_at !== null && time() - strtotime($this->started_at) >= (60 * 30)) {
+        if ($this->is_finished) {
             $answers = $this->answers()->select('score')->get();
 
             $score = 0;

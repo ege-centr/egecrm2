@@ -2,7 +2,7 @@
   <div>
     <Loader v-if='loading' />
     <DataTable v-else :items='items'>
-      <template slot-scope='{ item }'>
+      <tr slot-scope='{ item }'>
         <td>
           {{ item.test.title }}
         </td>
@@ -27,7 +27,7 @@
             </span>
           </router-link>
         </td>
-      </template>
+      </tr>
     </DataTable>
   </div>
 </template>
