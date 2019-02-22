@@ -296,6 +296,10 @@ nav {
   border-bottom: 1px solid #e0e0e0;
 }
 
+.theme--light.v-table tfoot tr {
+  border-top: 1px solid #e0e0e0;
+}
+
 .v-tabs__item {
   padding: 6px 18px;
   font-size: 12px;
@@ -303,4 +307,10 @@ nav {
 
 .v-tabs__container--fixed-tabs .v-tabs__div {
   min-width: unset;
+}
+
+.btn-tr {
+  width: 100%;
+  height: 46px;
+  margin: 0;
 }

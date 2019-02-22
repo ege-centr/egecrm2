@@ -12,11 +12,12 @@
     <v-text-field hide-details
       slot="activator"
       v-model='dateFormatted'
+      :readonly="readonly"
       :label="label"
-      readonly
     ></v-text-field>
     <v-date-picker no-title
       locale='ru'
+      :readonly="readonly"
       v-model="date"
       @input="$refs.datepicker.save(date)">
     </v-date-picker>
@@ -25,7 +26,15 @@
 
 <script>
 export default {
-  props: ['value', 'label'],
+  props: {
+    value: {},
+    label: {},
+    readonly: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
+  },
 
   data() {
     return {

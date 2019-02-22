@@ -119,6 +119,9 @@
           Платежи
         </v-tab>
         <v-tab>
+          Пробный ЕГЭ
+        </v-tab>
+        <v-tab>
           Комментарии
         </v-tab>
         <v-tab>
@@ -214,7 +217,22 @@
           </DisplayData>
         </v-tab-item>
 
-        <!-- Тесты -->
+        <v-tab-item>
+          <DisplayData ref='EgeTrialPage'
+            :tabs="{data: 'years', field: 'year'}"
+            :api-url='EGE_TRIAL_API_URL' 
+            :invisible-filters="{client_id: $route.params.id}"
+          >
+            <template slot='items' slot-scope='{ items }'>
+              <EgeTrialList :items='items' />
+            </template>
+            <template slot='buttons-bottom'>
+              <AddBtn @click.native='$refs.EgeTrialDialog.open(null, {client_id: $route.params.id})' />
+            </template>
+          </DisplayData>
+        </v-tab-item>
+
+        <!-- Комментарии -->
         <v-tab-item>
           <v-card :class='config.elevationClass'>
             <v-card-text>
@@ -222,6 +240,8 @@
             </v-card-text>
           </v-card>
         </v-tab-item>
+
+        <!-- Тесты -->
         <v-tab-item>
           <TestAdminClientList :client='client' />
         </v-tab-item>
@@ -231,6 +251,7 @@
     <PaymentDialog ref='PaymentDialog' v-if='$refs.PaymentPage' @updated='$refs.PaymentPage.reloadData' />
     <RequestDialog ref='RequestDialog' v-if='$refs.RequestPage' @updated='$refs.RequestPage.loadData' />
     <ContractDialog ref='ContractDialog' v-if='$refs.ContractPage' @updated='$refs.ContractPage.reloadData' />
+    <EgeTrialDialog ref='EgeTrialDialog' v-if='$refs.EgeTrialPage' @updated='$refs.EgeTrialPage.reloadData' />
   </div>
 </template>
 
@@ -269,6 +290,11 @@ import Preview from '@/other/Preview'
 import ClientSchedule from '@/components/Client/Schedule'
 import Balance from '@/components/Balance/Balance'
 
+// EGE TRIAL
+import EgeTrialDialog from '@/components/EgeTrial/Dialog'
+import EgeTrialList from '@/components/EgeTrial/List'
+import { API_URL as EGE_TRIAL_API_URL } from '@/components/EgeTrial'
+
 export default {
   props: ['clientId'],
 
@@ -280,6 +306,7 @@ export default {
       PAYMENT_API_URL,
       PAYMENT_SORT,
       REQUEST_API_URL,
+      EGE_TRIAL_API_URL,
       Preview,
       tabs: null,
       loading: true,
@@ -288,9 +315,9 @@ export default {
   },
 
   components: { 
-    RequestDialog, RequestItem, Comments, ContractList, GroupList, GroupNotAssignedList, 
+    RequestDialog, RequestItem, Comments, ContractList, GroupList, GroupNotAssignedList, EgeTrialList,
     PaymentList, ClientDialog, PhoneList, BranchList, EmailShow, TestAdminClientList,
-    DisplayData, ContractDialog, PaymentDialog, ClientSchedule, Balance
+    DisplayData, ContractDialog, PaymentDialog, ClientSchedule, Balance, EgeTrialDialog
   },
 
   created() {

@@ -10,6 +10,13 @@ class Lesson extends Model
 {
     use LessonTrait;
 
+    /**
+     * Статусы занятий
+     */
+    const STATUS_CANCELLED = 'cancelled';
+    const STATUS_CONDUCTED = 'conducted';
+    const STATUS_PLANNED = 'planned';
+
     protected $fillable = [
         'teacher_id', 'cabinet_id', 'date', 'time', 'price',
         'status', 'is_unplanned', 'group_id', 'year'
@@ -40,6 +47,29 @@ class Lesson extends Model
             return mb_strimwidth($this->attributes['time'], 0, 5);
         }
     }
+
+
+    /**
+     * первое занятие в группе?
+     */
+    public function getIsFirstInGroupAttribute()
+    {
+        return $this->date === self::where('group_id', $this->group_id)
+            ->where('status', '<>', self::STATUS_CANCELLED)
+            ->min('date');
+    }
+
+    /**
+     * занятие не зарегистрировано?
+     */
+    public function getIsNotRegisteredAttribute()
+    {
+        return $this->date < now()->format(DATE_FORMAT)
+            && $this->date > now()->sub(new \DateInterval('P10D'))
+            && $this->status !== self::STATUS_CANCELLED
+            && $this->status !== self::STATUS_CONDUCTED;
+    }
+
 
     public function getClientsCountAttribute()
     {

@@ -32,6 +32,14 @@ trait LessonTrait
         return $this->group->grade_id;
     }
 
+    public function getGroupGradeIdAttribute($value)
+    {
+        if ($this->status === 'conducted') {
+            return $value;
+        }
+        return $this->group->grade_id;
+    }
+
     public function getSubjectIdAttribute($value)
     {
         if ($this->status === 'conducted') {

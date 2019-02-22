@@ -9,7 +9,8 @@
       </div>
       <div class="visits__items" v-for='client in clients' :key='client.id'>
         <div>
-          <router-link :to="{ name: 'ClientShow', params: { id: client.id } }"><PersonName :item='client' /></router-link>
+          <router-link v-if='$store.state.user.class === ROLES.ADMIN' :to="{ name: 'ClientShow', params: { id: client.id } }"><PersonName :item='client' /></router-link>
+          <PersonName v-else :item='client' />
         </div>
         <div v-for='(lesson, index) in group.lessons' :key='lesson.id' :class="getClass(index)">
           <SmallCircle v-if='getClientLesson(lesson, client)' 
@@ -35,6 +36,7 @@
 
 import SmallCircle from '@/components/UI/SmallCircle'
 import { LESSON_STATUS } from '@/components/Lesson'
+import { ROLES } from '@/config'
 
 export default {
   props: {
@@ -49,6 +51,7 @@ export default {
   data() {
     return {
       LESSON_STATUS,
+      ROLES,
     }
   },
 

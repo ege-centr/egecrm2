@@ -1,9 +1,15 @@
 <template>
   <div>
     <div v-for='item in items' :key='item.date'>
-      <div class='headline mb-4'>{{ formatDate(item.date) }}</div>
+      <div class='headline mb-4'>
+        {{ formatDate(item.date) }} 
+        <span v-if='isToday(item.date)'>(сегодня)</span>
+      </div>
       <v-data-table :items='item.items' item-key='id' hide-headers hide-actions :class='config.elevationClass' class='mb-5'>
         <template slot="items" slot-scope="{ item }">
+          <td width='44' class='pr-0'>
+            <LessonStatusCircles :item='item' />
+          </td>
           <td>
             <router-link :to="{ name: 'GroupShow', params: { id: item.group_id}}">
               Группа {{ item.group_id }}
@@ -35,13 +41,6 @@
           <td class='grey--text'>
             <span v-if='item.conducted_email_id'>{{ getData('admins', item.conducted_email_id).name }} {{ item.created_at | date-time }}</span>
           </td>
-          <td width='10' class='pr-0 grey--text'>
-            <div class='lesson-status' :class="{
-              'blue': item.status === LESSON_STATUS.PLANNED,
-              'green': item.status === LESSON_STATUS.CONDUCTED,
-              'grey': item.status === LESSON_STATUS.CANCELLED,
-            }"></div>
-          </td>
         </template>
         <NoData slot='no-data' />
       </v-data-table>
@@ -50,7 +49,7 @@
 </template>
 
 <script>
-import { LESSON_STATUS } from '@/components/Lesson'
+import { LESSON_STATUS, LessonStatusCircles } from '@/components/Lesson'
 
 export default {
   props: {
@@ -60,6 +59,8 @@ export default {
     },
   },
 
+  components: { LessonStatusCircles },
+
   data() {
     return {
       LESSON_STATUS,
@@ -67,6 +68,10 @@ export default {
   },
   
   methods: {
+    isToday(date) {
+      return date === moment().format('YYYY-MM-DD')
+    },
+
     formatDate(date) {
       return moment(date).format('D MMMM YYYY')
     }
@@ -81,14 +86,5 @@ export default {
         position: relative;
       }
     }
-  }
-
-  .lesson-status {
-    border-radius: 50%;
-    height: 8px;
-    width: 8px;
-    position: absolute;
-    right: 16px;
-    top: 20px;
   }
 </style>

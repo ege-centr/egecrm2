@@ -51,6 +51,8 @@ class LessonsController extends Controller
 
     public function destroy($id)
     {
-        Lesson::find($id)->delete();
+        $lesson = Lesson::find($id);
+        $lesson->clientLessons()->delete();
+        $lesson->delete();
     }
 }

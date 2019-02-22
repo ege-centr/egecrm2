@@ -6,6 +6,7 @@
     :label="label"
     item-value='id'
     :item-text='itemText'
+    :readonly="readonly"
   >
     <v-list-tile slot='prepend-item' @click='clear'>
       <v-list-tile-title class='grey--text'>
@@ -32,7 +33,12 @@ export default {
     itemText: {
       required: false,
       default: 'title',
-    }
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
+      required: false,
+    },
   },
 
   methods: {

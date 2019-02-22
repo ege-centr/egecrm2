@@ -1,6 +1,7 @@
 <template>
   <ClearableSelect 
     :value='value'
+    :readonly='readonly'
     @input="value => $emit('input', value)"
     :items="item.items"
     :item-text='item.text'
@@ -17,6 +18,11 @@ export default {
     },
     value: {
       required: true
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
+      required: false,
     },
   },
 

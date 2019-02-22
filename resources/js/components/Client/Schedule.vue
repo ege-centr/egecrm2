@@ -13,13 +13,10 @@
     <v-card v-else>
       <v-card-text>
         <div v-if='items.length > 0'>
-          <div v-for='(lessons, yearMonth, byMonthsIndex) in byMonths' :key='yearMonth'>
-            <div class='headline mb-2'>{{ yearMonth + '-01' | dateFormat('MMMM YYYY') }}</div>
             <v-data-table 
-              :class="{'mb-5': byMonthsIndex + 1 < Object.keys(byMonths).length}"
               hide-actions 
               hide-headers 
-              :items='lessons'
+              :items='filteredItems'
             >
               <template slot='items' slot-scope='{ item }'>
                 <td width='65' class='pr-0 grey--text'>
@@ -71,7 +68,6 @@
                 </td>
               </template>
             </v-data-table>
-          </div>
         </div>
         <NoData v-else />
       </v-card-text>
@@ -113,18 +109,6 @@ export default {
   },
 
   computed: {
-    byMonths() {
-      const data = {}
-      this.filteredItems.forEach(item => {
-        let yearMonth = moment(item.date).format('YYYY-MM')
-        if (!(yearMonth in data)) {
-          data[yearMonth] = []
-        }
-        data[yearMonth].push(item)
-      })
-      return data
-    },
-
     filteredItems() {
       if (this.selected_tab_index === null) {
         return this.items

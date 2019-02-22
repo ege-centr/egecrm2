@@ -13,7 +13,7 @@
         <Loader v-if='loading'></Loader>
         <v-layout wrap v-if='item !== null'>
           <v-flex md12>
-            <GroupInfo :item='item' @open='openGroup' />
+            <GroupInfo :item='item' :display-options='{edit: false}' />
           </v-flex>
           <v-flex md12 class='mt-5' v-if='item.clients.length'>
             <v-data-table
@@ -23,48 +23,14 @@
               :items='item.clients'
             >
               <template slot='items' slot-scope="props">
-                <td width='200'>
-                  <router-link :to="{name: 'ClientShow', params: { id: props.item.id }}" 
-                    :class="{
-                      'orange--text': props.item.subject_status === SUBJECT_STATUSES.SUBJECT_STATUS_TO_BE_TERMINATED,
-                      'red--text': props.item.subject_status === SUBJECT_STATUSES.SUBJECT_STATUS_TERMINATED,
-                    }"
-                  >
-                    <PersonName :item='props.item'/>
-                  </router-link>
-                </td>
-                <td width='200'>
-                  30%
-                </td>
-                <td width='200'>
-                  смс отправлено
-                </td>
-                <td width='200'>
-                  <BranchList :items='props.item.branches' />
+                <td width='300'>
+                  <PersonName :item='props.item'/>
                 </td>
                 <td>
-                  <Bars :group-bars='item.schedule.bars' :client-bars='props.item.bars' />
+                  30%
                 </td>
-                <td class='text-md-right' style='padding-right: 16px'>
-                  <v-menu>
-                    <v-btn slot='activator' flat icon color="black" class='ma-0'>
-                      <v-icon>more_horiz</v-icon>
-                    </v-btn>
-                     <v-list dense>
-                        <v-list-tile @click='removeClientFromGroup(props.item)'>
-                          <v-list-tile-action>
-                            <v-icon>close</v-icon>
-                          </v-list-tile-action>
-                          <v-list-tile-title>Удалить из группы</v-list-tile-title>
-                        </v-list-tile>
-                        <v-list-tile @click='moveClient(props.item)'>
-                          <v-list-tile-action>
-                            <v-icon>repeat</v-icon>
-                          </v-list-tile-action>
-                          <v-list-tile-title>Переместить в группу</v-list-tile-title>
-                        </v-list-tile>
-                     </v-list>
-                  </v-menu>
+                <td>
+                  <EmailShow :item='props.item.email' />
                 </td>
               </template>
             </v-data-table>
@@ -80,18 +46,12 @@
         <v-tab>
           Посещаемость
         </v-tab>
-         <v-tab>
-          Акты
-        </v-tab>
-         <v-tab>
-          Комментарии
-        </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <v-tab-item>
           <v-card :class='config.elevationClass'>
             <v-card-text class='relative'>
-              <GroupSchedule v-if='item !== null' :group='item' />
+              <GroupSchedule v-if='item !== null' :group='item' :readonly='true' />
             </v-card-text>
           </v-card>
         </v-tab-item>
@@ -102,24 +62,6 @@
             </v-card-text>
           </v-card>
           <NoData v-else />
-        </v-tab-item>
-        <v-tab-item>
-          <DisplayData ref='GroupActPage' :api-url='GROUP_ACTS_API_URL' :invisible-filters='{group_id: item.id}' container-class='py-0'>
-            <template slot='items' slot-scope='{ items }'>
-              <GroupActList :items='items' @updated='$refs.GroupActPage.loadData()' />
-            </template>
-            <template slot='buttons-bottom'>
-              <AddBtn class='mt-3' @click.native='$refs.GroupActDialog.open(null, {group_id: item.id})' />
-            </template>
-          </DisplayData>
-          <!-- <GroupActList :group-id='item.id' /> -->
-        </v-tab-item>
-        <v-tab-item>
-          <v-card :class='config.elevationClass'>
-            <v-card-text>
-              <Comments :class-name='CLASS_NAME' :entity-id='item.id' />
-            </v-card-text>
-          </v-card>
         </v-tab-item>
       </v-tabs-items>
     </div>
@@ -149,12 +91,13 @@ import Comments from '@/components/Comments'
 import { SUBJECT_STATUSES } from '@/components/Contract'
 import BranchList from '@/components/UI/BranchList'
 import GroupInfo from '@/components/Group/Info'
+import EmailShow from '@/components/Email/Show'
 
 
 export default {
   components: { 
     DisplayData, GroupSchedule, Bars, Visits, GroupDialog, MoveClientDialog, GroupActList, 
-    GroupActDialog, Comments, BranchList, GroupInfo 
+    GroupActDialog, Comments, BranchList, GroupInfo, EmailShow
   },
 
   data() {

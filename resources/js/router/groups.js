@@ -1,6 +1,6 @@
 import { ROLES } from '@/config'
 import GroupIndex from '@/pages/Group/Index'
-import GroupShow from '@/pages/Group/Admin/Show'
+import GroupShow from '@/pages/Group/Show'
 
 export default [
   {
@@ -14,6 +14,9 @@ export default [
   {
     path: '/groups/:id',
     name: 'GroupShow',
-    component: GroupShow
+    component: GroupShow,
+    meta: {
+      roles: [ROLES.ADMIN, ROLES.TEACHER]
+    },
   }
 ]

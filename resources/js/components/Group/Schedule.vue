@@ -11,41 +11,40 @@
           <v-flex>
             <v-data-table hide-actions hide-headers :items='items' class='mt-3'>
               <template slot='items' slot-scope="{ index, item }">
-                <td width='10' class='pr-0 grey--text' :class="{'purple lighten-5': item.is_unplanned}">
-                  <div class='lesson-status' :class="{
-                    'blue': item.status === LESSON_STATUS.PLANNED,
-                    'green': item.status === LESSON_STATUS.CONDUCTED,
-                    'grey': item.status === LESSON_STATUS.CANCELLED,
-                  }"></div>
-                  <span v-if="item.status !== LESSON_STATUS.CANCELLED">{{ indexSkippingCancelledLessons(index, items) }}</span>
+                <td width='24' class='px-2'>
+                  <LessonStatusCircles :item='item'  />
                 </td>
-                <td :class="{'purple lighten-5': item.is_unplanned}">
+                <td width='10' class='px-0'>
+                  <span class='grey--text'
+                    v-if="item.status !== LESSON_STATUS.CANCELLED">{{ indexSkippingCancelledLessons(index, items) }}</span>
+                </td>
+                <td>
                   {{ item.date | date }}
                 </td>
-                <td :class="{'purple lighten-5': item.is_unplanned}">
+                <td>
                   {{ item.time }}
                 </td>
-                <td :class="{'purple lighten-5': item.is_unplanned}">
+                <td>
                   <span v-if='item.cabinet_id'>
                     {{ getData('cabinets', item.cabinet_id).title }}
                   </span>
                 </td>
-                <td :class="{'purple lighten-5': item.is_unplanned}">
+                <td>
                   <span v-if='item.teacher_id'>
                     {{ getData('teachers', item.teacher_id).names.abbreviation }}
                   </span>
                 </td>
-                <td class='text-md-right' :class="{'purple lighten-5': item.is_unplanned}">
+                <td class='text-md-right'>
                   <v-btn flat icon color="black" class='ma-0' @click='edit(item)'>
                     <v-icon>more_horiz</v-icon>
                   </v-btn>
                 </td>
               </template>
-              <template slot='footer'>
+              <template slot='footer' v-if='!readonly'>
                 <tr>
-                  <td colspan='6' class='pl-0 pt-2 text-md-center'>
-                    <v-menu>
-                      <v-btn slot='activator' small flat color='primary' :loading='filling'>
+                  <td colspan='7' class='pa-0 text-md-center'>
+                    <v-menu style='width: 100%'>
+                      <v-btn slot='activator' small flat color='primary' class='btn-tr' :loading='filling'>
                         <v-icon class="mr-1">add</v-icon>
                         добавить
                       </v-btn>
@@ -80,7 +79,8 @@
               </v-btn>
               <v-toolbar-title>{{ dialog_item.id ? 'Редактирование' : 'Добавление' }} занятия</v-toolbar-title>
               <v-spacer></v-spacer>
-              <v-toolbar-items>
+              <v-toolbar-items v-if="!readonly">
+                <v-btn dark flat v-if='dialog_item.id' @click.native="destroy" :loading='destroying'>Удалить</v-btn>
                 <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ dialog_item.id ? 'Сохранить' : 'Добавить' }}</v-btn>
               </v-toolbar-items>
             </v-toolbar>
@@ -91,22 +91,23 @@
                   <v-flex md4>
                     <div class='vertical-inputs'>
                       <div class='vertical-inputs__input'>
-                        <DatePicker v-if='dialog' label="Дата занятия" v-model='dialog_item.date' />
+                        <DatePicker :readonly="readonly" v-if='dialog' label="Дата занятия" v-model='dialog_item.date' />
                       </div>
                       <div class='vertical-inputs__input'>
-                        <v-text-field hide-details v-model='dialog_item.time' label='Время занятия' v-mask="'##:##'"></v-text-field>
+                        <v-text-field hide-details v-model='dialog_item.time' :readonly="readonly"  label='Время занятия' v-mask="'##:##'"></v-text-field>
                       </div>
                       <div class='vertical-inputs__input'>
-                        <DataSelect type='cabinets' v-model='dialog_item.cabinet_id' />
+                        <DataSelect :readonly="readonly" type='cabinets' v-model='dialog_item.cabinet_id' />
                       </div>
                       <div class='vertical-inputs__input'>
-                        <TeacherSelect v-model="dialog_item.teacher_id" />
+                        <TeacherSelect :readonly="readonly" v-model="dialog_item.teacher_id" />
                       </div>
                       <div class='vertical-inputs__input' v-if="dialog_item.status === LESSON_STATUS.CONDUCTED">
-                        <v-text-field v-model='dialog_item.price' label='Цена' hide-details></v-text-field>
+                        <v-text-field :readonly="readonly" v-model='dialog_item.price' label='Цена' hide-details></v-text-field>
                       </div>
                       <div class="vertical-inputs__input" v-if="dialog_item.status !== LESSON_STATUS.CONDUCTED">
                         <v-switch class='ma-0'
+                          :readonly="readonly" 
                           label="Отменено"
                           hide-details
                           :input-value="dialog_item.status === LESSON_STATUS.CANCELLED"
@@ -115,6 +116,7 @@
                       </div>
                       <div class="vertical-inputs__input">
                          <v-switch class='ma-0'
+                          :readonly="readonly" 
                           label="Незапланировано"
                           hide-details
                           v-model='dialog_item.is_unplanned'
@@ -198,7 +200,7 @@
                           </template>
                         </v-data-table>
                       </v-flex>
-                      <v-flex md12>
+                      <v-flex md12 v-if='!readonly'>
                         <AddBtn label='добавить ученика' @click.native='addClientDialog' />
                       </v-flex>
                     </v-layout>
@@ -254,14 +256,21 @@
 import Calendar from '@/components/Calendar/Calendar'
 import { LESSON_STATUS, API_URL, indexSkippingCancelledLessons } from '@/components/Lesson'
 import { DatePicker, DataSelect, TeacherSelect } from '@/components/UI'
+import LessonStatusCircles from '@/components/Lesson/StatusCircles'
 import { API_URL as CLIENTS_API_URL } from '@/components/Client'
 
 export default {
-  components: { Calendar, DatePicker, DataSelect, TeacherSelect },
+  components: { Calendar, DatePicker, DataSelect, TeacherSelect, LessonStatusCircles },
 
   props: {
     group: {
       required: true
+    },
+
+    readonly: {
+      type: Boolean,
+      required: false,
+      default: false,
     }
   },
 
@@ -436,15 +445,6 @@ export default {
 </script>
 
 <style lang="scss">
-  .lesson-status {
-    border-radius: 50%;
-    height: 8px;
-    width: 8px;
-    position: absolute;
-    left: 6px;
-    top: 20px;
-  }
-
   .v-datatable {
     & tr {
       & td {

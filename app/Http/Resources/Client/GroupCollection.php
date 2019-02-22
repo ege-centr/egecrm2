@@ -13,6 +13,7 @@ class GroupCollection extends JsonResource
             'names' => $this->names,
             'bars' => $this->getBars(),
             'branches' => $this->branches,
+            'email' => $this->email,
             'subject_status' => $this->subject_status,
         ];
     }

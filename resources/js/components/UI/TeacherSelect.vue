@@ -6,6 +6,7 @@
     :label="label"
     item-value='id'
     item-text='names.abbreviation'
+    readonly="readonly"
   >
     <v-list-tile slot='prepend-item' @click='clear'>
       <v-list-tile-title class='grey--text'>
@@ -28,6 +29,11 @@ export default {
     },
     value: {
       required: true,
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
+      required: false,
     },
   },
 
