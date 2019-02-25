@@ -11,7 +11,7 @@
     </div>
     <Loader class='loader-wrapper_transparent' v-if='items === null' />
     <v-card v-else>
-      <v-card-text>
+      <v-card-text class='pa-0'>
         <div v-if='items.length > 0'>
             <v-data-table 
               hide-actions 
@@ -145,7 +145,7 @@ export default {
     height: 8px;
     width: 8px;
     position: absolute;
-    left: 6px;
+    left: 10px;
     top: 20px;
   }
 

@@ -14,8 +14,10 @@
       </div>
       <AllFilter v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' :sort='sort' @updated='filtersUpdated' />
       <v-spacer></v-spacer>
-      <slot name='buttons'></slot>
+      <slot name='buttons' v-if='items.length > 0'></slot>
     </div>
+
+    <NoData v-if='items.length === 0' :class="{'invisible': loading}" />
 
     <v-container grid-list-md fluid :class="`px-0 ${containerClass} ${loading ? 'invisible' : ''}`">
       <v-layout row wrap class='relative'>
@@ -35,7 +37,7 @@
             </v-icon>
           </div> -->
 
-          <slot name='items' :items='items' v-if='items.length > 0'></slot>
+          <slot name='items' :items='items'></slot>
 
           <infinite-loading v-if='paginate && infinite_loading'
             @infinite='loadData' ref='InfiniteLoading' :distance='2000' spinner='spiral' class='mt-3'>
@@ -45,8 +47,6 @@
         </v-flex>
       </v-layout>
     </v-container>
-
-    <NoData v-if='items.length === 0' :class="{'invisible': loading}" />
 
     <slot name='buttons-bottom'></slot>
   </div>

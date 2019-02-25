@@ -102,7 +102,7 @@ class User extends Model
                 $query->with('photo');
             }
             $user = $query->find($entity_id);
-            $user->class = substr($class, 11);
+            $user->class = trimModelClass($class);
             return $user;
             // return new AdminResource(Admin::find($_SESSION['user']->id));
         }
@@ -112,6 +112,11 @@ class User extends Model
     public static function id()
     {
         return User::fromSession()->id;
+    }
+
+    public static function isTeacher()
+    {
+        return get_class(self::fromSession()) === Teacher::class;
     }
 
     private static function errorResponse($error_message)

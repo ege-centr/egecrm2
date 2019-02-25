@@ -1,7 +1,8 @@
 <template>
   <div>
-    <EgeDialog ref='EgeDialog' />
+    <EgeTrialDialog ref='EgeTrialDialog' />
     <v-data-table
+      v-if='items.length > 0'
       :class='config.elevationClass'
       hide-actions
       hide-headers
@@ -31,17 +32,20 @@
           <Credentials :item='item' />
         </td>
         <td class='text-md-right'>
-          <v-btn @click='$refs.EgeDialog.open(item.id)' slot='activator' flat icon color="black" class='ma-0'>
+          <v-btn @click='$refs.EgeTrialDialog.open(item.id)' slot='activator' flat icon color="black" class='ma-0'>
             <v-icon>more_horiz</v-icon>
           </v-btn>
         </td>
       </template>
     </v-data-table>
+    <center class='mt-5' v-if='items.length === 0'>
+      <AddBtn @click.native='$refs.EgeTrialDialog.open(null, {client_id: clientId})' />
+    </center>
   </div>
 </template>
 
 <script>
-import EgeDialog from './Dialog'
+import EgeTrialDialog from './Dialog'
 
 export default {
   props: {
@@ -49,9 +53,12 @@ export default {
       type: Array,
       required: true
     },
+    clientId: {
+      required: true,
+    },
   },
 
-  components: { EgeDialog },
+  components: { EgeTrialDialog },
 
   data() {
     return {

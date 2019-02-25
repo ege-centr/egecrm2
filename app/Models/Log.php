@@ -62,7 +62,8 @@ class Log extends Model
 
         static::creating(function ($model) {
             if (User::loggedIn()) {
-                $model->email_id = User::fromSession()->email->id;
+                // TODO: должен сохраняться правильный из режима просмотра
+                // $model->email_id = User::fromSession()->email->id;
             }
         });
     }

@@ -14,14 +14,9 @@
         <td>
           {{ getData('subjects', item.subject_id).three_letters }}–{{ item.grade_id }}
         </td>
-        <td class='text-md-right'>
-          <v-menu
-            bottom
-            origin="center center"
-            transition="scale-transition"
-          >
-            <v-btn slot='activator' small color='primary' @click='loadFittingGroups(item, index)'>присвоить группу</v-btn>
-          </v-menu>
+        <td class='text-md-right pa-0' width='180'>
+          <v-btn slot='activator' small class='btn-td' flat
+            color='primary' @click='loadFittingGroups(item, index)'>присвоить группу</v-btn>
         </td>
       </template>
     </v-data-table>

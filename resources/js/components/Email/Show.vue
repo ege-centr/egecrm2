@@ -1,46 +1,53 @@
 <template>
   <div>
-    <a @click='openDialog'>
-      {{ item.email }}
-    </a>
+    <EmailHistory ref='EmailHistory' />
+
+    <v-menu>
+      <a slot='activator'>
+        {{ item.email }}
+      </a>
+      <v-list dense>
+        <v-list-tile @click='openDialog'>
+          <v-list-tile-action>
+            <v-icon>email</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>написать</v-list-tile-title>
+        </v-list-tile>
+        <v-list-tile @click='$refs.EmailHistory.open(item.email)'>
+          <v-list-tile-action>
+            <v-icon>history</v-icon>
+          </v-list-tile-action>
+          <v-list-tile-title>история</v-list-tile-title>
+        </v-list-tile>
+      </v-list>
+    </v-menu>
 
     <v-layout row justify-center>
-      <v-dialog v-model="dialog" max-width="1000px" scrollable>
+      <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
         <v-card>
-          <v-card-title class='title justify-center'>
-            {{ item.email }}
-          </v-card-title>
-          <v-card-text class='email-messages'>
-            <Loader v-if='messages === null' />
-            <div v-else>
-              <div v-for='message in messages' :key='message.id' class="mb-3 display-flex">
-              <Avatar :photo='message.createdAdmin ? message.createdAdmin.photo : null' :size='50' class='mr-3' />
-              <v-card class='email-messages__item grey lighten-4' :class='config.elevationClass'>
-                <v-card-text class='py-2 px-3'>
-                  <div class='display-flex align-center'>
-                    <span class='font-weight-medium'>{{ message.createdAdmin ? message.createdAdmin.name : 'Неизвестный отправитель' }}</span>
-                    <span class='ml-2 caption grey--text'>{{ message.created_at | date-time }}</span>
-                  </div>
-                  <div v-if='message.subject' class='font-weight-medium'>
-                    {{ message.subject }}
-                  </div>
-                  <div>
-                    {{ message.message }}
-                  </div>
-                  <div v-if='message.files.length' class='mt-2 grey--text small caption flex-items' style='flex-wrap: wrap'>
-                    <a v-for='file in message.files' :key='file.name' class='mr-2 flex-items align-center' target="_blank" :href="`/storage/img/upload/${file.name}`">
-                      <v-chip class='pointer'>
-                        <span>{{ file.original_name | truncate(25) }}</span>
-                      </v-chip>
-                    </a>
-                  </div>
-                </v-card-text>
-              </v-card>
-            </div>
-          </div>
-          </v-card-text>
-          <v-card-actions class='v-card-actions--normal-padding email'>
+          <v-toolbar dark color="primary">
+            <v-btn icon dark @click.native="dialog = false">
+              <v-icon>close</v-icon>
+            </v-btn>
+            <v-toolbar-title>Отправка email</v-toolbar-title>
+          </v-toolbar>
+          <v-card-text>
             <div style='width: 100%'>
+              <v-combobox
+                v-model="emails"
+                label="Адреса"
+                chips
+                multiple
+              >
+                <template slot="selection" slot-scope="data">
+                  <v-chip
+                    close
+                    @input="removeEmail(data.item)"
+                  >
+                    <span>{{ data.item }}</span>
+                  </v-chip>
+                </template>
+              </v-combobox>
               <v-text-field label="Тема сообщения" v-model='subject' :counter='100'></v-text-field>
               <v-textarea v-model='message' label='Сообщение' :counter='1000' ref='textarea'
                 @keydown.enter='handleCmdEnter($event)'
@@ -48,7 +55,7 @@
               </v-textarea>
               <div class='flex-items align-center mt-3'>
                 <div style='width: calc(100% - 130px)'>
-                  <LoadingChip v-for="(file, index) in $upload.files('file').all" :key='file.$id' :file='file' @remove='remove(index)' />
+                  <LoadingChip v-for="(file, index) in $upload.files('file').all" :key='file.$id' :file='file' @remove='removeFile(index)' />
                   <v-btn @click='attach' flat fab small style='height: 34px; width: 34px; margin: 4px'>
                     <v-icon style='font-size: 20px'>attach_file</v-icon>
                   </v-btn>
@@ -60,7 +67,7 @@
                 <v-btn flat color='primary' :loading='sending' @click='send' style='align-self: flex-start'>отправить</v-btn>
               </div>
             </div>
-          </v-card-actions>
+          </v-card-text>
         </v-card>
       </v-dialog>
     </v-layout>
@@ -69,14 +76,14 @@
 
 <script>
 
-const API_URL = 'email-messages'
-
 import LoadingChip from '@/components/UI/LoadingChip'
+import { API_URL } from './'
+import EmailHistory from './History'
 
 export default {
   props: ['item'],
 
-  components: { LoadingChip },
+  components: { LoadingChip, EmailHistory },
 
   data() {
     return {
@@ -85,7 +92,7 @@ export default {
       message: '',
       subject: '',
       files: [],
-      messages: null,
+      emails: [],
       uploading_error: false,
     }
   },
@@ -93,6 +100,7 @@ export default {
   watch: {
     dialog(newVal) {
       if (newVal === true) {
+        this.emails = [this.item.email]
         this.$upload.on('file', {
           extensions: false,
           multiple: true,
@@ -130,31 +138,27 @@ export default {
     },
 
     openDialog() {
-      this.messages = null
       this.message = ''
       this.subject = ''
       this.dialog = true
       // Vue.nextTick(() => this.$refs.textarea.focus())
-      axios.get(apiUrl(`${API_URL}?email=${this.item.email}`)).then(r => {
-        this.messages = r.data
-      })
     },
 
     send() {
       this.sending = true
-      console.log('files', this.files)
       axios.post(apiUrl(API_URL), {
         subject: this.subject,
         message: this.message,
-        email: this.item.email,
+        emails: this.emails,
         files: this.files,
       }).then(r => {
-        this.sending = false
-        this.messages.unshift(r.data)
         this.message = ''
         this.subject = ''
         this.files = []
         this.$upload.reset('file')
+        this.dialog = false
+        this.emails = []
+        this.waitForDialogClose(() => this.sending = false)
       })
     },
 
@@ -164,14 +168,18 @@ export default {
       }
     },
 
-    remove(index) {
+    removeFile(index) {
       this.files.splice(index, 1)
+    },
+
+    removeEmail(email) {
+      this.emails.splice(this.emails.indexOf(email), 1)
     },
 
     cancelUpload() {
       this.$upload.reset('file')
       this.uploading_file_name = null
-    }
+    },
   }
 }
 </script>
@@ -184,18 +192,6 @@ export default {
         font-size: 24px;
         margin-bottom: 18px;
       }
-    }
-  }
-  .email-messages {
-    height: 500px;
-    position: relative;
-    &__item {
-      display: inline-block;
-      min-width: 300px;
-      max-width: 90%;
-    }
-    & .v-icon {
-      cursor: default;
     }
   }
 </style>

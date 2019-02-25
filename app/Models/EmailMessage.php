@@ -7,6 +7,7 @@ use App\Traits\{HasCreatedAdmin, HasFiles};
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CustomEmail;
 use App\Http\Resources\Admin\Light as AdminResource;
+use User;
 
 class EmailMessage extends Model
 {
@@ -29,5 +30,19 @@ class EmailMessage extends Model
             'subject' => $this->subject,
             'created_at' => $this->created_at->toDateTimeString(),
         ];
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        // TODO:  изменить на created_email_id
+        static::creating(function ($model) {
+            if (User::isTeacher()) {
+                $model->created_admin_id = 1;
+            } else {
+                $model->created_admin_id = User::id();
+            }
+        });
     }
 }

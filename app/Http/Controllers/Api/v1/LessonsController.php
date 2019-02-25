@@ -70,6 +70,7 @@ class LessonsController extends Controller
         $lesson->conducted_email_id = get_class(User::fromSession()) === Teacher::class ? 69 : User::id();
         $lesson->entry_id = uniqid();
         $lesson->duration = 135;
+        $lesson->price = $group->teacher_price;
         $lesson->save();
 
         foreach ($request->clients as $client) {

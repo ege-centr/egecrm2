@@ -68,6 +68,11 @@ function getModelClass(string $class, bool $trim = false) : string
     return $class;
 }
 
+function trimModelClass($class)
+{
+    return substr($class, 11);
+}
+
 /**
  * Get model by class & id
  */

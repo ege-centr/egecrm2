@@ -206,10 +206,10 @@
             :invisible-filters="{entity_id: $route.params.id, entity_type: CLASS_NAME}"
           >
             <template slot='items' slot-scope='{ items }'>
-              <PaymentList :items='items' />
+              <PaymentList :items='items' :entity-id='$route.params.id' :entity-type='CLASS_NAME' />
             </template>
-            <template slot='buttons-bottom'>
-              <AddBtn @click.native='$refs.PaymentDialog.open(null, {
+            <template slot='buttons'>
+              <AddBtn label='добавить платеж' @click.native='$refs.PaymentDialog.open(null, {
                 entity_id: $route.params.id,
                 entity_type: CLASS_NAME,
               })' />
@@ -217,6 +217,7 @@
           </DisplayData>
         </v-tab-item>
 
+        <!--  Пробный ЕГЭ -->
         <v-tab-item>
           <DisplayData ref='EgeTrialPage'
             :tabs="{data: 'years', field: 'year'}"
@@ -224,10 +225,10 @@
             :invisible-filters="{client_id: $route.params.id}"
           >
             <template slot='items' slot-scope='{ items }'>
-              <EgeTrialList :items='items' />
+              <EgeTrialList :items='items' :client-id='$route.params.id' />
             </template>
-            <template slot='buttons-bottom'>
-              <AddBtn @click.native='$refs.EgeTrialDialog.open(null, {client_id: $route.params.id})' />
+            <template slot='buttons'>
+              <AddBtn label='добавить' @click.native='$refs.EgeTrialDialog.open(null, {client_id: $route.params.id})' />
             </template>
           </DisplayData>
         </v-tab-item>

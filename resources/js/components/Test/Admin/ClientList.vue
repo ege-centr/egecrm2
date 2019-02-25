@@ -39,12 +39,12 @@
                 результат: <b>{{ getClientTest(item).results.score }}</b> из {{ getClientTest(item).results.max_score }}
               </a>
           </td>
-          <td class='text-md-right' width='300'>
-            <v-btn small color='primary' class='mr-0'
+          <td class='pa-0' width='100'>
+            <v-btn small color='primary' class='btn-td' flat
               @click='addTest(item)' 
               :loading='adding_test_id === item.id' 
               v-if='getClientTest(item) === undefined'>добавить</v-btn>
-            <div v-else>
+            <div v-else class='full-height'>
               <span v-if='getClientTest(item) && getClientTest(item).is_in_progress' >
                 <v-progress-circular v-if='reloading_test_id === item.id' :size="20" color='primary' indeterminate></v-progress-circular>
                 <span v-else class='grey--text flex-items align-center justify-end'>
@@ -52,7 +52,8 @@
                   <TestCountDown style='width: 30px' :from='getClientTest(item).started_at' @end='reloadClientTest(item)' />
                 </span>
               </span>
-              <v-btn v-else :loading='destroying_test_id === item.id' small @click='destroyTest(item)' class='mr-0'>
+              <v-btn v-else flat
+                :loading='destroying_test_id === item.id' small @click='destroyTest(item)' class='btn-td'>
                 сбросить
               </v-btn>
             </div>

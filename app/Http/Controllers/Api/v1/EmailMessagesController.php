@@ -18,12 +18,17 @@ class EmailMessagesController extends Controller
 
     public function store(Request $request)
     {
-        $emailMessage = EmailMessage::create($request->all());
-        foreach($request->input('files') as $file) {
-            $emailMessage->files()->create($file);
+        foreach($request->emails as $email) {
+            $emailMessage = new EmailMessage($request->all());
+            $emailMessage->email = $email;
+            $emailMessage->save();
+            foreach($request->input('files') as $file) {
+                $emailMessage->files()->create($file);
+            }
+            $emailMessage = $emailMessage->fresh();
+            $emailMessage->send();
         }
-        $emailMessage = $emailMessage->fresh();
-        $emailMessage->send();
-        return new EmailMessageResource($emailMessage);
+        return response(null, 201);
+        // return new EmailMessageResource($emailMessage);
     }
 }
