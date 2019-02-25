@@ -204,6 +204,74 @@
                         <AddBtn label='добавить ученика' @click.native='addClientDialog' />
                       </v-flex>
                     </v-layout>
+
+
+                    <v-layout wrap v-if="dialog_item.status === LESSON_STATUS.PLANNED">
+                      <!-- <v-flex md12 class='headline'>
+                        Занятие
+                      </v-flex> -->
+                      
+                      <v-flex md12>
+                        <v-data-table v-if='items.length'
+                          hide-actions
+                          :headers="[
+                            { text: 'Ученик', sortable: false },
+                            { text: 'Отсутствовал', sortable: false }, 
+                            { text: 'Опоздание', sortable: false },
+                            { text: 'Комментарий', sortable: false },
+                          ]"
+                          :items='clients'
+                        >
+                          <template slot="items" slot-scope="{ item }">
+                            <td width='200'>
+                              <PersonName :item='item' />
+                            </td>
+                            <td width='150'>
+                              <v-switch color='red' v-model="item.is_absent" hide-details></v-switch>
+                            </td>
+                            <td width='150'>
+                              <v-icon small v-if="!item.late" class='client-edit-icon'>edit</v-icon>
+                              <v-edit-dialog
+                                :return-value.sync="item.late"
+                                lazy
+                              > {{ item.late }}
+                                <v-text-field
+                                  slot="input"
+                                  v-model="item.late"
+                                  label="Опоздание"
+                                  single-line
+                                  v-mask="'##'"
+                                ></v-text-field>
+                              </v-edit-dialog>
+                            </td>
+                            <td>
+                              <v-icon small v-if="!item.comment" class='client-edit-icon'>edit</v-icon>
+                              <v-edit-dialog
+                                :return-value.sync="item.comment"
+                                lazy
+                              > {{ item.comment }}
+                                <v-text-field
+                                  slot="input"
+                                  v-model="item.comment"
+                                  single-line
+                                  label="Комментарий"
+                                ></v-text-field>
+                              </v-edit-dialog>
+                            </td>
+                          </template>
+                          <template slot='footer'>
+                            <tr>
+                              <td class='text-md-center pa-0' colspan='7'>
+                                <v-btn small flat color='primary' class='btn-tr' :loading='conducting' @click='conduct'>
+                                  провести
+                                </v-btn>
+                              </td>
+                            </tr>
+                          </template>
+                        </v-data-table>
+                      </v-flex>
+                    </v-layout>
+
                    </v-flex>
                 </v-layout>
               </v-container>
@@ -297,6 +365,10 @@ export default {
       filling: false,
       dialog_item: {},
       loading: false,
+      conducting: false,
+      
+      // ученики для проводки занятия
+      clients: [],
     }
   },
 
@@ -328,9 +400,11 @@ export default {
     edit(lesson) {
       this.dialog = true
       this.loading = true
+      this.clients = this.group.clients.map(c => _.pick(c, ['id', 'names']))
       axios.get(apiUrl(API_URL, lesson.id)).then(r => {
         this.dialog_item = r.data
         this.loading = false
+        
       })
     },
 
@@ -418,6 +492,14 @@ export default {
       //   1
       // )
       // axios.delete(apiUrl('client-lessons', lesson_id))
+    },
+
+    conduct() {
+      this.conducting = true
+      axios.post(apiUrl(API_URL, 'conduct', this.dialog_item.id), {clients: this.clients}).then(r => {
+        this.conducting = false
+        this.dialog_item = r.data
+      })
     },
 
     async fillSchedule() {

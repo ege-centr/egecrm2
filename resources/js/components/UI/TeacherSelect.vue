@@ -6,7 +6,7 @@
     :label="label"
     item-value='id'
     item-text='names.abbreviation'
-    readonly="readonly"
+    :readonly="readonly"
   >
     <v-list-tile slot='prepend-item' @click='clear'>
       <v-list-tile-title class='grey--text'>

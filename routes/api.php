@@ -21,6 +21,8 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
 
     Route::get('balance', 'BalanceController@index');
 
+    Route::post('lessons/conduct/{id}', 'LessonsController@conduct');
+
     Route::prefix('abstract-groups')->group(function() {
         Route::get('/', 'AbstractGroupsController@index');
         Route::get('/{year}/{grade_id}/{subject_id}', 'AbstractGroupsController@show');
