@@ -22,7 +22,8 @@
       </div> -->
 
     </div>
-    <div v-if='items !== null'>
+    <div v-if='items !== null && recommendedPrices !== null'>
+      <!-- Праздники и экзамены -->
       <v-layout row justify-center>
         <v-dialog v-model="dialog" persistent max-width="330px" v-if="dialog_item !== null">
           <v-card>
@@ -61,15 +62,76 @@
           </v-card>
         </v-dialog>
       </v-layout>
+
+      <!-- Праздники и экзамены -->
+      <v-layout row justify-center>
+        <v-dialog v-model="recommendedPricesDialog" persistent max-width="330px" v-if="recommendedPriceDialogItem !== null">
+          <v-card>
+            <v-card-text>
+              <v-container class="pa-0 ma-0" fluid>
+                <v-layout wrap>
+                  <v-flex md12>
+                    <div class='vertical-inputs'>
+                      <div class='vertical-inputs__input'>
+                        <DataSelect v-model='recommendedPriceDialogItem.grade_id' type='grades' />
+                      </div>
+                    </div>
+                    <div class='vertical-inputs'>
+                      <div class='vertical-inputs__input'>
+                        <v-text-field hide-details v-model='recommendedPriceDialogItem.price' label='Цена' v-mask="'####'" />
+                      </div>
+                    </div>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-btn color="red darken-1" flat @click.native="destroyRecommendedPrice" v-show='recommendedPriceDialogItem.id' :loading='destroying'>Удалить</v-btn>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" flat @click.native="recommendedPricesDialog = false">Отмена</v-btn>
+              <v-btn color="blue darken-1" flat @click.native='storeOrUpdateRecommendedPrice' :loading='saving'>{{ recommendedPriceDialogItem.id ? 'Сохранить' : 'Добавить' }}</v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-layout>
+
+
       <v-card>
         <v-card-text>
           <v-container grid-list-xl class="pa-0 ma-0" fluid>
             <v-layout>
               <v-flex md5>
-                <Calendar :year='selected_year' :special-dates='current_year_items' />
+                <div class='headline'>
+                  Рекомендованные цены
+                </div>
+                
+                <v-data-table class='mt-3' hide-actions hide-headers :items='currentYearRecommendedPrices'>
+                   <template slot='items' slot-scope="{ item }">
+                    <td>
+                      {{ getData('grades', item.grade_id).title }}
+                    </td>
+                    <td>
+                      {{ item.price }} руб.
+                    </td>
+                    <td class='text-md-right'>
+                      <v-btn flat icon color="black" class='ma-0' @click='editRecommendedPrice(item)'>
+                        <v-icon>more_horiz</v-icon>
+                      </v-btn>
+                    </td>
+                  </template>
+                </v-data-table>
+
+                <v-btn color='primary' small class='ma-0 mr-3 mt-3' @click='addRecommendedPrice'>
+                    <v-icon class="mr-1">add</v-icon>
+                    добавить
+                    <!-- добавить {{ type === TYPE_EXAM ? 'экзамен' : 'праздник'}} -->
+                  </v-btn>
               </v-flex>
               <v-spacer></v-spacer>
               <v-flex md6>
+                <div class='headline'>
+                  Праздники и экзамены
+                </div>
                 <v-data-table hide-actions hide-headers :items='current_year_items' :paginate.sync="sortingOptions" class='mt-3'>
                   <template slot='items' slot-scope="{ item }">
                     <td>
@@ -91,7 +153,7 @@
                 <div class='mt-3'>
                   <v-btn color='primary' small class='ma-0 mr-3' @click='add'>
                     <v-icon class="mr-1">add</v-icon>
-                    добавить дату
+                    добавить
                     <!-- добавить {{ type === TYPE_EXAM ? 'экзамен' : 'праздник'}} -->
                   </v-btn>
                 </div>
@@ -111,15 +173,14 @@
 
 <script>
 
-const url = 'settings'
-const settings_key = 'recommended-prices'
-
 const API_URL = 'special-dates'
 const TYPE_EXAM = 'exam'
 const TYPE_VACATION = 'vacation'
+const key = 'recommended-prices'
 
 import Calendar from '@/components/Calendar/Calendar'
 import { DatePicker, DataSelect } from '@/components/UI'
+import Settings from '@/other/settings'
 
 export default {
   components: { Calendar, DatePicker, DataSelect },
@@ -140,8 +201,11 @@ export default {
       saving: false,
       destroying: false,
       dialog: false,
+      recommendedPricesDialog: false,
       editing_item_index: null,
       dialog_item: null,
+      recommendedPriceDialogItem: null,
+      recommendedPrices: null,
       sortingOptions: {
         rowsPerPage: -1,
         sortBy: 'date'
@@ -159,6 +223,10 @@ export default {
         this.items = r.data
         this.loading = false
       })
+      Settings.get(key, true).then(r => {
+        this.recommendedPrices = r.data || []
+        this.loading = false
+      })
     },
 
     add() {
@@ -169,9 +237,21 @@ export default {
       this.dialog = true
     },
 
+    addRecommendedPrice() {
+      this.recommendedPriceDialogItem = {
+        year: this.selected_year,
+      }
+      this.recommendedPricesDialog = true
+    },
+
     edit(item) {
       this.dialog_item = clone(item)
       this.dialog = true
+    },
+
+    editRecommendedPrice(item) {
+      this.recommendedPriceDialogItem = clone(item)
+      this.recommendedPricesDialog = true
     },
 
     destroy() {
@@ -199,11 +279,38 @@ export default {
         })
       }
     },
+
+    async storeOrUpdateRecommendedPrice() {
+      this.saving = true
+      if (this.recommendedPriceDialogItem.hasOwnProperty('id')) {
+        const index = this.recommendedPrices.findIndex(e => e.id === this.recommendedPriceDialogItem.id)
+        this.recommendedPrices.splice(index, 1, this.recommendedPriceDialogItem)
+      } else {
+        this.recommendedPriceDialogItem.id = uniqid()
+        this.recommendedPrices.push(this.recommendedPriceDialogItem)
+      }
+      await Settings.set(key, this.recommendedPrices, true)
+      this.saving = false
+      this.recommendedPricesDialog = false
+    },
+
+    async destroyRecommendedPrice() {
+      this.destroying = true
+      const index = this.recommendedPrices.findIndex(e => e.id === this.recommendedPriceDialogItem.id)
+      this.recommendedPrices.splice(index, 1)
+      await Settings.set(key, this.recommendedPrices, true)
+      this.destroying = false
+      this.recommendedPricesDialog = false
+    }
   },
 
   computed: {
     current_year_items() {
       return this.items.filter(e => e.year == this.selected_year)
+    },
+
+    currentYearRecommendedPrices() {
+      return this.recommendedPrices.filter(e => e.year == this.selected_year)
     }
   }
 }

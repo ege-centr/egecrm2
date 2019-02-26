@@ -9,7 +9,9 @@ use App\Traits\LessonTrait;
 class ClientLesson extends Model
 {
     use LessonTrait;
+
     protected $table = 'lessons';
+
     protected $fillable = [
         'teacher_id', 'cabinet_id', 'date', 'time', 'price',
         'status', 'is_unplanned', 'group_id', 'year', 'entry_id',
@@ -20,6 +22,11 @@ class ClientLesson extends Model
     public function client()
     {
         return $this->belongsTo(Client::class, 'entity_id');
+    }
+
+    public function getGradeIdAttribute()
+    {
+        return $this->attributes['client_grade_id'];
     }
 
     public static function boot()

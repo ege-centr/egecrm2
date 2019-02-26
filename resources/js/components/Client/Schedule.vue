@@ -6,7 +6,7 @@
         @click='selected_tab_index = selected_tab_index === index ? null : index'
         :key='index'
       >
-      {{ getData('subjects', tab.subject_id).three_letters }}–{{ tab.client_grade_id }}
+      <SubjectGrade :item='tab' />
     </v-chip>
     </div>
     <Loader class='loader-wrapper_transparent' v-if='items === null' />
@@ -19,53 +19,84 @@
               :items='filteredItems'
             >
               <template slot='items' slot-scope='{ item }'>
-                <td width='65' class='pr-0 grey--text'>
-                  <div class='lesson-status' :class="{
-                    'blue': item.status === LESSON_STATUS.PLANNED,
-                    'green': item.status === LESSON_STATUS.CONDUCTED,
-                    'grey': item.status === LESSON_STATUS.CANCELLED,
-                  }"></div>
-                  <span v-show='item.status !== LESSON_STATUS.CANCELLED'>
+                <tr v-if="'score' in item">
+                  <td class='grey--text'>
                     {{ indexSkippingCancelledLessons(item) }}
-                  </span>
-                </td>
-                <td width='150'>
-                  {{ item.date + ' ' + item.time | date-time }}
-                </td>
-                <td width='150'>
-                  <router-link :to="{name: 'GroupShow', params: {id: item.group_id}}">
-                    Группа {{ item.group_id }}
-                  </router-link>
-                </td>
-                <td width='150'>
-                  <Cabinet :id='item.cabinet_id' />
-                </td>
-                <td width='150'>
-                  {{ getData('subjects', item.subject_id).three_letters }}–{{ item.client_grade_id }}
-                </td>
-                <td width='300'>
-                  <span v-if='item.teacher_id'>
-                    {{ getData('teachers', item.teacher_id).names.abbreviation }}
-                  </span>
-                </td>
-                <td>
-                  <span v-if='item.status !== LESSON_STATUS.CONDUCTED'>
-                    <span v-if='item.status === LESSON_STATUS.PLANNED'>
-                      планируется
+                  </td>
+                  <td>
+                    {{ item.date | date }}
+                  </td>
+                  <td>
+                    пробный ЕГЭ
+                  </td>
+                  <td>
+
+                  </td>
+                  <td>
+                    <SubjectGrade :item='item' />
+                  </td>
+                  <td colspan='4'>{{ item.description }}</td>
+                </tr>
+                <tr v-else>
+                  <td width='65' class='pr-0 grey--text'>
+                    <div class='lesson-status' :class="{
+                      'blue': item.status === LESSON_STATUS.PLANNED,
+                      'green': item.status === LESSON_STATUS.CONDUCTED,
+                      'grey': item.status === LESSON_STATUS.CANCELLED,
+                    }"></div>
+                    <span v-show='item.status !== LESSON_STATUS.CANCELLED'>
+                      {{ indexSkippingCancelledLessons(item) }}
                     </span>
-                    <span class='grey--text' v-else>
-                      отменено
+                  </td>
+                  <td width='150'>
+                    {{ item.date + ' ' + item.time | date-time }}
+                  </td>
+                  <td width='150'>
+                    <router-link :to="{name: 'GroupShow', params: {id: item.group_id}}">
+                      Группа {{ item.group_id }}
+                    </router-link>
+                  </td>
+                  <td width='150'>
+                    <Cabinet :id='item.cabinet_id' />
+                  </td>
+                  <td width='150'>
+                    <SubjectGrade :item='item' />
+                  </td>
+                  <td width='250'>
+                    <span v-if='item.teacher_id'>
+                      {{ getData('teachers', item.teacher_id).names.abbreviation }}
                     </span>
-                  </span>
-                  <span v-else>
-                    <span v-if='item.is_absent'>
-                      не был
+                  </td>
+                  <td width='150'>
+                    <span v-if='item.status === LESSON_STATUS.CONDUCTED && item.price > 0'>
+                      {{ item.price }} руб.
+                    </span>
+                  </td>
+                  <td>
+                    <v-tooltip bottom v-if='item.status === LESSON_STATUS.CONDUCTED && item.comment'>
+                      <v-icon class='cursor-default' slot='activator'>comment</v-icon>
+                      <span>{{ item.comment }}</span>
+                    </v-tooltip>
+                  </td>
+                  <td>
+                    <span v-if='item.status !== LESSON_STATUS.CONDUCTED'>
+                      <span v-if='item.status === LESSON_STATUS.PLANNED'>
+                        планируется
+                      </span>
+                      <span class='grey--text' v-else>
+                        отменено
+                      </span>
                     </span>
                     <span v-else>
-                      был
+                      <span v-if='item.is_absent'>
+                        не был
+                      </span>
+                      <span v-else>
+                        был
+                      </span>
                     </span>
-                  </span>
-                </td>
+                  </td>
+                </tr>
               </template>
             </v-data-table>
         </div>
@@ -76,7 +107,6 @@
 </template>
 
 <script>
-import { CLIENT_LESSONS_API_URL } from '@/components/Lesson'
 import { ROLES } from '@/config'
 import { LESSON_STATUS, indexSkippingCancelledLessons } from '@/components/Lesson'
 import Cabinet from '@/components/UI/Cabinet'
@@ -95,9 +125,7 @@ export default {
   },
   
   mounted() {
-    axios.get(apiUrl(CLIENT_LESSONS_API_URL) + queryString({
-      entity_id: this.clientId
-    })).then(r => this.items = r.data)
+    axios.get(apiUrl('schedule/client', this.clientId)).then(r => this.items = r.data)
   },
 
   methods: {
@@ -114,13 +142,13 @@ export default {
         return this.items
       }
       const tab = this.tabs[this.selected_tab_index]
-      return this.items.filter(e => e.subject_id === tab.subject_id && e.client_grade_id === tab.client_grade_id)
+      return this.items.filter(e => e.subject_id === tab.subject_id && e.grade_id === tab.grade_id)
     },
 
     tabs() {
       const tabs = []
       this.items.forEach(item => {
-        let tab = _.pick(item, ['subject_id', 'client_grade_id'])
+        let tab = _.pick(item, ['subject_id', 'grade_id'])
         if (tabs.findIndex(e => _.isEqual(e, tab)) === -1) {
           tabs.push(tab)
         }

@@ -1,16 +1,21 @@
 <template>
   <div>
     <h1>DEV</h1>
-    <AddBtnAnimated label='замалым' />
+
+    <div class='flex-items'>
+      <AllFilter :items="[{label: 'Период', field: 'created_at', type: 'interval'}]" />
+      <AddBtnAnimated label='замалым' />
+    </div>
   </div>
 </template>
 
 <script>
 
 import AddBtnAnimated from '@/components/UI/AddBtnAnimated'
+import { AllFilter } from '@/components/Filter'
 
 export default {
-  components: { AddBtnAnimated },
+  components: { AddBtnAnimated, AllFilter },
   data() {
     return {
      

@@ -25,8 +25,8 @@ class BalanceController extends Controller
                 . ' ' . date("d.m.y", strtotime($lesson->date))
                 . " в {$lesson->time}, группа {$lesson->group_id} "
                 . '(' . Subject::getTitle($lesson->subject_id, 'three_letters') . '-'
-                . Grade::getTitle($lesson->client_grade_id, 'short') . '), кабинет '
-                . $lesson->cabinet->title;
+                . Grade::getTitle($lesson->client_grade_id, 'short') . ')'
+                . ($lesson->cabinet ? ', кабинет ' . $lesson->cabinet->title : '');
 
             $items[] = [
                 'sum' => $isTeacher ? $lesson->price : $lesson->price * -1,

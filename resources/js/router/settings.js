@@ -1,15 +1,9 @@
-import RecommendedPrices from '@/pages/Settings/RecommendedPrices'
-import SpecialDates from '@/pages/Settings/SpecialDates'
+import DatesAndPrices from '@/pages/Settings/DatesAndPrices'
 
 export default [
   {
-    path: '/settings/recommended-prices',
-    name: 'RecommendedPrices',
-    component: RecommendedPrices
-  },
-  {
-    path: '/settings/special-dates',
-    name: 'SpecialDates',
-    component: SpecialDates
+    path: '/settings/dates-and-prices',
+    name: 'DatesAndPrices',
+    component: DatesAndPrices
   }
 ]

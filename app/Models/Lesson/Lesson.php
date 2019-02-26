@@ -48,6 +48,11 @@ class Lesson extends Model
         }
     }
 
+    public function getGradeIdAttribute()
+    {
+        return $this->attributes['group_grade_id'];
+    }
+
 
     /**
      * первое занятие в группе?

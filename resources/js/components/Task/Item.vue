@@ -20,12 +20,12 @@
             </v-btn>
           </div>
         </div>
-         <div v-if='item.attachments.length' class='mt-1 grey--text small caption flex-items '>
-            <a v-for='(attachment, index) in item.attachments' :key='index' class='mr-2 flex-items align-center' target="_blank" :href="`/storage/img/upload/${attachment}`">
-              <v-icon style='font-size: 14px' class='mr-1'>attach_file</v-icon>
-              <span class='grey--text'>Вложение {{ index + 1 }}</span>
-            </a>
-          </div>
+        <!-- <div v-if='item.attachments.length' class='mt-1 grey--text small caption flex-items '>
+          <a v-for='(attachment, index) in item.attachments' :key='index' class='mr-2 flex-items align-center' target="_blank" :href="`/storage/img/upload/${attachment}`">
+            <v-icon style='font-size: 14px' class='mr-1'>attach_file</v-icon>
+            <span class='grey--text'>Вложение {{ index + 1 }}</span>
+          </a>
+        </div> -->
         <Comments class='mt-3' :class-name='CLASS_NAME' :entity-id='item.id' :items='item.comments' />
       </v-card-text>
     </v-card>

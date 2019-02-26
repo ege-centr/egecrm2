@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Redis;
 use App\Http\Resources\Admin\Resource as AdminResource;
 use App\Utils\Sms;
-use App\Models\{Admin\Admin, Teacher};
+use App\Models\{Admin\Admin, Client\Client, Teacher};
 use DB;
 
 class User extends Model
@@ -117,6 +117,11 @@ class User extends Model
     public static function isTeacher()
     {
         return get_class(self::fromSession()) === Teacher::class;
+    }
+
+    public static function isClient()
+    {
+        return get_class(self::fromSession()) === Client::class;
     }
 
     private static function errorResponse($error_message)

@@ -21,6 +21,8 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
 
     Route::get('balance', 'BalanceController@index');
 
+    Route::get('schedule/client/{id}', 'ScheduleController@client');
+
     Route::post('lessons/conduct/{id}', 'LessonsController@conduct');
 
     Route::prefix('abstract-groups')->group(function() {
@@ -51,6 +53,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         'client-tests' => 'ClientTestsController',
         'client-test-answers' => 'ClientTestAnswersController',
         'ege-trials' => 'EgeTrialsController',
+        'reviews' => 'ReviewsController',
     ]);
 
     // Route::namespace('Test')->prefix('tests')->group(function() {

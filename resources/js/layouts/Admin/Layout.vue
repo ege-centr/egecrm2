@@ -11,7 +11,6 @@
       <div class='menu-logo'>
         <img src='/img/svg/logo-full.svg' />
       </div>
-      <SearchBar />
       <Menu />
     </v-navigation-drawer>
   </div>

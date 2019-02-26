@@ -1,17 +1,20 @@
 <template>
-  <div class='search-bar'>
-    <v-text-field
-      v-model='text'
-      flat
-      prepend-inner-icon="search"
-      solo-inverted
-      hide-details
-      @input='search'
-      :loading='loading'
-      label="Поиск..."
-      class="hidden-sm-and-down"
-    ></v-text-field>
-  </div>
+  <v-list-tile @click='start()'>
+    <div class='search-bar' v-show='show'>
+      <v-text-field
+        ref='search'
+        v-model='text'
+        flat
+        prepend-inner-icon="search"
+        solo-inverted
+        hide-details
+        @input='search'
+        :loading='loading'
+        label="поиск"
+        class="hidden-sm-and-down"
+      ></v-text-field>
+    </div>
+  </v-list-tile>
 </template>
 
 <script>
@@ -22,7 +25,8 @@ export default {
   data() {
     return {
       loading: false,
-      text: ''
+      text: '',
+      show: true,
     }
   },
   
@@ -39,6 +43,11 @@ export default {
       })
     }, 300),
     
+    start() {
+      this.show = true
+      console.log(this.$refs.search.$el.querySelector('input'))
+      this.$refs.search.$el.querySelector('input').focus()
+    },
     //
     // clear() {
     //   this.text = ''
@@ -49,13 +58,44 @@ export default {
 </script>
 
 <style lang="scss">
+  @import '~sass/_variables';
+
   .search-bar {
-    padding: 0 17px;
+    position: absolute;
+    width: 100%;
+    margin-left: -16px;
+    z-index: 1;
     & input, label {
       font-size: 13px;
     }
     & .v-input__control {
       min-height: 40px !important;
+    }
+    & .v-input__slot {
+      padding: 0 15px !important;
+      border-radius: 0 !important;
+      background: $sidebar-color !important;
+      cursor: pointer !important;
+      &:hover {
+        background: rgba(255, 255, 255, 0.01) !important;
+      }
+      & .v-label  {
+        left: 9px !important;
+        color: white !important;
+      }
+      & input {
+        padding-left: 9px;
+        cursor: pointer;
+      }
+    }
+    & .v-input--is-focused {
+      & .v-input__slot {
+        background: white !important;
+        color: black !important;
+        & .v-label  {
+          color: #9e9e9e !important;
+        }
+      }
     }
     margin-bottom: 12px;
   }

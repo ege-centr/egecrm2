@@ -21,6 +21,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+$size: 34px;
+
 .add-btn-animated {
   display: inline-block;
   // background: rgba(#ff4c45, .4);
@@ -31,17 +34,27 @@ export default {
   display: inline-flex;
   align-items: center;
   width: auto;
+  overflow: hidden;
   cursor: pointer;
   &__title {
     position: relative;
-    top: 1px;
-    padding-left: 47px;
+    padding-left: 34px;
+    background: #f44336;
+    border-radius: 40px;
+    color: white;
+    height: $size;
+    display: flex;
+    align-items: center;
+    padding-right: 10px;
   }
   & button {
     position: absolute;
-    left: calc(100% - 40px);
+    left: calc(100% - 34px);
     transition: all ease-in .25s;
     z-index: 1;
+    box-shadow: none !important;
+    height: $size;
+    width: $size;
     &:after {
       content: '';
     }
@@ -50,7 +63,7 @@ export default {
     position: absolute;
     left: 0;
     width: 100%;
-    height: 40px;
+    height: $size;
     background: #f2f2f2;
     border-radius: 40px;
     transition: all ease-in .25s;
@@ -61,7 +74,7 @@ export default {
       // transform: rotate(-90deg);
     }
     & .add-btn-animated__blocker {
-      width: 0%;
+      margin-left: calc(-100% + #{$size});
     }
   }
 }

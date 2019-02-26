@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center v-if='item !== null'>
-    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay content-class='overflow-hidden'>
+    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card>
        <v-toolbar dark color="primary">
           <v-btn icon dark @click.native="dialog = false">

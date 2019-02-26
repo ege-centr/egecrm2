@@ -41,7 +41,7 @@
     >
       <v-chip slot='activator' class='pointer white--text' color='primary' @click='item = null'>
         <v-avatar class='pl-2'>
-          <v-icon>filter_list</v-icon>
+          <v-icon>equalizer</v-icon>
         </v-avatar>
         Добавить фильтр
       </v-chip>

@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class='headline'>
+      Макросы
+    </div>
     <DisplayData :api-url='API_URL' :paginate='1'>
       <template slot='items' slot-scope='{ items }'>
         <MacroList :items='items' />

@@ -1,5 +1,7 @@
 <template>
   <v-list dense>
+    <SearchBar />
+    
     <v-list-tile v-for='m in menu' :key='m.route' @click="$router.push({name: m.route})">
         <v-list-tile-action>
             <v-icon>{{ m.icon }}</v-icon>
@@ -38,7 +40,11 @@
 
 <script>
 
+import SearchBar from '@/components/Search/Bar'
+
 export default {
+  components: { SearchBar },
+
   data: () => ({
     drawer: true,
     menu: [
@@ -93,14 +99,9 @@ export default {
     ],
     admin_menu: [
       {
-        icon: 'multiline_chart',
-        route: 'RecommendedPrices',
-        label: 'Рекомендованные цены'
-      },
-      {
         icon: 'event',
-        route: 'SpecialDates',
-        label: 'Праздники и экзамены'
+        route: 'DatesAndPrices',
+        label: 'Экзамены и цены'
       },
       {
         icon: 'history',

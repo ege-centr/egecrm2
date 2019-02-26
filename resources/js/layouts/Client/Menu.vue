@@ -60,6 +60,11 @@ export default {
         route: 'TestIndex',
         label: 'Тесты'
       },
+      {
+        icon: 'chat',
+        route: 'ReviewIndex',
+        label: 'Отзывы'
+      },
     ],
   }),
   methods: {
