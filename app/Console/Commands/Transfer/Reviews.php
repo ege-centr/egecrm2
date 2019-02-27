@@ -102,6 +102,18 @@ class Reviews extends Command
             $bar->advance();
         }
         $bar->finish();
+
+        $this->line("\n");
+        $this->info("Reviewer admin id");
+
+
+        $items = dbEgecrm('students')->select('id', 'id_user_review')->where('id_user_review', '>', 0)->get();
+
+        foreach($items as $item) {
+            DB::table('clients')->where('old_student_id', $item->id)->update(['reviewer_admin_id' => $item->id_user_review]);
+            $bar->advance();
+        }
+        $bar->finish();
     }
 
     private function getRating($rating)
