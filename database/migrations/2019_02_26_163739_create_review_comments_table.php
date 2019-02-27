@@ -17,8 +17,11 @@ class CreateReviewCommentsTable extends Migration
             $table->increments('id');
             $table->string('text', 2000);
             $table->smallInteger('rating')->nullable();
-            $table->unsignedInteger('created_email_id');
+            $table->enum('type', ['client', 'admin', 'final']);
+            $table->unsignedInteger('created_email_id')->nullable();
             $table->foreign('created_email_id')->references('id')->on('emails');
+            $table->unsignedInteger('review_id');
+            $table->foreign('review_id')->references('id')->on('reviews')->onDelete('cascade');
             $table->timestamps();
         });
     }

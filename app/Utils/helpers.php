@@ -119,3 +119,13 @@ function extractFields($fields, $object)
     }
     return $return;
 }
+
+function imitatePagination($items) {
+    return [
+        'data' => $items,
+        'meta' => [
+            'current_page' => 1,
+            'last_page' => 1,
+        ],
+    ];
+}

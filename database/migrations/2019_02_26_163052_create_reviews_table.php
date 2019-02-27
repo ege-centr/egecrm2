@@ -27,6 +27,7 @@ class CreateReviewsTable extends Migration
             $table->smallInteger('year')->unsigned()->nullable();
             $table->boolean('is_approved')->default(false);
             $table->boolean('is_published')->default(false);
+            $table->unique(['teacher_id', 'client_id', 'grade_id', 'subject_id', 'year']);
             $table->timestamps();
         });
     }

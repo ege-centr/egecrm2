@@ -96,6 +96,11 @@ export default {
         route: 'VisitIndex',
         label: 'Посещаемость'
       },
+      {
+        icon: 'chat',
+        route: 'ReviewIndex',
+        label: 'Отзывы'
+      },
     ],
     admin_menu: [
       {

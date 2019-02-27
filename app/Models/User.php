@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Redis;
 use App\Http\Resources\Admin\Resource as AdminResource;
 use App\Utils\Sms;
-use App\Models\{Admin\Admin, Client\Client, Teacher};
+use App\Models\{Admin\Admin, Client\Client, Teacher, Email};
 use DB;
 
 class User extends Model
@@ -103,6 +103,7 @@ class User extends Model
             }
             $user = $query->find($entity_id);
             $user->class = trimModelClass($class);
+            $user->entityType = $class;
             return $user;
             // return new AdminResource(Admin::find($_SESSION['user']->id));
         }
@@ -112,6 +113,13 @@ class User extends Model
     public static function id()
     {
         return User::fromSession()->id;
+    }
+
+    public static function emailId()
+    {
+        return Email::where('entity_type', $_SESSION['user']['class'])
+            ->where('entity_id', $_SESSION['user']['entity_id'])
+            ->value('id');
     }
 
     public static function isTeacher()

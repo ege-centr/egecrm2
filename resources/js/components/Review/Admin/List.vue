@@ -3,22 +3,45 @@
     <v-data-table :items='items' item-key='id' hide-headers hide-actions :class='config.elevationClass'>
       <template slot="items" slot-scope="{ item }">
         <td>
+          отзыв {{ item.id }}
+        </td>
+        <td>
           <SubjectGrade :item='item' />
         </td>
         <td>
-          {{ item.lesson_count }} занятий
+          <router-link :to="{name: 'ClientShow', params: {id: item.client_id}}">
+            {{ item.client.names.short }}
+          </router-link>
         </td>
         <td>
-          <span v-if='item.teacher_id'>
+          <router-link :to="{name: 'TeacherShow', params: {id: item.teacher_id}}">
             {{ getData('teachers', item.teacher_id).names.short }}
+          </router-link>
+        </td>
+        <td>
+          <span>{{ item.comments.find(e => e.type === COMMENT_TYPE.client).rating }}</span> |
+          <span>{{ item.comments.find(e => e.type === COMMENT_TYPE.admin).rating }}</span> |
+          <span>{{ item.comments.find(e => e.type === COMMENT_TYPE.final).rating }}</span>
+        </td>
+        <td>
+          <span v-if='item.score && item.max_score'>
+            {{ item.score }} из {{ item.max_score }}
           </span>
         </td>
         <td>
-          <span v-if='item.review'>
-            <v-rating 
-              small
-              readonly
-              :value='item.review.comments.find(e => e.type === COMMENT_TYPE.client).rating' />
+          <span class='green--text' v-if='item.is_approved'>
+            проверено
+          </span>
+          <span v-else class='red--text'>
+            не проверено
+          </span>
+        </td>
+        <td>
+          <span class='green--text' v-if='item.is_published'>
+            опубликовано
+          </span>
+          <span v-else class='red--text'>
+            не опубликовано
           </span>
         </td>
         <td class='text-md-right pa-0' width='180'>

@@ -1,8 +1,12 @@
 <template>
   <div>
-    <DisplayData :api-url='API_URL' :tabs="{data: 'years', field: 'year'}">
+    <DisplayData 
+      ref='DisplayData'
+      :api-url='API_URL' 
+      :tabs="{data: 'years', field: 'year'}"
+    >
       <template slot='items' slot-scope='{ items }'>
-        <ReviewClientList :items='items' />
+        <ReviewClientList :items='items' @updated='() => $refs.DisplayData.loadData()' />
       </template>
     </DisplayData>
   </div>

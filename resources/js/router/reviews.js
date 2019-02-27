@@ -9,7 +9,7 @@ export default [
     name: 'ReviewIndex',
     component: ReviewIndex,
     meta: {
-      roles: [ROLES.CLIENT]
+      roles: [ROLES.CLIENT, ROLES.ADMIN]
     }
   },
   // {
