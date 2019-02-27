@@ -11,7 +11,7 @@ class ReviewResource extends JsonResource
     {
         $fields = extractFields([
             'id', 'teacher_id', 'client_id', 'subject_id', 'grade_id', 'signature', 'is_approved', 'year',
-            'is_published', 'score', 'max_score', 'comments'
+            'is_published', 'score', 'max_score', 'comments', 'expressive_title'
         ], $this);
 
         return array_merge($fields, [

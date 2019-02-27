@@ -17,51 +17,82 @@
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
           <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
             <v-layout>
-              <v-flex md6>
-                <div class='font-weight-medium mb-2'>
-                  Оценка и отзыв ученика (заполняется учеником из его личного кабинета)
-                </div>
-                <div class='mb-3'>
-                  <div class='flex-items align-center'>
-                    <span class='caption mr-3' style='color: rgba(0, 0, 0, 0.54)'>Оценка:</span>
-                    <v-rating clearable v-model="getComment(COMMENT_TYPE.client).rating"></v-rating>
-                  </div>
-                </div>
-                <div>
-                  <v-textarea hide-details label='Отзыв' v-model='getComment(COMMENT_TYPE.client).text'></v-textarea>
-                </div>
+              <v-flex md5>
+                <v-layout wrap>
+                  <v-flex md12 class='mb-4'>
+                    <div class='font-weight-medium mb-2'>
+                      Оценка и отзыв ученика (заполняется учеником из его личного кабинета)
+                    </div>
+                    <div class='mb-3'>
+                      <div class='flex-items align-center'>
+                        <span class='caption mr-3' style='color: rgba(0, 0, 0, 0.54)'>Оценка:</span>
+                        <v-rating clearable v-model="getComment(COMMENT_TYPE.client).rating"></v-rating>
+                      </div>
+                    </div>
+                    <div>
+                      <v-textarea auto-grow hide-details label='Отзыв' v-model='getComment(COMMENT_TYPE.client).text'></v-textarea>
+                    </div>
+                  </v-flex>
+                  <v-flex md12 class='mb-4'>
+                    <div class='font-weight-medium mb-2'>
+                      Предварительная оценка и отзыв ученика (заполняется администратором)
+                    </div>
+                    <div class='mb-3'>
+                      <div class='flex-items align-center'>
+                        <span class='caption mr-3' style='color: rgba(0, 0, 0, 0.54)'>Оценка:</span>
+                        <v-rating clearable v-model="getComment(COMMENT_TYPE.admin).rating"></v-rating>
+                      </div>
+                    </div>
+                    <div>
+                      <v-textarea auto-grow hide-details label='Отзыв' v-model='getComment(COMMENT_TYPE.admin).text'></v-textarea>
+                    </div>
+                  </v-flex>
+                  <v-flex md12 class='mb-4'>
+                    <div class='font-weight-medium mb-2'>
+                      Оценка и отзыв ученика по окончании занятий (заполняется администратором)
+                    </div>
+                    <div class='mb-3'>
+                      <div class='flex-items align-center'>
+                        <span class='caption mr-3' style='color: rgba(0, 0, 0, 0.54)'>Оценка:</span>
+                        <v-rating clearable v-model="getComment(COMMENT_TYPE.final).rating"></v-rating>
+                      </div>
+                    </div>
+                    <div>
+                      <v-textarea auto-grow hide-details label='Отзыв' v-model='getComment(COMMENT_TYPE.final).text'></v-textarea>
+                    </div>
+                  </v-flex>
+                </v-layout>
               </v-flex>
-            </v-layout>
-            <v-layout>
-              <v-flex md6>
-                <div class='font-weight-medium mb-2'>
-                  Предварительная оценка и отзыв ученика (заполняется администратором)
-                </div>
-                <div class='mb-3'>
-                  <div class='flex-items align-center'>
-                    <span class='caption mr-3' style='color: rgba(0, 0, 0, 0.54)'>Оценка:</span>
-                    <v-rating clearable v-model="getComment(COMMENT_TYPE.admin).rating"></v-rating>
-                  </div>
-                </div>
-                <div>
-                  <v-textarea hide-details label='Отзыв' v-model='getComment(COMMENT_TYPE.admin).text'></v-textarea>
-                </div>
-              </v-flex>
-            </v-layout>
-            <v-layout>
-              <v-flex md6>
-                <div class='font-weight-medium mb-2'>
-                  Оценка и отзыв ученика по окончании занятий (заполняется администратором)
-                </div>
-                <div class='mb-3'>
-                  <div class='flex-items align-center'>
-                    <span class='caption mr-3' style='color: rgba(0, 0, 0, 0.54)'>Оценка:</span>
-                    <v-rating clearable v-model="getComment(COMMENT_TYPE.final).rating"></v-rating>
-                  </div>
-                </div>
-                <div>
-                  <v-textarea hide-details label='Отзыв' v-model='getComment(COMMENT_TYPE.final).text'></v-textarea>
-                </div>
+              <v-flex md6 offset-md1>
+                <v-layout wrap>
+                  <v-flex md12>
+                    <v-textarea label='Экспрессивный заголовок' hide-details auto-grow v-model='item.expressive_title'></v-textarea>
+                  </v-flex>
+                  <v-flex md12>
+                    <v-text-field hide-details v-model='item.signature' label='Подпись'></v-text-field>
+                  </v-flex>
+                  <v-flex md12>
+                    <div class='flex-items align-center'>
+                      <v-text-field hide-details v-model='item.score' label='Балл' />
+                      <span class='grey--text two-inputs-separator'>/</span>
+                      <v-text-field hide-details v-model='item.max_score' label='Максимальный' />
+                    </div>
+                  </v-flex>
+                  <v-flex md12>
+                     <v-switch class='ma-0'
+                      label="Опубликован"
+                      hide-details
+                      v-model='item.is_published'
+                      ></v-switch>
+                  </v-flex>
+                  <v-flex md12>
+                     <v-switch class='ma-0'
+                      label="Подтвержден"
+                      hide-details
+                      v-model='item.is_approved'
+                      ></v-switch>
+                  </v-flex>
+                </v-layout>
               </v-flex>
             </v-layout>
           </v-container>
@@ -101,7 +132,15 @@ export default {
       return 'primary'
     },
 
-    getComment(item, type) {
+    getComment(type) {
+      const index = this.item.comments.findIndex(e => e.type === type)
+      if (index === -1) {
+        this.item.comments.push({
+          rating: null,
+          text: '',
+          type,
+        })
+      }
       return this.item.comments.find(e => e.type === type)
     }
   },
