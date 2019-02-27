@@ -21,7 +21,7 @@
                 <div class='mb-3'>
                   <div class='flex-items align-center'>
                     <span class='caption mr-3' style='color: rgba(0, 0, 0, 0.54)'>Оценка:</span>
-                    <v-rating clearable v-model="item.comments[0].rating"></v-rating>
+                    <v-rating dense clearable v-model="item.comments[0].rating"></v-rating>
                   </div>
                 </div>
                 <div>

@@ -40,6 +40,11 @@ class ReviewsController extends Controller
                 $review->comments()->create($comment);
             }
         }
+
+        if (isset($request->reviewer_admin_id)) {
+            Client::find($review->client_id)->update(['reviewer_admin_id' => $request->reviewer_admin_id]);
+        }
+
         return new ReviewResource($review);
     }
 

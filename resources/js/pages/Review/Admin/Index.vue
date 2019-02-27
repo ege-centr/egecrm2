@@ -6,7 +6,7 @@
       :paginate='30'
     >
       <template slot='items' slot-scope='{ items }'>
-        <ReviewAdminList :items='items' />
+        <ReviewAdminList :items='items' @updated='() => $refs.DisplayData.reloadData()' />
       </template>
     </DisplayData>
   </div>

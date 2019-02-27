@@ -14,7 +14,8 @@ class Client extends Model implements UserInterface
 
     protected $fillable = [
         'first_name', 'last_name', 'middle_name',
-        'grade_id', 'year', 'branches', 'school'
+        'grade_id', 'year', 'branches', 'school',
+        'reviewer_admin_id',
     ];
 
     protected $commaSeparated = ['branches'];

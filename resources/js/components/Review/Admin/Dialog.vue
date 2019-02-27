@@ -26,7 +26,7 @@
                     <div class='mb-3'>
                       <div class='flex-items align-center'>
                         <span class='caption mr-3' style='color: rgba(0, 0, 0, 0.54)'>Оценка:</span>
-                        <v-rating clearable v-model="getComment(COMMENT_TYPE.client).rating"></v-rating>
+                        <v-rating dense clearable v-model="getComment(COMMENT_TYPE.client).rating"></v-rating>
                       </div>
                     </div>
                     <div>
@@ -40,7 +40,7 @@
                     <div class='mb-3'>
                       <div class='flex-items align-center'>
                         <span class='caption mr-3' style='color: rgba(0, 0, 0, 0.54)'>Оценка:</span>
-                        <v-rating clearable v-model="getComment(COMMENT_TYPE.admin).rating"></v-rating>
+                        <v-rating dense clearable v-model="getComment(COMMENT_TYPE.admin).rating"></v-rating>
                       </div>
                     </div>
                     <div>
@@ -54,7 +54,11 @@
                     <div class='mb-3'>
                       <div class='flex-items align-center'>
                         <span class='caption mr-3' style='color: rgba(0, 0, 0, 0.54)'>Оценка:</span>
-                        <v-rating clearable v-model="getComment(COMMENT_TYPE.final).rating"></v-rating>
+                        <v-icon class='cursor-default' v-if='getComment(COMMENT_TYPE.final).rating === -1'>star</v-icon>
+                        <v-icon class='pointer' 
+                          v-if='getComment(COMMENT_TYPE.final).rating !== -1'
+                          @click='getComment(COMMENT_TYPE.final).rating = -1'>star_border</v-icon>
+                        <v-rating dense clearable v-model="getComment(COMMENT_TYPE.final).rating"></v-rating>
                       </div>
                     </div>
                     <div>
@@ -77,6 +81,9 @@
                       <span class='grey--text two-inputs-separator'>/</span>
                       <v-text-field hide-details v-model='item.max_score' label='Максимальный' />
                     </div>
+                  </v-flex>
+                  <v-flex md12>
+                    <AdminSelect v-model='item.reviewer_admin_id' label='Ответственный' />
                   </v-flex>
                   <v-flex md12>
                      <v-switch class='ma-0'
@@ -106,9 +113,12 @@
 
 import { API_URL, MODEL_DEFAULTS, COMMENT_TYPE } from '../'
 import { DialogMixin } from '@/mixins'
+import { AdminSelect } from '@/components/UI'
 
 export default {
   mixins: [ DialogMixin ],
+
+  components: { AdminSelect },
 
   data() {
     return {

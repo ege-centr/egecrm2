@@ -16,6 +16,7 @@
         <td>
           <span v-if='item.review'>
             <v-rating 
+              dense
               small
               readonly
               :value='item.review.comments.find(e => e.type === COMMENT_TYPE.client).rating' />

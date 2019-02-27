@@ -15,7 +15,8 @@ class ReviewResource extends JsonResource
         ], $this);
 
         return array_merge($fields, [
-            'client' => new PersonResource($this->client)
+            'client' => new PersonResource($this->client),
+            'reviewer_admin_id' => $this->client->reviewer_admin_id,
         ]);
     }
 }
