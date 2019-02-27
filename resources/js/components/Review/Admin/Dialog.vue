@@ -18,14 +18,49 @@
           <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
             <v-layout>
               <v-flex md6>
+                <div class='font-weight-medium mb-2'>
+                  Оценка и отзыв ученика (заполняется учеником из его личного кабинета)
+                </div>
                 <div class='mb-3'>
                   <div class='flex-items align-center'>
                     <span class='caption mr-3' style='color: rgba(0, 0, 0, 0.54)'>Оценка:</span>
-                    <v-rating clearable v-model="item.comments[0].rating"></v-rating>
+                    <v-rating clearable v-model="getComment(COMMENT_TYPE.client).rating"></v-rating>
                   </div>
                 </div>
                 <div>
-                  <v-textarea hide-details label='Отзыв' v-model='item.comments[0].text'></v-textarea>
+                  <v-textarea hide-details label='Отзыв' v-model='getComment(COMMENT_TYPE.client).text'></v-textarea>
+                </div>
+              </v-flex>
+            </v-layout>
+            <v-layout>
+              <v-flex md6>
+                <div class='font-weight-medium mb-2'>
+                  Предварительная оценка и отзыв ученика (заполняется администратором)
+                </div>
+                <div class='mb-3'>
+                  <div class='flex-items align-center'>
+                    <span class='caption mr-3' style='color: rgba(0, 0, 0, 0.54)'>Оценка:</span>
+                    <v-rating clearable v-model="getComment(COMMENT_TYPE.admin).rating"></v-rating>
+                  </div>
+                </div>
+                <div>
+                  <v-textarea hide-details label='Отзыв' v-model='getComment(COMMENT_TYPE.admin).text'></v-textarea>
+                </div>
+              </v-flex>
+            </v-layout>
+            <v-layout>
+              <v-flex md6>
+                <div class='font-weight-medium mb-2'>
+                  Оценка и отзыв ученика по окончании занятий (заполняется администратором)
+                </div>
+                <div class='mb-3'>
+                  <div class='flex-items align-center'>
+                    <span class='caption mr-3' style='color: rgba(0, 0, 0, 0.54)'>Оценка:</span>
+                    <v-rating clearable v-model="getComment(COMMENT_TYPE.final).rating"></v-rating>
+                  </div>
+                </div>
+                <div>
+                  <v-textarea hide-details label='Отзыв' v-model='getComment(COMMENT_TYPE.final).text'></v-textarea>
                 </div>
               </v-flex>
             </v-layout>
@@ -38,7 +73,7 @@
 
 <script>
 
-import { API_URL, MODEL_DEFAULTS } from '../'
+import { API_URL, MODEL_DEFAULTS, COMMENT_TYPE } from '../'
 import { DialogMixin } from '@/mixins'
 
 export default {
@@ -48,6 +83,7 @@ export default {
     return {
       API_URL,
       MODEL_DEFAULTS,
+      COMMENT_TYPE,
     }
   },
 
@@ -63,7 +99,11 @@ export default {
         return 'green'
       }
       return 'primary'
+    },
+
+    getComment(item, type) {
+      return this.item.comments.find(e => e.type === type)
     }
-  }
+  },
 }
 </script>

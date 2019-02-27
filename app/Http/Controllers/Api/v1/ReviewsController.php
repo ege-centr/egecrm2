@@ -47,7 +47,7 @@ class ReviewsController extends Controller
     {
         $query = Review::orderBy('id', 'desc');
         return ReviewResource::collection(
-            $this->showAll($query)
+            $this->showBy($request, $query)
         );
     }
 

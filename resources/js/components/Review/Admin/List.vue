@@ -19,9 +19,15 @@
           </router-link>
         </td>
         <td>
-          <span>{{ item.comments.find(e => e.type === COMMENT_TYPE.client).rating }}</span> |
-          <span>{{ item.comments.find(e => e.type === COMMENT_TYPE.admin).rating }}</span> |
-          <span>{{ item.comments.find(e => e.type === COMMENT_TYPE.final).rating }}</span>
+          <span>
+            {{ getComment(item, COMMENT_TYPE.client) ? getComment(item, COMMENT_TYPE.client).rating : '/' }}
+          </span> |
+          <span>
+            {{ getComment(item, COMMENT_TYPE.admin) ? getComment(item, COMMENT_TYPE.admin).rating : '/' }}
+          </span> |
+          <span>
+            {{ getComment(item, COMMENT_TYPE.final) ? getComment(item, COMMENT_TYPE.final).rating : '/' }}
+          </span>
         </td>
         <td>
           <span v-if='item.score && item.max_score'>
@@ -45,10 +51,8 @@
           </span>
         </td>
         <td class='text-md-right pa-0' width='180'>
-          <v-btn flat color='primary' small v-if='item.review === null'
-            @click='add(item)' class='btn-td'>добавить отзыв</v-btn>
-          <v-btn flat color='primary' small v-else
-            @click='edit(item)' class='btn-td'>редактировать</v-btn>
+          <v-btn flat color='primary' small
+            @click='edit1(item)' class='btn-td'>редактировать</v-btn>
         </td>
       </template>
     </v-data-table>
@@ -77,25 +81,12 @@ export default {
   },  
 
   methods: {
-    add(item) {
-      this.$refs.Dialog.open(null, {
-        ..._.pick(item, [
-          'teacher_id', 'client_id', 'grade_id', 'subject_id', 'year'
-        ]),
-        ...{
-          comments: [
-            {
-              rating: null,
-              text: '',
-              type: 'client'
-            }
-          ]
-        }
-      })
+    edit(item) {
+      this.$refs.Dialog.open(item.id)
     },
 
-    edit(item) {
-      this.$refs.Dialog.open(item.review.id)
+    getComment(item, type) {
+      return item.comments.find(e => e.type === type)
     }
   },
 }
