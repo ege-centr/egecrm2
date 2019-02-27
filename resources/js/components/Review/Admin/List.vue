@@ -18,15 +18,24 @@
             {{ getData('teachers', item.teacher_id).names.short }}
           </router-link>
         </td>
-        <td>
-          <span>
-            {{ getComment(item, COMMENT_TYPE.client) ? getComment(item, COMMENT_TYPE.client).rating : '/' }}
-          </span> |
-          <span>
-            {{ getComment(item, COMMENT_TYPE.admin) ? getComment(item, COMMENT_TYPE.admin).rating : '/' }}
-          </span> |
-          <span>
-            {{ getComment(item, COMMENT_TYPE.final) ? getComment(item, COMMENT_TYPE.final).rating : '/' }}
+        <td width='30' class='td-border'>
+          <span v-if='getComment(item, COMMENT_TYPE.client)'>
+            {{ getComment(item, COMMENT_TYPE.client).rating }}
+          </span>
+        </td>
+        <td width='30' class='td-border'>
+          <span v-if='getComment(item, COMMENT_TYPE.admin)'>
+            {{ getComment(item, COMMENT_TYPE.admin).rating }}
+          </span>
+        </td>
+        <td width='30' class='td-border'>
+          <span v-if='getComment(item, COMMENT_TYPE.final)'>
+            <span class='grey--text' v-if='getComment(item, COMMENT_TYPE.final).rating === -1'>
+              –
+            </span>
+            <span v-else>
+              {{ getComment(item, COMMENT_TYPE.final).rating }}
+            </span>
           </span>
         </td>
         <td>
@@ -51,7 +60,7 @@
           </span>
         </td>
         <td class='text-md-right'>
-          <v-btn flat icon color="black" class='ma-0' @click='edit(item)'>
+          <v-btn flat icon color="black" class='ma-0' @click='edit1(item)'>
             <v-icon>more_horiz</v-icon>
           </v-btn>
         </td>
