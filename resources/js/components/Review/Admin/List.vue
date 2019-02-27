@@ -50,9 +50,10 @@
             не опубликовано
           </span>
         </td>
-        <td class='text-md-right pa-0' width='180'>
-          <v-btn flat color='primary' small
-            @click='edit1(item)' class='btn-td'>редактировать</v-btn>
+        <td class='text-md-right'>
+          <v-btn flat icon color="black" class='ma-0' @click='edit(item)'>
+            <v-icon>more_horiz</v-icon>
+          </v-btn>
         </td>
       </template>
     </v-data-table>

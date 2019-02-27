@@ -109,6 +109,6 @@ class Reviews extends Command
         if ($rating == 6) {
             return -1;
         }
-        return $rating || null;
+        return $rating > 0 ? $rating : null;
     }
 }
