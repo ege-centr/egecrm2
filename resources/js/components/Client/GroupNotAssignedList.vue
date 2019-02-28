@@ -11,6 +11,7 @@
         <td width='200'>
           Без группы
         </td>
+        <td width='300'></td>
         <td>
           {{ getData('subjects', item.subject_id).three_letters }}–{{ item.grade_id }}
         </td>

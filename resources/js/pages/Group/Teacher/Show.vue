@@ -1,9 +1,6 @@
 <template>
-  <div>
-    <GroupDialog ref='GroupDialog' @updated='loadData' />
-    <GroupActDialog v-if='$refs.GroupActPage' ref='GroupActDialog' @updated='$refs.GroupActPage.loadData()' />
-    <MoveClientDialog ref='MoveClientDialog' @moved='removeClientFromGroup' />
-    
+  <div class='teacher-group-show'>
+    <EmailDialog ref='EmailDialog' />
     <div class='headline mb-4'>
       Группа {{ $route.params.id }}
     </div>
@@ -26,11 +23,25 @@
                 <td width='300'>
                   <PersonName :item='props.item'/>
                 </td>
-                <td>
+                <td width='150'>
                   30%
                 </td>
+                <td width='300' class='relative'>
+                  <div class='flex-items align-center' v-if='props.item.email.email'>
+                    <v-checkbox class='checkbox-in-table' 
+                      :value='emails.includes(props.item.email.email)' 
+                      @change='selectEmail(props.item.email.email)' hide-details></v-checkbox>
+                    <EmailShow :item='props.item.email' />
+                  </div>
+                </td>
                 <td>
-                  <EmailShow :item='props.item.email' />
+                  <div class='flex-items align-center' 
+                    v-if='props.item.representative.email && props.item.representative.email.email'>
+                    <v-checkbox class='checkbox-in-table' 
+                      :value='emails.includes(props.item.representative.email.email)' 
+                      @change='selectEmail(props.item.representative.email.email)' hide-details></v-checkbox>
+                    <EmailShow :item='props.item.representative.email' />
+                  </div>
                 </td>
               </template>
             </v-data-table>
@@ -38,7 +49,74 @@
         </v-layout>
       </v-card-text>
     </v-card>
-    <div v-if='item !== null'>
+
+     <v-layout row justify-center>
+        <v-dialog v-model="emailDialog" max-width="800">
+          <v-card>
+            <v-card-text>
+              <v-container class="pa-0 ma-0" fluid>
+                <v-layout wrap>
+                  <v-flex md12>
+                     <v-data-table
+                        class="full-width"
+                        hide-actions
+                        :headers="[{text: 'Ученики', sortable: false}, {text: 'Представители', sortable: false}]"
+                        :items='item.clients'
+                      >
+                        <template slot='items' slot-scope="props">
+                          <tr>
+                            <td width='300' class='relative'>
+                              <div class='flex-items align-center' v-if='props.item.email.email'>
+                                <v-checkbox class='checkbox-in-table' 
+                                  @change='selectEmail(props.item.email.email)'
+                                  :value='emails.includes(props.item.email.email)' 
+                                  hide-details></v-checkbox>
+                                <EmailShow :item='props.item.email' />
+                              </div>
+                            </td>
+                            <td>
+                              <div class='flex-items align-center' 
+                                v-if='props.item.representative.email && props.item.representative.email.email'>
+                                <v-checkbox 
+                                  @change='selectEmail(props.item.representative.email.email)' 
+                                  :value='emails.includes(props.item.representative.email.email)' 
+                                  class='checkbox-in-table' hide-details></v-checkbox>
+                                <EmailShow :item='props.item.representative.email' />
+                              </div>
+                            </td>
+                          </tr>
+                        </template>
+                        <template slot='footer'>
+                          <td>
+                            <div class='flex-items align-center'>
+                              <v-checkbox class='checkbox-in-table' @change="(e) => selectAllEmails(e, 'client')" hide-details></v-checkbox>
+                              <span>выделить все</span>
+                            </div>
+                          </td>
+                          <td>
+                            <div class='flex-items align-center'>
+                              <v-checkbox class='checkbox-in-table' @change="(e) => selectAllEmails(e, 'representative')" hide-details></v-checkbox>
+                              <span>выделить все</span>
+                            </div>
+                          </td>
+                        </template>
+                     </v-data-table>
+                  </v-flex>
+                </v-layout>
+              </v-container>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn color="blue darken-1" flat 
+                @click='sendEmails'
+                :disabled='emails.length === 0'>отправить email на выбранные адреса</v-btn>
+              <v-spacer></v-spacer>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
+      </v-layout>
+    
+    <!-- <div v-if='item !== null'>
       <v-tabs fixed-tabs v-model='tabs' class='mb-4'>
         <v-tab>
           Расписание
@@ -64,7 +142,7 @@
           <NoData v-else />
         </v-tab-item>
       </v-tabs-items>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -77,38 +155,27 @@ import {
   CLASS_NAME,
 } from '@/components/Group'
 
-import GroupSchedule from '@/components/Group/Schedule'
-import MoveClientDialog from '@/components/Group/MoveClientDialog'
-import GroupDialog from '@/components/Group/Dialog'
-
-import Bars from '@/components/Group/Bars'
-import Visits from '@/components/Group/Visits'
-import { DisplayData } from '@/components/UI'
-import { API_URL as GROUP_ACTS_API_URL } from '@/components/Group/Act'
-import GroupActDialog from '@/components/Group/Act/Dialog'
-import GroupActList from '@/components/Group/Act/List'
 import Comments from '@/components/Comments'
 import { SUBJECT_STATUSES } from '@/components/Contract'
-import BranchList from '@/components/UI/BranchList'
 import GroupInfo from '@/components/Group/Info'
 import EmailShow from '@/components/Email/Show'
-
+import EmailDialog from '@/components/Email/Dialog'
 
 export default {
   components: { 
-    DisplayData, GroupSchedule, Bars, Visits, GroupDialog, MoveClientDialog, GroupActList, 
-    GroupActDialog, Comments, BranchList, GroupInfo, EmailShow
+    Comments, GroupInfo, EmailShow, EmailDialog
   },
 
   data() {
     return {
       LEVELS,
       CLASS_NAME,
-      GROUP_ACTS_API_URL,
       SUBJECT_STATUSES,
       loading: true,
       item: null,
       tabs: null,
+      emailDialog: false,
+      emails: [],
     }
   },
 
@@ -136,6 +203,42 @@ export default {
     moveClient(client) {
       this.$refs.MoveClientDialog.open(this.item, client)
     },
+
+    /**
+     * type null | true выделить все | false снять выделение
+     */
+    selectEmail(email, type = null) {
+      if (this.emails.includes(email)) {
+        if (type !== true) {
+          this.emails.splice(this.emails.indexOf(email), 1)
+        }
+      } else {
+        if (type !== false) {
+          this.emails.push(email)
+          if (!this.emailDialog) {
+            this.emailDialog = true
+          }
+        }
+      }
+    },
+
+    selectAllEmails(selected, type) {
+      this.item.clients.forEach(client => {
+        const item = type === 'client' ? client : client.representative
+        if (item.email && item.email.email) {
+          this.selectEmail(item.email.email, selected)
+        }
+      })
+    },
+
+    sendEmails() {
+      this.emailDialog = false
+      this.$refs.EmailDialog.open(this.emails)
+    },
   }
 }
 </script>
+
+<style lang='scss'>
+
+</style>

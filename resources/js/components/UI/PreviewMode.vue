@@ -36,6 +36,13 @@ export default {
     }
   },
   
+  mounted() {
+    $('.application--wrap').addClass('application--preview-mode')
+  },
+
+  destroyed() {
+    $('.application--wrap').removeClass('application--preview-mode')
+  },
 }
 </script>
 

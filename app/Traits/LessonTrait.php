@@ -16,14 +16,6 @@ trait LessonTrait
         return $this->belongsTo(Group::class);
     }
 
-    public function getTeacherIdAttribute($value)
-    {
-        if ($this->status === 'conducted') {
-            return $value;
-        }
-        return $this->group->teacher_id;
-    }
-
     public function getClientGradeIdAttribute($value)
     {
         if ($this->status === 'conducted') {

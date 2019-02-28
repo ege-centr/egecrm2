@@ -8,14 +8,27 @@ use App\Models\SpecialDate;
 
 class SpecialDatesController extends Controller
 {
-    protected $filters = [
-        'equals' => ['year', 'subject_id', 'grade_id']
-    ];
+    // тут нельзя использовать фильтры
+    // protected $filters = [
+    //     'equals' => ['year', 'subject_id', 'grade_id']
+    // ];
 
     public function index(Request $request)
     {
         $query = SpecialDate::query();
-        $this->filter($request, $query);
+
+        if (isset($request->year) && $request->year) {
+            $query->where('year', $request->year);
+        }
+
+        if (isset($request->subject_id) && $request->subject_id) {
+            $query->whereRaw("(type = 'vacation' OR subject_id={$request->subject_id})");
+        }
+
+        if (isset($request->grade_id) && $request->grade_id) {
+            $query->whereRaw("(type = 'vacation' OR grade_id={$request->grade_id})");
+        }
+
         return $query->get();
     }
 

@@ -67,7 +67,7 @@ class ClientsController extends Controller
         $model->representative->phones()->delete();
         $model->representative->phones()->createMany($request->representative['phones']);
 
-        if ($request->representatives['email']['email']) {
+        if ($request->representative['email']['email']) {
             if ($model->representative->email === null) {
                 $model->representative->email()->create($request->representative['email']);
             } else {

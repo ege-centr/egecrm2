@@ -17,7 +17,7 @@
             Группа {{ item.id }}
           </router-link>
         </td>
-        <td v-if='show.teacher'>
+        <td v-if='show.teacher' width='300'>
           {{ item.teacher ? item.teacher.names.abbreviation : '' }}
         </td>
         <td>

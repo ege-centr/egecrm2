@@ -6,8 +6,16 @@
         @click='selected_tab_index = selected_tab_index === index ? null : index'
         :key='index'
       >
-      <SubjectGrade :item='tab' />
-    </v-chip>
+        <SubjectGrade :item='tab' />
+      </v-chip>
+      <v-chip class='pointer ml-0 mr-3'
+        v-if='items.findIndex(e => isEgeTrial(e)) !== -1'
+        :class="{'primary white--text': selected_tab_index === -1}"
+        @click='selected_tab_index = selected_tab_index === -1 ? null : -1'
+        :key='-1'
+      >
+        ПРОБНЫЙ ЕГЭ
+      </v-chip>
     </div>
     <Loader class='loader-wrapper_transparent' v-if='items === null' />
     <v-card v-else>
@@ -19,24 +27,26 @@
               :items='filteredItems'
             >
               <template slot='items' slot-scope='{ item }'>
-                <tr v-if="'score' in item">
-                  <td class='grey--text'>
-                    {{ indexSkippingCancelledLessons(item) }}
+                <!-- ПРОБНЫЙ ЕГЭ -->
+                <tr v-if="isEgeTrial(item)">
+                  <td width='48'>
                   </td>
-                  <td>
+                  <td width='150'>
                     {{ item.date | date }}
                   </td>
-                  <td>
-                    пробный ЕГЭ
+                  <td width='150'>
+                    Пробный ЕГЭ
                   </td>
-                  <td>
-
+                  <td width='150'>
+                    {{ item.sum }} руб.
                   </td>
-                  <td>
+                  <td width='150'>
                     <SubjectGrade :item='item' />
                   </td>
                   <td colspan='4'>{{ item.description }}</td>
                 </tr>
+
+                <!-- ЗАНЯТИЕ -->
                 <tr v-else>
                   <td width='65' class='pr-0 grey--text'>
                     <div class='lesson-status' :class="{
@@ -44,8 +54,8 @@
                       'green': item.status === LESSON_STATUS.CONDUCTED,
                       'grey': item.status === LESSON_STATUS.CANCELLED,
                     }"></div>
-                    <span v-show='item.status !== LESSON_STATUS.CANCELLED'>
-                      {{ indexSkippingCancelledLessons(item) }}
+                    <span v-show='!excludeFromIndex(item)'>
+                      {{ getIndex(item) }}
                     </span>
                   </td>
                   <td width='150'>
@@ -108,7 +118,7 @@
 
 <script>
 import { ROLES } from '@/config'
-import { LESSON_STATUS, indexSkippingCancelledLessons } from '@/components/Lesson'
+import { LESSON_STATUS } from '@/components/Lesson'
 import Cabinet from '@/components/UI/Cabinet'
 
 export default {
@@ -129,10 +139,19 @@ export default {
   },
 
   methods: {
-    indexSkippingCancelledLessons(item) {
+    getIndex(item) {
       const index = this.filteredItems.findIndex(e => e === item)
-      const cancelled_lessons_count = _.chain(this.filteredItems).sortBy('date').take(index + 1).filter(e => e.status === LESSON_STATUS.CANCELLED).value().length
-      return index + 1 - cancelled_lessons_count
+      const exclude_count = _.chain(this.filteredItems).sortBy('date').take(index + 1).filter(e => this.excludeFromIndex(e)).value().length
+      return index + 1 - exclude_count
+    },
+    
+    // какие позиции не нумеровать?
+    excludeFromIndex(item) {
+      return item.status === LESSON_STATUS.CANCELLED || this.isEgeTrial(item)
+    },
+
+    isEgeTrial(item) {
+      return 'score' in item
     }
   },
 
@@ -141,8 +160,11 @@ export default {
       if (this.selected_tab_index === null) {
         return this.items
       }
+      if (this.selected_tab_index === -1) {
+        return this.items.filter(e => this.isEgeTrial(e))
+      }
       const tab = this.tabs[this.selected_tab_index]
-      return this.items.filter(e => e.subject_id === tab.subject_id && e.grade_id === tab.grade_id)
+      return this.items.filter(e => !this.isEgeTrial(e) && e.subject_id === tab.subject_id && e.grade_id === tab.grade_id)
     },
 
     tabs() {

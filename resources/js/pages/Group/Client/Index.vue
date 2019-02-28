@@ -1,6 +1,10 @@
 <template>
   <div>
-    <DisplayData :api-url='API_URL' :paginate='30' :invisible-filters="{client_id: $store.state.user.id}">
+    <DisplayData 
+      :tabs="{data: 'years', field: 'year'}"
+      :api-url='API_URL' 
+      :paginate='30' 
+      :invisible-filters="{client_id: $store.state.user.id}">
       <template slot='items' slot-scope="{ items }">
         <GroupList :items='items' />
       </template>

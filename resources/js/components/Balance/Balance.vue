@@ -30,20 +30,25 @@
               </span>
             </td>
             <td width='130'>
-              <span class='green--text' v-if='i.sum >= 0'>
+              <span class='green--text' v-if='i.sum > 0'>
                 +{{ i.sum }} руб.
               </span>
             </td>
             <td  width='130'>
-              <span class='red--text' v-if='i.sum < 0'>
-                {{ i.sum }} руб.
+              <span class='red--text' v-if='i.sum <= 0'>
+                <span v-if='i.sum === 0'>
+                  бесплатно
+                </span>
+                <span v-else>
+                  {{ i.sum }} руб.
+                </span>
               </span>
             </td>
             <td width='130'></td>
             <td>
               {{ i.comment }}
             </td>
-            <td class='grey--text' v-if='show.created_at'>
+            <td class='grey--text' v-if='show.created_at && i.admin_id'>
               {{ getData('admins', i.admin_id).name }}
               {{ i.created_at | date-time }}
             </td>
