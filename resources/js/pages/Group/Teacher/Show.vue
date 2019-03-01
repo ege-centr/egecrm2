@@ -14,9 +14,9 @@
           </v-flex>
           <v-flex md12 class='mt-5' v-if='item.clients.length'>
             <v-data-table
-              class="full-width"
+              class="full-width big-table-headers"
               hide-actions
-              hide-headers
+              :headers="[{sortable: false}, {sortable: false}, {text: 'Ученики', sortable: false}, {text: 'Представители', sortable: false}]"
               :items='item.clients'
             >
               <template slot='items' slot-scope="props">
@@ -50,73 +50,16 @@
       </v-card-text>
     </v-card>
 
-     <v-layout row justify-center>
-        <v-dialog v-model="emailDialog" max-width="800">
-          <v-card>
-            <v-card-text>
-              <v-container class="pa-0 ma-0" fluid>
-                <v-layout wrap>
-                  <v-flex md12>
-                     <v-data-table
-                        class="full-width"
-                        hide-actions
-                        :headers="[{text: 'Ученики', sortable: false}, {text: 'Представители', sortable: false}]"
-                        :items='item.clients'
-                      >
-                        <template slot='items' slot-scope="props">
-                          <tr>
-                            <td width='300' class='relative'>
-                              <div class='flex-items align-center' v-if='props.item.email.email'>
-                                <v-checkbox class='checkbox-in-table' 
-                                  @change='selectEmail(props.item.email.email)'
-                                  :value='emails.includes(props.item.email.email)' 
-                                  hide-details></v-checkbox>
-                                <EmailShow :item='props.item.email' />
-                              </div>
-                            </td>
-                            <td>
-                              <div class='flex-items align-center' 
-                                v-if='props.item.representative.email && props.item.representative.email.email'>
-                                <v-checkbox 
-                                  @change='selectEmail(props.item.representative.email.email)' 
-                                  :value='emails.includes(props.item.representative.email.email)' 
-                                  class='checkbox-in-table' hide-details></v-checkbox>
-                                <EmailShow :item='props.item.representative.email' />
-                              </div>
-                            </td>
-                          </tr>
-                        </template>
-                        <template slot='footer'>
-                          <td>
-                            <div class='flex-items align-center'>
-                              <v-checkbox class='checkbox-in-table' @change="(e) => selectAllEmails(e, 'client')" hide-details></v-checkbox>
-                              <span>выделить все</span>
-                            </div>
-                          </td>
-                          <td>
-                            <div class='flex-items align-center'>
-                              <v-checkbox class='checkbox-in-table' @change="(e) => selectAllEmails(e, 'representative')" hide-details></v-checkbox>
-                              <span>выделить все</span>
-                            </div>
-                          </td>
-                        </template>
-                     </v-data-table>
-                  </v-flex>
-                </v-layout>
-              </v-container>
-            </v-card-text>
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" flat 
-                @click='sendEmails'
-                :disabled='emails.length === 0'>отправить email на выбранные адреса</v-btn>
-              <v-spacer></v-spacer>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
-      </v-layout>
+    <!-- v-ripple -->
+    <transition
+      enter-active-class="animated slideInUp"
+      leave-active-class="animated slideOutDown">
+      <div class='send-emails font-weight-medium' v-show='emails.length > 0' @click='sendEmails'>
+        отправить на выбранные адреса
+      </div>
+    </transition>
     
-    <!-- <div v-if='item !== null'>
+    <div v-if='item !== null'>
       <v-tabs fixed-tabs v-model='tabs' class='mb-4'>
         <v-tab>
           Расписание
@@ -136,13 +79,13 @@
         <v-tab-item>
           <v-card :class='config.elevationClass' v-if='item.lessons.length > 0'>
             <v-card-text class='relative'>
-              <Visits :group='item' />
+              <GroupVisits :group='item' />
             </v-card-text>
           </v-card>
           <NoData v-else />
         </v-tab-item>
       </v-tabs-items>
-    </div> -->
+    </div>
   </div>
 </template>
 
@@ -155,15 +98,19 @@ import {
   CLASS_NAME,
 } from '@/components/Group'
 
+import GroupSchedule from '@/components/Group/Schedule/Schedule'
+import GroupVisits from '@/components/Group/Visits'
+import GroupInfo from '@/components/Group/Info'
+
 import Comments from '@/components/Comments'
 import { SUBJECT_STATUSES } from '@/components/Contract'
-import GroupInfo from '@/components/Group/Info'
 import EmailShow from '@/components/Email/Show'
 import EmailDialog from '@/components/Email/Dialog'
 
 export default {
   components: { 
-    Comments, GroupInfo, EmailShow, EmailDialog
+    Comments, GroupInfo, EmailShow, EmailDialog,
+    GroupSchedule, GroupVisits
   },
 
   data() {
@@ -174,7 +121,6 @@ export default {
       loading: true,
       item: null,
       tabs: null,
-      emailDialog: false,
       emails: [],
     }
   },
@@ -204,41 +150,45 @@ export default {
       this.$refs.MoveClientDialog.open(this.item, client)
     },
 
-    /**
-     * type null | true выделить все | false снять выделение
-     */
-    selectEmail(email, type = null) {
+    selectEmail(email) {
       if (this.emails.includes(email)) {
-        if (type !== true) {
-          this.emails.splice(this.emails.indexOf(email), 1)
-        }
+        this.emails.splice(this.emails.indexOf(email), 1)
       } else {
-        if (type !== false) {
-          this.emails.push(email)
-          if (!this.emailDialog) {
-            this.emailDialog = true
-          }
-        }
+        this.emails.push(email)
       }
     },
 
-    selectAllEmails(selected, type) {
-      this.item.clients.forEach(client => {
-        const item = type === 'client' ? client : client.representative
-        if (item.email && item.email.email) {
-          this.selectEmail(item.email.email, selected)
-        }
-      })
-    },
-
     sendEmails() {
-      this.emailDialog = false
       this.$refs.EmailDialog.open(this.emails)
+      this.waitForDialogClose(() => this.emails = [])
     },
   }
 }
 </script>
 
-<style lang='scss'>
-
+<style lang='scss' scoped>
+.send-emails {
+  $color: #427095;
+  background: $color;
+  color: white;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  width: 100%;
+  height: 70px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  animation-duration: .3s !important;
+  transition: background linear .1s;
+  cursor: pointer;
+  &:hover {
+    background: lighten($color, 10);
+  }
+  &:active {
+    background: darken($color, 10);
+  }
+}
 </style>

@@ -48,6 +48,9 @@
         <v-tab>
           Допуслуги
         </v-tab>
+        <v-tab>
+          Отзывы
+        </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <!-- ГРУППЫ -->
@@ -106,6 +109,20 @@
             </template>
           </DisplayData>
         </v-tab-item>
+
+        <!-- Отзывы -->
+        <v-tab-item>
+          <DisplayData 
+            ref='ReviewPage'
+            :api-url='REVIEW_API_URL' 
+            :tabs="{data: 'years', field: 'year'}"
+            :invisible-filters="{teacher_id: $route.params.id}"
+          >
+            <template slot='items' slot-scope='{ items }'>
+              <ReviewAdminList :items='items' @updated='() => $refs.ReviewPage.reloadData()' />
+            </template>
+          </DisplayData>
+        </v-tab-item>
       </v-tabs-items>
     </div>
     <PaymentDialog ref='PaymentDialog' />
@@ -133,14 +150,23 @@ import { DisplayData } from '@/components/UI'
 import Preview from '@/other/Preview'
 import Balance from '@/components/Balance/Balance'
 
+
+// Reviews
+import ReviewAdminList from '@/components/Review/Admin/List'
+import { API_URL as REVIEW_API_URL } from '@/components/Review'
+
 export default {
-  components: { GroupList, PaymentList, DisplayData, PaymentDialog, PaymentAdditionalList, PaymentAdditionalDialog, Balance },
+  components: { 
+    GroupList, PaymentList, DisplayData, PaymentDialog, PaymentAdditionalList, PaymentAdditionalDialog, Balance,
+    ReviewAdminList,
+  },
 
   data() {
     return {
       GROUP_API_URL,
       PAYMENT_API_URL,
       PAYMENT_ADDITIONAL_API_URL,
+      REVIEW_API_URL,
       CLASS_NAME,
       PAYMENT_SORT,
       Preview,

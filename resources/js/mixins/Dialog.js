@@ -13,6 +13,7 @@ export default {
 
   methods: {
     open(item_id = null, defaults = {}) {
+      this.item = null
       this.dialog = true
       if (item_id !== null) {
         this.edit_mode = true

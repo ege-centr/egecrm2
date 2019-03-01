@@ -135,7 +135,7 @@ import {
   CLASS_NAME,
 } from '@/components/Group'
 
-import GroupSchedule from '@/components/Group/Schedule'
+import GroupSchedule from '@/components/Group/Schedule/Schedule'
 import MoveClientDialog from '@/components/Group/MoveClientDialog'
 import GroupDialog from '@/components/Group/Dialog'
 

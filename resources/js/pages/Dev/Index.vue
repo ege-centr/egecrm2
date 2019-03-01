@@ -4,7 +4,7 @@
 
     <div class='flex-items'>
       <AllFilter :items="[{label: 'Период', field: 'created_at', type: 'interval'}]" />
-      <AddBtnAnimated label='замалым' />
+      <AddBtnAnimated label='максимально замалымно' />
     </div>
   </div>
 </template>

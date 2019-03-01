@@ -127,6 +127,9 @@
         <v-tab>
           Тесты
         </v-tab>
+        <v-tab>
+          Отзывы
+        </v-tab>
       </v-tabs>
 
       <v-tabs-items v-model="tabs">
@@ -246,6 +249,21 @@
         <v-tab-item>
           <TestAdminClientList :client='client' />
         </v-tab-item>
+
+        <!-- Отзывы -->
+        <v-tab-item>
+          <DisplayData 
+            ref='ReviewPage'
+            :api-url='REVIEW_API_URL' 
+            :tabs="{data: 'years', field: 'year'}"
+            :invisible-filters="{client_id: $route.params.id}"
+          >
+            <template slot='items' slot-scope='{ items }'>
+              <ReviewAdminList :items='items' @updated='() => $refs.ReviewPage.reloadData()' />
+            </template>
+          </DisplayData>
+        </v-tab-item>
+
       </v-tabs-items>
     </div>
     <ClientDialog ref='ClientDialog' />
@@ -296,6 +314,10 @@ import EgeTrialDialog from '@/components/EgeTrial/Dialog'
 import EgeTrialList from '@/components/EgeTrial/List'
 import { API_URL as EGE_TRIAL_API_URL } from '@/components/EgeTrial'
 
+// Reviews
+import ReviewAdminList from '@/components/Review/Admin/List'
+import { API_URL as REVIEW_API_URL } from '@/components/Review'
+
 export default {
   props: ['clientId'],
 
@@ -308,6 +330,7 @@ export default {
       PAYMENT_SORT,
       REQUEST_API_URL,
       EGE_TRIAL_API_URL,
+      REVIEW_API_URL,
       Preview,
       tabs: null,
       loading: true,
@@ -318,7 +341,8 @@ export default {
   components: { 
     RequestDialog, RequestItem, Comments, ContractList, GroupList, GroupNotAssignedList, EgeTrialList,
     PaymentList, ClientDialog, PhoneList, BranchList, EmailShow, TestAdminClientList,
-    DisplayData, ContractDialog, PaymentDialog, ClientSchedule, Balance, EgeTrialDialog
+    DisplayData, ContractDialog, PaymentDialog, ClientSchedule, Balance, EgeTrialDialog,
+    ReviewAdminList,
   },
 
   created() {

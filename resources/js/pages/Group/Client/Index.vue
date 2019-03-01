@@ -26,6 +26,5 @@ export default {
       API_URL,
     }
   },
-  
 }
 </script>

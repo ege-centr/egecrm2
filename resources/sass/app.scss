@@ -350,3 +350,18 @@ nav {
 .application--preview-mode {
   padding-bottom: 30px;
 }
+
+.big-table-headers {
+  & thead {
+    & tr {
+      border-bottom: none !important;
+      height: 36px !important;
+    }
+    & th {
+      font-size: 18px !important;
+    }
+    & .v-datatable__progress {
+      display: none;
+    }
+  }
+}

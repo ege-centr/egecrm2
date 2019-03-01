@@ -1,10 +1,13 @@
 <template>
-  <div class='add-btn-animated'>
-    <v-btn fab dark small color="red" class='ma-0'>
-      <v-icon dark>add</v-icon>
-    </v-btn>
-    <span class='add-btn-animated__title'>{{ label }}</span>
-    <div class='add-btn-animated__blocker'></div>
+  <div>
+    <div class='add-btn-animated'>
+      <div class='add-btn-animated__label'>
+        {{ label }}
+      </div>
+      <div class='add-btn-animated__icon'>
+        <v-icon color='white'>add</v-icon>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -21,63 +24,48 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
 $size: 34px;
+$color: #f44336;
+$animation-speed: .3s;
 
 .add-btn-animated {
-  display: inline-block;
-  // background: rgba(#ff4c45, .4);
+  margin: 4px;
+  background: $color;
+  // background: yellowgreen;
+  color: white;
   border-radius: 40px;
-  padding-right: 14px;
-  position: relative;
-  height: 40px;
+  height: $size;
   display: inline-flex;
   align-items: center;
-  width: auto;
+  justify-content: center;
+  padding: 0 10px;
+  position: relative;
   overflow: hidden;
   cursor: pointer;
-  &__title {
-    position: relative;
-    padding-left: 34px;
-    background: #f44336;
-    border-radius: 40px;
+  &__label {
+    padding-left: #{$size - 10px};
+  }
+  &__icon {
+    background: $color;
     color: white;
     height: $size;
+    width: $size;
+    border-radius: 50%;
     display: flex;
     align-items: center;
-    padding-right: 10px;
-  }
-  & button {
+    justify-content: center;
     position: absolute;
-    left: calc(100% - 34px);
-    transition: all ease-in .25s;
-    z-index: 1;
-    box-shadow: none !important;
-    height: $size;
-    width: $size;
-    &:after {
-      content: '';
-    }
-  }
-  &__blocker {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    height: $size;
-    background: #f2f2f2;
-    border-radius: 40px;
-    transition: all ease-in .25s;
+    left: calc(100% - #{$size});
+    transition: all ease-in-out $animation-speed;
+    box-shadow: -1020px 0 0 1000px #f2f2f2;
+    clip-path: inset(0px 0px -10px -1000px);
   }
   &:hover {
-    & button {
-      left: 0%;
-      // transform: rotate(-90deg);
-    }
-    & .add-btn-animated__blocker {
-      margin-left: calc(-100% + #{$size});
+    & .add-btn-animated {
+      &__icon {
+        left: 0;
+      }
     }
   }
 }
-
-
 </style>

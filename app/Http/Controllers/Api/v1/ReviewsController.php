@@ -10,6 +10,10 @@ use User;
 
 class ReviewsController extends Controller
 {
+    protected $filters = [
+        'equals' => ['client_id', 'teacher_id']
+    ];
+
     public function index(Request $request)
     {
             return $this->{strtolower(class_basename($_SESSION['user']['class'])) . 'Index'}($request);
@@ -51,6 +55,7 @@ class ReviewsController extends Controller
     private function adminIndex(Request $request)
     {
         $query = Review::orderBy('id', 'desc');
+        $this->filter($request, $query);
         return ReviewResource::collection(
             $this->showBy($request, $query)
         );
