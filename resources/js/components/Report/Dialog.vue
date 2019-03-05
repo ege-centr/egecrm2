@@ -95,7 +95,7 @@
                     <v-flex md5 class='pb-0'>
                       <DatePicker v-model='item.date' label='Дата создания отчёта' />
                     </v-flex>
-                     <v-flex offset-md1 md5 class='pb-0'>
+                     <v-flex offset-md1 md5 class='pb-0' v-if='$store.state.user.class === ROLES.ADMIN'>
                       <v-switch color='green' v-model="item.is_available_for_parents" label="сделать отчет доступным для родителя"></v-switch>
                     </v-flex>
                   </v-layout>
@@ -116,6 +116,7 @@
 import { API_URL, MODEL_DEFAULTS, CATEGORY, getCategoryTitle, getCategoryDescription } from './'
 import { DialogMixin } from '@/mixins'
 import { DatePicker } from '@/components/UI'
+import { ROLES } from '@/config'
 
 export default {
   mixins: [ DialogMixin ],
@@ -127,6 +128,7 @@ export default {
       API_URL,
       MODEL_DEFAULTS,
       CATEGORY,
+      ROLES,
     }
   },
 

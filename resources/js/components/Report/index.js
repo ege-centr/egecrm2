@@ -1,10 +1,19 @@
+import store from '@/store'
+
 export const API_URL = 'reports'
 
 export const MODEL_DEFAULTS = {
 
 }
 
-export const FILTERS = []
+export const FILTERS = [
+  {label: 'Год', field: 'year', type: 'multiple', options: store.state.data.years},
+  {label: 'Преподаватель', field: 'teacher_ids', type: 'multiple', options: store.state.data.teachers, textField: 'names.abbreviation'},
+  {label: 'Предмет', field: 'subject_id', type: 'multiple', options: store.state.data.subjects, textField: 'name'},
+  {label: 'Тип', field: 'exists', type: 'multiple', options: [
+    {id: 'id', title: 'только созданные'},
+  ]}
+]
 
 export const REPORT_NEEDED_LESSON_COUNT = 6
 

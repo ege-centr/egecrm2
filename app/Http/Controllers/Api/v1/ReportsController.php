@@ -10,12 +10,13 @@ use App\Http\Resources\Report\{AbstractReportCollection, ReportResource};
 class ReportsController extends Controller
 {
     protected $filterTablePrefix = [
-        'lessons' => ['teacher_id', 'entity_id'],
-        'reports' => ['is_available_for_parents', 'exists']
+        'lessons' => ['teacher_id', 'entity_id', 'year', 'subject_id'],
+        'reports' => ['is_available_for_parents']
     ];
 
     protected $filters = [
         'equals' => ['teacher_id', 'entity_id', 'is_available_for_parents'],
+        'multiple' => ['year', 'subject_id']
     ];
 
     public function index(Request $request)
@@ -23,9 +24,13 @@ class ReportsController extends Controller
         $query = AbstractReport::query();
         $this->filter($request, $query);
 
-        // if (isset($request->exists) && $request->exists) {
-        //     $query->whereNotNull('reports.id');
-        // }
+        if (isset($request->teacher_ids) && count($request->teacher_ids) > 0) {
+            $query->whereIn('lessons.teacher_id', $request->teacher_ids);
+        }
+
+        if (isset($request->exists) && $request->exists) {
+            $query->whereNotNull('reports.id');
+        }
 
         return AbstractReportCollection::collection(
            $this->showBy($request, $query)
