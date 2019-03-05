@@ -53,7 +53,7 @@ class Controller extends BaseController
 
     protected function filterMultiple(string $field, $value, Builder &$query)
     {
-        $query->whereIn($field, explode(',', $value));
+        $query->whereIn($this->getFieldName($field), explode(',', $value));
     }
 
     protected function filterEquals(string $field, $value, Builder &$query)
