@@ -103,7 +103,8 @@ class User extends Model
             }
             $user = $query->find($entity_id);
             $user->class = trimModelClass($class);
-            $user->entityType = $class;
+            $user->entity_type = $class;
+            $user->class_basename = class_basename($class);
             return $user;
             // return new AdminResource(Admin::find($_SESSION['user']->id));
         }

@@ -7,5 +7,6 @@ export const MODEL_DEFAULTS = {
 
 }
 
-export const <%= Name %>List = require('./List')
-export const <%= Name %>Dialog = require('./Dialog')
+export const FILTERS = [
+  
+]

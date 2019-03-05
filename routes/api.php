@@ -54,6 +54,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         'client-test-answers' => 'ClientTestAnswersController',
         'ege-trials' => 'EgeTrialsController',
         'reviews' => 'ReviewsController',
+        'reports' => 'ReportsController',
     ]);
 
     // Route::namespace('Test')->prefix('tests')->group(function() {

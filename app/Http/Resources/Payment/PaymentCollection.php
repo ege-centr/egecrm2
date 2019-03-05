@@ -10,10 +10,10 @@ class PaymentCollection extends JsonResource
 {
     public function toArray($request)
     {
-        return array_merge(extractFields([
+        return extractFields($this, [
             'id', 'category', 'type', 'method', 'date', 'sum', 'year',
             'created_admin_id', 'created_at', 'class_name', 'is_confirmed'
-        ], $this), [
+        ], [
             'entity' => new PersonResource($this->entity),
         ]);
     }

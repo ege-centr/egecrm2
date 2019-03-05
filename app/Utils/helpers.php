@@ -111,13 +111,13 @@ function numToText($number)
     return $f->format($number);
 }
 
-function extractFields($fields, $object)
+function extractFields($object, $fields, $merge = [])
 {
     $return = [];
     foreach ($fields as $field) {
         $return[$field] = $object->{$field};
     }
-    return $return;
+    return array_merge($return, $merge);
 }
 
 function imitatePagination($items) {

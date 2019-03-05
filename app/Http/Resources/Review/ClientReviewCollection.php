@@ -9,8 +9,8 @@ class ClientReviewCollection extends JsonResource
 {
     public function toArray($request)
     {
-       return extractFields([
+       return extractFields($this, [
            'subject_id', 'grade_id', 'lesson_count', 'teacher_id', 'year', 'client_id', 'review'
-        ], $this);
+        ]);
     }
 }

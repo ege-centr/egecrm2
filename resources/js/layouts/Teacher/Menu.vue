@@ -41,6 +41,11 @@ export default {
         route: 'BalanceIndex',
         label: 'Баланс'
       },
+      {
+        icon: 'rate_review',
+        route: 'ReportIndex',
+        label: 'Отчёты'
+      },
     ],
   }),
   methods: {

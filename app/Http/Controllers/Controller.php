@@ -13,6 +13,9 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    protected $filters = [];
+    protected $filterTablePrefix = [];
+
     protected function filter(Request $request, Builder &$query)
     {
         // if (isset($request->sort_by) && $request->sort_by) {
@@ -27,7 +30,7 @@ class Controller extends BaseController
         foreach($this->filters as $type => $fields) {
             foreach($fields as $key_field => $field) {
                 $f = is_array($field) ? $key_field : $field;
-                if (isset($request->{$f}) && $request->{$f}) {
+                if (isset($request[$f]) && $request[$f]) {
                     $this->{'filter' . ucfirst($type)}($field, $request->{$f}, $query);
                 }
             }
@@ -55,7 +58,12 @@ class Controller extends BaseController
 
     protected function filterEquals(string $field, $value, Builder &$query)
     {
-        $query->where($field, $value);
+        $query->where($this->getFieldName($field), $value);
+    }
+
+    protected function filterNotNull(string $field, $value, Builder &$query)
+    {
+        $query->whereNotNull($this->getFieldName($field));
     }
 
     protected function filterExclude(string $field, $value, Builder &$query)
@@ -99,5 +107,17 @@ class Controller extends BaseController
     protected function filterFindInSet(string $field, $value, Builder &$query)
     {
         $query->whereRaw("FIND_IN_SET({$value}, {$field})");
+    }
+
+    private function getFieldName($field)
+    {
+        if (count($this->filterTablePrefix) === 0) {
+            return $field;
+        }
+        foreach($this->filterTablePrefix as $table => $fields) {
+            if (in_array($field, $fields)) {
+                return "{$table}.{$field}";
+            }
+        }
     }
 }

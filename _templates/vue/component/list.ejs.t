@@ -3,7 +3,7 @@ to: resources/js/components/<%= Name %>/List.vue
 ---
 <template>
   <div>
-    <<%= Name %>Dialog ref='<%= Name %>Dialog' />
+    <Dialog ref='Dialog' />
     <v-data-table
       :class='config.elevationClass'
       hide-actions
@@ -15,7 +15,7 @@ to: resources/js/components/<%= Name %>/List.vue
           {{ item.id }}
         </td>
         <td class='text-md-right'>
-          <v-btn @click='$refs.<%= Name %>Dialog.open(item.id)' slot='activator' flat icon color="black" class='ma-0'>
+          <v-btn @click='$refs.Dialog.open(item.id)' slot='activator' flat icon color="black" class='ma-0'>
             <v-icon>more_horiz</v-icon>
           </v-btn>
         </td>
@@ -25,7 +25,7 @@ to: resources/js/components/<%= Name %>/List.vue
 </template>
 
 <script>
-import { <%= Name %>Dialog } from './'
+import Dialog from './Dialog'
 
 export default {
   props: {
@@ -35,7 +35,7 @@ export default {
     },
   },
 
-  components: { <%= Name %>Dialog },
+  components: { Dialog },
 
   data() {
     return {

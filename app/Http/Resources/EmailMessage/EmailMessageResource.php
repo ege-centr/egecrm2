@@ -9,9 +9,9 @@ class EmailMessageResource extends JsonResource
 {
     public function toArray($request)
     {
-        return array_merge(extractFields([
+        return extractFields($this, [
             'id', 'files', 'created_at', 'subject', 'message', 'email'
-        ], $this), [
+        ], [
             'createdAdmin' => new AdminResource($this->createdAdmin),
         ]);
     }

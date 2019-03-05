@@ -32,6 +32,10 @@ button {
   background: $grey-background !important;
 }
 
+.nowrap {
+  white-space: nowrap;
+}
+
 
 a {
   cursor: pointer;
@@ -364,4 +368,8 @@ nav {
       display: none;
     }
   }
+}
+
+.input-label {
+  color: rgba(0, 0, 0, 0.54);
 }

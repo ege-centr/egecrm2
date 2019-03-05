@@ -15,6 +15,7 @@ const router = new Router({
     }
   },
   routes: [
+    ...require('./reports').default,
     ...require('./reviews').default,
     ...require('./balances').default,
     ...require('./schedules').default,

@@ -3,7 +3,6 @@
 namespace App\Console\Commands\Transfer;
 
 use Illuminate\Console\Command;
-use App\Models\{Task};
 use DB;
 
 class Reviews extends Command

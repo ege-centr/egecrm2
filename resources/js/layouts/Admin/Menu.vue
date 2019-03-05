@@ -101,6 +101,11 @@ export default {
         route: 'ReviewIndex',
         label: 'Отзывы'
       },
+      {
+        icon: 'rate_review',
+        route: 'ReportIndex',
+        label: 'Отчёты'
+      },
     ],
     admin_menu: [
       {

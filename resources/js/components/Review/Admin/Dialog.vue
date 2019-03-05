@@ -25,7 +25,7 @@
                     </div>
                     <div class='mb-3'>
                       <div class='flex-items align-center'>
-                        <span class='caption mr-3' style='color: rgba(0, 0, 0, 0.54)'>Оценка:</span>
+                        <span class='caption mr-3 input-label'>Оценка</span>
                         <v-rating dense clearable v-model="getComment(COMMENT_TYPE.client).rating"></v-rating>
                       </div>
                     </div>
@@ -39,7 +39,7 @@
                     </div>
                     <div class='mb-3'>
                       <div class='flex-items align-center'>
-                        <span class='caption mr-3' style='color: rgba(0, 0, 0, 0.54)'>Оценка:</span>
+                        <span class='caption mr-3 input-label'>Оценка</span>
                         <v-rating dense clearable v-model="getComment(COMMENT_TYPE.admin).rating"></v-rating>
                       </div>
                     </div>
@@ -53,7 +53,7 @@
                     </div>
                     <div class='mb-3'>
                       <div class='flex-items align-center'>
-                        <span class='caption mr-3' style='color: rgba(0, 0, 0, 0.54)'>Оценка:</span>
+                        <span class='caption mr-3 input-label'>Оценка</span>
                         <v-icon class='cursor-default' v-if='getComment(COMMENT_TYPE.final).rating === -1'>star</v-icon>
                         <v-icon class='pointer' 
                           v-if='getComment(COMMENT_TYPE.final).rating !== -1'
