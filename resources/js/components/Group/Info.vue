@@ -12,8 +12,9 @@
       <span v-else>
         Не установлен
       </span>
-      <div class='mt-3 item-label'>Кабинет</div>
-      <span>{{ item.cabinet_id ? item.cabinet.text : 'Не установлен' }}</span>
+      <div class='mt-3 item-label'>Уровень</div>
+      <span v-if='item.level' class='text-capitalize'>{{ LEVELS.find(e => e.value == item.level).text }}</span>
+      <span v-else>Не установлен</span>
     </div>
     <div class='mr-5 pr-5'>
       <div class='item-label'>Предмет и класс</div>
@@ -31,9 +32,7 @@
     <div>
       <div class='item-label'>Статус</div>
       <span>{{ item.is_archived ? 'Заархивирована' : 'Активная' }}</span>
-      <div class='mt-3 item-label'>Уровень</div>
-      <span v-if='item.level' class='text-capitalize'>{{ LEVELS.find(e => e.value == item.level).text }}</span>
-      <span v-else>Не установлен</span>
+      
     </div>
     <div class='f-1 text-md-right align-center d-flex' v-if='show.edit'>
       <div>
