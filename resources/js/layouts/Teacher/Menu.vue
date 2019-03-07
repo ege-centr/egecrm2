@@ -14,7 +14,7 @@
 
     <div class='menu-separator'></div>
     
-    <v-list-tile @click="$store.dispatch('logout')">
+    <v-list-tile @click="logout">
       <v-list-tile-action>
         <v-icon>exit_to_app</v-icon>
       </v-list-tile-action>
@@ -22,13 +22,25 @@
         <v-list-tile-title>Выход</v-list-tile-title>
       </v-list-tile-content>
     </v-list-tile> 
+
+    <v-list-tile v-if='PreviewMode.isActive()' class='preview-mode-info'>
+      Преподаватель №{{ $store.state.user.id }}
+      <br>
+      {{ $store.state.user.last_name }}
+      {{ $store.state.user.first_name }}
+      {{ $store.state.user.middle_name }}
+    </v-list-tile>
   </v-list>
 </template>
 
+
+
 <script>
+import PreviewMode from '@/other/PreviewMode'
 
 export default {
   data: () => ({
+    PreviewMode,
     drawer: true,
     menu: [
       {
@@ -49,9 +61,13 @@ export default {
     ],
   }),
   methods: {
-    goTo(route) {
-      this.$router.push({name: route})
-    }
+    logout() {
+      if (PreviewMode.isActive()) {
+        PreviewMode.exit()
+      } else {
+        this.$store.dispatch('logout')
+      }
+    },
   }
 }
 </script>

@@ -6,7 +6,7 @@
         is_available_for_parents: 1,
         exists: 1,
       }"
-      :tabs="{data: 'years', field: 'year'}"
+      :tabs='true'
       :api-url='API_URL' 
     >
       <template slot='items' slot-scope='{ items }'>

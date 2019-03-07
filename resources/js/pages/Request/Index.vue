@@ -2,7 +2,7 @@
   <div>
     <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='15' ref='DisplayData'>
       <template slot='buttons'>
-        <AddBtnAnimated label='добавить заявку' @click.native='$refs.RequestDialog.open(null)' />
+        <AddBtn animated label='добавить заявку' @click.native='$refs.RequestDialog.open(null)' />
       </template>
       <template slot='items' slot-scope='{ items }'>
         <v-layout row wrap class='relative'>

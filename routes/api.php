@@ -16,8 +16,8 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
     Route::get('search', 'SearchController@index');
     Route::get('visits', 'VisitsController@index');
 
-    Route::get('preview/exit', 'PreviewController@exit');
-    Route::get('preview', 'PreviewController@index');
+    Route::get('preview-mode/exit', 'PreviewModeController@exit');
+    Route::get('preview-mode', 'PreviewModeController@index');
 
     Route::get('balance', 'BalanceController@index');
 
@@ -52,7 +52,6 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         'macros' => 'MacrosController',
         'client-tests' => 'ClientTestsController',
         'client-test-answers' => 'ClientTestAnswersController',
-        'ege-trials' => 'EgeTrialsController',
         'reviews' => 'ReviewsController',
         'reports' => 'ReportsController',
     ]);

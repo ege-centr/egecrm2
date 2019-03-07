@@ -22,88 +22,97 @@
               :loading='saving'>Сохранить</v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-card-text>
+        <v-card-text class='px-0'>
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
-          <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
+          <div v-else>
             <!-- ЗАНЯТИЕ ПРОВЕДЕНО -->
-            <v-layout wrap v-if="item.status === LESSON_STATUS.CONDUCTED">
-              <v-flex md12>
-                <v-data-table 
-                  hide-actions
-                  :headers="[
-                    { text: '', sortable: false },
-                    { text: 'Ученик', sortable: false },
-                    { text: 'Отсутствовал', sortable: false }, 
-                    { text: 'Опоздание', sortable: false },
-                    { text: 'Цена', sortable: false },
-                    { text: 'Комментарий', sortable: false },
-                  ]"
-                  :items='clientLessons'
-                >
-                  <template slot="items" slot-scope="{ item }">
-                    <td width='30' class='px-0 text-md-center' @click='destroyClientLesson(item.id)'>
-                      <v-icon class='pointer'>close</v-icon>
+            <div wrap v-if="item.status === LESSON_STATUS.CONDUCTED">
+              <v-data-table 
+                hide-actions
+                :headers="[
+                  { text: 'Ученик', sortable: false },
+                  { text: 'Отсутствовал', sortable: false }, 
+                  { text: 'Опоздание', sortable: false },
+                  { text: 'Цена', sortable: false },
+                  { text: 'Комментарий', sortable: false },
+                  { text: '', sortable: false },
+                ]"
+                :items='clientLessons'
+              >
+                <template slot="items" slot-scope="{ item }">
+                  <td width='200'>
+                    {{ item.client ? item.client.names.short : 'ученик не указан' }}
+                  </td>
+                  <td width='150'>
+                    <v-switch color='red' v-model="item.is_absent" hide-details></v-switch>
+                  </td>
+                  <td width='150'>
+                    <v-icon small v-if="!item.late" class='client-edit-icon'>edit</v-icon>
+                    <v-edit-dialog
+                      :return-value.sync="item.late"
+                      lazy
+                    > {{ item.late }}
+                      <v-text-field
+                        slot="input"
+                        v-model="item.late"
+                        label="Опоздание"
+                        single-line
+                        v-mask="'##'"
+                      ></v-text-field>
+                    </v-edit-dialog>
+                  </td>
+                  <td width='150'>
+                    <v-icon small v-if="!item.price" class='client-edit-icon'>edit</v-icon>
+                    <v-edit-dialog
+                      :return-value.sync="item.price"
+                      lazy
+                    > {{ item.price }}
+                      <v-text-field
+                        slot="input"
+                        v-model="item.price"
+                        label="Цена"
+                        single-line
+                        v-mask="'#####'"
+                      ></v-text-field>
+                    </v-edit-dialog>
+                  </td>
+                  <td>
+                    <v-icon small v-if="!item.comment" class='client-edit-icon'>edit</v-icon>
+                    <v-edit-dialog
+                      :return-value.sync="item.comment"
+                      lazy
+                    > {{ item.comment }}
+                      <v-text-field
+                        slot="input"
+                        v-model="item.comment"
+                        single-line
+                        label="Комментарий"
+                      ></v-text-field>
+                    </v-edit-dialog>
+                  </td>
+                  <td width='30' class='text-md-right'>
+                    <v-btn flat icon color="red" class='ma-0' @click='destroyClientLesson(item.id)'>
+                      <v-icon>remove</v-icon>
+                    </v-btn>
+                  </td>
+                </template>
+                <template slot='footer'>
+                  <tr>
+                    <td colspan='7' class='pa-0 text-md-center'>
+                      <v-btn small flat color='primary' class='btn-tr' @click='$refs.AddClientDialog.open()'>
+                        <v-icon class="mr-1">add</v-icon>
+                        добавить ученика
+                      </v-btn>
                     </td>
-                    <td width='200'>
-                      {{ item.client ? item.client.names.short : 'ученик не указан' }}
-                    </td>
-                    <td width='150'>
-                      <v-switch color='red' v-model="item.is_absent" hide-details></v-switch>
-                    </td>
-                    <td width='150'>
-                      <v-icon small v-if="!item.late" class='client-edit-icon'>edit</v-icon>
-                      <v-edit-dialog
-                        :return-value.sync="item.late"
-                        lazy
-                      > {{ item.late }}
-                        <v-text-field
-                          slot="input"
-                          v-model="item.late"
-                          label="Опоздание"
-                          single-line
-                          v-mask="'##'"
-                        ></v-text-field>
-                      </v-edit-dialog>
-                    </td>
-                    <td width='150'>
-                      <v-icon small v-if="!item.price" class='client-edit-icon'>edit</v-icon>
-                      <v-edit-dialog
-                        :return-value.sync="item.price"
-                        lazy
-                      > {{ item.price }}
-                        <v-text-field
-                          slot="input"
-                          v-model="item.price"
-                          label="Цена"
-                          single-line
-                          v-mask="'#####'"
-                        ></v-text-field>
-                      </v-edit-dialog>
-                    </td>
-                    <td>
-                      <v-icon small v-if="!item.comment" class='client-edit-icon'>edit</v-icon>
-                      <v-edit-dialog
-                        :return-value.sync="item.comment"
-                        lazy
-                      > {{ item.comment }}
-                        <v-text-field
-                          slot="input"
-                          v-model="item.comment"
-                          single-line
-                          label="Комментарий"
-                        ></v-text-field>
-                      </v-edit-dialog>
-                    </td>
-                  </template>
-                </v-data-table>
-              </v-flex>
-              <v-flex md12>
-                <AddBtn label='добавить ученика' @click.native='$refs.AddClientDialog.open()' />
-              </v-flex>
-            </v-layout>
-
+                  </tr>
+                </template>
+                <template slot='no-data'>
+                  <NoData />
+                </template>
+              </v-data-table>
+            </div>
             <!-- Планируемое занятие -->
-            <v-layout wrap v-else>
+            <div wrap v-else>
               <v-flex md12>
                 <v-data-table v-if='item.groupClients.length'
                   hide-actions
@@ -154,8 +163,8 @@
                   </template>
                 </v-data-table>
               </v-flex>
-            </v-layout>
-          </v-container>
+            </div>
+          </div>
         </v-card-text>
       </v-card>
     </v-dialog>

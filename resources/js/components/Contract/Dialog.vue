@@ -25,22 +25,6 @@
                     </v-btn>
                     <!-- <span :class="getSubjectColor(subject)" @click='toggleSubjectStatus(subject.id)'>{{ subject.three_letters }}</span> -->
                   </v-flex>
-                  <!-- <v-flex class='ml-3' style='max-width: 190px'>
-                    <v-select hide-details class='pa-0 ma-0' @change='(e) => changeSubject(e, subject.id)'
-                      :items="SUBJECT_STATUS_LABELS"
-                      :value="findSubject(subject) ? findSubject(subject).status : undefined"
-                      item-text='title'
-                      item-value='id'
-                      placeholder="Статус"
-                      ref='select'
-                    >
-                      <v-list-tile slot='prepend-item' @click='changeSubject(null, subject.id); $refs.select[index].isMenuActive = false'>
-                        <v-list-tile-title class='grey--text'>
-                          не установлено
-                        </v-list-tile-title>
-                      </v-list-tile>
-                    </v-select>
-                  </v-flex> -->
                   <v-flex class='ml-3' style='max-width: 120px' v-if='findSubject(subject)'>
                     <v-text-field class='pa-0 ma-0' v-model="findSubject(subject).lessons" label="уроков" hide-details></v-text-field>
                   </v-flex>
@@ -137,12 +121,12 @@ export default {
       loading: true,
       edit_mode: true,
       destroying: false,
-      recommended_prices: null,
+      recommendedPrices: null,
     }
   },
 
   created() {
-    Settings.get('recommended-prices', true).then(r => this.recommended_prices = r.data)
+    Settings.get('recommended-prices', true).then(r => this.recommendedPrices = r.data)
   },
 
   methods: {
@@ -223,12 +207,15 @@ export default {
     },
 
     getRecommendedPrice() {
-      if (this.recommended_prices !== null && this.item.year && this.item.grade_id) {
+      if (this.recommendedPrices !== null && this.item.year && this.item.grade_id) {
         let lesson_count = 0
         this.item.subjects.forEach(subject => {
           lesson_count += subject.lessons
         })
-        return lesson_count * parseInt(this.recommended_prices[this.item.year][this.item.grade_id])
+        const recommendedPrice = this.recommendedPrices.find(e => e.year === this.item.year && e.grade_id === this.item.grade_id)
+        if (recommendedPrice !== null) {
+          return lesson_count * parseInt(recommendedPrice.price)
+        }
       }
     },
 

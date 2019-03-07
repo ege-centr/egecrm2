@@ -15,7 +15,7 @@ class Group extends Model
 
     protected $fillable = [
         'teacher_id', 'head_teacher_id', 'subject_id', 'grade_id', 'teacher_price',
-        'duration', 'year', 'is_archived', 'is_ready_to_start', 'cabinet_id', 'level',
+        'duration', 'year', 'is_archived', 'is_ready_to_start', 'level',
         'latest_start_lesson_id'
     ];
 
@@ -27,11 +27,6 @@ class Group extends Model
     public function groupClients()
     {
         return $this->hasMany(GroupClient::class);
-    }
-
-    public function cabinet()
-    {
-        return $this->belongsTo(Cabinet::class);
     }
 
     public function teacher()

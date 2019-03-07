@@ -56,35 +56,16 @@ class BalanceController extends Controller
             ];
         }
 
-        if ($isTeacher) {
-            $additionalPayments = app()->call('App\Http\Controllers\Api\v1\PaymentAdditionalsController@index')->items();
-            foreach($additionalPayments as $additionalPayment) {
-                $items[] = [
-                    'sum' => $additionalPayment->sum,
-                    'comment' => $additionalPayment->purpose,
-                    'date' => $additionalPayment->date,
-                    'year' => $additionalPayment->year,
-                    'admin_id' => $additionalPayment->created_admin_id,
-                    'created_at' => $additionalPayment->created_at,
-                ];
-            }
-        } else {
-            $egeTrials = app()->call('App\Http\Controllers\Api\v1\EgeTrialsController@index')->items();
-            foreach($egeTrials as $egeTrial) {
-                $comment = 'пробный ЕГЭ '
-                    . '(' . Subject::getTitle($egeTrial->subject_id, 'three_letters') . '-'
-                    . Grade::getTitle($egeTrial->grade_id, 'short') . ')'
-                    . ($egeTrial->description ? ', ' . $egeTrial->description : '');
-
-                $items[] = [
-                    'sum' => $egeTrial->sum * -1,
-                    'comment' => $comment,
-                    'date' => $egeTrial->date,
-                    'year' => $egeTrial->year,
-                    'admin_id' => $egeTrial->created_admin_id,
-                    'created_at' => $egeTrial->created_at,
-                ];
-            }
+        $additionalPayments = app()->call('App\Http\Controllers\Api\v1\PaymentAdditionalsController@index')->items();
+        foreach($additionalPayments as $additionalPayment) {
+            $items[] = [
+                'sum' => $additionalPayment->sum,
+                'comment' => $additionalPayment->purpose,
+                'date' => $additionalPayment->date,
+                'year' => $additionalPayment->year,
+                'admin_id' => $additionalPayment->created_admin_id,
+                'created_at' => $additionalPayment->created_at,
+            ];
         }
 
         $items = collect($items)->sortByDesc(function($item) {

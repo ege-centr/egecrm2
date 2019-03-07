@@ -16,7 +16,6 @@ class Resource extends JsonResource
             $client->subject_status = $client->getSubjectStatus($this->year, $this->grade_id, $this->subject_id);
         }
         return array_merge(parent::toArray($request), [
-            'cabinet' => $this->cabinet,
             'clients' => ClientCollection::collection($clients),
             'lessons' => LessonResource::collection($this->lessons),
             'teacher' => new TeacherResource($this->teacher),

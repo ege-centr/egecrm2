@@ -13,17 +13,15 @@
       </div>
       <Menu />
     </v-navigation-drawer>
-    <PreviewMode />
   </div>
 </template>
 
 <script>
 
 import Menu from './Menu'
-import PreviewMode from '@/components/UI/PreviewMode'
 
 export default {
-  components: { Menu, PreviewMode },
+  components: { Menu },
 }
 </script>
 

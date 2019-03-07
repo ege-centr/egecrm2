@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 
-class PreviewController extends Controller
+class PreviewModeController extends Controller
 {
     public function index(Request $request)
     {
@@ -16,7 +16,6 @@ class PreviewController extends Controller
             'class' => getModelClass($request->class_name, true),
         ];
         $user = User::fromSession();
-        $user->preview = true;
         return $user;
     }
 

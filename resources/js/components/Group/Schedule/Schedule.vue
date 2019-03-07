@@ -96,6 +96,9 @@
                   </td>
                 </tr>
               </template>
+              <template slot='no-data'>
+                <NoData />
+              </template>
             </v-data-table>
           </v-flex>
         </v-layout>
@@ -166,7 +169,8 @@ export default {
 
     async fillSchedule() {
       this.filling = true
-      const last_lesson = _.sortBy(this.items, 'date').reverse()[0]
+      // последнее непроведенное занятие
+      const last_lesson = _.sortBy(this.items.filter(e => e.status === LESSON_STATUS.PLANNED), 'date').reverse()[0]
       let date = last_lesson.date
       while (true) {
         date = moment(date).add(1, 'week').format('YYYY-MM-DD')

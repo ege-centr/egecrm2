@@ -1,7 +1,7 @@
 <template>
   <div>
     <DisplayData 
-      :tabs="{data: 'years', field: 'year'}"
+      :tabs='true'
       :api-url='API_URL' 
       :paginate='30' 
       :invisible-filters="{client_id: $store.state.user.id}">

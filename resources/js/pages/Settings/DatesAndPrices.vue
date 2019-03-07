@@ -105,8 +105,8 @@
                   Рекомендованные цены
                 </div>
                 
-                <v-data-table class='mt-3' hide-actions hide-headers :items='currentYearRecommendedPrices'>
-                   <template slot='items' slot-scope="{ item }">
+                <data-table no-elevation :items='currentYearRecommendedPrices'>
+                  <tr slot-scope='{ item }'>
                     <td>
                       {{ getData('grades', item.grade_id).title }}
                     </td>
@@ -118,14 +118,10 @@
                         <v-icon>more_horiz</v-icon>
                       </v-btn>
                     </td>
-                  </template>
-                </v-data-table>
+                  </tr>
+                </data-table>
 
-                <v-btn color='primary' small class='ma-0 mr-3 mt-3' @click='addRecommendedPrice'>
-                    <v-icon class="mr-1">add</v-icon>
-                    добавить
-                    <!-- добавить {{ type === TYPE_EXAM ? 'экзамен' : 'праздник'}} -->
-                  </v-btn>
+                <AddBtn class='ma-0 mr-3 mt-3' @click.native='addRecommendedPrice' />
               </v-flex>
               <v-spacer></v-spacer>
               <v-flex md6>
@@ -149,13 +145,12 @@
                       </v-btn>
                     </td>
                   </template>
+                  <template slot='no-data'>
+                    <NoData />
+                  </template>
                 </v-data-table>
                 <div class='mt-3'>
-                  <v-btn color='primary' small class='ma-0 mr-3' @click='add'>
-                    <v-icon class="mr-1">add</v-icon>
-                    добавить
-                    <!-- добавить {{ type === TYPE_EXAM ? 'экзамен' : 'праздник'}} -->
-                  </v-btn>
+                  <AddBtn class='ma-0 mr-3' @click.native='add' />
                 </div>
               </v-flex>
             </v-layout>

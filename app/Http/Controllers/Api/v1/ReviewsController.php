@@ -4,18 +4,19 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\{Lesson\ClientLesson, Client\Client, Review\Review, Review\ReviewComment};
-use App\Http\Resources\Review\{ReviewResource, ClientReviewCollection};
+use App\Models\{Lesson\ClientLesson, Client\Client, Review\Review, Review\ReviewComment, Review\AbstractReview};
+use App\Http\Resources\Review\{ReviewResource, ClientReviewCollection, AbstractReviewCollection};
 use User;
 
 class ReviewsController extends Controller
 {
     protected $filters = [
-        'equals' => ['client_id', 'teacher_id']
+        'equals' => ['entity_id', 'teacher_id']
     ];
 
     public function index(Request $request)
     {
+            // return $this->adminIndex($request);
             return $this->{strtolower(class_basename($_SESSION['user']['class'])) . 'Index'}($request);
     }
 
@@ -54,9 +55,9 @@ class ReviewsController extends Controller
 
     private function adminIndex(Request $request)
     {
-        $query = Review::orderBy('id', 'desc');
+        $query = AbstractReview::query();
         $this->filter($request, $query);
-        return ReviewResource::collection(
+        return AbstractReviewCollection::collection(
             $this->showBy($request, $query)
         );
     }

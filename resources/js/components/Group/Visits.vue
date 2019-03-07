@@ -1,34 +1,38 @@
 <template>
   <div>
-    <div class='visits' v-if='group.lessons.length > 0'>
-      <div class='visits__dates'>
-        <div></div>
-        <div v-for='(lesson, index) in group.lessons' :key='lesson.id' :class="getClass(index)">
-          <span>{{ lesson.date | date }}</span>
+    <v-card v-if='group.lessons.length > 0'>
+      <v-card-text class='relative'>
+        <div class='visits'>
+          <div class='visits__dates'>
+            <div></div>
+            <div v-for='(lesson, index) in group.lessons' :key='lesson.id' :class="getClass(index)">
+              <span>{{ lesson.date | date }}</span>
+            </div>
+          </div>
+          <div class="visits__items" v-for='client in clients' :key='client.id'>
+            <div>
+              <router-link v-if='$store.state.user.class === ROLES.ADMIN' :to="{ name: 'ClientShow', params: { id: client.id } }"><PersonName :item='client' /></router-link>
+              <PersonName v-else :item='client' />
+            </div>
+            <div v-for='(lesson, index) in group.lessons' :key='lesson.id' :class="getClass(index)">
+              <SmallCircle v-if='getClientLesson(lesson, client)' 
+                :class-name='getCircleClass(lesson, client)' 
+                :title="getClientLesson(lesson, client).late > 0 ? 'опоздал на ' + getClientLesson(lesson, client).late + ' мин' : ''"
+              />
+            </div>
+          </div>
+          <div class="visits__items" v-for="(teacher, index) in teachers" :key="teacher.id" :class="{'first-teacher-item': index === 0}">
+            <div>
+              <router-link :to="{ name: 'TeacherShow', params: { id: teacher.id } }">{{ teacher.names.abbreviation }}</router-link>
+            </div>
+            <div v-for='(lesson, index) in group.lessons' :key='lesson.id' :class="getClass(index)">
+              <SmallCircle v-if='lesson.status === LESSON_STATUS.CONDUCTED && lesson.teacher_id === teacher.id' class-name='green' />
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="visits__items" v-for='client in clients' :key='client.id'>
-        <div>
-          <router-link v-if='$store.state.user.class === ROLES.ADMIN' :to="{ name: 'ClientShow', params: { id: client.id } }"><PersonName :item='client' /></router-link>
-          <PersonName v-else :item='client' />
-        </div>
-        <div v-for='(lesson, index) in group.lessons' :key='lesson.id' :class="getClass(index)">
-          <SmallCircle v-if='getClientLesson(lesson, client)' 
-            :class-name='getCircleClass(lesson, client)' 
-            :title="getClientLesson(lesson, client).late > 0 ? 'опоздал на ' + getClientLesson(lesson, client).late + ' мин' : ''"
-          />
-        </div>
-      </div>
-      <div class="visits__items" v-for="(teacher, index) in teachers" :key="teacher.id" :class="{'first-teacher-item': index === 0}">
-        <div>
-          <router-link :to="{ name: 'TeacherShow', params: { id: teacher.id } }">{{ teacher.names.abbreviation }}</router-link>
-        </div>
-        <div v-for='(lesson, index) in group.lessons' :key='lesson.id' :class="getClass(index)">
-          <SmallCircle v-if='lesson.status === LESSON_STATUS.CONDUCTED && lesson.teacher_id === teacher.id' class-name='green' />
-        </div>
-      </div>
-    </div>
-    <NoData v-else />
+      </v-card-text>
+    </v-card>
+    <DataTable v-else :items='[]' />
   </div>
 </template>
 
@@ -98,8 +102,12 @@ export default {
       const clients = []
       this.group.lessons.forEach(lesson => {
         lesson.clientLessons.forEach(clientLesson => {
-          if (clients.findIndex(e => e.id === clientLesson.client.id) === -1) {
-            clients.push(clientLesson.client)
+          // TODO: вообще-то client всегда должен быть. что-то неправильно перенеслось?
+          // пример группы: 2005 (prod)
+          if (clientLesson.client !== null) {
+            if (clients.findIndex(e => e.id === clientLesson.client.id) === -1) {
+              clients.push(clientLesson.client)
+            }
           }
         })
       })

@@ -12,7 +12,9 @@ class EmailMessagesController extends Controller
     public function index(Request $request)
     {
         return EmailMessageResource::collection(
-            EmailMessage::where('email', $request->email)->get()
+            EmailMessage::orderBy('id', 'desc')
+                ->where('email', $request->email)
+                ->get()
         );
     }
 

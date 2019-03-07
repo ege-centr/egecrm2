@@ -1,35 +1,43 @@
 <template>
   <div>
-    <v-data-table :items='items' item-key='id' hide-headers hide-actions :class='config.elevationClass'>
+    <v-data-table :items='items' hide-headers hide-actions :class='config.elevationClass'>
       <template slot="items" slot-scope="{ item }">
         <td>
-          отзыв {{ item.id }}
+          <span v-if='item.review !== null'>
+            отзыв {{ item.review.id }}
+          </span>
+          <span v-else class='grey--text'>
+            не создан
+          </span>
         </td>
         <td>
           <SubjectGrade :item='item' />
         </td>
         <td>
-          <router-link :to="{name: 'ClientShow', params: {id: item.client_id}}">
+          <router-link :to="{name: 'ClientShow', params: {id: item.client_id}}" v-if='item.client_id > 0'>
             {{ item.client.names.short }}
           </router-link>
         </td>
         <td>
-          <router-link :to="{name: 'TeacherShow', params: {id: item.teacher_id}}">
-            {{ getData('teachers', item.teacher_id).names.short }}
+          <router-link :to="{name: 'TeacherShow', params: {id: item.teacher_id}}" v-if='item.teacher_id > 0'>
+            {{ item.teacher.names.short }}
           </router-link>
         </td>
+        <td>
+          {{ item.lesson_count }} занятий
+        </td>
         <td width='40' class='td-border px-1 text-md-center'>
-          <span v-if='getComment(item, COMMENT_TYPE.client)'>
+          <span v-if='item.review !== null && getComment(item, COMMENT_TYPE.client)'>
             {{ getComment(item, COMMENT_TYPE.client).rating }}
           </span>
         </td>
         <td width='40' class='td-border px-1 text-md-center'>
-          <span v-if='getComment(item, COMMENT_TYPE.admin)'>
+          <span v-if='item.review !== null && getComment(item, COMMENT_TYPE.admin)'>
             {{ getComment(item, COMMENT_TYPE.admin).rating }}
           </span>
         </td>
         <td width='40' class='td-border px-1 text-md-center'>
-          <span v-if='getComment(item, COMMENT_TYPE.final)'>
+          <span v-if='item.review !== null && getComment(item, COMMENT_TYPE.final)'>
             <span class='grey--text' v-if='getComment(item, COMMENT_TYPE.final).rating === -1'>
               –
             </span>
@@ -39,28 +47,34 @@
           </span>
         </td>
         <td>
-          <span v-if='item.score && item.max_score'>
-            {{ item.score }} из {{ item.max_score }}
+          <span v-if='item.review !== null && item.review.score > 0 && item.review.max_score > 0'>
+            {{ item.review.score }} из {{ item.review.max_score }}
           </span>
         </td>
         <td>
-          <span class='green--text' v-if='item.is_approved'>
-            проверено
-          </span>
-          <span v-else class='red--text'>
-            не проверено
+          <span v-if='item.review !== null'>
+            <span class='green--text' v-if='item.review.is_approved'>
+              проверено
+            </span>
+            <span v-else class='red--text'>
+              не проверено
+            </span>
           </span>
         </td>
         <td>
-          <span class='green--text' v-if='item.is_published'>
-            опубликовано
-          </span>
-          <span v-else class='red--text'>
-            не опубликовано
+          <span v-if='item.review !== null'>
+            <span class='green--text' v-if='item.review.is_published'>
+              опубликовано
+            </span>
+            <span v-else class='red--text'>
+              не опубликовано
+            </span>
           </span>
         </td>
         <td class='text-md-right'>
-          <v-btn flat icon color="black" class='ma-0' @click='edit(item)'>
+          <v-btn flat icon color="black" class='ma-0' 
+            v-if='item.review !== null'
+            @click='$refs.Dialog.open(item.review.id)'>
             <v-icon>more_horiz</v-icon>
           </v-btn>
         </td>
@@ -91,12 +105,8 @@ export default {
   },  
 
   methods: {
-    edit(item) {
-      this.$refs.Dialog.open(item.id)
-    },
-
     getComment(item, type) {
-      return item.comments.find(e => e.type === type)
+      return item.review.comments.find(e => e.type === type)
     }
   },
 }

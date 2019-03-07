@@ -96,20 +96,14 @@
           </v-card>
         </v-tab-item>
         <v-tab-item>
-          <v-card :class='config.elevationClass' v-if='item.lessons.length > 0'>
-            <v-card-text class='relative'>
-              <Visits :group='item' />
-            </v-card-text>
-          </v-card>
-          <NoData v-else />
+          <Visits :group='item' />
         </v-tab-item>
         <v-tab-item>
-          <DisplayData ref='GroupActPage' :api-url='GROUP_ACTS_API_URL' :invisible-filters='{group_id: item.id}' container-class='py-0'>
+          <DisplayData ref='GroupActPage' :api-url='GROUP_ACTS_API_URL' :invisible-filters='{group_id: item.id}' container-class='py-0 mt-4'>
             <template slot='items' slot-scope='{ items }'>
               <GroupActList :items='items' @updated='$refs.GroupActPage.loadData()' />
             </template>
             <template slot='buttons-bottom'>
-              <AddBtn class='mt-3' @click.native='$refs.GroupActDialog.open(null, {group_id: item.id})' />
             </template>
           </DisplayData>
           <!-- <GroupActList :group-id='item.id' /> -->

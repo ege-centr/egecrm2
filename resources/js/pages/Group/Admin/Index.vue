@@ -3,7 +3,7 @@
     <GroupDialog ref='GroupDialog' />
     <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='30'>
       <template slot='buttons'>
-        <AddBtn @click.native='$refs.GroupDialog.open(null)' label='добавить группу' />
+        <AddBtn @click.native='$refs.GroupDialog.open(null)' animated label='добавить группу' />
       </template>
       <template slot='items' slot-scope="{ items }">
         <GroupList :items='items' />

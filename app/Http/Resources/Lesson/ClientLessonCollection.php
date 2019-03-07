@@ -10,7 +10,7 @@ class ClientLessonCollection extends JsonResource
     {
         return extractFields($this, [
             'id', 'group_id', 'cabinet_id', 'teacher_id', 'grade_id', 'comment',
-            'status', 'date', 'time', 'subject_id', 'is_absent', 'price'
+            'status', 'date', 'time', 'subject_id', 'is_absent', 'price', 'year'
         ]);
     }
 }

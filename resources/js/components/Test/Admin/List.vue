@@ -1,18 +1,9 @@
 <template>
   <div>
-    <div class='flex-items justify-end'>
-      <div class='mr-5'>
-        <v-btn fab dark small color="red" @click='$refs.TestIntroTextDialog.open()'>
-          <v-icon dark>format_align_left</v-icon>
-        </v-btn>
-        <span>редактировать вступительный текст</span>
-      </div>
-      <div>
-        <v-btn fab dark small color="red" @click='$refs.TestDialog.open()'>
-          <v-icon dark>add</v-icon>
-        </v-btn>
-        <span>добавить тест</span>
-      </div>
+    <div class='flex-items'>
+      <AddBtn @click.native='$refs.TestIntroTextDialog.open()' label='редактировать вступительный текст' icon='format_align_left' />
+      <v-spacer></v-spacer>
+      <AddBtn @click.native='$refs.TestDialog.open()' animated label='добавить тест' />
     </div>
 
     <TestDialog ref='TestDialog' @updated='loadData' />

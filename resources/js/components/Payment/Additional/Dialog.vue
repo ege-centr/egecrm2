@@ -6,7 +6,7 @@
           <v-btn icon dark @click.native="dialog = false">
             <v-icon>close</v-icon>
           </v-btn>
-          <v-toolbar-title>{{ edit_mode ? 'Редактирование' : 'Добавление' }} дополнительной услуги</v-toolbar-title>
+          <v-toolbar-title>{{ edit_mode ? 'Редактирование' : 'Добавление' }} услуги</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn dark flat v-if='edit_mode' @click.native="destroy" :loading='destroying'>Удалить</v-btn>

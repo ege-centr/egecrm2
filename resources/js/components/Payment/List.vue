@@ -1,16 +1,17 @@
 <template>
-  <div>
-    <PaymentDialog ref='PaymentDialog' />
-    <v-data-table
-      :class='config.elevationClass'
-      hide-actions
-      hide-headers
-      :items='items'
-    >
-      <template slot='items' slot-scope="{ item }">
+  <display-list 
+    :dialog-component='Dialog'
+    :items='items'
+    :model-defaults='modelDefaults'
+    :add-btn='show.addBtn'
+    add-btn-label='добавить платеж'
+    ref='DisplayList'
+  >
+    <template slot='item' slot-scope="{ item }">
+      <tr>
         <td v-if='show.entity'>
           <router-link v-if='item.entity' :to="{
-            name: item.class_name === CLIENT_CLASS_NAME ? 'ClientShow' : 'TeacherShow',  
+            name: item.class_name === ROLES.CLIENT ? 'ClientShow' : 'TeacherShow',  
             params: {id: item.entity.id}
           }">
             <PersonName :item='item.entity' />
@@ -31,10 +32,10 @@
             {{ ENUMS.categories.find(e => e.id == item.category).title }}
           </span>
         </td>
-         <td v-if='show.entity !== false'>
-           <span v-if='item.year'>
+          <td v-if='show.entity !== false'>
+            <span v-if='item.year'>
             {{ getData('years', item.year).title }}
-           </span>
+            </span>
         </td>
         <td>
           {{ item.sum }} руб.
@@ -53,38 +54,23 @@
           </span>
         </td>
         <td class='text-md-right'>
-          <v-btn @click='$refs.PaymentDialog.open(item.id)' slot='activator' flat icon color="black" class='ma-0'>
+          <v-btn @click='$refs.DisplayList.edit(item.id)' slot='activator' flat icon color="black" class='ma-0'>
             <v-icon>more_horiz</v-icon>
           </v-btn>
         </td>
-      </template>
-      <!-- <template slot='footer' v-if='show.addBtn'>
-        <tr>
-          <td class='text-md-center pa-0' colspan='10'>
-            <v-btn small flat color='primary' class='btn-tr' @click='$refs.PaymentDialog.open(null, {
-              entity_id: entityId,
-              entity_type: entityType,
-            })'>
-              добавить
-            </v-btn>
-          </td>
-        </tr>
-      </template> -->
-    </v-data-table>
-    <center class='mt-5' v-if='items.length === 0'>
-      <AddBtn @click.native='$refs.PaymentDialog.open(null, {
-        entity_id: entityId,
-        entity_type: entityType,
-      })' />
-    </center>
-  </div>
+      </tr>
+    </template>
+  </display-list>
 </template>
-<script>
 
-import { ENUMS, PaymentDialog } from './'
-import { CLASS_NAME as CLIENT_CLASS_NAME } from '@/components/Client'
-import { CLASS_NAME as TEACHER_CLASS_NAME } from '@/components/Teacher'
+
+
+<script>
+import Dialog from './Dialog'
+import DisplayList from '@/components/UI/DisplayList'
 import DisplayOptions from '@/mixins/DisplayOptions'
+import { ROLES } from '@/config'
+import { ENUMS } from './'
 
 export default {
   props: {
@@ -92,24 +78,23 @@ export default {
       type: Array,
       required: true
     },
-    entityId: {
+    
+    modelDefaults: {
+      type: Object,
       required: false,
+      default: () => {},
     },
-    entityType: {
-      type: String,
-      required: false,
-    }
   },
 
   mixins: [ DisplayOptions ],
 
-  components: { PaymentDialog },
+  components: { DisplayList },
 
   data() {
     return {
       ENUMS,
-      CLIENT_CLASS_NAME,
-      TEACHER_CLASS_NAME,
+      ROLES,
+      Dialog,
       defaultDisplayOptions: {
         entity: false,
         addBtn: true,

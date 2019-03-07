@@ -3,7 +3,7 @@
     <Loader v-if='loading' />
 
     <div class='flex-items align-center'>
-      <div v-if='tabs !== null'>
+      <div v-if='tabs'>
          <v-chip v-for="item in tabsWithData" class='pointer ml-0 mr-3'
             :class="{'primary white--text': item.id == selected_tab}"
             @click='selected_tab = item.id'
@@ -17,7 +17,7 @@
       <slot name='buttons' v-if='items.length > 0'></slot>
     </div>
 
-    <NoData v-if='items.length === 0' :class="{'invisible': loading}" />
+    <!-- <NoData v-if='items.length === 0' :class="{'invisible': loading}" /> -->
 
     <v-container grid-list-md fluid :class="`px-0 ${containerClass} ${loading ? 'invisible' : ''}`">
       <v-layout row wrap class='relative'>
@@ -55,6 +55,7 @@
 <script>
 
 import { AllFilter } from '@/components/Filter'
+import { tabsWithData } from '@/other/functions'
 import InfiniteLoading from 'vue-infinite-loading'
 
 export default {
@@ -86,8 +87,8 @@ export default {
       required: false,
     },
     tabs: {
-      type: Object,
-      default: null,
+      type: Boolean,
+      default: false,
     },
     containerClass: {
       type: String,
@@ -129,7 +130,7 @@ export default {
         } else {
           this.data.push(...response.data.data)
         }
-        if (this.tabs !== null && this.tabsWithData.length) {
+        if (this.tabs && this.tabsWithData.length) {
           this.selected_tab = this.tabsWithData.slice(-1)[0].id
         }
         if (this.paginate !== null) {
@@ -213,15 +214,13 @@ export default {
     },
 
     items() {
-      return this.tabs !== null ?
-        this.data.filter(e => e[this.tabs.field] === this.selected_tab) :
+      return this.tabs ?
+        this.data.filter(e => e.year === this.selected_tab) :
         this.data
     },
 
     tabsWithData() {
-      return this.$store.state.data[this.tabs.data].filter(d => {
-        return this.data.findIndex(e => e[this.tabs.field] === d.id) !== -1
-      })
+      return tabsWithData(this.data)
     },
   }
 }

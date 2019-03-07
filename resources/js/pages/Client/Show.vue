@@ -82,7 +82,7 @@
                       <v-list-tile-title>Редактировать</v-list-tile-title>
                     </v-list-tile-content>
                   </v-list-tile>
-                  <v-list-tile @click="loading = true; Preview.login(client.id, CLASS_NAME)">
+                  <v-list-tile @click="loading = true; PreviewMode.login(client.id, CLASS_NAME)">
                     <v-list-tile-action>
                       <v-icon>visibility</v-icon>
                     </v-list-tile-action>
@@ -119,7 +119,7 @@
           Платежи
         </v-tab>
         <v-tab>
-          Пробный ЕГЭ
+          Допуслуги
         </v-tab>
         <v-tab>
           Комментарии
@@ -140,14 +140,23 @@
             :invisible-filters="{client_id: client.id}"
           >
             <template slot='items' slot-scope='{ items }'>
-              <v-layout row wrap class='relative'>
+              <v-layout row wrap class='relative' v-if='items.length > 0'>
                 <v-flex xs12 v-for='item in items' :key='item.id'>
                   <RequestItem :item='item' @openDialog='$refs.RequestDialog.open(item.id)' />
                 </v-flex>
               </v-layout>
+              <v-data-table :items='[]' hide-actions hide-headers :class='config.elevationClass' v-else>
+                <template slot='no-data'>
+                  <no-data>
+                    <AddBtn label='добавить заявку' @click.native='$refs.RequestDialog.open(null, {
+                      phones: client.phones,
+                    })' />
+                  </no-data>
+                </template>
+              </v-data-table>
             </template>
-            <template slot='buttons-bottom'>
-              <AddBtn @click.native='$refs.RequestDialog.open(null, {
+            <template slot='buttons'>
+              <AddBtn label='добавить заявку' animated @click.native='$refs.RequestDialog.open(null, {
                 phones: client.phones,
               })' />
             </template>
@@ -157,15 +166,12 @@
         <!-- Договоры -->
         <v-tab-item>
           <DisplayData ref='ContractPage'
-            :tabs="{data: 'years', field: 'year'}"
+            :tabs='true'
             :api-url='CONTRACT_API_URL' 
             :invisible-filters="{client_id: client.id}"
           >
             <template slot='items' slot-scope='{ items }'>
               <ContractList :items='items' :client='client' @updated='$refs.ContractPage.loadData' />
-            </template>
-            <template slot='buttons-bottom'>
-              <AddBtn @click.native='$refs.ContractDialog.open(null, {client_id: client.id})' />
             </template>
           </DisplayData>
         </v-tab-item>
@@ -183,7 +189,7 @@
         <!-- Группы -->
         <v-tab-item>
           <DisplayData ref='GroupPage'
-            :tabs="{data: 'years', field: 'year'}"
+            :tabs='true'
             :api-url='GROUP_API_URL' 
             :invisible-filters="{client_id: $route.params.id}"
           >
@@ -204,34 +210,33 @@
         <!-- Платежи -->
         <v-tab-item>
           <DisplayData ref='PaymentPage'
-            :tabs="{data: 'years', field: 'year'}"
+            :tabs='true'
             :api-url='PAYMENT_API_URL' 
             :invisible-filters="{entity_id: $route.params.id, entity_type: CLASS_NAME}"
           >
             <template slot='items' slot-scope='{ items }'>
-              <PaymentList :items='items' :entity-id='$route.params.id' :entity-type='CLASS_NAME' />
-            </template>
-            <template slot='buttons'>
-              <AddBtn label='добавить платеж' @click.native='$refs.PaymentDialog.open(null, {
-                entity_id: $route.params.id,
-                entity_type: CLASS_NAME,
-              })' />
+              <PaymentList 
+                :items='items' 
+                :model-defaults='{ entity_id: $route.params.id, entity_type: CLASS_NAME }' 
+                @updated='$refs.PaymentPage.loadData()'
+              />
             </template>
           </DisplayData>
         </v-tab-item>
 
-        <!--  Пробный ЕГЭ -->
-        <v-tab-item>
-          <DisplayData ref='EgeTrialPage'
-            :tabs="{data: 'years', field: 'year'}"
-            :api-url='EGE_TRIAL_API_URL' 
-            :invisible-filters="{client_id: $route.params.id}"
+        <!--  Допуслуги -->
+         <v-tab-item>
+           <DisplayData ref='PaymentAdditionalPage'
+            :tabs='true'
+            :api-url='PAYMENT_ADDITIONAL_API_URL' 
+            :invisible-filters="{ entity_id: $route.params.id, entity_type: CLASS_NAME }"
           >
             <template slot='items' slot-scope='{ items }'>
-              <EgeTrialList :items='items' :client-id='$route.params.id' />
-            </template>
-            <template slot='buttons'>
-              <AddBtn label='добавить' @click.native='$refs.EgeTrialDialog.open(null, {client_id: $route.params.id})' />
+              <PaymentAdditionalList 
+                :model-defaults='{ entity_id: $route.params.id, entity_type: CLASS_NAME }'
+                :items='items' 
+                @updated='$refs.PaymentAdditionalPage.loadData()'
+              />
             </template>
           </DisplayData>
         </v-tab-item>
@@ -255,7 +260,7 @@
           <DisplayData 
             ref='ReviewPage'
             :api-url='REVIEW_API_URL' 
-            :tabs="{data: 'years', field: 'year'}"
+            :tabs='true'
             :invisible-filters="{client_id: $route.params.id}"
           >
             <template slot='items' slot-scope='{ items }'>
@@ -270,7 +275,7 @@
     <PaymentDialog ref='PaymentDialog' v-if='$refs.PaymentPage' @updated='$refs.PaymentPage.reloadData' />
     <RequestDialog ref='RequestDialog' v-if='$refs.RequestPage' @updated='$refs.RequestPage.loadData' />
     <ContractDialog ref='ContractDialog' v-if='$refs.ContractPage' @updated='$refs.ContractPage.reloadData' />
-    <EgeTrialDialog ref='EgeTrialDialog' v-if='$refs.EgeTrialPage' @updated='$refs.EgeTrialPage.reloadData' />
+    <PaymentAdditionalDialog ref='PaymentAdditionalDialog' />
   </div>
 </template>
 
@@ -291,10 +296,8 @@ import { DisplayData } from '@/components/UI'
 import { API_URL as GROUP_API_URL } from '@/components/Group'
 import GroupList from '@/components/Group/List'
 
-import { 
-  API_URL as CONTRACT_API_URL,
-} from '@/components/Contract'
-import ContractDialog from '@/components/Contract/Dialog'
+// Contracts
+import { API_URL as CONTRACT_API_URL } from '@/components/Contract'
 import ContractList from '@/components/Contract/List'
 
 import ClientDialog from '@/components/Client/Dialog'
@@ -305,18 +308,21 @@ import {
   RequestDialog,
   API_URL as REQUEST_API_URL
 } from '@/components/Request'
-import Preview from '@/other/Preview'
+import PreviewMode from '@/other/PreviewMode'
 import ClientSchedule from '@/components/Client/Schedule'
 import Balance from '@/components/Balance/Balance'
 
-// EGE TRIAL
-import EgeTrialDialog from '@/components/EgeTrial/Dialog'
-import EgeTrialList from '@/components/EgeTrial/List'
-import { API_URL as EGE_TRIAL_API_URL } from '@/components/EgeTrial'
 
 // Reviews
 import ReviewAdminList from '@/components/Review/Admin/List'
 import { API_URL as REVIEW_API_URL } from '@/components/Review'
+
+// Payment Additional
+import {
+  API_URL as PAYMENT_ADDITIONAL_API_URL,
+  PaymentAdditionalList,
+  PaymentAdditionalDialog,
+} from '@/components/Payment/Additional'
 
 export default {
   props: ['clientId'],
@@ -329,9 +335,9 @@ export default {
       PAYMENT_API_URL,
       PAYMENT_SORT,
       REQUEST_API_URL,
-      EGE_TRIAL_API_URL,
       REVIEW_API_URL,
-      Preview,
+      PAYMENT_ADDITIONAL_API_URL,
+      PreviewMode,
       tabs: null,
       loading: true,
       client: null,
@@ -339,10 +345,10 @@ export default {
   },
 
   components: { 
-    RequestDialog, RequestItem, Comments, ContractList, GroupList, GroupNotAssignedList, EgeTrialList,
+    RequestDialog, RequestItem, Comments, ContractList, GroupList, GroupNotAssignedList, 
     PaymentList, ClientDialog, PhoneList, BranchList, EmailShow, TestAdminClientList,
-    DisplayData, ContractDialog, PaymentDialog, ClientSchedule, Balance, EgeTrialDialog,
-    ReviewAdminList,
+    DisplayData, PaymentDialog, ClientSchedule, Balance,
+    ReviewAdminList, PaymentAdditionalList, PaymentAdditionalDialog,
   },
 
   created() {

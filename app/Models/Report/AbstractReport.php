@@ -64,26 +64,19 @@ class AbstractReport extends Model
             ->count();
     }
 
-    /**
-     * Присоединить таблицу reports к запросу
-     */
-    public static function joinReports(Builder $builder)
-    {
-        return $builder->leftJoin('reports', function($join) {
-            $join->on('reports.client_id', '=', 'lessons.entity_id')
-                ->on('reports.teacher_id', '=', 'lessons.teacher_id')
-                ->on('reports.subject_id', '=', 'lessons.subject_id')
-                ->on('reports.year', '=', 'lessons.year')
-                ->on('reports.date', '>=', 'lessons.date');
-        });
-    }
-
     public static function boot()
     {
         parent::boot();
 
         static::addGlobalScope('abstract-report', function($query) {
-            return self::joinReports($query)->where('entity_type', Client::class)
+            return $query->where('entity_type', Client::class)
+                ->leftJoin('reports', function($join) {
+                    $join->on('reports.client_id', '=', 'lessons.entity_id')
+                        ->on('reports.teacher_id', '=', 'lessons.teacher_id')
+                        ->on('reports.subject_id', '=', 'lessons.subject_id')
+                        ->on('reports.year', '=', 'lessons.year')
+                        ->on('reports.date', '>=', 'lessons.date');
+                })
                 ->selectRaw('
                     reports.id as report_id, lessons.year, lessons.subject_id, lessons.teacher_id,
                     lessons.client_grade_id as grade_id, lessons.entity_id as client_id,

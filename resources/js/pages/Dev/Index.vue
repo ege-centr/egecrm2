@@ -1,21 +1,22 @@
 <template>
   <div>
-    <h1>DEV</h1>
-
-    <div class='flex-items'>
-      <AllFilter :items="[{label: 'Период', field: 'created_at', type: 'interval'}]" />
-      <AddBtnAnimated label='максимально замалымно' />
-    </div>
+    <div class='headline'>DEV</div>
+    <display-list>
+      <template slot='allo'>
+        <div class='green--text'>working!</div>
+      </template>
+    </display-list>
   </div>
 </template>
 
-<script>
 
-import AddBtnAnimated from '@/components/UI/AddBtnAnimated'
-import { AllFilter } from '@/components/Filter'
+
+<script>
+import DisplayList from '@/components/UI/DisplayList'
 
 export default {
-  components: { AddBtnAnimated, AllFilter },
+  components: { DisplayList },
+
   data() {
     return {
      

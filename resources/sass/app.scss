@@ -351,10 +351,6 @@ nav {
   padding-top: 0;
 }
 
-.application--preview-mode {
-  padding-bottom: 30px;
-}
-
 .big-table-headers {
   & thead {
     & tr {
@@ -372,4 +368,13 @@ nav {
 
 .input-label {
   color: rgba(0, 0, 0, 0.54);
+}
+
+.preview-mode-info {
+  position: absolute;
+  bottom: 10px;
+}
+
+.v-small-dialog__content {
+  background: white;
 }

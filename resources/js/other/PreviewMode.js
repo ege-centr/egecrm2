@@ -1,10 +1,10 @@
 import store from '@/store'
 import router from '@/router'
 
-const API_URL = 'preview'
-const LOCAL_STORAGE_KEY = 'preview_return_url'
+const API_URL = 'preview-mode'
+const LOCAL_STORAGE_KEY = 'preview_mode_return_url'
 
-export default class Preview {
+export default class PreviewMode {
   static login(entity_id, class_name) {
     axios.get(apiUrl(API_URL + queryString({ 
       entity_id, 
@@ -20,6 +20,11 @@ export default class Preview {
     axios.get(apiUrl(API_URL, 'exit')).then(r => {
       store.commit('setUser', r.data)
       router.push({path: localStorage.getItem(LOCAL_STORAGE_KEY)})
+      localStorage.removeItem(LOCAL_STORAGE_KEY)
     })
+  }
+
+  static isActive() {
+    return LOCAL_STORAGE_KEY in localStorage
   }
 }

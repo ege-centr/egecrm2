@@ -2,7 +2,7 @@
   <div>
     <DisplayData :api-url='API_URL' :filters='FILTERS' :sort='SORT' :paginate='30'>
       <template slot='items' slot-scope='{ items }'>
-        <PaymentList :items='items' :show-entity='true' />
+        <PaymentList :items='items' :display-options="{entity: true, addBtn: false}" />
       </template>
     </DisplayData>
   </div>

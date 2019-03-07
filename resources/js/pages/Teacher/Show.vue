@@ -25,7 +25,7 @@
           <v-spacer></v-spacer>
            <v-flex class='text-md-right' align-end d-flex>
              <div>
-              <v-btn slot='activator' flat icon color="black" class='ma-0' @click="loading = true; Preview.login(item.id, CLASS_NAME)">
+              <v-btn slot='activator' flat icon color="black" class='ma-0' @click="loading = true; PreviewMode.login(item.id, CLASS_NAME)">
                 <v-icon>visibility</v-icon>
               </v-btn>
              </div>
@@ -57,7 +57,7 @@
         <v-tab-item>
           <DisplayData ref='GroupPage'
             :api-url='GROUP_API_URL' 
-            :tabs="{data: 'years', field: 'year'}"
+            :tabs='true'
             :invisible-filters="{teacher_id: $route.params.id}"
           >
             <template slot='items' slot-scope='{ items }'>
@@ -69,19 +69,15 @@
         <!-- ПЛАТЕЖИ -->
         <v-tab-item>
           <DisplayData ref='PaymentPage'
-            :tabs="{data: 'years', field: 'year'}"
+            :tabs='true'
             :api-url='PAYMENT_API_URL' 
             :sort='PAYMENT_SORT'
             :invisible-filters="{entity_id: $route.params.id, entity_type: CLASS_NAME}"
           >
             <template slot='items' slot-scope='{ items }'>
-              <PaymentList :items='items' />
-            </template>
-            <template slot='buttons-bottom'>
-              <AddBtn @click.native='$refs.PaymentDialog.open(null, {
-                entity_id: $route.params.id,
-                entity_type: CLASS_NAME,
-              })' />
+              <PaymentList 
+                :items='items' 
+                :model-defaults='{ entity_id: $route.params.id, entity_type: CLASS_NAME }' />
             </template>
           </DisplayData>
         </v-tab-item>
@@ -94,18 +90,15 @@
         <!-- ДОПУСЛУГИ -->
         <v-tab-item>
            <DisplayData ref='PaymentAdditionalPage'
-            :tabs="{data: 'years', field: 'year'}"
+            :tabs='true'
             :api-url='PAYMENT_ADDITIONAL_API_URL' 
             :invisible-filters="{entity_id: $route.params.id, entity_type: CLASS_NAME}"
           >
             <template slot='items' slot-scope='{ items }'>
-              <PaymentAdditionalList :items='items' />
-            </template>
-            <template slot='buttons-bottom'>
-              <AddBtn @click.native='$refs.PaymentAdditionalDialog.open(null, {
-                entity_id: $route.params.id,
-                entity_type: CLASS_NAME,
-              })' />
+              <PaymentAdditionalList 
+                :items='items' 
+                :model-defaults='{ entity_id: $route.params.id, entity_type: CLASS_NAME }' 
+              />
             </template>
           </DisplayData>
         </v-tab-item>
@@ -115,7 +108,7 @@
           <DisplayData 
             ref='ReviewPage'
             :api-url='REVIEW_API_URL' 
-            :tabs="{data: 'years', field: 'year'}"
+            :tabs='true'
             :invisible-filters="{teacher_id: $route.params.id}"
           >
             <template slot='items' slot-scope='{ items }'>
@@ -147,7 +140,7 @@ import {
   PaymentAdditionalDialog,
 } from '@/components/Payment/Additional'
 import { DisplayData } from '@/components/UI'
-import Preview from '@/other/Preview'
+import PreviewMode from '@/other/PreviewMode'
 import Balance from '@/components/Balance/Balance'
 
 
@@ -169,7 +162,7 @@ export default {
       REVIEW_API_URL,
       CLASS_NAME,
       PAYMENT_SORT,
-      Preview,
+      PreviewMode,
       loading: true,
       item: null,
       tabs: null,

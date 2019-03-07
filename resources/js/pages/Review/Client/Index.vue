@@ -3,7 +3,7 @@
     <DisplayData 
       ref='DisplayData'
       :api-url='API_URL' 
-      :tabs="{data: 'years', field: 'year'}"
+      :tabs='true'
     >
       <template slot='items' slot-scope='{ items }'>
         <ReviewClientList :items='items' @updated='() => $refs.DisplayData.loadData()' />

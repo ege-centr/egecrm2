@@ -2,7 +2,7 @@
   <div>
     <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='30'>
       <template slot='items' slot-scope='{ items }'>
-        <ContractList :items='items' :display-options='{client: true, year: true}' />
+        <ContractList :items='items'  :display-options='{client: true, year: true, addBtn: false}' />
       </template>
     </DisplayData>
   </div>

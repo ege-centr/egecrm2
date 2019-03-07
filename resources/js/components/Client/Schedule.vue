@@ -1,21 +1,13 @@
 <template>
   <div>
-    <div v-if='items !== null && tabs.length' class='mb-3'>
-      <v-chip v-for="(tab, index) in tabs" class='pointer ml-0 mr-3'
-        :class="{'primary white--text': selected_tab_index === index}"
-        @click='selected_tab_index = selected_tab_index === index ? null : index'
-        :key='index'
-      >
-        <SubjectGrade :item='tab' />
-      </v-chip>
-      <v-chip class='pointer ml-0 mr-3'
-        v-if='items.findIndex(e => isEgeTrial(e)) !== -1'
-        :class="{'primary white--text': selected_tab_index === -1}"
-        @click='selected_tab_index = selected_tab_index === -1 ? null : -1'
-        :key='-1'
-      >
-        ПРОБНЫЙ ЕГЭ
-      </v-chip>
+    <div v-if='items !== null' class='mb-3'>
+       <v-chip v-for="item in tabsWithData" class='pointer ml-0 mr-3'
+          :class="{'primary white--text': item.id == selected_tab}"
+          @click='selected_tab = item.id'
+          :key='item.id'
+        >
+          {{ item.title }}
+        </v-chip>
     </div>
     <Loader class='loader-wrapper_transparent' v-if='items === null' />
     <v-card v-else>
@@ -27,27 +19,8 @@
               :items='filteredItems'
             >
               <template slot='items' slot-scope='{ item }'>
-                <!-- ПРОБНЫЙ ЕГЭ -->
-                <tr v-if="isEgeTrial(item)">
-                  <td width='48'>
-                  </td>
-                  <td width='150'>
-                    {{ item.date | date }}
-                  </td>
-                  <td width='150'>
-                    Пробный ЕГЭ
-                  </td>
-                  <td width='150'>
-                    {{ item.sum }} руб.
-                  </td>
-                  <td width='150'>
-                    <SubjectGrade :item='item' />
-                  </td>
-                  <td colspan='4'>{{ item.description }}</td>
-                </tr>
-
                 <!-- ЗАНЯТИЕ -->
-                <tr v-else>
+                <tr>
                   <td width='65' class='pr-0 grey--text'>
                     <div class='lesson-status' :class="{
                       'blue': item.status === LESSON_STATUS.PLANNED,
@@ -119,6 +92,7 @@
 <script>
 import { ROLES } from '@/config'
 import { LESSON_STATUS } from '@/components/Lesson'
+import { tabsWithData } from '@/other/functions'
 import Cabinet from '@/components/UI/Cabinet'
 
 export default {
@@ -129,13 +103,18 @@ export default {
   data() {
     return {
       items: null,
-      selected_tab_index: null,
+      selected_tab: null,
       LESSON_STATUS,
     }
   },
   
   mounted() {
-    axios.get(apiUrl('schedule/client', this.clientId)).then(r => this.items = r.data)
+    axios.get(apiUrl('schedule/client', this.clientId)).then(r => {
+      this.items = r.data
+      if (this.tabsWithData.length) {
+          this.selected_tab = this.tabsWithData.slice(-1)[0].id
+        }
+    })
   },
 
   methods: {
@@ -147,35 +126,17 @@ export default {
     
     // какие позиции не нумеровать?
     excludeFromIndex(item) {
-      return item.status === LESSON_STATUS.CANCELLED || this.isEgeTrial(item)
+      return item.status === LESSON_STATUS.CANCELLED
     },
-
-    isEgeTrial(item) {
-      return 'score' in item
-    }
   },
 
   computed: {
     filteredItems() {
-      if (this.selected_tab_index === null) {
-        return this.items
-      }
-      if (this.selected_tab_index === -1) {
-        return this.items.filter(e => this.isEgeTrial(e))
-      }
-      const tab = this.tabs[this.selected_tab_index]
-      return this.items.filter(e => !this.isEgeTrial(e) && e.subject_id === tab.subject_id && e.grade_id === tab.grade_id)
+      return this.items.filter(e => e.year === this.selected_tab)
     },
 
-    tabs() {
-      const tabs = []
-      this.items.forEach(item => {
-        let tab = _.pick(item, ['subject_id', 'grade_id'])
-        if (tabs.findIndex(e => _.isEqual(e, tab)) === -1) {
-          tabs.push(tab)
-        }
-      })
-      return tabs
+    tabsWithData() {
+      return tabsWithData(this.items)
     }
   },
 }
