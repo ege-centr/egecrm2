@@ -6,6 +6,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
 
     Route::post('login', 'LoginController@login');
     Route::get('logout', 'LoginController@logout');
+    Route::post('confirm-password', 'LoginController@confirmPassword');
 
     Route::get('initial-data', 'InitialDataController@index');
 

@@ -13,12 +13,15 @@ class ScheduleController extends Controller
     {
         // Уроки
         $query = ClientLesson::orderBy('date', 'asc')->orderBy('time', 'asc');
-        $group_ids = GroupClient::where('client_id', $id)->pluck('group_id')->implode(',');
-        $query->withoutGlobalScope('clients')->whereRaw("
-            (entity_type = '" . addslashes(Client::class) . "' AND entity_id = {$id}) OR
-            (entity_type IS NULL AND group_id IN ({$group_ids}))
-        ");
+        $group_ids = GroupClient::where('client_id', $id)->pluck('group_id');
 
-        return ClientLessonCollection::collection($query->get());
+        if ($group_ids->count() > 0) {
+            $query->withoutGlobalScope('clients')->whereRaw("
+                (entity_type = '" . addslashes(Client::class) . "' AND entity_id = {$id}) OR
+                (entity_type IS NULL AND group_id IN ({$group_ids->implode(',')}))
+            ");
+            return ClientLessonCollection::collection($query->get());
+        }
+        return [];
     }
 }

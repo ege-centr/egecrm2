@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\Builder;
 use App\Models\Report\{Report, AbstractReport};
 use App\Http\Resources\Report\{AbstractReportCollection, ReportResource};
 
@@ -15,8 +16,9 @@ class ReportsController extends Controller
     ];
 
     protected $filters = [
-        'equals' => ['teacher_id', 'entity_id', 'is_available_for_parents'],
-        'multiple' => ['year', 'subject_id']
+        'equals' => ['entity_id', 'is_available_for_parents'],
+        'multiple' => ['year', 'subject_id', 'teacher_id'],
+        'exists' => ['exists']
     ];
 
     public function index(Request $request)
@@ -24,13 +26,9 @@ class ReportsController extends Controller
         $query = AbstractReport::query();
         $this->filter($request, $query);
 
-        if (isset($request->teacher_ids) && count($request->teacher_ids) > 0) {
-            $query->whereIn('lessons.teacher_id', $request->teacher_ids);
-        }
-
-        if (isset($request->exists) && $request->exists) {
-            $query->whereNotNull('reports.id');
-        }
+        // if (isset($request->exists) && $request->exists) {
+        //     $query->whereNotNull('reports.id');
+        // }
 
         return AbstractReportCollection::collection(
            $this->showBy($request, $query)
@@ -47,5 +45,14 @@ class ReportsController extends Controller
         $item = Report::find($id);
         $item->update($request->all());
         return new ReportResource($item);
+    }
+
+    protected function filterExists(string $field, $value, Builder &$query)
+    {
+        if (intval($value) === 0) {
+            $query->whereNull('reports.id');
+        } else {
+            $query->whereNotNull('reports.id');
+        }
     }
 }

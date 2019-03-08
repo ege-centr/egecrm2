@@ -8,10 +8,11 @@ export const MODEL_DEFAULTS = {
 
 export const FILTERS = [
   {label: 'Год', field: 'year', type: 'multiple', options: store.state.data.years},
-  {label: 'Преподаватель', field: 'teacher_ids', type: 'multiple', options: store.state.data.teachers, textField: 'names.abbreviation'},
+  {label: 'Преподаватель', field: 'teacher_id', type: 'multiple', options: store.state.data.teachers, textField: 'names.abbreviation'},
   {label: 'Предмет', field: 'subject_id', type: 'multiple', options: store.state.data.subjects, textField: 'name'},
-  {label: 'Тип', field: 'exists', type: 'multiple', options: [
-    {id: 'id', title: 'только созданные'},
+  {label: 'Тип', field: 'exists', type: 'select', options: [
+    {id: 0, title: 'не созданные'},
+    {id: 1, title: 'созданные'},
   ]}
 ]
 

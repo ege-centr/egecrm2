@@ -1,13 +1,8 @@
 <template>
   <div>
     <Dialog ref='Dialog' />
-    <v-data-table
-      :class='config.elevationClass'
-      hide-actions
-      hide-headers
-      :items='items'
-    >
-      <template slot='items' slot-scope="{ item }">
+    <data-table :items='items'>
+      <tr slot-scope="{ item }">
         <td v-if='show.id'>
           <span v-if='item.report === null' class='red--text'>
             <!-- <span v-if='item.lesson_count >= REPORT_NEEDED_LESSON_COUNT'>Требуется</span> -->
@@ -96,8 +91,8 @@
               просмотр
             </v-btn>
         </td>
-      </template>
-    </v-data-table>
+      </tr>
+    </data-table>
   </div>
 </template>
 

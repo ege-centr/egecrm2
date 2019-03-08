@@ -51,6 +51,9 @@
         <v-tab>
           Отзывы
         </v-tab>
+        <v-tab>
+          Отчёты
+        </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <!-- ГРУППЫ -->
@@ -109,10 +112,24 @@
             ref='ReviewPage'
             :api-url='REVIEW_API_URL' 
             :tabs='true'
-            :invisible-filters="{teacher_id: $route.params.id}"
+            :invisible-filters="{teacher_id: [$route.params.id]}"
           >
             <template slot='items' slot-scope='{ items }'>
               <ReviewAdminList :items='items' @updated='() => $refs.ReviewPage.reloadData()' />
+            </template>
+          </DisplayData>
+        </v-tab-item>
+
+        <!-- Отчёты -->
+        <v-tab-item>
+          <DisplayData 
+            ref='ReportPage'
+            :api-url='REPORT_API_URL' 
+            :tabs='true'
+            :invisible-filters="{teacher_id: [$route.params.id]}"
+          >
+            <template slot='items' slot-scope='{ items }'>
+              <ReportList :items='items' @updated='() => $refs.ReportPage.reloadData()' />
             </template>
           </DisplayData>
         </v-tab-item>
@@ -123,8 +140,9 @@
   </div>
 </template>
 
-<script>
 
+
+<script>
 import { API_URL, CLASS_NAME } from '@/components/Teacher'
 import { API_URL as GROUP_API_URL } from '@/components/Group'
 import GroupList from '@/components/Group/List'
@@ -148,10 +166,14 @@ import Balance from '@/components/Balance/Balance'
 import ReviewAdminList from '@/components/Review/Admin/List'
 import { API_URL as REVIEW_API_URL } from '@/components/Review'
 
+// Reports
+import ReportList from '@/components/Report/List'
+import { API_URL as REPORT_API_URL } from '@/components/Report'
+
 export default {
   components: { 
     GroupList, PaymentList, DisplayData, PaymentDialog, PaymentAdditionalList, PaymentAdditionalDialog, Balance,
-    ReviewAdminList,
+    ReviewAdminList, ReportList,
   },
 
   data() {
@@ -159,6 +181,7 @@ export default {
       GROUP_API_URL,
       PAYMENT_API_URL,
       PAYMENT_ADDITIONAL_API_URL,
+      REPORT_API_URL,
       REVIEW_API_URL,
       CLASS_NAME,
       PAYMENT_SORT,

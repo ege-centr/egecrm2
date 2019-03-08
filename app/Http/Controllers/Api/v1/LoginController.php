@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use ReCaptcha\ReCaptcha;
-use App\Models\User;
+use App\Models\{User, Email};
 
 class LoginController extends Controller
 {
@@ -27,5 +27,15 @@ class LoginController extends Controller
     public function logout()
     {
         User::logout();
+    }
+
+    public function confirmPassword(Request $request)
+    {
+        return response()->json(
+            Email::where('entity_id', User::id())
+                ->where('entity_type', getModelClass(User::fromSession()->class, true))
+                ->where('password', Email::toPassword($request->password))
+                ->exists()
+        );
     }
 }

@@ -12,78 +12,73 @@
     <Loader class='loader-wrapper_transparent' v-if='items === null' />
     <v-card v-else>
       <v-card-text class='pa-0'>
-        <div v-if='items.length > 0'>
-            <v-data-table 
-              hide-actions 
-              hide-headers 
-              :items='filteredItems'
-            >
-              <template slot='items' slot-scope='{ item }'>
-                <!-- ЗАНЯТИЕ -->
-                <tr>
-                  <td width='65' class='pr-0 grey--text'>
-                    <div class='lesson-status' :class="{
-                      'blue': item.status === LESSON_STATUS.PLANNED,
-                      'green': item.status === LESSON_STATUS.CONDUCTED,
-                      'grey': item.status === LESSON_STATUS.CANCELLED,
-                    }"></div>
-                    <span v-show='!excludeFromIndex(item)'>
-                      {{ getIndex(item) }}
-                    </span>
-                  </td>
-                  <td width='150'>
-                    {{ item.date + ' ' + item.time | date-time }}
-                  </td>
-                  <td width='150'>
-                    <router-link :to="{name: 'GroupShow', params: {id: item.group_id}}">
-                      Группа {{ item.group_id }}
-                    </router-link>
-                  </td>
-                  <td width='150'>
-                    <Cabinet :id='item.cabinet_id' />
-                  </td>
-                  <td width='150'>
-                    <SubjectGrade :item='item' />
-                  </td>
-                  <td width='250'>
-                    <span v-if='item.teacher_id'>
-                      {{ getData('teachers', item.teacher_id).names.abbreviation }}
-                    </span>
-                  </td>
-                  <td width='150'>
-                    <span v-if='item.status === LESSON_STATUS.CONDUCTED && item.price > 0'>
-                      {{ item.price }} руб.
-                    </span>
-                  </td>
-                  <td>
-                    <v-tooltip bottom v-if='item.status === LESSON_STATUS.CONDUCTED && item.comment'>
-                      <v-icon class='cursor-default' slot='activator'>comment</v-icon>
-                      <span>{{ item.comment }}</span>
-                    </v-tooltip>
-                  </td>
-                  <td>
-                    <span v-if='item.status !== LESSON_STATUS.CONDUCTED'>
-                      <span v-if='item.status === LESSON_STATUS.PLANNED'>
-                        планируется
-                      </span>
-                      <span class='grey--text' v-else>
-                        отменено
-                      </span>
-                    </span>
-                    <span v-else>
-                      <span v-if='item.is_absent'>
-                        не был
-                      </span>
-                      <span v-else>
-                        был
-                      </span>
-                    </span>
-                  </td>
-                </tr>
-              </template>
-            </v-data-table>
-        </div>
-        <NoData v-else />
+        <data-table 
+          hide-actions 
+          hide-headers 
+          :items='filteredItems'
+        >
+          <tr slot-scope='{ item }'>
+            <!-- ЗАНЯТИЕ -->
+            <td width='65' class='pr-0 grey--text'>
+              <div class='lesson-status' :class="{
+                'blue': item.status === LESSON_STATUS.PLANNED,
+                'green': item.status === LESSON_STATUS.CONDUCTED,
+                'grey': item.status === LESSON_STATUS.CANCELLED,
+              }"></div>
+              <span v-show='!excludeFromIndex(item)'>
+                {{ getIndex(item) }}
+              </span>
+            </td>
+            <td width='150'>
+              {{ item.date + ' ' + item.time | date-time }}
+            </td>
+            <td width='150'>
+              <router-link :to="{name: 'GroupShow', params: {id: item.group_id}}">
+                Группа {{ item.group_id }}
+              </router-link>
+            </td>
+            <td width='150'>
+              <Cabinet :id='item.cabinet_id' />
+            </td>
+            <td width='150'>
+              <SubjectGrade :item='item' />
+            </td>
+            <td width='250'>
+              <span v-if='item.teacher_id'>
+                {{ getData('teachers', item.teacher_id).names.abbreviation }}
+              </span>
+            </td>
+            <td width='150'>
+              <span v-if='item.status === LESSON_STATUS.CONDUCTED && item.price > 0'>
+                {{ item.price }} руб.
+              </span>
+            </td>
+            <td>
+              <v-tooltip bottom v-if='item.status === LESSON_STATUS.CONDUCTED && item.comment'>
+                <v-icon class='cursor-default' slot='activator'>comment</v-icon>
+                <span>{{ item.comment }}</span>
+              </v-tooltip>
+            </td>
+            <td>
+              <span v-if='item.status !== LESSON_STATUS.CONDUCTED'>
+                <span v-if='item.status === LESSON_STATUS.PLANNED'>
+                  планируется
+                </span>
+                <span class='grey--text' v-else>
+                  отменено
+                </span>
+              </span>
+              <span v-else>
+                <span v-if='item.is_absent'>
+                  не был
+                </span>
+                <span v-else>
+                  был
+                </span>
+              </span>
+            </td>
+          </tr>
+        </data-table>
       </v-card-text>
     </v-card>
   </div>

@@ -39,7 +39,7 @@
                 <td class='text-md-right'>
                   <div v-if='readonly'>
                     <v-btn slot='activator' flat icon small color="black" class='ma-0' 
-                      v-if='item.status === LESSON_STATUS.PLANNED'
+                      v-if='item.status !== LESSON_STATUS.CANCELLED'
                       @click='$refs.ConductDialog.open(item.id)'>
                       <v-icon>more_horiz</v-icon>
                     </v-btn>

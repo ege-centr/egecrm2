@@ -130,6 +130,9 @@
         <v-tab>
           Отзывы
         </v-tab>
+        <v-tab>
+          Отчёты
+        </v-tab>
       </v-tabs>
 
       <v-tabs-items v-model="tabs">
@@ -269,6 +272,20 @@
           </DisplayData>
         </v-tab-item>
 
+        <!-- Отчёты -->
+        <v-tab-item>
+          <DisplayData 
+            ref='ReportPage'
+            :api-url='REPORT_API_URL' 
+            :tabs='true'
+            :invisible-filters="{entity_id: $route.params.id}"
+          >
+            <template slot='items' slot-scope='{ items }'>
+              <ReportList :items='items' @updated='() => $refs.ReportPage.reloadData()' />
+            </template>
+          </DisplayData>
+        </v-tab-item>
+
       </v-tabs-items>
     </div>
     <ClientDialog ref='ClientDialog' />
@@ -316,6 +333,10 @@ import Balance from '@/components/Balance/Balance'
 import ReviewAdminList from '@/components/Review/Admin/List'
 import { API_URL as REVIEW_API_URL } from '@/components/Review'
 
+// Reports
+import ReportList from '@/components/Report/List'
+import { API_URL as REPORT_API_URL } from '@/components/Report'
+
 // Payment Additional
 import {
   API_URL as PAYMENT_ADDITIONAL_API_URL,
@@ -335,6 +356,7 @@ export default {
       PAYMENT_SORT,
       REQUEST_API_URL,
       REVIEW_API_URL,
+      REPORT_API_URL,
       PAYMENT_ADDITIONAL_API_URL,
       PreviewMode,
       tabs: null,
@@ -346,7 +368,7 @@ export default {
   components: { 
     RequestDialog, RequestItem, Comments, ContractList, GroupList, GroupNotAssignedList, 
     PaymentList, ClientDialog, PhoneList, BranchList, EmailShow, TestAdminClientList,
-    DisplayData, PaymentDialog, ClientSchedule, Balance,
+    DisplayData, PaymentDialog, ClientSchedule, Balance, ReportList,
     ReviewAdminList, PaymentAdditionalList, PaymentAdditionalDialog,
   },
 

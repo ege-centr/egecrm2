@@ -1,7 +1,7 @@
 <template>
   <div>
-    <v-data-table :items='items' item-key='id' hide-headers hide-actions :class='config.elevationClass'>
-      <template slot="items" slot-scope="{ item }">
+    <data-table :items='items'>
+      <tr slot-scope="{ item }">
         <td>
           <SubjectGrade :item='item' />
         </td>
@@ -28,8 +28,8 @@
           <v-btn flat color='primary' small v-else
             @click='edit(item)' class='btn-td'>редактировать</v-btn>
         </td>
-      </template>
-    </v-data-table>
+      </tr>
+    </data-table>
     <Dialog ref='Dialog' @updated="$emit('updated')" />
   </div>
 </template>

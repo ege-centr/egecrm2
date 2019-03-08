@@ -29,14 +29,7 @@
             <div wrap v-if="item.status === LESSON_STATUS.CONDUCTED">
               <v-data-table 
                 hide-actions
-                :headers="[
-                  { text: 'Ученик', sortable: false },
-                  { text: 'Отсутствовал', sortable: false }, 
-                  { text: 'Опоздание', sortable: false },
-                  { text: 'Цена', sortable: false },
-                  { text: 'Комментарий', sortable: false },
-                  { text: '', sortable: false },
-                ]"
+                :headers="headers"
                 :items='clientLessons'
               >
                 <template slot="items" slot-scope="{ item }">
@@ -61,7 +54,7 @@
                       ></v-text-field>
                     </v-edit-dialog>
                   </td>
-                  <td width='150'>
+                  <td width='150' v-if='$store.state.user.class === ROLES.ADMIN'>
                     <v-icon small v-if="!item.price" class='client-edit-icon'>edit</v-icon>
                     <v-edit-dialog
                       :return-value.sync="item.price"
@@ -90,13 +83,13 @@
                       ></v-text-field>
                     </v-edit-dialog>
                   </td>
-                  <td width='30' class='text-md-right'>
+                  <td width='30' class='text-md-right' v-if='$store.state.user.class === ROLES.ADMIN'>
                     <v-btn flat icon color="red" class='ma-0' @click='destroyClientLesson(item.id)'>
                       <v-icon>remove</v-icon>
                     </v-btn>
                   </td>
                 </template>
-                <template slot='footer'>
+                <template slot='footer' v-if='$store.state.user.class === ROLES.ADMIN'>
                   <tr>
                     <td colspan='7' class='pa-0 text-md-center'>
                       <v-btn small flat color='primary' class='btn-tr' @click='$refs.AddClientDialog.open()'>
@@ -174,6 +167,7 @@
 
 <script>
 import { DialogMixin } from '@/mixins'
+import { ROLES } from '@/config'
 import { LESSON_STATUS, MODEL_DEFAULTS, API_URL } from '@/components/Lesson'
 import AddClientDialog from './AddClientDialog'
 
@@ -185,6 +179,7 @@ export default {
   data() {
     return {
       API_URL,
+      ROLES,
       LESSON_STATUS,
       MODEL_DEFAULTS,
       // FIXME:
@@ -221,7 +216,21 @@ export default {
     clientLessons() {
       this.recompute_client_lessons
       return this.item.clientLessons.filter(e => e.to_be_deleted !== true)
-    }
+    },
+
+    headers() {
+      const headers = [
+        { text: 'Ученик', sortable: false },
+        { text: 'Отсутствовал', sortable: false }, 
+        { text: 'Опоздание', sortable: false },
+        { text: 'Комментарий', sortable: false },
+      ]
+      if (this.$store.state.user.class === ROLES.ADMIN) {
+        headers.splice(3, 0, { text: 'Цена', sortable: false })
+        headers.splice(5, 0, { text: 'Цена', sortable: false })
+      }
+      return headers
+    },
   }
 }
 </script>

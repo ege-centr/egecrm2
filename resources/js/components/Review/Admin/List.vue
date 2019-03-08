@@ -33,7 +33,12 @@
         </td>
         <td width='40' class='td-border px-1 text-md-center'>
           <span v-if='item.review !== null && getComment(item, COMMENT_TYPE.admin)'>
-            {{ getComment(item, COMMENT_TYPE.admin).rating }}
+            <span class='grey--text' v-if='getComment(item, COMMENT_TYPE.admin).rating === -1'>
+              –
+            </span>
+            <span v-else>
+              {{ getComment(item, COMMENT_TYPE.admin).rating }}
+            </span>
           </span>
         </td>
         <td width='40' class='td-border px-1 text-md-center'>

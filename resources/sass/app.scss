@@ -382,3 +382,7 @@ nav {
 .v-dialog--fullscreen .v-toolbar {
   box-shadow: none !important;
 }
+
+.theme--light.v-tabs__bar  {
+  background: $grey-background;
+}

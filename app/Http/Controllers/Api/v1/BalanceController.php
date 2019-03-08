@@ -59,7 +59,7 @@ class BalanceController extends Controller
         $additionalPayments = app()->call('App\Http\Controllers\Api\v1\PaymentAdditionalsController@index')->items();
         foreach($additionalPayments as $additionalPayment) {
             $items[] = [
-                'sum' => $additionalPayment->sum,
+                'sum' => $isTeacher ? $additionalPayment->sum : $additionalPayment->sum * -1,
                 'comment' => $additionalPayment->purpose,
                 'date' => $additionalPayment->date,
                 'year' => $additionalPayment->year,
