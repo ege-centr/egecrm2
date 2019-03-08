@@ -13,7 +13,7 @@
       </div>
 
       <data-table :items='Object.keys(currentYearItems)' class='balance-table'>
-        <tr slot-scope='{ item }'>
+        <template slot-scope='{ item }'>
           <tr style='border-top: 1px solid #e0e0e0; border-bottom: none'>
             <td colspan='3'></td>
             <td>
@@ -53,7 +53,7 @@
               {{ i.created_at | date-time }}
             </td>
           </tr>
-        </tr>
+        </template>
       </data-table>
     </div>
   </div>
@@ -106,7 +106,7 @@ export default {
 
   computed: {
     currentYearItems() {
-      return this.items[this.selected_year] || []
+      return Object.keys(this.items).length > 0 ? this.items[this.selected_year] : []
     },
 
     yearsWithData() {
