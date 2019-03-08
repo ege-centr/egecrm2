@@ -10,7 +10,7 @@
         </v-chip>
     </div>
     <Loader class='loader-wrapper_transparent' v-if='items === null' />
-    <v-card v-else>
+    <v-card v-else class='elevation-0'>
       <v-card-text class='pa-0'>
         <data-table 
           hide-actions 
