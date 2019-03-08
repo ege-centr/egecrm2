@@ -5,7 +5,7 @@
     
     <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='15'>
       <template slot='buttons'>
-        <AddBtn label='добавить задачу' @click.native='$refs.TaskDialog.open(null)' />
+        <AddBtn animated label='добавить задачу' @click.native='$refs.TaskDialog.open(null)' />
       </template>
       
       <template slot='items' slot-scope='{ items }'>

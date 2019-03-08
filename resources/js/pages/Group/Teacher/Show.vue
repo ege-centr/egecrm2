@@ -77,12 +77,7 @@
           </v-card>
         </v-tab-item>
         <v-tab-item>
-          <v-card :class='config.elevationClass' v-if='item.lessons.length > 0'>
-            <v-card-text class='relative'>
-              <GroupVisits :group='item' />
-            </v-card-text>
-          </v-card>
-          <NoData v-else />
+          <GroupVisits :group='item' />
         </v-tab-item>
       </v-tabs-items>
     </div>

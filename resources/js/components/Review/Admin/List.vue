@@ -1,15 +1,15 @@
 <template>
   <div>
-    <v-data-table :items='items' hide-headers hide-actions :class='config.elevationClass'>
-      <template slot="items" slot-scope="{ item }">
-        <td>
+    <data-table :items='items'>
+      <tr slot-scope="{ item }">
+        <!-- <td>
           <span v-if='item.review !== null'>
             отзыв {{ item.review.id }}
           </span>
           <span v-else class='grey--text'>
             не создан
           </span>
-        </td>
+        </td> -->
         <td>
           <SubjectGrade :item='item' />
         </td>
@@ -78,8 +78,8 @@
             <v-icon>more_horiz</v-icon>
           </v-btn>
         </td>
-      </template>
-    </v-data-table>
+      </tr>
+    </data-table>
     <Dialog ref='Dialog' @updated="$emit('updated')" />
   </div>
 </template>

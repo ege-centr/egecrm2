@@ -30,7 +30,7 @@ class Controller extends BaseController
         foreach($this->filters as $type => $fields) {
             foreach($fields as $key_field => $field) {
                 $f = is_array($field) ? $key_field : $field;
-                if (isset($request[$f]) && $request[$f]) {
+                if (isset($request[$f])) {
                     $this->{'filter' . ucfirst($type)}($field, $request->{$f}, $query);
                 }
             }

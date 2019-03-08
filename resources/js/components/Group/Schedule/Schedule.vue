@@ -72,7 +72,16 @@
               <template slot='footer' v-if='!readonly'>
                 <tr>
                   <td colspan='7' class='pa-0 text-md-center'>
-                    <v-menu style='width: 100%'>
+                    <v-btn slot='activator' small flat color='primary' class='btn-tr' 
+                      @click='$refs.LessonDialog.open(null, {
+                          group_id: group.id,
+                          year: group.year,
+                      })'
+                      v-if='lastPlannedLesson === null' >
+                        <v-icon class="mr-1">add</v-icon>
+                        добавить
+                    </v-btn>
+                    <v-menu style='width: 100%' v-else>
                       <v-btn slot='activator' small flat color='primary' class='btn-tr' :loading='filling'>
                         <v-icon class="mr-1">add</v-icon>
                         добавить
@@ -168,19 +177,30 @@ export default {
     },
 
     async fillSchedule() {
-      this.filling = true
-      // последнее непроведенное занятие
-      const last_lesson = _.sortBy(this.items.filter(e => e.status === LESSON_STATUS.PLANNED), 'date').reverse()[0]
-      let date = last_lesson.date
-      while (true) {
-        date = moment(date).add(1, 'week').format('YYYY-MM-DD')
-        if (moment(date).format('M') == 6) {
-          this.filling = false
-          return
+      if (this.lastPlannedLesson !== null) {
+        this.filling = true
+        let lastPlannedLesson = clone(this.lastPlannedLesson)
+        let date = lastPlannedLesson.date
+        while (true) {
+          date = moment(date).add(1, 'week').format('YYYY-MM-DD')
+          if (moment(date).format('M') == 6) {
+            this.filling = false
+            return
+          }
+          await this.store({...lastPlannedLesson, date})
         }
-        await this.store({...last_lesson, date})
       }
     },
   },
+
+  computed: {
+    lastPlannedLesson() {
+      const plannedLessons = this.items.filter(e => e.status === LESSON_STATUS.PLANNED)
+      if (plannedLessons.length > 0) {
+        return _.sortBy(plannedLessons, 'date').reverse()[0]
+      }
+      return null
+    }
+  }
 }
 </script>

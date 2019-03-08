@@ -2,7 +2,7 @@
   <div>
     <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='30'>
       <template slot='buttons'>
-        <AddBtn @click.native='$refs.ClientDialog.open(null)' label='добавить клиента' />
+        <AddBtn animated @click.native='$refs.ClientDialog.open(null)' label='добавить клиента' />
       </template>
       <template slot='items' slot-scope="{ items }">
         <ClientList :items='items' />

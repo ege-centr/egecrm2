@@ -3,7 +3,7 @@
     <AdminDialog ref='AdminDialog' />
     <DisplayData :api-url='API_URL' :filters='FILTERS'>
       <template slot='buttons'>
-        <AddBtn @click.native='$refs.AdminDialog.open(null)' label='добавить пользователя' />
+        <AddBtn animated @click.native='$refs.AdminDialog.open(null)' label='добавить пользователя' />
       </template>
       <template slot='items' slot-scope='{ items }'>
         <AdminList :items='items' />

@@ -1,6 +1,5 @@
 <template lang="html">
   <div>
-
     <Loader v-if='loading' />
     <div class='mb-3 flex-items'>
       <div>
@@ -73,11 +72,6 @@
                   <v-flex md12>
                     <div class='vertical-inputs'>
                       <div class='vertical-inputs__input'>
-                        <DataSelect v-model='recommendedPriceDialogItem.grade_id' type='grades' />
-                      </div>
-                    </div>
-                    <div class='vertical-inputs'>
-                      <div class='vertical-inputs__input'>
                         <v-text-field hide-details v-model='recommendedPriceDialogItem.price' label='Цена' v-mask="'####'" />
                       </div>
                     </div>
@@ -86,10 +80,9 @@
               </v-container>
             </v-card-text>
             <v-card-actions>
-              <v-btn color="red darken-1" flat @click.native="destroyRecommendedPrice" v-show='recommendedPriceDialogItem.id' :loading='destroying'>Удалить</v-btn>
               <v-spacer></v-spacer>
               <v-btn color="blue darken-1" flat @click.native="recommendedPricesDialog = false">Отмена</v-btn>
-              <v-btn color="blue darken-1" flat @click.native='storeOrUpdateRecommendedPrice' :loading='saving'>{{ recommendedPriceDialogItem.id ? 'Сохранить' : 'Добавить' }}</v-btn>
+              <v-btn color="blue darken-1" flat @click.native='storeOrUpdateRecommendedPrice' :loading='saving'>Сохранить</v-btn>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -100,32 +93,30 @@
         <v-card-text>
           <v-container grid-list-xl class="pa-0 ma-0" fluid>
             <v-layout>
-              <v-flex md5>
+              <v-flex md6>
                 <div class='headline'>
                   Рекомендованные цены
                 </div>
                 
-                <data-table no-elevation :items='currentYearRecommendedPrices'>
-                  <tr slot-scope='{ item }'>
-                    <td>
-                      {{ getData('grades', item.grade_id).title }}
-                    </td>
-                    <td>
-                      {{ item.price }} руб.
-                    </td>
-                    <td class='text-md-right'>
-                      <v-btn flat icon color="black" class='ma-0' @click='editRecommendedPrice(item)'>
-                        <v-icon>more_horiz</v-icon>
-                      </v-btn>
-                    </td>
-                  </tr>
-                </data-table>
+                <v-data-table hide-headers hide-actions :items='currentYearRecommendedPrices'>
+                  <template slot='items' slot-scope="{ item }">
+                    <tr>
+                      <td>
+                        {{ getData('grades', item.grade_id).title }}
+                      </td>
+                      <td>
+                        {{ item.price }} руб.
+                      </td>
+                      <td class='text-md-right'>
+                        <v-btn flat icon color="black" class='ma-0' @click='editRecommendedPrice(item)'>
+                          <v-icon>more_horiz</v-icon>
+                        </v-btn>
+                      </td>
+                    </tr>
+                  </template>
+                </v-data-table>
 
-                <AddBtn class='ma-0 mr-3 mt-3' @click.native='addRecommendedPrice' />
-              </v-flex>
-              <v-spacer></v-spacer>
-              <v-flex md6>
-                <div class='headline'>
+                <div class='headline mt-5'>
                   Праздники и экзамены
                 </div>
                 <v-data-table hide-actions hide-headers :items='current_year_items' :paginate.sync="sortingOptions" class='mt-3'>
@@ -145,13 +136,18 @@
                       </v-btn>
                     </td>
                   </template>
+                  <template slot='footer'>
+                    <tr>
+                      <td colspan='10' class='pa-0'>
+                        <v-btn flat class='btn-td' color='primary' style='height: 48px' small @click='add'>добавить</v-btn>
+                      </td>
+                    </tr>
+                  </template>
                   <template slot='no-data'>
                     <NoData />
                   </template>
                 </v-data-table>
-                <div class='mt-3'>
-                  <AddBtn class='ma-0 mr-3' @click.native='add' />
-                </div>
+
               </v-flex>
             </v-layout>
           </v-container>
@@ -184,8 +180,7 @@ export default {
     return {
       TYPE_EXAM,
       TYPE_VACATION,
-      // TODO: this.$store.state.data.years.slice(-1).value
-      selected_year: 2018,
+      selected_year: this.$store.state.data.years.slice(-1)[0].id,
       type: TYPE_EXAM,
       types: [
         { text: 'экзамен', value: TYPE_EXAM },
@@ -204,7 +199,7 @@ export default {
       sortingOptions: {
         rowsPerPage: -1,
         sortBy: 'date'
-      }
+      },
     }
   },
 
@@ -230,13 +225,6 @@ export default {
         year: this.selected_year,
       },
       this.dialog = true
-    },
-
-    addRecommendedPrice() {
-      this.recommendedPriceDialogItem = {
-        year: this.selected_year,
-      }
-      this.recommendedPricesDialog = true
     },
 
     edit(item) {
@@ -277,26 +265,12 @@ export default {
 
     async storeOrUpdateRecommendedPrice() {
       this.saving = true
-      if (this.recommendedPriceDialogItem.hasOwnProperty('id')) {
-        const index = this.recommendedPrices.findIndex(e => e.id === this.recommendedPriceDialogItem.id)
-        this.recommendedPrices.splice(index, 1, this.recommendedPriceDialogItem)
-      } else {
-        this.recommendedPriceDialogItem.id = uniqid()
-        this.recommendedPrices.push(this.recommendedPriceDialogItem)
-      }
+      const index = this.recommendedPrices.findIndex(e => e.id === this.recommendedPriceDialogItem.id)
+      this.recommendedPrices.splice(index, 1, this.recommendedPriceDialogItem)
       await Settings.set(key, this.recommendedPrices, true)
       this.saving = false
       this.recommendedPricesDialog = false
     },
-
-    async destroyRecommendedPrice() {
-      this.destroying = true
-      const index = this.recommendedPrices.findIndex(e => e.id === this.recommendedPriceDialogItem.id)
-      this.recommendedPrices.splice(index, 1)
-      await Settings.set(key, this.recommendedPrices, true)
-      this.destroying = false
-      this.recommendedPricesDialog = false
-    }
   },
 
   computed: {

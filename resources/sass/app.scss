@@ -378,3 +378,7 @@ nav {
 .v-small-dialog__content {
   background: white;
 }
+
+.v-dialog--fullscreen .v-toolbar {
+  box-shadow: none !important;
+}

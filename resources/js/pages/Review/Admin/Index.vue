@@ -4,6 +4,7 @@
       ref='DisplayData'
       :api-url='API_URL' 
       :paginate='30'
+      :filters='FILTERS'
     >
       <template slot='items' slot-scope='{ items }'>
         <ReviewAdminList :items='items' @updated='() => $refs.DisplayData.reloadData()' />
@@ -12,10 +13,11 @@
   </div>
 </template>
 
-<script>
 
+
+<script>
 import { DisplayData } from '@/components/UI'
-import { API_URL } from '@/components/Review'
+import { API_URL, FILTERS } from '@/components/Review'
 import ReviewAdminList from '@/components/Review/Admin/List'
 
 export default {
@@ -24,6 +26,7 @@ export default {
   data() {
     return {
       API_URL,
+      FILTERS,
     }
   },
   

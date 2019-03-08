@@ -261,7 +261,7 @@
             ref='ReviewPage'
             :api-url='REVIEW_API_URL' 
             :tabs='true'
-            :invisible-filters="{client_id: $route.params.id}"
+            :invisible-filters="{entity_id: $route.params.id}"
           >
             <template slot='items' slot-scope='{ items }'>
               <ReviewAdminList :items='items' @updated='() => $refs.ReviewPage.reloadData()' />
@@ -274,7 +274,6 @@
     <ClientDialog ref='ClientDialog' />
     <PaymentDialog ref='PaymentDialog' v-if='$refs.PaymentPage' @updated='$refs.PaymentPage.reloadData' />
     <RequestDialog ref='RequestDialog' v-if='$refs.RequestPage' @updated='$refs.RequestPage.loadData' />
-    <ContractDialog ref='ContractDialog' v-if='$refs.ContractPage' @updated='$refs.ContractPage.reloadData' />
     <PaymentAdditionalDialog ref='PaymentAdditionalDialog' />
   </div>
 </template>

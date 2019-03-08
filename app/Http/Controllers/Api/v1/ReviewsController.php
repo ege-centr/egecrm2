@@ -6,17 +6,24 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\{Lesson\ClientLesson, Client\Client, Review\Review, Review\ReviewComment, Review\AbstractReview};
 use App\Http\Resources\Review\{ReviewResource, ClientReviewCollection, AbstractReviewCollection};
+use Illuminate\Database\Eloquent\Builder;
 use User;
 
 class ReviewsController extends Controller
 {
+    protected $filterTablePrefix = [
+        'lessons' => ['teacher_id', 'entity_id', 'year', 'subject_id'],
+    ];
+
     protected $filters = [
-        'equals' => ['entity_id', 'teacher_id']
+        'equals' => ['entity_id'],
+        'multiple' => ['teacher_id', 'year', 'subject_id'],
+        'rating' => ['client', 'admin', 'final'],
     ];
 
     public function index(Request $request)
     {
-            // return $this->adminIndex($request);
+            return $this->adminIndex($request);
             return $this->{strtolower(class_basename($_SESSION['user']['class'])) . 'Index'}($request);
     }
 
@@ -88,5 +95,38 @@ class ReviewsController extends Controller
         return imitatePagination(
             ClientReviewCollection::collection($items)
         );
+    }
+
+
+    protected function filterRating(string $field, $value, Builder &$query)
+    {
+        $conditions = [];
+        foreach(explode(',', $value) as $rating) {
+            switch($rating) {
+                case -2:
+                    $conditions[] = "(
+                        reviews.id is null OR
+                        not exists(
+                            select 1 from review_comments rc
+                            where rc.review_id = reviews.id AND rc.type = '{$field}'
+                        )
+                    )";
+                    break;
+                default:
+                    $conditions[] = "(
+                        reviews.id is not null AND
+                        exists(
+                            select 1 from review_comments rc
+                            where
+                                rc.review_id = reviews.id AND
+                                rc.type = '{$field}' AND
+                                rc.rating = {$rating}
+                        )
+                    )";
+            }
+        }
+        if (count($conditions)) {
+            $query->whereRaw("(" . implode(' OR ', $conditions)  .")");
+        }
     }
 }

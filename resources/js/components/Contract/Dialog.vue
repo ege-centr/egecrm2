@@ -1,5 +1,5 @@
 <template>
-  <v-layout row justify-center v-if='item !== null'>
+  <v-layout row justify-center>
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card>
        <v-toolbar dark color="primary">
@@ -17,7 +17,7 @@
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
           <v-container v-else grid-list-xl class="pa-0 ma-0" style='max-width: 100%'>
             <v-layout class='mb-3'>
-              <v-flex md6>
+              <v-flex md6 class='mt-3'>
                 <v-layout wrap align-center v-for='subject in $store.state.data.subjects' :key='subject.id'>
                   <v-flex style='max-width: 100px; height: 56px'>
                     <v-btn class='ma-0' flat small :class="getSubjectColor(subject)" @click='toggleSubjectStatus(subject.id)'>
@@ -75,10 +75,8 @@
                     </v-btn>
                   </v-layout>
                 </div>
-                <div class='mt-3'>
-                  <v-btn fab dark small color="red" @click='addPayment'>
-                    <v-icon dark>add</v-icon>
-                  </v-btn>
+                <div class='mt-4'>
+                  <AddBtn @click.native='addPayment' label='добавить платеж' />
                 </div>
               </v-flex>
             </v-layout>

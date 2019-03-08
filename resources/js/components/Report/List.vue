@@ -10,7 +10,7 @@
       <template slot='items' slot-scope="{ item }">
         <td v-if='show.id'>
           <span v-if='item.report === null' class='red--text'>
-            <span v-if='item.lesson_count >= REPORT_NEEDED_LESSON_COUNT'>Требуется</span>
+            <!-- <span v-if='item.lesson_count >= REPORT_NEEDED_LESSON_COUNT'>Требуется</span> -->
           </span>
           <span v-else>
             Отчёт №{{ item.report.id }}
@@ -78,15 +78,15 @@
               client_id: item.client_id,
               teacher_id: item.teacher_id,
             })'
-            v-if='item.report === null && item.lesson_count >= REPORT_NEEDED_LESSON_COUNT'
+            v-if='item.report === null'
           >
             добавить
           </v-btn>
-          <v-btn small color='primary' class='btn-td' flat
+          <v-btn small color='black' flat icon
             @click='$refs.Dialog.open(item.report.id)'
             v-if='item.report !== null'
           >
-            изменить
+              <v-icon>more_horiz</v-icon>
           </v-btn>
         </td>
         <td class='text-md-right pa-0' width='100' v-else>
