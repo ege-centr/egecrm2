@@ -9,18 +9,25 @@
       <v-card-text class='relative card-with-loader'>
         <Loader v-if='loading'></Loader>
         <v-layout wrap v-if='item !== null'>
-          <v-flex md12>
+          <v-flex style='width: 400px'>
             <div class='flex-items'>
-              <v-avatar v-if='item' :size='100' class='bg-avatar mr-4' :style="{backgroundImage: `url(${item.photo_url})`}"></v-avatar>
-              <v-avatar v-else size='100' class='mr-4'>
-                <img src="/img/no-profile-img.jpg">
-              </v-avatar>
+              <BgAvatar :photo='item.photo' :size='100' class='mr-4' />
               <div class='mr-5 pr-5'>
-                <div class='item-label'>Преподаватель</div>
-                {{ item.names.full }}
-                <div class='mt-3 item-label'>Предметы</div>
+                <div class='item-label'>Предметы</div>
                 <span v-for='(subject_id, index) in item.subjects_ec' :key='subject_id'>{{ getData('subjects', subject_id).name }}{{ index === item.subjects_ec.length - 1 ? '' : '+' }}</span>
+                
+                <span v-if='item.email'>
+                  <div class='item-label mt-3'>Email</div>
+                  <EmailShow :item='item.email' />
+                </span>
+                
               </div>
+            </div>
+          </v-flex>
+          <v-flex style='width: 400px'>
+            <div>
+              <div class='item-label'>Телефон</div>
+              <PhoneList :items='item.phones' :block='true' />
             </div>
           </v-flex>
           <v-spacer></v-spacer>
@@ -161,6 +168,9 @@ import {
 import { DisplayData } from '@/components/UI'
 import PreviewMode from '@/other/PreviewMode'
 import Balance from '@/components/Balance/Balance'
+import EmailShow from '@/components/Email/Show'
+import BgAvatar from '@/components/UI/BgAvatar'
+import PhoneList from '@/components/Phone/List'
 
 
 // Reviews
@@ -174,7 +184,7 @@ import { API_URL as REPORT_API_URL } from '@/components/Report'
 export default {
   components: { 
     GroupList, PaymentList, DisplayData, PaymentDialog, PaymentAdditionalList, PaymentAdditionalDialog, Balance,
-    ReviewAdminList, ReportList,
+    ReviewAdminList, ReportList, EmailShow, BgAvatar, PhoneList,
   },
 
   data() {

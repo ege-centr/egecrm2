@@ -33,7 +33,7 @@
             </div>
           </div>
           <div class='flex-items font-italic'>
-            <Avatar :photo='item.teacher.photo' :size='100' class='mr-3' />
+            <BgAvatar :photo='item.teacher.photo' :size='100' class='mr-3' />
             <div>
               <div>
                 Преподаватель по {{ getData('subjects', item.subject_id).dative }}
@@ -56,12 +56,14 @@
   </div>
 </template>
 
-<script>
 
+
+<script>
+import BgAvatar from '@/components/UI/BgAvatar'
 import { API_URL, CATEGORY, getCategoryTitle } from '@/components/Report'
 
 export default {
-  components: { },
+  components: { BgAvatar },
 
   data() {
     return {

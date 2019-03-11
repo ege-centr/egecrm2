@@ -6,6 +6,7 @@ use Shared\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Traits\HasName;
 use App\Models\{Payment\Payment, Group\Group};
+use App\Utils\Phone;
 
 class Teacher extends Model
 {
@@ -32,6 +33,27 @@ class Teacher extends Model
     public function getPaymentsAttribute()
     {
         return Payment::where('entity_type', self::class)->where('entity_id', $this->id)->get();
+    }
+
+    public function getEmailAttribute()
+    {
+        return $this->attributes['email'] ? ['email' => $this->attributes['email']] : null;
+    }
+
+    public function getPhonesAttribute()
+    {
+        $phones = [];
+        foreach(['phone', 'phone2', 'phone3', 'phone4'] as $field) {
+            $phone_clean = $this->{$field};
+            if ($phone_clean) {
+                $phones[] = [
+                    'phone_clean' => $phone_clean,
+                    'phone' => Phone::format($phone_clean),
+                    'comment' => $this->{"{$field}_comment"},
+                ];
+            }
+        }
+        return $phones;
     }
 
     /**
