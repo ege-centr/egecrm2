@@ -34,6 +34,20 @@ class Teacher extends Model
         return Payment::where('entity_type', self::class)->where('entity_id', $this->id)->get();
     }
 
+    /**
+     * Имитируем фотку по правилам новой системы
+     */
+    public function getPhotoAttribute()
+    {
+        return [
+            'url' => $this->photo_url,
+            'url_version' => $this->photo_url,
+            'url_original' => $this->photo_url,
+            'url_cropped' => $this->photo_url,
+            'has_cropped' => 1,
+        ];
+    }
+
     public function scopeActive($query)
     {
         return $query->where('in_egecentr', 2);

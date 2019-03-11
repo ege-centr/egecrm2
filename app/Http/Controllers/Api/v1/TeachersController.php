@@ -10,14 +10,17 @@ use App\Http\Resources\Teacher\{Collection as TeacherCollection, Resource as Tea
 class TeachersController extends Controller
 {
     protected $filters = [
+        'multiple' => ['in_egecentr'],
         'findInSet' => ['subjects_ec']
     ];
 
     public function index(Request $request)
     {
-        $query = Teacher::active();
+        $query = Teacher::query();
         $this->filter($request, $query);
-        return TeacherCollection::collection($this->showAll($query));
+        return TeacherCollection::collection(
+            $this->showBy($request, $query)
+        );
     }
 
     public function store(Request $request)

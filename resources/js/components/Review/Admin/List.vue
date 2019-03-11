@@ -78,8 +78,7 @@
         </td>
         <td class='text-md-right'>
           <v-btn flat icon color="black" class='ma-0' 
-            v-if='item.review !== null'
-            @click='$refs.Dialog.open(item.review.id)'>
+            @click='createOrEdit(item)'>
             <v-icon>more_horiz</v-icon>
           </v-btn>
         </td>
@@ -112,6 +111,38 @@ export default {
   methods: {
     getComment(item, type) {
       return item.review.comments.find(e => e.type === type)
+    },
+
+    createOrEdit(item) {
+      if (item.review === null) {
+        console.log('adding', item)
+        this.$refs.Dialog.open(null, {
+          ..._.pick(item, [
+            'teacher_id', 'client_id', 'grade_id', 'subject_id', 'year'
+          ]),
+          ...{
+            comments: [
+              {
+                rating: null,
+                text: '',
+                type: COMMENT_TYPE.client
+              },
+              {
+                rating: null,
+                text: '',
+                type: COMMENT_TYPE.admin
+              },
+              {
+                rating: null,
+                text: '',
+                type: COMMENT_TYPE.final
+              }
+            ]
+          }
+        })
+      } else {
+        this.$refs.Dialog.open(item.review.id)
+      }
     }
   },
 }

@@ -1,7 +1,8 @@
 <template>
   <div>
-    <div class='headline mb-4'>
-      Преподаватель {{ $route.params.id }}
+    <Placeholder v-if='loading' :size='56' />
+    <div class='headline mb-4' v-else>
+      {{ item.names.full }}
     </div>
 
     <v-card class='mb-4' :class='config.elevationClass'>
@@ -16,7 +17,7 @@
               </v-avatar>
               <div class='mr-5 pr-5'>
                 <div class='item-label'>Преподаватель</div>
-                {{ item ? item.names.full : 'Не установлен' }}
+                {{ item.names.full }}
                 <div class='mt-3 item-label'>Предметы</div>
                 <span v-for='(subject_id, index) in item.subjects_ec' :key='subject_id'>{{ getData('subjects', subject_id).name }}{{ index === item.subjects_ec.length - 1 ? '' : '+' }}</span>
               </div>

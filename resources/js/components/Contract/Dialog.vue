@@ -140,6 +140,13 @@ export default {
       }
     },
 
+    async addVersion(item_id) {
+      this.dialog = true
+      this.edit_mode = false
+      await this.loadData(item_id)
+      delete this.item.id
+    },
+
     addPayment() {
       this.item.payments.push({})
     },
@@ -196,7 +203,7 @@ export default {
       }
     },
 
-    loadData(item_id) {
+    async loadData(item_id) {
       this.loading = true
       axios.get(apiUrl(API_URL, item_id)).then(r => {
         this.item = r.data

@@ -8,6 +8,7 @@ import PersonName from '@/components/UI/PersonName'
 import ClearableSelect from '@/components/UI/ClearableSelect'
 import SubjectGrade from '@/components/UI/SubjectGrade'
 import Credentials from '@/components/UI/Credentials'
+import Placeholder from '@/components/UI/Placeholder'
 
 export const GlobalPlugin = {
   install(Vue, options) {
@@ -46,5 +47,6 @@ export const GlobalPlugin = {
     Vue.component('DataTable', DataTable)
     Vue.component('Credentials', Credentials)
     Vue.component('SubjectGrade', SubjectGrade)
+    Vue.component('Placeholder', Placeholder)
   }
 }

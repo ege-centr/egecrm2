@@ -66,7 +66,7 @@
                       <v-list-tile-title>Редактировать</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile @click='addVersion(item)'>
+                <v-list-tile @click='$refs.DisplayList.Dialog.addVersion(item.id)'>
                     <v-list-tile-action>
                       <v-icon>file_copy</v-icon>
                     </v-list-tile-action>
@@ -121,15 +121,6 @@ export default {
         addBtn: true,
       },
     }
-  },
-
-  methods: {
-    addVersion(item) {
-      this.$refs.DisplayList.add(null, {
-        ...clone(item),
-        id: undefined
-      })
-    },
   },
 }
 </script>
