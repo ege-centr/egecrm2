@@ -11,7 +11,7 @@ class LessonCollection extends JsonResource
     {
         return extractFields($this, [
             'id', 'date', 'time', 'cabinet_id', 'status', 'conducted_email_id', 'grade_id',
-            'created_admin_id', 'created_at', 'teacher_id', 'group_id', 'clients_count', 'subject_id',
+            'created_admin_id', 'created_at', 'teacher_id', 'group_id', 'subject_id',
             'is_first_in_group', 'is_not_registered', 'is_unplanned'
         ]);
     }

@@ -11,12 +11,14 @@ use App\Http\Resources\Report\{AbstractReportCollection, ReportResource};
 class ReportsController extends Controller
 {
     protected $filterTablePrefix = [
-        'lessons' => ['teacher_id', 'entity_id', 'year', 'subject_id'],
+        'client_lessons' => ['client_id'],
+        'lessons' => ['teacher_id'],
+        'groups' => ['year', 'subject_id'],
         'reports' => ['is_available_for_parents']
     ];
 
     protected $filters = [
-        'equals' => ['entity_id', 'is_available_for_parents'],
+        'equals' => ['client_id', 'is_available_for_parents'],
         'multiple' => ['year', 'subject_id', 'teacher_id'],
         'exists' => ['exists']
     ];
@@ -25,11 +27,6 @@ class ReportsController extends Controller
     {
         $query = AbstractReport::query();
         $this->filter($request, $query);
-
-        // if (isset($request->exists) && $request->exists) {
-        //     $query->whereNotNull('reports.id');
-        // }
-
         return AbstractReportCollection::collection(
            $this->showBy($request, $query)
         );

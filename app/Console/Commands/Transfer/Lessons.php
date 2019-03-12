@@ -41,8 +41,10 @@ class Lessons extends Command
     {
         $take = $this->argument('take');
         DB::table('lessons')->delete();
+        DB::table('client_lessons')->delete();
 
         $egecrm_items = dbEgecrm('visit_journal')
+            ->where('type_entity', '<>', 'STUDENT')
             ->when($take != 'all', function ($query) use ($take) {
                 return $query->take($take)->orderBy('id', 'desc');
             })
@@ -50,65 +52,77 @@ class Lessons extends Command
 
         $bar = $this->output->createProgressBar(count($egecrm_items));
         foreach($egecrm_items as $item) {
-            // $new_item = Group::create((array)$egecrm_item);
-            if ($item->type_entity == 'STUDENT') {
-                $client_id = DB::table('clients')->where('old_student_id', $item->id_entity)->value('id');
-        }
-            $group_id = DB::table('groups')->where('old_group_id', $item->id_group)->value('id');;
-            //if ($group_id && ($item->type_entity == 'TEACHER' || ($item->type_entity == 'STUDENT' && $client_id))) {
+            $group_id = DB::table('groups')->where('old_group_id', $item->id_group)->value('id');
             if ($group_id) {
-                $id = DB::table('lessons')->insertGetId([
+                $status = ($item->cancelled ? 'cancelled' : ($item->type_entity ? 'conducted' : 'planned'));
+                $lessonId = DB::table('lessons')->insertGetId([
                     'teacher_id' => $item->id_teacher,
-                    'subject_id' => $item->id_subject,
                     'price' => $item->price,
-                    'duration' => $item->duration,
-                    'year' => $item->year,
-                    'entity_type' => $item->type_entity ? ($item->type_entity == 'TEACHER' ? Teacher::class : Client::class) : null,
-                    'entity_id' =>  $item->type_entity ? ($item->type_entity == 'STUDENT' ? $client_id : $item->id_teacher) : null,
                     'group_id' => $group_id,
                     'date' => $item->lesson_date,
                     'time' => $item->lesson_time,
                     'cabinet_id' => $item->cabinet,
-                    'group_grade_id' => $item->grade,
-                    'client_grade_id' => $item->grade,
-                    'late' => $item->type_entity == 'STUDENT' ? $item->late : null,
-                    'comment' => $item->comment ?: '',
-                    'is_absent' => $item->type_entity == 'STUDENT' ? ($item->presence == 1 ? false : true) : null,
-                    'status' => ($item->cancelled ? 'cancelled' : ($item->type_entity ? 'conducted' : 'planned')),
+                    'status' => $status,
                     'is_unplanned' => false,
                     'conducted_email_id' => 69,
                     'conducted_at' => ($item->cancelled ? null : $item->date),
-                    'created_at' => $item->type_entity ? $item->date : now(),
-                    'updated_at' => $item->type_entity ? $item->date : now(),
+                    'created_at' => $item->type_entity ? $item->date : now()->format(DATE_FORMAT),
+                    'updated_at' => $item->type_entity ? $item->date : now()->format(DATE_FORMAT),
                 ]);
+
+                // для проведенных занятий
+                // отмечаем учеников
+                if ($status === 'conducted') {
+                    $clientLessons = dbEgecrm('visit_journal')
+                        ->where('type_entity', 'STUDENT')
+                        ->where('id_group', $item->id_group)
+                        ->where('lesson_date', $item->lesson_date)
+                        ->where('lesson_time', $item->lesson_time)
+                        ->get();
+
+                    foreach($clientLessons as $clientLesson) {
+                        $client_id = DB::table('clients')->where('old_student_id', $clientLesson->id_entity)->value('id');
+                        if ($client_id) {
+                            DB::table('client_lessons')->insert([
+                                'client_id' => $client_id,
+                                'lesson_id' => $lessonId,
+                                'grade_id' => $clientLesson->grade,
+                                'late' =>  $clientLesson->late,
+                                'comment' => $clientLesson->comment ?: '',
+                                'is_absent' => $clientLesson->presence == 1 ? false : true,
+                                'price' => $clientLesson->price,
+                            ]);
+                        }
+                    }
+                }
             }
             $bar->advance();
         }
         $bar->finish();
-        $this->info("Setting entry_id...");
-        $this->setEntryId();
+        // $this->info("Setting entry_id...");
+        // $this->setEntryId();
     }
 
-    public function setEntryId()
-    {
-          // проставить entry_id
-          $lessons = DB::table('lessons')->where('entity_type', Teacher::class)->get();
-          foreach ($lessons as $lesson) {
-              $entry_id = uniqid();
-              DB::table('lessons')->whereId($lesson->id)->update(compact('entry_id'));
-              DB::table('lessons')->where([
-                  ['entity_type', Client::class],
-                  ['date', $lesson->date],
-                  ['time', $lesson->time],
-                  ['group_id', $lesson->group_id],
-              ])->update(compact('entry_id'));
-          }
+    // public function setEntryId()
+    // {
+    //       // проставить entry_id
+    //       $lessons = DB::table('lessons')->where('entity_type', Teacher::class)->get();
+    //       foreach ($lessons as $lesson) {
+    //           $entry_id = uniqid();
+    //           DB::table('lessons')->whereId($lesson->id)->update(compact('entry_id'));
+    //           DB::table('lessons')->where([
+    //               ['entity_type', Client::class],
+    //               ['date', $lesson->date],
+    //               ['time', $lesson->time],
+    //               ['group_id', $lesson->group_id],
+    //           ])->update(compact('entry_id'));
+    //       }
 
-          // проставить entry_id в запланированных
-          $lessons = DB::table('lessons')->whereNull('entity_type')->get();
-          foreach ($lessons as $lesson) {
-              $entry_id = uniqid();
-              DB::table('lessons')->whereId($lesson->id)->update(compact('entry_id'));
-          }
-    }
+    //       // проставить entry_id в запланированных
+    //       $lessons = DB::table('lessons')->whereNull('entity_type')->get();
+    //       foreach ($lessons as $lesson) {
+    //           $entry_id = uniqid();
+    //           DB::table('lessons')->whereId($lesson->id)->update(compact('entry_id'));
+    //       }
+    // }
 }

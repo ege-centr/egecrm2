@@ -264,7 +264,7 @@
             ref='ReviewPage'
             :api-url='REVIEW_API_URL' 
             :tabs='true'
-            :invisible-filters="{entity_id: $route.params.id}"
+            :invisible-filters="{client_id: $route.params.id}"
           >
             <template slot='items' slot-scope='{ items }'>
               <ReviewAdminList :items='items' @updated='() => $refs.ReviewPage.reloadData()' />
@@ -278,7 +278,7 @@
             ref='ReportPage'
             :api-url='REPORT_API_URL' 
             :tabs='true'
-            :invisible-filters="{entity_id: $route.params.id}"
+            :invisible-filters="{client_id: $route.params.id}"
           >
             <template slot='items' slot-scope='{ items }'>
               <ReportList :items='items' @updated='() => $refs.ReportPage.reloadData()' />

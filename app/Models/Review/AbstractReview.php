@@ -7,7 +7,7 @@ use App\Models\{ Teacher, Client\Client, Lesson\ClientLesson };
 
 class AbstractReview extends Model
 {
-    protected $table = 'lessons';
+    protected $table = 'client_lessons';
 
     protected $with = ['review'];
 
@@ -28,10 +28,12 @@ class AbstractReview extends Model
 
     public function getLessonCountAttribute()
     {
-        return ClientLesson::where('lessons.entity_id', $this->client_id)
+        return ClientLesson::join('lessons', 'lessons.id', '=', 'client_lessons.lesson_id')
+            ->join('groups', 'groups.id', '=', 'lessons.group_id')
+            ->where('client_lessons.client_id', $this->client_id)
             ->where('lessons.teacher_id', $this->teacher_id)
-            ->where('lessons.subject_id', $this->subject_id)
-            ->where('lessons.year', $this->year)
+            ->where('groups.subject_id', $this->subject_id)
+            ->where('groups.year', $this->year)
             ->count();
     }
 
@@ -41,18 +43,19 @@ class AbstractReview extends Model
         parent::boot();
 
         static::addGlobalScope('abstract-review', function($query) {
-            return $query->where('entity_type', Client::class)
+            return $query->join('lessons', 'lessons.id', '=', 'client_lessons.lesson_id')
+                ->join('groups', 'groups.id', '=', 'lessons.group_id')
                 ->leftJoin('reviews', function($join) {
-                    $join->on('reviews.client_id', '=', 'lessons.entity_id')
+                    $join->on('reviews.client_id', '=', 'client_lessons.client_id')
                         ->on('reviews.teacher_id', '=', 'lessons.teacher_id')
-                        ->on('reviews.subject_id', '=', 'lessons.subject_id')
-                        ->on('reviews.year', '=', 'lessons.year');
+                        ->on('reviews.subject_id', '=', 'groups.subject_id')
+                        ->on('reviews.year', '=', 'groups.year');
                 })
                 ->selectRaw('
-                    reviews.id as review_id, lessons.year, lessons.subject_id, lessons.teacher_id,
-                    lessons.client_grade_id as grade_id, lessons.entity_id as client_id
+                    reviews.id as review_id, groups.year, groups.subject_id, lessons.teacher_id,
+                    client_lessons.grade_id, client_lessons.client_id
                 ')
-                ->groupBy('reviews.id', 'lessons.entity_id', 'lessons.teacher_id', 'lessons.subject_id', 'lessons.year');
+                ->groupBy('reviews.id', 'client_lessons.client_id', 'lessons.teacher_id', 'groups.subject_id', 'groups.year');
         });
     }
 }

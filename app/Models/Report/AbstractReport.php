@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class AbstractReport extends Model
 {
-    protected $table = 'lessons';
+    protected $table = 'client_lessons';
 
     protected $with = ['report'];
 
@@ -40,10 +40,12 @@ class AbstractReport extends Model
      */
     public function getLessonCountAttribute()
     {
-        $query = ClientLesson::where('lessons.entity_id', $this->client_id)
+        $query = ClientLesson::join('lessons', 'lessons.id', '=', 'client_lessons.lesson_id')
+            ->join('groups', 'groups.id', '=', 'lessons.group_id')
+            ->where('client_lessons.client_id', $this->client_id)
             ->where('lessons.teacher_id', $this->teacher_id)
-            ->where('lessons.subject_id', $this->subject_id)
-            ->where('lessons.year', $this->year);
+            ->where('groups.subject_id', $this->subject_id)
+            ->where('groups.year', $this->year);
 
         if ($this->report_id === null) {
             return $query->where('lessons.date', '>=', $this->lesson_date)->count();
@@ -54,10 +56,10 @@ class AbstractReport extends Model
                 (
                     select max(reports.date) from reports
                     where
-                        reports.client_id = lessons.entity_id and
+                        reports.client_id = client_lessons.client_id and
                         reports.teacher_id = lessons.teacher_id and
-                        reports.subject_id = lessons.subject_id and
-                        reports.year = lessons.year and
+                        reports.subject_id = groups.subject_id and
+                        reports.year = groups.year and
                         reports.date < '{$this->report_date}'
                 ), '0000-00-00')
             ")
@@ -69,20 +71,21 @@ class AbstractReport extends Model
         parent::boot();
 
         static::addGlobalScope('abstract-report', function($query) {
-            return $query->where('entity_type', Client::class)
+            return $query->join('lessons', 'lessons.id', '=', 'client_lessons.lesson_id')
+                ->join('groups', 'groups.id', '=', 'lessons.group_id')
                 ->leftJoin('reports', function($join) {
-                    $join->on('reports.client_id', '=', 'lessons.entity_id')
+                    $join->on('reports.client_id', '=', 'client_lessons.client_id')
                         ->on('reports.teacher_id', '=', 'lessons.teacher_id')
-                        ->on('reports.subject_id', '=', 'lessons.subject_id')
-                        ->on('reports.year', '=', 'lessons.year')
+                        ->on('reports.subject_id', '=', 'groups.subject_id')
+                        ->on('reports.year', '=', 'groups.year')
                         ->on('reports.date', '>=', 'lessons.date');
                 })
                 ->selectRaw('
-                    reports.id as report_id, lessons.year, lessons.subject_id, lessons.teacher_id,
-                    lessons.client_grade_id as grade_id, lessons.entity_id as client_id,
+                    reports.id as report_id, groups.year, groups.subject_id, lessons.teacher_id,
+                    client_lessons.grade_id, client_lessons.client_id,
                     min(lessons.date) as lesson_date, reports.date as report_date
                 ')
-                ->groupBy('reports.id', 'lessons.entity_id', 'lessons.teacher_id', 'lessons.subject_id', 'lessons.year');
+                ->groupBy('reports.id', 'client_lessons.client_id', 'lessons.teacher_id', 'groups.subject_id', 'groups.year');
         });
     }
 }

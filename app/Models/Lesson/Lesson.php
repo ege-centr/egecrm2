@@ -2,14 +2,11 @@
 
 namespace App\Models\Lesson;
 
-use Illuminate\Database\Eloquent\{Model, Builder};
-use App\Models\{Teacher, Admin\Admin, Client\Client, Group\Group};
-use App\Traits\LessonTrait;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\{Group\Group, Cabinet, Teacher, Admin\Admin};
 
 class Lesson extends Model
 {
-    use LessonTrait;
-
     /**
      * Статусы занятий
      */
@@ -19,12 +16,18 @@ class Lesson extends Model
 
     protected $fillable = [
         'teacher_id', 'cabinet_id', 'date', 'time', 'price',
-        'status', 'is_unplanned', 'group_id', 'year'
+        'status', 'is_unplanned', 'group_id'
     ];
 
-    protected $attributes = [
-        'duration' => 135
-    ];
+    public function cabinet()
+    {
+        return $this->belongsTo(Cabinet::class);
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);
+    }
 
     public function createdAdmin()
     {
@@ -38,7 +41,7 @@ class Lesson extends Model
 
     public function clientLessons()
     {
-        return $this->hasMany(ClientLesson::class, 'entry_id', 'entry_id');
+        return $this->hasMany(ClientLesson::class);
     }
 
     public function getTimeAttribute()
@@ -47,12 +50,6 @@ class Lesson extends Model
             return mb_strimwidth($this->attributes['time'], 0, 5);
         }
     }
-
-    public function getGradeIdAttribute()
-    {
-        return $this->attributes['group_grade_id'];
-    }
-
 
     /**
      * первое занятие в группе?
@@ -75,34 +72,11 @@ class Lesson extends Model
             && $this->status !== self::STATUS_CONDUCTED;
     }
 
-
     public function getClientsCountAttribute()
     {
         if ($this->is_conducted) {
             return $this->clientLessons()->count();
         }
         return $this->group->groupClients()->count();
-    }
-
-    // public function addClient($client)
-    // {
-    //     $data = ;
-    //     return
-    // }
-
-    public static function boot()
-    {
-        parent::boot();
-
-        static::addGlobalScope('lessons', function (Builder $builder) {
-			$builder->where(function($query) {
-				return $query->where('entity_type', Teacher::class)->orWhereNull('entity_type');
-	        });
-        });
-
-        static::creating(function ($model) {
-            $model->entry_id = uniqid();
-            // $model->created_email_id = User::id();
-        });
     }
 }

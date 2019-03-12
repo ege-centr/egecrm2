@@ -12,11 +12,13 @@ use User;
 class ReviewsController extends Controller
 {
     protected $filterTablePrefix = [
-        'lessons' => ['teacher_id', 'entity_id', 'year', 'subject_id'],
+        'lessons' => ['teacher_id'],
+        'groups' => ['year', 'subject_id'],
+        'client_lessons' => ['client_id']
     ];
 
     protected $filters = [
-        'equals' => ['entity_id'],
+        'equals' => ['client_id'],
         'multiple' => ['teacher_id', 'year', 'subject_id'],
         'rating' => ['client', 'admin', 'final'],
     ];
@@ -74,11 +76,11 @@ class ReviewsController extends Controller
      */
     private function clientIndex(Request $request)
     {
-        $items = ClientLesson::where('entity_type', Client::class)
-            ->where('entity_id', User::id())
-            ->selectRaw('count(*) as lesson_count, client_grade_id as grade_id, entity_id as client_id')
-            ->addSelect('year', 'subject_id', 'group_id', 'client_grade_id')
-            ->groupBy('teacher_id', 'year', 'subject_id')
+        $items = ClientLesson::join('lessons', 'lessons.id', '=', 'client_lessons.lesson_id')
+            ->where('client_lessons.client_id', User::id())
+            ->selectRaw('count(*) as lesson_count, client_lessons.grade_id, client_lessons.client_id')
+            ->addSelect('lessons.year', 'lessons.subject_id', 'lessons.group_id')
+            ->groupBy('lessons.teacher_id', 'lessons.year', 'lessons.subject_id')
             ->get();
 
         foreach($items as $item) {

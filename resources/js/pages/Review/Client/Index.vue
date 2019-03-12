@@ -4,7 +4,7 @@
       ref='DisplayData'
       :api-url='API_URL' 
       :tabs='true'
-      :invisible-filters="{entity_id: $store.state.user.id}"
+      :invisible-filters="{client_id: $store.state.user.id}"
     >
       <template slot='items' slot-scope='{ items }'>
         <ReviewClientList :items='items' @updated='() => $refs.DisplayData.loadData()' />

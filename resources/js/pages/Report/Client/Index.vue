@@ -2,7 +2,7 @@
   <div>
     <DisplayData 
       :invisible-filters="{
-        entity_id: $store.state.user.id,
+        client_id: $store.state.user.id,
         is_available_for_parents: 1,
         exists: 1,
       }"
