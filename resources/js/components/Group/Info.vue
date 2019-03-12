@@ -1,9 +1,6 @@
 <template>
   <div class='flex-items'>
-    <v-avatar v-if='item.teacher' :size='100' class='bg-avatar mr-4' :style="{backgroundImage: `url(${item.teacher.photo_url})`}"></v-avatar>
-    <v-avatar v-else size='100' class='mr-4'>
-      <img src="/img/no-profile-img.jpg">
-    </v-avatar>
+    <BgAvatar :photo='item.teacher.photo' :size='100' class='mr-4' />
     <div class='mr-5 pr-5'>
       <div class='item-label'>Преподаватель</div>
       <router-link v-if='item.teacher' :to="{name: 'TeacherShow', params: {id: item.teacher.id}}">
@@ -45,7 +42,7 @@
 </template>
 
 <script>
-
+import BgAvatar from '@/components/UI/BgAvatar'
 import { LEVELS } from '@/components/Group'
 import DisplayOptions from '@/mixins/DisplayOptions'
 
@@ -58,6 +55,8 @@ export default {
   },
 
   mixins: [ DisplayOptions ],
+
+  components: { BgAvatar },
 
   data() {
     return {

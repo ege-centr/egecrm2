@@ -11,7 +11,7 @@ class ClientLesson extends Model
         'price', 'late', 'is_absent', 'comment',
     ];
 
-    protected $with = ['client'];
+    // protected $with = ['client'];
 
     public function client()
     {
