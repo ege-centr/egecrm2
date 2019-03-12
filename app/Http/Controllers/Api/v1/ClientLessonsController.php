@@ -9,25 +9,33 @@ use App\Http\Resources\Lesson\{LessonResource,  ClientLessonInSchedule, ClientLe
 
 class ClientLessonsController extends Controller
 {
+    protected $filterTablePrefix = [
+        'client_lessons' => ['client_id'],
+    ];
+
     protected $filters = [
-        'entity' => ['entity_type'],
-        'equals' => ['entity_id', 'status'],
+        'equals' => ['client_id'],
     ];
 
     public function index(Request $request)
     {
-        $query = ClientLesson::orderBy('date', 'asc')->orderBy('time', 'asc');
+        $query = ClientLesson::withJoins();
+
+        $this->filter($request, $query);
 
         if (isset($request->status) && $request->status === 'conducted') {
-            $this->filter($request, $query);
+            // $this->filter($request, $query);
         } else {
             // Вместе с планируемыми
             // AND `date` >= DATE(NOW())
-            $group_ids = GroupClient::where('client_id', $request->entity_id)->pluck('group_id')->implode(',');
-            $query->withoutGlobalScope('clients')->whereRaw("
-                (entity_type = '" . addslashes(Client::class) . "' AND entity_id = {$request->entity_id}) OR
-                (entity_type IS NULL AND group_id IN ({$group_ids}))
-            ");
+            $group_ids = GroupClient::where('client_id', $request->client_id)->pluck('group_id')->implode(',');
+            $query->leftJoin('lessons as planned_lessons', function($join) use ($group_ids) {
+                $join->whereRaw("(planned_lessons.status = 'planned' AND planned_lessons.group_id IN ({$group_ids}))");
+            });
+            // $query->withoutGlobalScope('clients')->whereRaw("
+            //     (entity_type = '" . addslashes(Client::class) . "' AND client_id = {$request->client_id}) OR
+            //     (entity_type IS NULL AND group_id IN ({$group_ids}))
+            // ");
         }
 
         return ClientLessonCollection::collection($query->get());
@@ -61,7 +69,7 @@ class ClientLessonsController extends Controller
         unset($client_lesson['id']);
         unset($client_lesson['price']);
         $client_lesson->created_at = now()->format('Y-m-d H:i:s');
-        $client_lesson->entity_id = $request->client_id;
+        $client_lesson->client_id = $request->client_id;
         $client_lesson->entity_type = Client::class;
         $client_lesson->save();
         return new ClientLessonInSchedule($client_lesson);

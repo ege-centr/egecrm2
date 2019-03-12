@@ -11,7 +11,7 @@ use User;
 class LessonsController extends Controller
 {
     protected $filters = [
-        'equals' => ['group_id', 'status', 'entity_id']
+        'equals' => ['group_id', 'status', 'teacher_id']
     ];
 
     public function index(Request $request)

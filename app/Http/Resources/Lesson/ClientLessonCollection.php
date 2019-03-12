@@ -9,8 +9,9 @@ class ClientLessonCollection extends JsonResource
     public function toArray($request)
     {
         return extractFields($this, [
-            'id', 'group_id', 'cabinet_id', 'teacher_id', 'grade_id', 'comment',
-            'status', 'date', 'time', 'subject_id', 'is_absent', 'price', 'year'
+            'id', 'grade_id', 'comment', 'is_absent', 'price'
+        ], [
+            'lesson' => new LessonCollection($this->lesson),
         ]);
     }
 }

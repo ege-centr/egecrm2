@@ -79,4 +79,9 @@ class Lesson extends Model
         }
         return $this->group->groupClients()->count();
     }
+
+    public function scopeWithJoins($query)
+    {
+        # code...
+    }
 }

@@ -12,32 +12,56 @@ class BalanceController extends Controller
 {
     public function index(Request $request)
     {
-        $request->merge(['status' => 'conducted']);
         $isTeacher = getModelClass($request->entity_type, true) === Teacher::class;
-        $lessons = app()->call('App\Http\Controllers\Api\v1\\' . ($isTeacher ? 'Lessons' : 'ClientLessons') . 'Controller@index');
-        $payments = app()->call('App\Http\Controllers\Api\v1\PaymentsController@index')->items();
+        $request->merge([
+            'status' => 'conducted',
+            ($isTeacher ? 'teacher_id' : 'client_id') => $request->entity_id,
+        ]);
 
 
         $items = [];
 
-        foreach($lessons as $lesson) {
-            $comment = ($lesson->is_unplanned ? 'дополнительное занятие' : 'занятие')
-                . ' ' . date("d.m.y", strtotime($lesson->date))
-                . " в {$lesson->time}, группа {$lesson->group_id} "
-                . '(' . Subject::getTitle($lesson->subject_id, 'three_letters') . '-'
-                . Grade::getTitle($lesson->client_grade_id, 'short') . ')'
-                . ($lesson->cabinet ? ', кабинет ' . $lesson->cabinet->title : '');
+        if ($isTeacher) {
+            $lessons = app()->call('App\Http\Controllers\Api\v1\LessonsController@index');
+            foreach($lessons as $lesson) {
+                $comment = ($lesson->is_unplanned ? 'дополнительное занятие' : 'занятие')
+                    . ' ' . date("d.m.y", strtotime($lesson->date))
+                    . " в {$lesson->time}, группа {$lesson->group_id} "
+                    . '(' . Subject::getTitle($lesson->subject_id, 'three_letters') . '-'
+                    . Grade::getTitle($lesson->grade_id, 'short') . ')'
+                    . ($lesson->cabinet ? ', кабинет ' . $lesson->cabinet->title : '');
 
-            $items[] = [
-                'sum' => $isTeacher ? $lesson->price : $lesson->price * -1,
-                'comment' => $comment,
-                'date' => $lesson->date,
-                'year' => $lesson->year,
-                'admin_id' => $lesson->conducted_email_id,
-                'created_at' => $lesson->created_at,
-            ];
+                $items[] = [
+                    'sum' => $lesson->price,
+                    'comment' => $comment,
+                    'date' => $lesson->date,
+                    'year' => $lesson->group->year,
+                    'admin_id' => $lesson->conducted_email_id,
+                    'created_at' => $lesson->created_at,
+                ];
+            }
+        } else {
+            $clientLessons = app()->call('App\Http\Controllers\Api\v1\ClientLessonsController@index');
+            foreach($clientLessons as $clientLesson) {
+                $comment = ($clientLesson->lesson->is_unplanned ? 'дополнительное занятие' : 'занятие')
+                    . ' ' . date("d.m.y", strtotime($clientLesson->lesson->date))
+                    . " в {$clientLesson->lesson->time}, группа {$clientLesson->lesson->group_id} "
+                    . '(' . Subject::getTitle($clientLesson->lesson->group->subject_id, 'three_letters') . '-'
+                    . Grade::getTitle($clientLesson->grade_id, 'short') . ')'
+                    . ($clientLesson->cabinet ? ', кабинет ' . $clientLesson->lesson->cabinet->title : '');
+
+                $items[] = [
+                    'sum' => $clientLesson->price * -1,
+                    'comment' => $comment,
+                    'date' => $clientLesson->lesson->date,
+                    'year' => $clientLesson->lesson->group->year,
+                    'admin_id' => $clientLesson->lesson->conducted_email_id,
+                    'created_at' => $clientLesson->lesson->created_at,
+                ];
+            }
         }
 
+        $payments = app()->call('App\Http\Controllers\Api\v1\PaymentsController@index')->items();
         foreach($payments as $payment) {
             if ($payment->type === 'payment') {
                 $sum = $isTeacher ? $payment->sum * -1 : $payment->sum;

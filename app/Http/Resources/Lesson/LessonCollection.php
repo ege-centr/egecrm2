@@ -10,9 +10,9 @@ class LessonCollection extends JsonResource
     public function toArray($request)
     {
         return extractFields($this, [
-            'id', 'date', 'time', 'cabinet_id', 'status', 'conducted_email_id', 'grade_id',
-            'created_admin_id', 'created_at', 'teacher_id', 'group_id', 'subject_id',
-            'is_first_in_group', 'is_not_registered', 'is_unplanned'
+            'id', 'date', 'time', 'cabinet_id', 'status', 'conducted_email_id',
+            'created_admin_id', 'created_at', 'teacher_id', 'group', 'clients_count',
+            'is_first_in_group', 'is_not_registered', 'is_unplanned', 'group_id'
         ]);
     }
 }

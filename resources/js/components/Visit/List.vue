@@ -11,8 +11,8 @@
             <LessonStatusCircles :item='item' />
           </td>
           <td>
-            <router-link :to="{ name: 'GroupShow', params: { id: item.group_id}}">
-              Группа {{ item.group_id }}
+            <router-link :to="{ name: 'GroupShow', params: { id: item.group.id}}">
+              Группа {{ item.group.id }}
             </router-link>
           </td>
           <td>
@@ -24,8 +24,8 @@
             </span>
           </td>
           <td>
-            <span v-if='item.subject_id'>
-              <SubjectGrade :item='item' />
+            <span v-if='item.group.subject_id'>
+              <SubjectGrade :item='item.group' />
             </span>
           </td>
           <td>

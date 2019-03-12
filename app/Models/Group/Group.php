@@ -72,13 +72,14 @@ class Group extends Model
         foreach(Time::WEEKDAYS as $weekday => $label) {
             $intervals = $weekday >= 6 ? $weekend_intervals : $weekday_intervals;
             foreach($intervals as $interval) {
-                $time = Lesson::whereRaw("
-                    is_unplanned=0 AND
-                    group_id={$this->id} AND
-                    year={$this->year} AND
-                    time BETWEEN '{$interval[0]}:00:00' AND '{$interval[1]}:00:00' AND
-                    DATE_FORMAT(date, '%w') = " . ($weekday == 7 ? 0 : $weekday))
-                ->value('time');
+                $time = Lesson::join('groups', 'groups.id', '=', 'lessons.group_id')
+                    ->whereRaw("
+                        lessons.is_unplanned=0 AND
+                        lessons.group_id={$this->id} AND
+                        groups.year={$this->year} AND
+                        lessons.time BETWEEN '{$interval[0]}:00:00' AND '{$interval[1]}:00:00' AND
+                        DATE_FORMAT(lessons.date, '%w') = " . ($weekday == 7 ? 0 : $weekday))
+                    ->value('time');
                 $bars[$weekday][] = $time;
                 if ($time) {
                     $labels[] = "{$label} в {$time}";

@@ -21,31 +21,31 @@
             <!-- ЗАНЯТИЕ -->
             <td width='65' class='pr-0 grey--text'>
               <div class='lesson-status' :class="{
-                'blue': item.status === LESSON_STATUS.PLANNED,
-                'green': item.status === LESSON_STATUS.CONDUCTED,
-                'grey': item.status === LESSON_STATUS.CANCELLED,
+                'blue': item.lesson.status === LESSON_STATUS.PLANNED,
+                'green': item.lesson.status === LESSON_STATUS.CONDUCTED,
+                'grey': item.lesson.status === LESSON_STATUS.CANCELLED,
               }"></div>
               <span v-show='!excludeFromIndex(item)'>
                 {{ getIndex(item) }}
               </span>
             </td>
             <td width='150'>
-              {{ item.date + ' ' + item.time | date-time }}
+              {{ item.lesson.date + ' ' + item.lesson.time | date-time }}
             </td>
             <td width='150'>
               <router-link :to="{name: 'GroupShow', params: {id: item.group_id}}">
-                Группа {{ item.group_id }}
+                Группа {{ item.lesson.group_id }}
               </router-link>
             </td>
             <td width='150'>
-              <Cabinet :id='item.cabinet_id' />
+              <Cabinet :id='item.lesson.cabinet_id' />
             </td>
             <td width='150'>
-              <SubjectGrade :item='item' />
+              <SubjectGrade :item='item.lesson.group' />
             </td>
             <td width='250'>
-              <span v-if='item.teacher_id'>
-                {{ getData('teachers', item.teacher_id).names.abbreviation }}
+              <span v-if='item.lesson.teacher_id'>
+                {{ getData('teachers', item.lesson.teacher_id).names.abbreviation }}
               </span>
             </td>
             <td width='150'>
@@ -54,14 +54,14 @@
               </span>
             </td>
             <td>
-              <v-tooltip bottom v-if='item.status === LESSON_STATUS.CONDUCTED && item.comment'>
+              <v-tooltip bottom v-if='item.lesson.status === LESSON_STATUS.CONDUCTED && item.comment'>
                 <v-icon class='cursor-default' slot='activator'>comment</v-icon>
                 <span>{{ item.comment }}</span>
               </v-tooltip>
             </td>
             <td>
-              <span v-if='item.status !== LESSON_STATUS.CONDUCTED'>
-                <span v-if='item.status === LESSON_STATUS.PLANNED'>
+              <span v-if='item.lesson.status !== LESSON_STATUS.CONDUCTED'>
+                <span v-if='item.lesson.status === LESSON_STATUS.PLANNED'>
                   планируется
                 </span>
                 <span class='grey--text' v-else>
@@ -121,17 +121,19 @@ export default {
     
     // какие позиции не нумеровать?
     excludeFromIndex(item) {
-      return item.status === LESSON_STATUS.CANCELLED
+      return item.lesson.status === LESSON_STATUS.CANCELLED
     },
   },
 
   computed: {
     filteredItems() {
-      return this.items.filter(e => e.year === this.selected_tab)
+      return this.items.filter(e => e.lesson.group.year === this.selected_tab)
     },
 
     tabsWithData() {
-      return tabsWithData(this.items)
+      return this.$store.state.data.years.filter(d => {
+        return this.items.findIndex(e => e.lesson.group.year === d.id) !== -1
+      })
     }
   },
 }
