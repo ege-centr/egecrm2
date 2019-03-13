@@ -1,8 +1,7 @@
 <template>
   <div>
-    <Placeholder v-if='loading' :size='56' />
-    <div class='headline mb-4' v-else>
-      {{ item.names.full }}
+    <div class='headline mb-4'>
+      {{ getData('teachers', $route.params.id).default_name }}
     </div>
 
     <v-card class='mb-4' :class='config.elevationClass'>

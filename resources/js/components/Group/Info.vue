@@ -4,7 +4,7 @@
     <div class='mr-5 pr-5'>
       <div class='item-label'>Преподаватель</div>
       <router-link v-if='item.teacher' :to="{name: 'TeacherShow', params: {id: item.teacher.id}}">
-        {{ item.teacher.names.full }}
+        {{ item.teacher.default_name }}
       </router-link>
       <span v-else>
         Не установлен
@@ -24,7 +24,7 @@
       <div class='item-label'>Учебный год</div>
       <span>{{ item.year }}–{{ item.year + 1 }}</span>
       <div class='mt-3 item-label'>Всего уроков</div>
-      <span>{{ item.lessons.length }}</span>
+      <span>{{ item.lessons.filter(e => e.status !== LESSON_STATUS.CANCELLED).length }}</span>
     </div>
     <div>
       <div class='item-label'>Статус</div>
@@ -45,6 +45,7 @@
 import BgAvatar from '@/components/UI/BgAvatar'
 import { LEVELS } from '@/components/Group'
 import DisplayOptions from '@/mixins/DisplayOptions'
+import { LESSON_STATUS } from '@/components/Lesson'
 
 export default {
   props: {
@@ -61,6 +62,7 @@ export default {
   data() {
     return {
       LEVELS,
+      LESSON_STATUS,
       defaultDisplayOptions: {
         edit: true,
       },

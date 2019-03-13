@@ -11,6 +11,7 @@ class PersonWithEmailResource extends JsonResource
         return array_merge([
             'id' => $this->id,
             'names' => $this->names,
+            'default_name' => $this->default_name,
             'email' => $this->email,
         ]);
     }

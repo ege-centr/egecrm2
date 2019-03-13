@@ -1,16 +1,6 @@
 <template>
   <v-list dense>
-    <v-list-tile v-for='m in menu' :key='m.route' @click="$router.push({name: m.route})">
-        <v-list-tile-action>
-            <v-icon>{{ m.icon }}</v-icon>
-        </v-list-tile-action>
-        <v-list-tile-content>
-            <v-list-tile-title>
-              {{ m.label }}
-              <span class='menu-counter' v-if="m.hasOwnProperty('counter')">{{ $store.state.counters[m.counter] || '' }}</span>
-            </v-list-tile-title>
-        </v-list-tile-content>
-    </v-list-tile>
+    <MenuItem v-for='m in menu' :key='m.route' :item='m' />
 
     <div class='menu-separator'></div>
     
@@ -36,9 +26,12 @@
 
 
 <script>
+import MenuItem from '@/components/UI/MenuItem'
 import PreviewMode from '@/other/PreviewMode'
 
 export default {
+  components: { MenuItem },
+
   data: () => ({
     PreviewMode,
     drawer: true,

@@ -6,9 +6,9 @@
     <v-content>
       <v-container fluid>
         <transition name="fade">
-          <router-view v-show='$store.state.search === null'></router-view>
+          <router-view v-show='$store.state.search.results === null'></router-view>
         </transition>
-        <SearchResults v-show='$store.state.search !== null' />
+        <SearchResults v-show='$store.state.search.results !== null' />
       </v-container>
     </v-content>
     <!-- <ListenToLogout></ListenToLogout> -->

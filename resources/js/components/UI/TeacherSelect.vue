@@ -5,7 +5,7 @@
     :items="$store.state.data.teachers"
     :label="label"
     item-value='id'
-    item-text='names.abbreviation'
+    item-text='default_name'
     :readonly="readonly"
   >
     <v-list-tile slot='prepend-item' @click='clear'>
@@ -14,7 +14,7 @@
       </v-list-tile-title>
     </v-list-tile>
     <template slot='item' slot-scope='{ item }' @click='value = item.id'>
-      <div :class="{'grey--text': item.in_egecentr !== 2}">{{ item.names.abbreviation }}</div>
+      <div :class="{'grey--text': item.in_egecentr !== 2}">{{ item.default_name }}</div>
     </template>
   </v-select>
 </template>

@@ -1,12 +1,13 @@
 <template>
-  <v-container grid-list-xl class="pa-0 ma-0" fluid v-if='result !== null'>
+  <v-container grid-list-xl class="pa-0 ma-0" fluid v-if='$store.state.search.results !== null'>
     <div v-if='typesWithData.length > 0'>
       <v-layout wrap row v-for='type in typesWithData' :key='type.field' class='mb-4'>
         <v-flex md12 class='headline'>
-          {{ type.title }} <span class='grey--text'>({{ result[type.field].length }})</span>
+          {{ type.title }} 
+          <!-- <span class='grey--text'>({{ result[type.field].length }})</span> -->
         </v-flex>
         <v-flex md12 >
-          <component :is='type.component' :items='result[type.field]' />
+          <component :is='type.component' :items='$store.state.search.results[type.field]' />
         </v-flex>
       </v-layout>
     </div>
@@ -42,12 +43,8 @@ export default {
   },
 
   computed: {
-    result() {
-      return this.$store.state.search
-    },
-
     typesWithData() {
-      return this.types.filter(type => this.result[type.field].length > 0)
+      return this.types.filter(type => this.$store.state.search.results[type.field].length > 0)
     },
   }
 }

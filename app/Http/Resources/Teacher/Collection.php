@@ -13,6 +13,7 @@ class Collection extends JsonResource
             'in_egecentr' => $this->in_egecentr,
             'subjects_ec' => $this->subjects_ec,
             'names' => $this->names,
+            'default_name' => $this->default_name,
         ];
     }
 }

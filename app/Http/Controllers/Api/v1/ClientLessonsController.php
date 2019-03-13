@@ -19,25 +19,8 @@ class ClientLessonsController extends Controller
 
     public function index(Request $request)
     {
-        $query = ClientLesson::withJoins();
-
+        $query = ClientLesson::joinLessons();
         $this->filter($request, $query);
-
-        if (isset($request->status) && $request->status === 'conducted') {
-            // $this->filter($request, $query);
-        } else {
-            // Вместе с планируемыми
-            // AND `date` >= DATE(NOW())
-            $group_ids = GroupClient::where('client_id', $request->client_id)->pluck('group_id')->implode(',');
-            $query->leftJoin('lessons as planned_lessons', function($join) use ($group_ids) {
-                $join->whereRaw("(planned_lessons.status = 'planned' AND planned_lessons.group_id IN ({$group_ids}))");
-            });
-            // $query->withoutGlobalScope('clients')->whereRaw("
-            //     (entity_type = '" . addslashes(Client::class) . "' AND client_id = {$request->client_id}) OR
-            //     (entity_type IS NULL AND group_id IN ({$group_ids}))
-            // ");
-        }
-
         return ClientLessonCollection::collection($query->get());
     }
 

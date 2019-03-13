@@ -13,6 +13,11 @@ trait HasName
         ];
     }
 
+    public function getDefaultNameAttribute()
+    {
+        return $this->names->short;
+    }
+
     public function scopeSearchByName($query, $text)
     {
         return $query->where(function ($query) use ($text) {

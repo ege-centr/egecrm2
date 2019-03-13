@@ -72,17 +72,21 @@ class Group extends Model
         foreach(Time::WEEKDAYS as $weekday => $label) {
             $intervals = $weekday >= 6 ? $weekend_intervals : $weekday_intervals;
             foreach($intervals as $interval) {
-                $time = Lesson::join('groups', 'groups.id', '=', 'lessons.group_id')
+                $result = Lesson::join('groups', 'groups.id', '=', 'lessons.group_id')
+                    ->selectRaw('time, count(*) as cnt')
                     ->whereRaw("
                         lessons.is_unplanned=0 AND
+                        lessons.status <> 'cancelled' AND
                         lessons.group_id={$this->id} AND
                         groups.year={$this->year} AND
                         lessons.time BETWEEN '{$interval[0]}:00:00' AND '{$interval[1]}:00:00' AND
                         DATE_FORMAT(lessons.date, '%w') = " . ($weekday == 7 ? 0 : $weekday))
-                    ->value('time');
-                $bars[$weekday][] = $time;
-                if ($time) {
-                    $labels[] = "{$label} в {$time}";
+                    ->first();
+
+                // bars заполняем даже в случае с null
+                $bars[$weekday][] = $result->time;
+                if ($result->cnt >= 2) {
+                    $labels[] = "{$label} в {$result->time}";
                 }
             }
         }

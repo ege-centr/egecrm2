@@ -133,6 +133,11 @@ class User extends Model
         return get_class(self::fromSession()) === Client::class;
     }
 
+    public static function isAdmin()
+    {
+        return get_class(self::fromSession()) === Admin::class;
+    }
+
     private static function errorResponse($error_message)
     {
         return (object)[

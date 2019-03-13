@@ -3,13 +3,18 @@
 namespace App\Http\Resources\Teacher;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Phone\PhoneResource;
+use App\Http\Resources\Photo\PhotoResource;
 
 class Resource extends JsonResource
 {
     public function toArray($request)
     {
         return extractFields($this, [
-            'id', 'names', 'photo', 'phones', 'email', 'subjects_ec'
+            'id', 'names', 'email', 'subjects_ec'
+        ], [
+            'phones' => PhoneResource::collection($this->phones),
+            'photo' => new PhotoResource($this->photo),
         ]);
     }
 }

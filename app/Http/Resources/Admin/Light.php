@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Photo\PhotoResource;
 
 class Light extends JsonResource
 {
@@ -18,7 +19,7 @@ class Light extends JsonResource
         return [
             'id' => $this->id,
             'name' => $name ?: $this->nickname,
-            'photo' => $this->photo
+            'photo' => new PhotoResource($this->photo)
         ];
     }
 }

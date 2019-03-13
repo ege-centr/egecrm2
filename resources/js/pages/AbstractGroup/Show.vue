@@ -33,7 +33,7 @@
               <template slot='items' slot-scope="props">
                 <td width='200'>
                   <router-link :to="{name: 'ClientShow', params: { id: props.item.id }}">
-                    <PersonName :item='props.item' field='abbreviation' />
+                    <PersonName :item='props.item' field='names.abbreviation' />
                   </router-link>
                 </td>
                 <td width='200'>
@@ -100,7 +100,7 @@ export default {
     },
 
     moveClient(client) {
-      this.$refs.MoveClientDialog.open(this.abstractGroup, client)
+      this.$refs.MoveClientDialog.open(this.abstractGroup, client.id)
     },
   },
 

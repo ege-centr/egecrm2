@@ -20,7 +20,7 @@
         </td>
         <td>
           <router-link :to="{name: 'TeacherShow', params: {id: item.teacher_id}}" v-if='item.teacher_id > 0'>
-            {{ item.teacher.names.short }}
+            {{ item.teacher.default_name }}
           </router-link>
         </td>
         <td>

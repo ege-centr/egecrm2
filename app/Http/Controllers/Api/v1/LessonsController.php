@@ -44,7 +44,7 @@ class LessonsController extends Controller
                     $client_lesson->update($clientLesson);
                 }
             } else {
-                ClientLesson::create(array_merge($model->toArray(), $clientLesson));
+                ClientLesson::create($clientLesson);
             }
         }
         return new LessonResource($model);
@@ -52,9 +52,7 @@ class LessonsController extends Controller
 
     public function destroy($id)
     {
-        $lesson = Lesson::find($id);
-        $lesson->clientLessons()->delete();
-        $lesson->delete();
+        Lesson::find($id)->delete();
     }
 
     public function conduct($id, Request $request)

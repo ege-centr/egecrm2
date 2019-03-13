@@ -26,8 +26,11 @@ class Log extends Model
 
     public function getUserNameAttribute()
     {
-        $class = $this->email->entity_type;
-        return $class::whereId($this->email->entity_id)->selectRaw("CONCAT(first_name, ' ', last_name) as `name`")->value('name');
+        if ($this->email !== null) {
+            $class = $this->email->entity_type;
+            return $class::whereId($this->email->entity_id)->selectRaw("CONCAT(first_name, ' ', last_name) as `name`")->value('name');
+        }
+        return 'не установлено';
     }
 
     public static function add($type, $model)

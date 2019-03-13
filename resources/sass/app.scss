@@ -314,10 +314,6 @@ nav {
   font-size: 12px;
 }
 
-.full-height {
-  height: 100%;
-}
-
 .v-tabs__container--fixed-tabs .v-tabs__div {
   min-width: unset;
 }
@@ -385,4 +381,22 @@ nav {
 
 .theme--light.v-tabs__bar  {
   background: $grey-background;
+}
+
+.full-height-vh {
+  height: 93vh;
+}
+
+.active .v-list__tile--link {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.v-datatable--small {
+  & tr {
+    & td {
+      height: 30px !important;
+      padding: 0 12px !important;
+      font-size: 12px !important;
+    }
+  }
 }

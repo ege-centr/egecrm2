@@ -40,8 +40,8 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   // очищаем результаты поиска при переходе по другой ссылке
-  if (store.state.search !== null) {
-    store.commit('set', {field: 'search', payload: null})
+  if (store.state.search.results !== null) {
+    store.commit('clearSearch')
   }
   Vue.nextTick(() => {
     if (store.state.user) {

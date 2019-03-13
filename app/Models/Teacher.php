@@ -25,6 +25,11 @@ class Teacher extends Model
         return '/img/no-profile-img.jpg';
     }
 
+    public function getDefaultNameAttribute()
+    {
+        return $this->names->abbreviation;
+    }
+
     public function getGroupsAttribute()
     {
         return Group::where('teacher_id', $this->id)->get();

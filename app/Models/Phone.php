@@ -19,16 +19,6 @@ class Phone extends Model
         return $this->attributes['phone'];
     }
 
-    public function toArray()
-    {
-        return [
-            'id' => $this->id,
-            'phone' => $this->phone,
-            'phone_clean' => $this->phone_clean,
-            'comment' => $this->comment
-        ];
-    }
-
     public static function boot()
     {
         parent::boot();

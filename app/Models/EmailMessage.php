@@ -20,29 +20,12 @@ class EmailMessage extends Model
         Mail::to($this->email)->send(new CustomEmail($this));
     }
 
-    public function toArray()
-    {
-        return [
-            'createdAdmin' => new AdminResource($this->createdAdmin),
-            'message' => $this->message,
-            'files' => $this->files,
-            // 'attachments' => $this->attachments,
-            'subject' => $this->subject,
-            'created_at' => $this->created_at->toDateTimeString(),
-        ];
-    }
-
     public static function boot()
     {
         parent::boot();
 
-        // TODO:  изменить на created_email_id
         static::creating(function ($model) {
-            if (User::isTeacher()) {
-                $model->created_admin_id = 1;
-            } else {
-                $model->created_admin_id = User::id();
-            }
+            $model->created_email_id = User::emailId();
         });
     }
 }

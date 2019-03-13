@@ -7,11 +7,11 @@ use App\Models\{Client\Client};
 
 class ClientLesson extends Model
 {
+    public $timestamps = false;
+
     protected $fillable = [
         'price', 'late', 'is_absent', 'comment',
     ];
-
-    // protected $with = ['client'];
 
     public function client()
     {
@@ -23,14 +23,9 @@ class ClientLesson extends Model
         return $this->belongsTo(Lesson::class);
     }
 
-    public function scopeWithJoins($query)
+    public function scopeJoinLessons($query)
     {
         return $query->join('lessons', 'lessons.id', '=', 'client_lessons.lesson_id')
-            ->join('groups', 'groups.id', '=', 'lessons.group_id')
-            // ->selectRaw('
-            //     client_lessons.*, groups.year, groups.subject_id, lessons.cabinet_id, lessons.group_id,
-            //     lessons.teacher_id, lessons.status, lessons.date, lessons.time, lessons.teacher_id
-            // ')
             ->orderBy('lessons.date', 'asc')
             ->orderBy('lessons.time', 'asc');
     }

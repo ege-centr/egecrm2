@@ -12,6 +12,17 @@ export default {
     state.counters = counters
   },
 
+  clearSearch(state) {
+    state.search = {
+      query: '',
+      results: null,
+    }
+  },
+
+  setSearchResults(state, data) {
+    state.search.results = data
+  },
+
   set(state, {field, payload}) {
     state[field] = payload
   },

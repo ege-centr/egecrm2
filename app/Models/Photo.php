@@ -73,14 +73,4 @@ class Photo extends Model
         //     Storage::delete(self::UPLOAD_PATH . $model->filename_cropped);
         // });
     }
-
-    public function toArray()
-    {
-        return array_merge(parent::toArray(), [
-            'url' => $this->url,
-            'url_version' => $this->url_version,
-            'url_original' => $this->url_original,
-            'url_cropped' => $this->url_cropped,
-        ]);
-    }
 }

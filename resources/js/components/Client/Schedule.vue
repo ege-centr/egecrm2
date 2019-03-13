@@ -1,13 +1,24 @@
 <template>
   <div>
-    <div v-if='items !== null' class='mb-3'>
-       <v-chip v-for="item in tabsWithData" class='pointer ml-0 mr-3'
-          :class="{'primary white--text': item.id == selected_tab}"
-          @click='selected_tab = item.id'
-          :key='item.id'
-        >
-          {{ item.title }}
+    <div v-if='items !== null' class='mb-3 flex-items justify-space-between align-center'>
+      <div>
+        <v-chip v-for="item in yearTabs" class='pointer ml-0 mr-3'
+            :class="{'primary white--text': item.id == selected_year_tab}"
+            @click='selected_year_tab = item.id'
+            :key='item.id'
+          >
+            {{ item.title }}
         </v-chip>
+      </div>
+      <div>
+        <v-chip v-for="item in subjectTabs" class='pointer mr-0 ml-3'
+            :class="{'primary white--text': item.id == selected_subject_tab}"
+            @click='selected_subject_tab = selected_subject_tab === item.id ? null : item.id'
+            :key='item.id'
+          >
+            {{ item.three_letters }}
+        </v-chip>
+      </div>
     </div>
     <Loader class='loader-wrapper_transparent' v-if='items === null' />
     <v-card v-else class='elevation-0'>
@@ -45,7 +56,7 @@
             </td>
             <td width='250'>
               <span v-if='item.teacher_id'>
-                {{ getData('teachers', item.teacher_id).names.abbreviation }}
+                {{ getData('teachers', item.teacher_id).default_name }}
               </span>
             </td>
             <td width='150'>
@@ -87,7 +98,6 @@
 <script>
 import { ROLES } from '@/config'
 import { LESSON_STATUS } from '@/components/Lesson'
-import { tabsWithData } from '@/other/functions'
 import Cabinet from '@/components/UI/Cabinet'
 
 export default {
@@ -98,7 +108,8 @@ export default {
   data() {
     return {
       items: null,
-      selected_tab: null,
+      selected_year_tab: null,
+      selected_subject_tab: null,
       LESSON_STATUS,
     }
   },
@@ -106,8 +117,8 @@ export default {
   mounted() {
     axios.get(apiUrl('schedule/client', this.clientId)).then(r => {
       this.items = r.data
-      if (this.tabsWithData.length) {
-          this.selected_tab = this.tabsWithData.slice(-1)[0].id
+      if (this.yearTabs.length) {
+          this.selected_year_tab = this.yearTabs.slice(-1)[0].id
         }
     })
   },
@@ -127,14 +138,27 @@ export default {
 
   computed: {
     filteredItems() {
-      return this.items.filter(e => e.group.year === this.selected_tab)
+      if (this.selected_subject_tab !== null) {
+        return this.filteredByYear.filter(e => e.group.subject_id === this.selected_subject_tab)
+      }
+      return this.filteredByYear
     },
 
-    tabsWithData() {
+    filteredByYear() {
+      return this.items.filter(e => e.group.year === this.selected_year_tab)
+    },
+
+    yearTabs() {
       return this.$store.state.data.years.filter(d => {
         return this.items.findIndex(e => e.group.year === d.id) !== -1
       })
-    }
+    },
+
+    subjectTabs() {
+      return this.$store.state.data.subjects.filter(subject => {
+        return this.filteredByYear.findIndex(e => e.group.subject_id === subject.id) !== -1
+      })
+    },
   },
 }
 </script>

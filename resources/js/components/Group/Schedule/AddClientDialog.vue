@@ -58,7 +58,7 @@ export default {
     add() {
       this.$emit('added', {
         client: this.client,
-        entity_id: this.client.id,
+        client_id: this.client.id,
       })
       this.dialog = false
     },

@@ -12,7 +12,7 @@
         </router-link>
       </td>
       <td v-if='show.teacher' width='300'>
-        {{ item.teacher ? item.teacher.names.abbreviation : '' }}
+        {{ item.teacher ? item.teacher.default_name : '' }}
       </td>
       <td>
         <span v-if='item.subject_id'>

@@ -10,7 +10,7 @@
         </td>
         <td>
           <span v-if='item.teacher_id'>
-            {{ getData('teachers', item.teacher_id).names.short }}
+            {{ getData('teachers', item.teacher_id).default_name }}
           </span>
         </td>
         <td>

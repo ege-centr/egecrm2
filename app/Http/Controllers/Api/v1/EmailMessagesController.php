@@ -6,16 +6,19 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\{EmailMessage, File};
 use App\Http\Resources\EmailMessage\EmailMessageResource;
+use User;
 
 class EmailMessagesController extends Controller
 {
     public function index(Request $request)
     {
-        return EmailMessageResource::collection(
-            EmailMessage::orderBy('id', 'desc')
-                ->where('email', $request->email)
-                ->get()
-        );
+        $query = EmailMessage::orderBy('id', 'desc')->where('email', $request->email);
+
+        if (! User::isAdmin()) {
+            $query->where('created_email_id', User::emailId());
+        }
+
+        return EmailMessageResource::collection($query->get());
     }
 
     public function store(Request $request)

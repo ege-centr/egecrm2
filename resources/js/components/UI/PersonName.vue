@@ -1,5 +1,5 @@
 <template>
-  <span>{{ hasName ? item.names[field] : 'пусто' }}</span>
+  <span>{{ hasName ? getName() : 'пусто' }}</span>
 </template> 
 
 <script>
@@ -11,8 +11,14 @@ export default {
     },
     field: {
       type: String,
-      default: 'short',
+      default: 'default_name',
       required: false,
+    }
+  },
+
+  methods: {
+    getName() {
+      return _.get(this.item, this.field)
     }
   },
 

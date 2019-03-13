@@ -3,7 +3,7 @@
     <template slot="items" slot-scope="{ item }">
       <td width='400'>
         <router-link :to="{ name: 'TeacherShow', params: { id: item.id }}">
-          {{ item.names.full }}
+          {{ item.default_name }}
         </router-link>
       </td>
       <td>

@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Person;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Photo\PhotoResource;
 
 class PersonWithPhotoResource extends JsonResource
 {
@@ -11,7 +12,8 @@ class PersonWithPhotoResource extends JsonResource
         return array_merge([
             'id' => $this->id,
             'names' => $this->names,
-            'photo' => $this->photo,
+            'default_name' => $this->default_name,
+            'photo' => new PhotoResource($this->photo),
         ]);
     }
 }

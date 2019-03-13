@@ -199,7 +199,7 @@ export default {
     },
 
     handleClientAdded(client) {
-      client.entry_id = this.item.entry_id
+      client.lesson_id = this.item.lesson_id
       this.item.clientLessons.push(client)
     },
 

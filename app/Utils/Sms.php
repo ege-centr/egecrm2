@@ -4,6 +4,7 @@ namespace App\Utils;
 
 use Illuminate\Support\Facades\Redis;
 use App\Models\Sms as SmsModel;
+use App\Http\Resources\Sms\SmsResource;
 
 class Sms
 {
@@ -56,7 +57,7 @@ class Sms
                     'message' => $sms->message,
                     'status' => $sms->status,
                     'status_name' => $sms->status_name,
-                    'model' => SmsModel::find($sms->id),
+                    'model' => new SmsResource(SmsModel::find($sms->id)),
                     'created_at' => date('Y-m-d H:i:s', $sms->send_timestamp),
                 ];
             }

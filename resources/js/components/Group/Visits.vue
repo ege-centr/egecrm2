@@ -23,7 +23,7 @@
           </div>
           <div class="visits__items" v-for="(teacher, index) in teachers" :key="teacher.id" :class="{'first-teacher-item': index === 0}">
             <div>
-              <router-link :to="{ name: 'TeacherShow', params: { id: teacher.id } }">{{ teacher.names.abbreviation }}</router-link>
+              <router-link :to="{ name: 'TeacherShow', params: { id: teacher.id } }">{{ teacher.default_name }}</router-link>
             </div>
             <div v-for='(lesson, index) in group.lessons' :key='lesson.id' :class="getClass(index)">
               <SmallCircle v-if='lesson.status === LESSON_STATUS.CONDUCTED && lesson.teacher_id === teacher.id' class-name='green' />

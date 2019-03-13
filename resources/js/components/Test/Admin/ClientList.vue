@@ -62,9 +62,21 @@
       </v-data-table>
     </div>
 
-    <div v-if='testPageOptions !== null' class='relative' style='margin-top: 100px'>
-      <TestClientStartPage :options='testPageOptions' :key='JSON.stringify(testPageOptions)' />
-    </div>
+     <v-layout row justify-center>
+      <v-dialog :value="testPageOptions !== null" transition="dialog-bottom-transition" fullscreen hide-overlay>
+        <v-card>
+          <v-toolbar dark color="primary">
+            <v-btn icon dark @click.native="testPageOptions = null">
+              <v-icon>close</v-icon>
+            </v-btn>
+            <v-toolbar-title>Результаты теста</v-toolbar-title>
+          </v-toolbar>
+          <v-card-text>
+            <TestClientStartPage :options='testPageOptions' :key='JSON.stringify(testPageOptions)' />
+          </v-card-text>
+        </v-card>
+      </v-dialog>
+    </v-layout>
   </div>
 </template>
 

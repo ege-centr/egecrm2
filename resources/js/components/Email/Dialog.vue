@@ -55,6 +55,7 @@
               v-model='message' 
             ></v-textarea>
           </v-form>
+          <hr class="v-divider theme--light">
           <div class='px-2'>
             <LoadingChip v-for="(file, index) in $upload.files('file').all" :key='file.$id' :file='file' @remove='removeFile(index)' />
             <v-btn @click='attach' flat fab small style='height: 34px; width: 34px; margin: 4px'>
@@ -188,6 +189,9 @@ export default {
         min-height: inherit !important;
         padding: 0 !important;
       }
+    }
+    .v-input__append-inner {
+      display: none;
     }
   }
 </style>

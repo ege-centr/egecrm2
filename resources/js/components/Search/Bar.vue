@@ -3,7 +3,7 @@
     <div class='search-bar' v-show='show'>
       <v-text-field
         ref='search'
-        v-model='text'
+        v-model='$store.state.search.query'
         flat
         prepend-inner-icon="search"
         solo-inverted
@@ -32,13 +32,13 @@ export default {
   
   methods: {
     search: _.debounce(function() {
-      if (this.text.length <= 3) {
-        this.$store.commit('set', {field: 'search', payload: null})
+      if (this.$store.state.search.query.length <= 3) {
+        this.$store.commit('setSearchResults', null)
         return
       }
       this.loading = true
-      axios.get(apiUrl(API_URL) + queryString({ text: this.text })).then(r => {
-        this.$store.commit('set', {field: 'search', payload: r.data})
+      axios.get(apiUrl(API_URL) + queryString({ text: this.$store.state.search.query })).then(r => {
+        this.$store.commit('setSearchResults', r.data)
         this.loading = false
       })
     }, 300),
@@ -50,7 +50,7 @@ export default {
     },
     //
     // clear() {
-    //   this.text = ''
+    //   this.$store.state.search.query = ''
     //   this.$store.commit('set', {field: 'search', payload: null})
     // }
   },

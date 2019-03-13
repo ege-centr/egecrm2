@@ -40,10 +40,12 @@
                     <div class='mb-3'>
                       <div class='flex-items align-center'>
                         <span class='caption mr-3 input-label'>Оценка</span>
-                        <v-icon class='cursor-default' v-if='getComment(COMMENT_TYPE.admin).rating === -1'>star</v-icon>
-                        <v-icon class='pointer' 
-                          v-if='getComment(COMMENT_TYPE.admin).rating !== -1'
-                          @click='getComment(COMMENT_TYPE.admin).rating = -1'>star_border</v-icon>
+                        <div class='v-rating v-rating--dense'>
+                          <v-icon class='cursor-default' v-if='getComment(COMMENT_TYPE.admin).rating === -1'>star</v-icon>
+                          <v-icon class='pointer' 
+                            v-if='getComment(COMMENT_TYPE.admin).rating !== -1'
+                            @click='getComment(COMMENT_TYPE.admin).rating = -1'>star_border</v-icon>
+                        </div>
                         <v-rating dense clearable v-model="getComment(COMMENT_TYPE.admin).rating"></v-rating>
                       </div>
                     </div>
@@ -58,10 +60,12 @@
                     <div class='mb-3'>
                       <div class='flex-items align-center'>
                         <span class='caption mr-3 input-label'>Оценка</span>
-                        <v-icon class='cursor-default' v-if='getComment(COMMENT_TYPE.final).rating === -1'>star</v-icon>
-                        <v-icon class='pointer' 
-                          v-if='getComment(COMMENT_TYPE.final).rating !== -1'
-                          @click='getComment(COMMENT_TYPE.final).rating = -1'>star_border</v-icon>
+                        <div class='v-rating v-rating--dense'>
+                          <v-icon class='cursor-default' v-if='getComment(COMMENT_TYPE.final).rating === -1'>star</v-icon>
+                          <v-icon class='pointer' 
+                            v-if='getComment(COMMENT_TYPE.final).rating !== -1'
+                            @click='getComment(COMMENT_TYPE.final).rating = -1'>star_border</v-icon>
+                        </div>
                         <v-rating dense clearable v-model="getComment(COMMENT_TYPE.final).rating"></v-rating>
                       </div>
                     </div>

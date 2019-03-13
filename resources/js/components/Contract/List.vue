@@ -12,7 +12,7 @@
         <tr>
           <td v-if='show.client'>
             <router-link :to="{name: 'ClientShow', params: {id: item.client.id}}">
-              <PersonName :item='item.client' field='abbreviation' />
+              <PersonName :item='item.client' field='names.abbreviation' />
             </router-link>
           </td>
           <td>
