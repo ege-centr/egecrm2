@@ -61,8 +61,7 @@ class LessonsController extends Controller
         $group = Group::find($lesson->group_id);
         $lesson->status = 'conducted';
         $lesson->conducted_at = now()->format(DATE_FORMAT);
-        // TODO: создать emailID для учителей
-        $lesson->conducted_email_id = get_class(User::fromSession()) === Teacher::class ? 69 : User::id();
+        $lesson->conducted_email_id = User::emailId();
         $lesson->price = $group->teacher_price;
         $lesson->save();
 

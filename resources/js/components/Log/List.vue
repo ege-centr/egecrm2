@@ -1,6 +1,7 @@
 <template>
   <v-data-table 
     class='v-datatable--small'
+    :class='config.elevationClass'
     :items='items'
     :item-key='id'
     hide-headers
@@ -17,7 +18,22 @@
           {{ item.row_id }}
         </td>
         <td>
-          {{ item.user_name }}
+          <span v-if='item.createdUser.type === ROLES.CLIENT'>
+            <router-link :to="{name: 'ClientShow', params: {id: item.createdUser.id}}">
+              {{ item.createdUser.default_name }}
+            </router-link>
+          </span>
+          <span v-else-if='item.createdUser.type === ROLES.TEACHER'>
+            <router-link :to="{name: 'TeacherShow', params: {id: item.createdUser.id}}">
+              {{ item.createdUser.default_name }}
+            </router-link>
+          </span>
+          <span v-else>
+            {{ item.createdUser.default_name }}
+          </span>
+          <div v-if='item.previewModeUser' class='grey--text'>
+            ({{ item.previewModeUser.default_name }})
+          </div>
         </td>
         <td class='log-data'>
           <table v-if="item.type == 'update'">
@@ -44,7 +60,7 @@
             </tr>
           </table>
         </td>
-        <td>
+        <td class='text-md-right grey--text'>
           {{ item.created_at | date-time }}
         </td>
       </tr>
@@ -56,6 +72,7 @@
 
 <script>
 import { TYPES } from './'
+import { ROLES } from '@/config'
 
 export default {
   props: {
@@ -67,7 +84,8 @@ export default {
   
   data() {
     return {
-      TYPES
+      TYPES,
+      ROLES,
     }
   },
 }

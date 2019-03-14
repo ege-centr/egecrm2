@@ -11,10 +11,10 @@ class Resource extends JsonResource
     public function toArray($request)
     {
         return extractFields($this, [
-            'id', 'names', 'email', 'subjects_ec'
+            'id', 'names', 'email', 'subjects_ec', 'default_name'
         ], [
-            'phones' => PhoneResource::collection($this->phones),
-            'photo' => new PhotoResource($this->photo),
+            'phones' => $this->phones,
+            'photo' => $this->photo,
         ]);
     }
 }

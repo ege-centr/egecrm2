@@ -1,6 +1,6 @@
 <template>
   <span class='grey--text'>
-    {{ getData('admins', item[field]).name }}
+    {{ item[userField] ? item[userField].default_name : 'неизвестно' }}
     {{ item.created_at | date-time }}
   </span>
 </template>
@@ -12,11 +12,11 @@ export default {
       type: Object,
       required: true,
     },
-    field: {
+
+    userField: {
       type: String,
-      default: 'created_admin_id',
-      required: false,
-    }
-  }
+      default: 'createdUser'
+    },
+  },
 }
 </script>

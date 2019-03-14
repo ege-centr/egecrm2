@@ -48,10 +48,7 @@
           <span v-else>не подтвержден</span>
         </td>
         <td>
-          <span v-if='item.id'>
-            {{ getData('admins', item.created_admin_id).name }}
-            {{ item.created_at | date-time }}
-          </span>
+          <Credentials v-if='item.id' :item='item' />
         </td>
         <td class='text-md-right'>
           <v-btn @click='$refs.DisplayList.edit(item.id)' slot='activator' flat icon color="black" class='ma-0'>

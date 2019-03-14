@@ -33,6 +33,7 @@ export default {
     },
 
     selectMultiple(option) {
+      console.log('selecting', this.idField, option[this.idField])
       const value = option[this.idField]
       const value_index = this.value.indexOf(value)
       if (value_index === -1) {

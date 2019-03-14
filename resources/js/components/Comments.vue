@@ -2,16 +2,16 @@
   <div>
     <!-- <v-slide-y-transition :group='true'> -->
       <div class='flex-items align-flex-start mb-3' v-for='(comment, index) in comments' :key='comment.id'>
-        <Avatar :photo='comment.createdAdmin.photo' :size='50' class='mr-3' />
+        <Avatar :photo='comment.createdUser.photo' :size='50' class='mr-3' />
         <div>
           <div>
-            <b>{{ comment.createdAdmin.name }}</b>
+            <b>{{ comment.createdUser.default_name }}</b>
             <span class='d-inline-block ml-1 grey--text'>
               {{ comment.created_at | date-time }}
               <span class='cursor-default' v-if='comment.created_at != comment.updated_at' :title="'Отредактировано ' + $options.filters['date-time'](comment.updated_at)">(edited)</span>
             </span>
             <v-menu left>
-              <v-btn slot='activator' flat icon small color="black" class='ma-0' v-if='comment.createdAdmin.id === $store.state.user.id'>
+              <v-btn slot='activator' flat icon small color="black" class='ma-0' v-if='comment.createdUser.id === $store.state.user.id'>
                 <v-icon>more_horiz</v-icon>
               </v-btn>
               <v-list dense>

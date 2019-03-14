@@ -48,9 +48,8 @@
             <td>
               {{ i.comment }}
             </td>
-            <td class='grey--text' v-if='show.created_at && i.admin_id'>
-              {{ getData('admins', i.admin_id).name }}
-              {{ i.created_at | date-time }}
+            <td  v-if='show.created_at && i.user'>
+              <Credentials :item='i' user-field='user' />
             </td>
           </tr>
         </template>

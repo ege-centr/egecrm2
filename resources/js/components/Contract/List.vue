@@ -49,8 +49,7 @@
             </span>
           </td>
           <td>
-            {{ item.createdAdmin.names.short }}
-            {{ item.created_at | date-time }}
+            <Credentials :item='item' />
           </td>
           <td class='text-md-right'>
             <v-menu left>

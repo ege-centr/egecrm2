@@ -55,6 +55,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         'client-test-answers' => 'ClientTestAnswersController',
         'reviews' => 'ReviewsController',
         'reports' => 'ReportsController',
+        'tables' => 'TablesController',
     ]);
 
     // Route::namespace('Test')->prefix('tests')->group(function() {

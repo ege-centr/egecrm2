@@ -11,7 +11,7 @@ class PaymentsController extends Controller
 {
     protected $filters = [
         'multiple' => ['year', 'category', 'method', 'type', 'is_confirmed'],
-        'equals' => ['created_admin_id', 'date', 'entity_id'],
+        'equals' => ['created_email_id', 'date', 'entity_id'],
     ];
 
     public function index(Request $request)

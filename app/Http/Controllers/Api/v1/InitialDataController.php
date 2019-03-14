@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Factory\{Branch, Subject, Grade, Year};
 use App\Models\{Teacher, Cabinet, User, Admin\Admin};
-use App\Http\Resources\Admin\Collection as AdminCollection;
+use App\Http\Resources\Admin\AdminCollection;
 use App\Http\Resources\Teacher\Collection as TeacherCollection;
 
 /**

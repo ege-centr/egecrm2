@@ -4,11 +4,11 @@ namespace App\Models\Contract;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\{User, Admin\Admin, Client\Client};
-use App\Traits\HasCreatedAdmin;
+use App\Traits\HasCreatedEmail;
 
 class Contract extends Model
 {
-    use HasCreatedAdmin;
+    use HasCreatedEmail;
 
     protected $fillable = ['year', 'grade_id', 'sum', 'date', 'discount', 'number', 'client_id'];
 
@@ -61,7 +61,7 @@ class Contract extends Model
                 $model->number = self::max('number') + 1;
             }
             if (User::loggedIn()) {
-                $model->created_admin_id = User::id();
+                $model->created_email_id = User::emailId();
             }
             $model->setPosition();
         });

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\{Lesson\ClientLesson, Teacher};
 use App\Models\Factory\{Grade, Subject, Branch};
 use Illuminate\Database\Eloquent\Collection;
+use PersonResource;
 
 class BalanceController extends Controller
 {
@@ -36,7 +37,7 @@ class BalanceController extends Controller
                     'comment' => $comment,
                     'date' => $lesson->date,
                     'year' => $lesson->group->year,
-                    'admin_id' => $lesson->conducted_email_id,
+                    'user' => new PersonResource($lesson->createdUser),
                     'created_at' => $lesson->created_at,
                 ];
             }
@@ -55,7 +56,7 @@ class BalanceController extends Controller
                     'comment' => $comment,
                     'date' => $clientLesson->lesson->date,
                     'year' => $clientLesson->lesson->group->year,
-                    'admin_id' => $clientLesson->lesson->conducted_email_id,
+                    'user' => new PersonResource($clientLesson->lesson->createdUser),
                     'created_at' => $clientLesson->lesson->created_at,
                 ];
             }
@@ -75,7 +76,7 @@ class BalanceController extends Controller
                 'comment' => $comment,
                 'date' => $payment->date,
                 'year' => $payment->year,
-                'admin_id' => $payment->created_admin_id,
+                'user' => new PersonResource($payment->createdUser),
                 'created_at' => $payment->created_at,
             ];
         }
@@ -87,7 +88,7 @@ class BalanceController extends Controller
                 'comment' => $additionalPayment->purpose,
                 'date' => $additionalPayment->date,
                 'year' => $additionalPayment->year,
-                'admin_id' => $additionalPayment->created_admin_id,
+                'user' => new PersonResource($additionalPayment->createdUser),
                 'created_at' => $additionalPayment->created_at,
             ];
         }

@@ -12,6 +12,19 @@ class Email extends Model
         'email' => ''
     ];
 
+    public function getUserAttribute()
+    {
+        $class = $this->entity_type;
+        return $class::find($this->entity_id);
+    }
+
+
+    // Получить пользователя по email_id
+    public static function getUser($id)
+    {
+        return self::whereId($id)->first()->user;
+    }
+
     public function setPasswordProperty($value)
     {
         $this->attributes['password'] = self::toPassword($value);

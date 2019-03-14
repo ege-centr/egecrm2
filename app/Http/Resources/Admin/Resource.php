@@ -18,7 +18,7 @@ class Resource extends JsonResource
     {
         $name = trim(implode(' ', [$this->last_name, $this->first_name]));
         return array_merge(parent::toArray($request), [
-            'name' => $name ?: $this->nickname,
+            'default_name' => $name ?: $this->nickname,
             'phones' => PhoneResource::collection($this->phones),
             'photo' => new PhotoResource($this->photo),
             'email' => $this->email,

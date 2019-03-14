@@ -12,6 +12,7 @@ class PersonResource extends JsonResource
             'id' => $this->id,
             'names' => $this->names,
             'default_name' => $this->default_name,
+            'type' => trimModelClass(get_class($this->resource), true),
         ]);
     }
 }

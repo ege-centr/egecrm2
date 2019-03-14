@@ -5,10 +5,10 @@
           <v-flex style='width: 80%; border-right: 1px solid #9e9e9e'>
             <div class='mb-3'>
               <div class='flex-items'>
-                <Avatar :photo='item.created_admin_id ? item.createdAdmin.photo : null' :size='50' class='mr-3' />
+                <Avatar :photo='item.createdUser ? item.createdUser.photo : null' :size='50' class='mr-3' />
                 <div>
                   <div>
-                    <b>{{ item.created_admin_id ? item.createdAdmin.name : 'System' }}</b>
+                    <b>{{ item.createdUser ? item.createdUser.default_name : 'System' }}</b>
                     <span class='d-inline-block ml-1 grey--text'>
                       {{ item.created_at | date-time }}
                     </span>
@@ -29,7 +29,7 @@
             </div>
             <div class='mb-3' v-if='item.responsibleAdmin'>
               <div class='item-label'>Ответственный</div>
-              {{ item.responsibleAdmin.name }}
+              {{ item.responsibleAdmin.default_name }}
             </div>
             <div class='mb-3'>
               <div class='item-label'>Филиалы</div>

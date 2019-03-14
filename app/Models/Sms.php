@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasCreatedAdmin;
+use App\Traits\HasCreatedEmail;
 
 class Sms extends Model
 {
-    use HasCreatedAdmin;
+    use HasCreatedEmail;
 
     const DISABLE_LOGS = true;
 

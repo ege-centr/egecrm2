@@ -34,7 +34,7 @@ export const FILTERS = [
     {id: 0, title: 'не подтвержден'},
     {id: 1, title: 'подтвержден'},
   ]},
-  {label: 'Пользователь', field: 'created_admin_id', type: 'select', options: store.state.data.admins, textField: 'name'},
+  {label: 'Пользователь', field: 'created_email_id', type: 'admin', valueField: 'email_id'},
   {label: 'Дата', field: 'date', type: 'date'},
   {label: 'Сортировка', field: 'sort', type: 'sort', valueField: 'field', options: [
     {field: 'created_at', type: 'desc', title: 'по дате проводки'},

@@ -11,11 +11,11 @@
             <Loader v-if='messages === null' />
             <div v-else>
               <div v-for='message in messages' :key='message.id' class="mb-3 display-flex">
-              <Avatar :photo='message.createdAdmin ? message.createdAdmin.photo : null' :size='50' class='mr-3' />
+              <Avatar :photo='message.createdUser ? message.createdUser.photo : null' :size='50' class='mr-3' />
               <v-card class='messages__item grey lighten-4' :class='config.elevationClass'>
                 <v-card-text class='py-2 px-3'>
                   <div class='display-flex align-center'>
-                    <span class='font-weight-medium'>{{ message.createdAdmin ? message.createdAdmin.name : 'Неизвестный отправитель' }}</span>
+                    <span class='font-weight-medium'>{{ message.createdUser ? message.createdUser.default_name : 'Неизвестный отправитель' }}</span>
                     <span class='ml-2 caption grey--text'>{{ message.created_at | date-time }}</span>
                   </div>
                   {{ message.message }}

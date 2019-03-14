@@ -5,7 +5,7 @@
     :items="$store.state.data.admins"
     :label="label"
     item-value='id'
-    item-text='name'
+    item-text='default_name'
   >
     <v-list-tile slot='prepend-item' @click='clear'>
       <v-list-tile-title class='grey--text'>
@@ -13,7 +13,7 @@
       </v-list-tile-title>
     </v-list-tile>
     <template slot='item' slot-scope='{ item }' @click='value = item.id'>
-      <div :class="{'grey--text': item.is_banned}">{{ item.name }}</div>
+      <div :class="{'grey--text': item.is_banned}">{{ item.default_name }}</div>
     </template>
   </v-select>
 </template>

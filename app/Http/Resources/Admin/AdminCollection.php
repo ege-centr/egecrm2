@@ -3,8 +3,9 @@
 namespace App\Http\Resources\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Photo\PhotoResource;
 
-class Collection extends JsonResource
+class AdminCollection extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,8 +18,10 @@ class Collection extends JsonResource
         $name = trim(implode(' ', [$this->last_name, $this->first_name]));
         return [
             'id' => $this->id,
-            'name' => $name ?: $this->nickname,
+            'default_name' => $name ?: $this->nickname,
             'is_banned' => $this->isBanned(),
+            'email_id' => $this->email->id,
+            'photo' => new PhotoResource($this->photo),
         ];
     }
 }

@@ -4,7 +4,7 @@
     <v-data-table :items='items' item-key='id' hide-headers hide-actions :class='config.elevationClass'>
       <template slot="items" slot-scope="{ item }">
         <td>
-            {{ item.name }}
+            {{ item.default_name }}
         </td>
         <td class='text-md-right'>
           <v-btn flat icon color="black" class='ma-0' @click='$refs.AdminDialog.open(item.id)'>

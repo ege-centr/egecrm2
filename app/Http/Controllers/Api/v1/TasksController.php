@@ -10,7 +10,7 @@ use App\Http\Resources\Task\{Resource, Collection};
 class TasksController extends Controller
 {
     protected $filters = [
-        'multiple' => ['status', 'responsible_admin_id', 'created_admin_id'],
+        'multiple' => ['status', 'responsible_admin_id', 'created_email_id'],
         'like' => ['text'],
     ];
 

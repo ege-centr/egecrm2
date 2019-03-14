@@ -33,7 +33,7 @@ export const FILTERS = [
     {id: 'first', title: 'первая'},
     {id: 'last', title: 'последняя'},
   ]},
-  {label: 'Пользователь', field: 'created_admin_id', type: 'admin'},
+  {label: 'Пользователь', field: 'created_email_id', type: 'admin'},
   {label: 'Дата создания', field: 'date', type: 'interval'},
   {label: 'Дата создания из реквизитов', field: 'created_at', type: 'interval'},
 ]

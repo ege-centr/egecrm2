@@ -4,7 +4,7 @@
   >
     <v-list dense style='min-width: 300px'>
       <v-list-tile @click='selectMultiple(option)' v-for='(option, index) in $store.state.data.admins' :key='index'>
-        <v-list-tile-title :class="{'grey--text': option.is_banned}">{{ option.name }}</v-list-tile-title>
+        <v-list-tile-title :class="{'grey--text': option.is_banned}">{{ option.default_name }}</v-list-tile-title>
         <v-icon style='float: right' v-if='value.indexOf(option[idField]) !== -1'>check</v-icon>
       </v-list-tile>
     </v-list>

@@ -3,7 +3,7 @@
 namespace App\Http\Resources\EmailMessage;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Admin\Light as AdminResource;
+use App\Http\Resources\Person\PersonWithPhotoResource;
 
 class EmailMessageResource extends JsonResource
 {
@@ -12,7 +12,7 @@ class EmailMessageResource extends JsonResource
         return extractFields($this, [
             'id', 'files', 'created_at', 'subject', 'message', 'email'
         ], [
-            'createdAdmin' => new AdminResource($this->createdAdmin),
+            'createdUser' => new PersonWithPhotoResource($this->createdUser),
         ]);
     }
 }

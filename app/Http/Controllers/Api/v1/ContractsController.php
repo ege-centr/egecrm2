@@ -11,7 +11,7 @@ class ContractsController extends Controller
 {
     protected $filters = [
         'equals' => ['client_id', 'number'],
-        'multiple' => ['year', 'grade_id', 'created_admin_id'],
+        'multiple' => ['year', 'grade_id', 'created_email_id'],
         'interval' => ['created_at', 'date'],
     ];
 

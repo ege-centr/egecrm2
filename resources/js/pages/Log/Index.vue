@@ -23,6 +23,15 @@ export default {
       FILTERS,
     }
   },
-  
+
+  mounted() {
+    if (this.FILTERS.findIndex(e => e.field === 'table') === -1) {
+      axios.get(apiUrl('tables')).then(r => {
+        this.FILTERS.push(
+          {type: 'multiple', field: 'table', label: 'таблица', options: r.data.map(e => {return {id: e, title: e} })}
+        )
+      })
+    }
+  },
 }
 </script>

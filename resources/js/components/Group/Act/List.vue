@@ -33,8 +33,8 @@
               {{ item.date | date }}
             </span>
           </td>
-          <td class='grey--text'>
-            {{ item.createdAdmin.name }} {{ item.created_at | date-time }}
+          <td>
+            <Credentials :item='item' />
           </td>
           <td class='text-md-right'>
             <v-menu left>

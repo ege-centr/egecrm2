@@ -3,10 +3,13 @@
 namespace App\Models\Lesson;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{Group\Group, Cabinet, Teacher, Admin\Admin};
+use App\Models\{Group\Group, Cabinet, Teacher, Admin\Admin, Email};
+use App\Traits\HasCreatedEmail;
 
 class Lesson extends Model
 {
+    use HasCreatedEmail;
+
     /**
      * Статусы занятий
      */
@@ -21,17 +24,12 @@ class Lesson extends Model
 
     public function cabinet()
     {
-        return $this->belongsTo(Cabinet::class);
+        return $this->belongsTo(Cabinet::class, 'cabinet_id', 'id');
     }
 
     public function group()
     {
         return $this->belongsTo(Group::class);
-    }
-
-    public function createdAdmin()
-    {
-        return $this->belongsTo(Admin::class, 'conducted_email_id');
     }
 
     public function teacher()
@@ -49,6 +47,11 @@ class Lesson extends Model
         if ($this->attributes['time']) {
             return mb_strimwidth($this->attributes['time'], 0, 5);
         }
+    }
+
+    public function getConductedUserAttribute()
+    {
+        return Email::getUser($this->conducted_email_id);
     }
 
     /**
@@ -78,10 +81,5 @@ class Lesson extends Model
             return $this->clientLessons()->count();
         }
         return $this->group->groupClients()->count();
-    }
-
-    public function scopeWithJoins($query)
-    {
-        # code...
     }
 }

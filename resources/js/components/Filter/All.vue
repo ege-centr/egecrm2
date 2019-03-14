@@ -215,8 +215,8 @@ export default {
           return this.$options.filters.date(filter.value)
         case 'admin': {
           const label = []
-          filter.value.forEach(admin_id => {
-            label.push(this.getData('admins', admin_id).name)
+          filter.value.forEach(id => {
+            label.push(this.$store.state.data.admins.find(admin => admin[filter.item.valueField] === id).default_name)
           })
           return label.join(', ')
         }

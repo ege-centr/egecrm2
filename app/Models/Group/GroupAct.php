@@ -3,11 +3,11 @@
 namespace App\Models\Group;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasCreatedAdmin;
+use App\Traits\HasCreatedEmail;
 
 class GroupAct extends Model
 {
-    use HasCreatedAdmin;
+    use HasCreatedEmail;
 
     protected $fillable = ['group_id', 'sum', 'lesson_count', 'teacher_id', 'date'];
 }

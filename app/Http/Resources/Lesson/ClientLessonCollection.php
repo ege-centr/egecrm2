@@ -11,7 +11,7 @@ class ClientLessonCollection extends JsonResource
         return extractFields($this, [
             'id', 'grade_id', 'comment', 'is_absent', 'price'
         ], [
-            'lesson' => new LessonCollection($this->lesson),
+           'lesson' => new LessonCollection($this->lesson),
         ]);
     }
 }

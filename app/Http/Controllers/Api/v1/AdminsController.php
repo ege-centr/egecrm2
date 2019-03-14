@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Admin;
-use App\Http\Resources\Admin\{Resource, Collection};
+use App\Http\Resources\Admin\{Resource, AdminCollection};
 
 class AdminsController extends Controller
 {
@@ -17,7 +17,7 @@ class AdminsController extends Controller
     {
         $query = Admin::query();
         $this->filter($request, $query);
-        return Collection::collection($this->showBy($request, $query));
+        return AdminCollection::collection($this->showBy($request, $query));
     }
 
     public function store(Request $request)

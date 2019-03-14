@@ -19,8 +19,7 @@
       </td>
       
       <td>
-        {{ getData('admins', item.created_admin_id).name }}
-        {{ item.created_at | date-time }}
+        <Credentials :item='item' />
       </td>
       <td class='text-md-right'>
         <v-btn @click='$refs.DisplayList.edit(item.id)' slot='activator' flat icon color="black" class='ma-0'>

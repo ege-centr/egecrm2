@@ -12,8 +12,9 @@ class PaymentCollection extends JsonResource
     {
         return extractFields($this, [
             'id', 'category', 'type', 'method', 'date', 'sum', 'year',
-            'created_admin_id', 'created_at', 'class_name', 'is_confirmed'
+            'created_at', 'class_name', 'is_confirmed'
         ], [
+            'createdUser' => new PersonResource($this->createdUser),
             'entity' => new PersonResource($this->entity),
         ]);
     }

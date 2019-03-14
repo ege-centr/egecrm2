@@ -213,6 +213,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'User' => App\Models\User::class,
+        'PersonResource' => App\Http\Resources\Person\PersonResource::class,
+        'PersonWithPhotoResource' => App\Http\Resources\Person\PersonWithPhotoResource::class,
     ],
 
 ];

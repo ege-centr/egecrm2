@@ -3,12 +3,12 @@
 namespace App\Models;
 
 use Shared\Model;
-use App\Traits\{Enumable, HasPhones, HasCreatedAdmin, Commentable};
+use App\Traits\{Enumable, HasPhones, HasCreatedEmail, Commentable};
 use App\Models\Client\Client;
 
 class Request extends Model
 {
-    use Enumable, HasPhones, HasCreatedAdmin, Commentable;
+    use Enumable, HasPhones, HasCreatedEmail, Commentable;
     protected $fillable = [
         'name', 'grade_id', 'comment', 'responsible_admin_id',
         'subjects', 'google_id', 'status', 'branches',

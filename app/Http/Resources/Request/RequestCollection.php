@@ -2,21 +2,24 @@
 
 namespace App\Http\Resources\Request;
 
-use App\Http\Resources\Admin\Resource as AdminResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Comment\Resource as CommentResource;
 use App\Http\Resources\Phone\PhoneResource;
+use PersonResource;
+use PersonWithPhotoResource;
 
-class Collection extends JsonResource
+class RequestCollection extends JsonResource
 {
     public function toArray($request)
     {
-        return array_merge(parent::toArray($request), [
+        return extractFields($this, [
+            'id', 'status', 'created_at', 'subjects', 'grade_id', 'branches'
+        ], [
             'comments' => CommentResource::collection($this->comments),
             'phones' => PhoneResource::collection($this->phones),
             'client_ids' => $this->getClientIds(),
-            'responsibleAdmin' => new AdminResource($this->responsibleAdmin),
-            'createdAdmin' => new AdminResource($this->createdAdmin),
+            'responsibleAdmin' => new PersonResource($this->responsibleAdmin),
+            'createdUser' => new PersonWithPhotoResource($this->createdUser),
         ]);
     }
 }

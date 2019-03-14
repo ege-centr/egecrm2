@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use Shared\Model;
-use App\Traits\{Commentable, HasCreatedAdmin};
+use App\Traits\{Commentable, HasCreatedEmail};
 
 class Task extends Model
 {
-    use Commentable, HasCreatedAdmin;
+    use Commentable, HasCreatedEmail;
 
     protected $commaSeparated = ['attachments'];
 

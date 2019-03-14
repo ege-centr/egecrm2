@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\{HasCreatedAdmin, HasFiles};
+use App\Traits\{HasCreatedEmail, HasFiles};
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CustomEmail;
 use App\Http\Resources\Admin\Light as AdminResource;
@@ -11,7 +11,7 @@ use User;
 
 class EmailMessage extends Model
 {
-    use HasCreatedAdmin, HasFiles;
+    use HasCreatedEmail, HasFiles;
 
     protected $fillable = ['subject', 'message', 'email'];
 

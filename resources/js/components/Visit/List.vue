@@ -38,8 +38,8 @@
               {{ getData('teachers', item.teacher_id).default_name }}
             </span>
           </td>
-          <td class='grey--text'>
-            <span v-if='item.conducted_email_id'>{{ getData('admins', item.conducted_email_id).name }} {{ item.created_at | date-time }}</span>
+          <td>
+            <Credentials class='grey--text' :item='item' v-if='item.conducted_email_id' />
           </td>
         </template>
         <NoData slot='no-data' />

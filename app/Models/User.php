@@ -145,4 +145,9 @@ class User extends Model
             'status' => 401,
         ];
     }
+
+    public static function isInPreviewMode()
+    {
+        return isset($_SESSION['real_user']);
+    }
 }

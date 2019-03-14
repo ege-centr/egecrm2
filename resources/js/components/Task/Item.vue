@@ -8,11 +8,10 @@
             {{ status.title }}
           </div>
           <div v-if='item.responsible_admin_id' class='caption mr-3'>
-            Ответственный: {{ getData('admins', item.responsible_admin_id).name }}
+            Ответственный: {{ getData('admins', item.responsible_admin_id).default_name }}
           </div>
-          <div class='caption grey--text mr-3'>
-             {{ getData('admins', item.created_admin_id).name }}
-             {{ item.created_at | date-time }}
+          <div class='caption mr-3'>
+            <Credentials :item='item' />
           </div>
           <div class='text-md-right f-1'>
             <v-btn flat icon color="black" class='ma-0' @click="$emit('edit', item.id)">

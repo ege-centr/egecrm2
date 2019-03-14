@@ -3,11 +3,11 @@
 namespace App\Models\Payment;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasCreatedAdmin;
+use App\Traits\HasCreatedEmail;
 
 class PaymentAdditional extends Model
 {
-    use HasCreatedAdmin;
+    use HasCreatedEmail;
 
     protected $fillable = ['date', 'sum', 'year', 'entity_type', 'entity_id', 'purpose'];
 }

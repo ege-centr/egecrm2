@@ -9,17 +9,15 @@ use App\Models\Payment\PaymentAdditional;
 class PaymentAdditionalsController extends Controller
 {
     protected $filters = [
-        'multiple' => ['year', 'category', 'method', 'type'],
-        'equals' => ['created_admin_id', 'date', 'entity_id'],
+        'multiple' => ['year'],
+        'equals' => ['entity_id'],
+        'entity' => ['entity_type'],
     ];
 
     public function index(Request $request)
     {
         $query = PaymentAdditional::query();
         $this->filter($request, $query);
-        if (isset($request->entity_type) && $request->entity_type) {
-            $query->where('entity_type', getModelClass($request->entity_type, true));
-        }
         return $this->showAll($query);
     }
 
