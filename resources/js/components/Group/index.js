@@ -13,6 +13,8 @@ export const FILTERS = [
   {label: 'Филиал', field: 'branch_id', type: 'multiple', options: store.state.data.branches, textField: 'full'},
 ]
 
+export const SEARCH_INDEX = 'groups'
+
 export const MODEL_DEFAULTS = {
   is_ready_to_start: false,
   is_archived: false,

@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\{Cabinet, Teacher, Lesson\Lesson, Client\Client, Factory\Subject, Factory\Grade};
 use App\Utils\Time;
 use App\Traits\Commentable;
+use Laravel\Scout\Searchable;
+use PersonResource;
 use DB;
 
 
 class Group extends Model
 {
-    use Commentable;
+    use Commentable, Searchable;
 
     protected $fillable = [
         'teacher_id', 'head_teacher_id', 'subject_id', 'grade_id', 'teacher_price',
@@ -47,6 +49,25 @@ class Group extends Model
     public function subject()
     {
         return $this->belongsTo(Subject::class);
+    }
+
+    public function toSearchableArray()
+    {
+        $lessons = collect($this->lessons);
+        return [
+            'id' => $this->id,
+            'grade_id' => $this->grade_id,
+            'subject_id' => $this->subject_id,
+            'cabinet' => $this->cabinet,
+            'year' => $this->year,
+            'teacher' => $this->teacher ? new PersonResource($this->teacher) : null,
+            'clients_count' => count($this->clients),
+            'lessons_count' => $lessons->count(),
+            'lessons_conducted_count' => $lessons->where('status', 'conducted')->count(),
+            'first_lesson_date' => $lessons->count() > 0 ? $lessons->sortBy('date')->first()->date : null,
+            'schedule' => $this->getSchedule(),
+            // 'schedule' => ['label' => '123']
+        ];
     }
 
     public function getSchedule()

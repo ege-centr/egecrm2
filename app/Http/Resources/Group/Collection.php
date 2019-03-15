@@ -9,7 +9,7 @@ class Collection extends JsonResource
 {
     public function toArray($request)
     {
-        $lesson_count = $this->lessons()->count();
+        $lessons = collect($this->lessons);
         return [
             'id' => $this->id,
             'grade_id' => $this->grade_id,
@@ -18,9 +18,9 @@ class Collection extends JsonResource
             'year' => $this->year,
             'teacher' => new PersonResource($this->teacher),
             'clients_count' => count($this->clients),
-            'lessons_count' => $lesson_count,
-            'lessons_conducted_count' => $this->lessons()->where('status', 'conducted')->count(),
-            'first_lesson_date' => $lesson_count ? $this->lessons()->orderBy('date', 'asc')->value('date') : null,
+            'lessons_count' => $lessons->count(),
+            'lessons_conducted_count' => $lessons->where('status', 'conducted')->count(),
+            'first_lesson_date' => $lessons->count() > 0 ? $lessons->sortBy('date')->first()->date : null,
             'schedule' => $this->getSchedule(),
             // 'schedule' => ['label' => '123']
         ];

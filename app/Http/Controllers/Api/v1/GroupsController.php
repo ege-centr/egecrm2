@@ -16,23 +16,26 @@ class GroupsController extends Controller
 
     public function index(Request $request)
     {
-        $query = Group::orderBy('id', 'desc');
-
+        $query = Group::search();
         $this->filter($request, $query);
+        return $query->paginateRaw($request->paginate);
+        // $query = Group::with(['lessons'])->orderBy('id', 'desc');
 
-        if (isset($request->group_id) && $request->group_id) {
-            $query->where('id', '<>', $request->group_id);
-        }
+        // $this->filter($request, $query);
 
-        if (isset($request->client_id) && $request->client_id) {
-            $query->whereExists(function ($query) use ($request) {
-                $query->select(DB::raw(1))
-                    ->from('group_clients')
-                    ->whereRaw('group_clients.group_id = groups.id AND group_clients.client_id = ' . $request->client_id);
-            });
-        }
+        // if (isset($request->group_id) && $request->group_id) {
+        //     $query->where('id', '<>', $request->group_id);
+        // }
 
-        return GroupCollection::collection($query->paginate(100));
+        // if (isset($request->client_id) && $request->client_id) {
+        //     $query->whereExists(function ($query) use ($request) {
+        //         $query->select(DB::raw(1))
+        //             ->from('group_clients')
+        //             ->whereRaw('group_clients.group_id = groups.id AND group_clients.client_id = ' . $request->client_id);
+        //     });
+        // }
+
+        // return GroupCollection::collection($query->paginate(100));
     }
 
     public function store(Request $request)

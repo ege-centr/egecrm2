@@ -3,6 +3,7 @@ window.moment = require('moment');
 window.moment.locale('ru')
 window.Popper = require('popper.js').default;
 window.Cookies = require('js-cookie');
+window.algolia = require('algoliasearch')(process.env.MIX_ALGOLIA_APP_ID, process.env.MIX_ALGOLIA_SECRET);
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support

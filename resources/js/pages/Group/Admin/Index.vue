@@ -1,26 +1,26 @@
 <template>
   <div>
     <GroupDialog ref='GroupDialog' />
-    <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='30'>
+    <DisplayDataAlgolia :api-url='API_URL' :filters='FILTERS' :paginate='50'>
       <template slot='buttons'>
         <AddBtn @click.native='$refs.GroupDialog.open(null)' animated label='добавить группу' />
       </template>
       <template slot='items' slot-scope="{ items }">
         <GroupList :items='items' />
       </template>
-    </DisplayData>
+    </DisplayDataAlgolia>
   </div>
 </template>
 
 <script>
 
-import { DisplayData } from '@/components/UI'
+import DisplayDataAlgolia from '@/components/UI/DisplayDataAlgolia'
 import { API_URL, FILTERS } from '@/components/Group'
 import GroupList from '@/components/Group/List'
 import GroupDialog from '@/components/Group/Dialog'
 
 export default {
-  components: { DisplayData, GroupList, GroupDialog },
+  components: { DisplayDataAlgolia, GroupList, GroupDialog },
   
   data() {
     return {
@@ -28,6 +28,5 @@ export default {
       FILTERS,
     }
   },
-  
 }
 </script>

@@ -16,7 +16,7 @@ class Controller extends BaseController
     protected $filters = [];
     protected $filterTablePrefix = [];
 
-    protected function filter(Request $request, Builder &$query)
+    protected function filter(Request $request, &$query)
     {
         // if (isset($request->sort_by) && $request->sort_by) {
         //     $query->orderBy($request->sort_by, $request->sort_type);
@@ -37,12 +37,12 @@ class Controller extends BaseController
         }
     }
 
-    protected function showBy(Request $request, Builder $query)
+    protected function showBy(Request $request, $query)
     {
         return $query->paginate($request->paginate ?: 9999);
     }
 
-    protected function showAll(Builder $query)
+    protected function showAll($query)
     {
         return $query->paginate(9999);
     }
@@ -51,37 +51,37 @@ class Controller extends BaseController
      * FILTERS TYPES
      */
 
-    protected function filterMultiple(string $field, $value, Builder &$query)
+    protected function filterMultiple(string $field, $value, &$query)
     {
         $query->whereIn($this->getFieldName($field), explode(',', $value));
     }
 
-    protected function filterEquals(string $field, $value, Builder &$query)
+    protected function filterEquals(string $field, $value, &$query)
     {
         $query->where($this->getFieldName($field), $value);
     }
 
-    protected function filterNotNull(string $field, $value, Builder &$query)
+    protected function filterNotNull(string $field, $value, &$query)
     {
         $query->whereNotNull($this->getFieldName($field));
     }
 
-    protected function filterExclude(string $field, $value, Builder &$query)
+    protected function filterExclude(string $field, $value, &$query)
     {
         $query->where($field, '<>', $value);
     }
 
-    protected function filterLike(string $field, $value, Builder &$query)
+    protected function filterLike(string $field, $value, &$query)
     {
         $query->where($field, 'like', '%' . $value . '%');
     }
 
-    protected function filterEntity(string $field, $value, Builder &$query)
+    protected function filterEntity(string $field, $value, &$query)
     {
         $query->where($field, getModelClass($value, true));
     }
 
-    protected function filterInterval(string $field, $value, Builder &$query)
+    protected function filterInterval(string $field, $value, &$query)
     {
         $value = json_decode($value);
         if (isset($value->start)) {
@@ -92,7 +92,7 @@ class Controller extends BaseController
         }
     }
 
-    protected function filterLikeMultiple(array $fields, $value, Builder &$query)
+    protected function filterLikeMultiple(array $fields, $value, &$query)
     {
         $query->where(function ($query) use ($fields, $value) {
             foreach($fields as $field) {
@@ -104,7 +104,7 @@ class Controller extends BaseController
     /**
      * Поиск в comma-separated values
      */
-    protected function filterFindInSet(string $field, $value, Builder &$query)
+    protected function filterFindInSet(string $field, $value, &$query)
     {
         $query->whereRaw("FIND_IN_SET({$value}, {$field})");
     }
