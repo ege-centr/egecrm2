@@ -20,7 +20,7 @@ class RefactorCreatedAdminId extends Migration
 
         \DB::statement("
             update comments
-            join emails on (emails.entity_id = comments.created_admin_id and emails.entity_type='App\\Models\\Admin\\Admin')
+            join emails on (emails.entity_id = comments.created_admin_id and emails.entity_type='App\\\Models\\\Admin\\\Admin')
             set comments.created_email_id = emails.id
         ");
 
@@ -39,7 +39,7 @@ class RefactorCreatedAdminId extends Migration
 
         \DB::statement("
             update contracts
-            join emails on (emails.entity_id = contracts.created_admin_id and emails.entity_type='App\\Models\\Admin\\Admin')
+            join emails on (emails.entity_id = contracts.created_admin_id and emails.entity_type='App\\\Models\\\Admin\\\Admin')
             set contracts.created_email_id = emails.id
         ");
 
@@ -57,7 +57,7 @@ class RefactorCreatedAdminId extends Migration
 
         \DB::statement("
             update email_messages
-            join emails on (emails.entity_id = email_messages.created_admin_id and emails.entity_type='App\\Models\\Admin\\Admin')
+            join emails on (emails.entity_id = email_messages.created_admin_id and emails.entity_type='App\\\Models\\\Admin\\\Admin')
             set email_messages.created_email_id = emails.id
         ");
 
@@ -75,7 +75,7 @@ class RefactorCreatedAdminId extends Migration
 
         \DB::statement("
             update group_acts
-            join emails on (emails.entity_id = group_acts.created_admin_id and emails.entity_type='App\\Models\\Admin\\Admin')
+            join emails on (emails.entity_id = group_acts.created_admin_id and emails.entity_type='App\\\Models\\\Admin\\\Admin')
             set group_acts.created_email_id = emails.id
         ");
 
@@ -93,7 +93,7 @@ class RefactorCreatedAdminId extends Migration
 
         \DB::statement("
             update payment_additionals
-            join emails on (emails.entity_id = payment_additionals.created_admin_id and emails.entity_type='App\\Models\\Admin\\Admin')
+            join emails on (emails.entity_id = payment_additionals.created_admin_id and emails.entity_type='App\\\Models\\\Admin\\\Admin')
             set payment_additionals.created_email_id = emails.id
         ");
 
@@ -111,7 +111,7 @@ class RefactorCreatedAdminId extends Migration
 
         \DB::statement("
             update payments
-            join emails on (emails.entity_id = payments.created_admin_id and emails.entity_type='App\\Models\\Admin\\Admin')
+            join emails on (emails.entity_id = payments.created_admin_id and emails.entity_type='App\\\Models\\\Admin\\\Admin')
             set payments.created_email_id = emails.id
         ");
 
@@ -128,7 +128,7 @@ class RefactorCreatedAdminId extends Migration
 
         \DB::statement("
             update requests
-            join emails on (emails.entity_id = requests.created_admin_id and emails.entity_type='App\\Models\\Admin\\Admin')
+            join emails on (emails.entity_id = requests.created_admin_id and emails.entity_type='App\\\Models\\\Admin\\\Admin')
             set requests.created_email_id = emails.id
         ");
 
@@ -145,7 +145,7 @@ class RefactorCreatedAdminId extends Migration
 
         \DB::statement("
             update sms
-            join emails on (emails.entity_id = sms.created_admin_id and emails.entity_type='App\\Models\\Admin\\Admin')
+            join emails on (emails.entity_id = sms.created_admin_id and emails.entity_type='App\\\Models\\\Admin\\\Admin')
             set sms.created_email_id = emails.id
         ");
 
@@ -162,7 +162,7 @@ class RefactorCreatedAdminId extends Migration
 
         \DB::statement("
             update tasks
-            join emails on (emails.entity_id = tasks.created_admin_id and emails.entity_type='App\\Models\\Admin\\Admin')
+            join emails on (emails.entity_id = tasks.created_admin_id and emails.entity_type='App\\\Models\\\Admin\\\Admin')
             set tasks.created_email_id = emails.id
         ");
 
