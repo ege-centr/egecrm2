@@ -14,7 +14,7 @@
               <TestCountDown :from='client_test.started_at' @end='end()' />
             </h2>
           </div>
-          <v-stepper v-model="step" non-linear class='test-process'>
+          <v-stepper v-model="step" non-linear class='test-process' :class="{'box-shadow-none': finished}">
             <v-stepper-header>
               <template v-for='(problem, index) in test.problems'>
                 <v-stepper-step editable :step="(index + 1)"></v-stepper-step>

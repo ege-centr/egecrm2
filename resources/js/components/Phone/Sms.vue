@@ -48,7 +48,7 @@
 
 <script>
 
-const API_URL = 'sms'
+const API_URL = 'sms/messages'
 
 export default {
   data() {

@@ -9,4 +9,9 @@ trait HasPhones
     {
         return $this->morphMany(Phone::class, 'entity');
     }
+
+    public function getPhonesArray()
+    {
+        return $this->phones()->pluck('phone')->all();
+    }
 }

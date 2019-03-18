@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models;
+namespace App\Models\Sms;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\HasCreatedEmail;
 
-class Sms extends Model
+class SmsMessage extends Model
 {
     use HasCreatedEmail;
 

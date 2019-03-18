@@ -36,6 +36,8 @@ const router = new Router({
     ...require('./groups').default,
     ...require('./tasks').default,
     ...require('./logs').default,
+    ...require('./sms').templates,
+    ...require('./sms').messages,
   ]
 })
 

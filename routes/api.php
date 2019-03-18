@@ -56,6 +56,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         'reviews' => 'ReviewsController',
         'reports' => 'ReportsController',
         'tables' => 'TablesController',
+        'sms/templates' => 'Sms\TemplatesController',
     ]);
 
     // Route::namespace('Test')->prefix('tests')->group(function() {
@@ -69,9 +70,9 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
 
     Route::resource('print', 'PrintController')->only(['index']);
 
-    Route::prefix('sms')->group(function() {
-        Route::get('/', 'SmsController@index');
-        Route::post('send', 'SmsController@send');
+    Route::prefix('sms/messages')->group(function() {
+        Route::get('/', 'Sms\MessagesController@index');
+        Route::post('send', 'Sms\MessagesController@send');
     });
 
     Route::prefix('photo')->group(function() {

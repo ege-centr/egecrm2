@@ -44,7 +44,7 @@ class LessonsController extends Controller
                     $client_lesson->update($clientLesson);
                 }
             } else {
-                ClientLesson::create($clientLesson);
+                ClientLesson::create(array_merge($clientLesson, ['id' => $id]));
             }
         }
         return new LessonResource($model);

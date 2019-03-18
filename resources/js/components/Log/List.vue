@@ -18,18 +18,20 @@
           {{ item.row_id }}
         </td>
         <td>
-          <span v-if='item.createdUser.type === ROLES.CLIENT'>
-            <router-link :to="{name: 'ClientShow', params: {id: item.createdUser.id}}">
+          <span v-if='item.createdUser'>
+            <span v-if='item.createdUser.type === ROLES.CLIENT'>
+              <router-link :to="{name: 'ClientShow', params: {id: item.createdUser.id}}">
+                {{ item.createdUser.default_name }}
+              </router-link>
+            </span>
+            <span v-else-if='item.createdUser.type === ROLES.TEACHER'>
+              <router-link :to="{name: 'TeacherShow', params: {id: item.createdUser.id}}">
+                {{ item.createdUser.default_name }}
+              </router-link>
+            </span>
+            <span v-else>
               {{ item.createdUser.default_name }}
-            </router-link>
-          </span>
-          <span v-else-if='item.createdUser.type === ROLES.TEACHER'>
-            <router-link :to="{name: 'TeacherShow', params: {id: item.createdUser.id}}">
-              {{ item.createdUser.default_name }}
-            </router-link>
-          </span>
-          <span v-else>
-            {{ item.createdUser.default_name }}
+            </span>
           </span>
           <div v-if='item.previewModeUser' class='grey--text'>
             ({{ item.previewModeUser.default_name }})
@@ -38,7 +40,7 @@
         <td class='log-data'>
           <table v-if="item.type == 'update'">
             <tr v-for="(d, index) in item.data" :key='index'>
-              <td>
+              <td width='150'>
                 {{ d.field }}
               </td>
               <td>
@@ -51,7 +53,7 @@
           </table>
           <table v-else>
             <tr v-for="(value, field, index) in item.data" :key='index'>
-              <td>
+              <td width='150'>
                 {{ field }}
               </td>
               <td>

@@ -1,16 +1,19 @@
 <?php
 
-namespace App\Http\Controllers\Api\v1;
+namespace App\Http\Controllers\Api\v1\Sms;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Utils\Sms;
 
-class SmsController extends Controller
+class MessagesController extends Controller
 {
     public function index(Request $request)
     {
-        return Sms::get($request->phone);
+        if (isset($request->phone)) {
+            return Sms::get($request->phone);
+        }
+        return imitatePagination(Sms::get(null));
         //return Sms::where('phone', \App\Utils\Phone::clean($request->phone))->get();
     }
 

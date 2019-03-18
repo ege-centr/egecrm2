@@ -104,6 +104,7 @@
                 </template>
               </v-data-table>
             </div>
+            
             <!-- Планируемое занятие -->
             <div wrap v-else>
               <v-flex md12>
@@ -199,7 +200,6 @@ export default {
     },
 
     handleClientAdded(client) {
-      client.lesson_id = this.item.lesson_id
       this.item.clientLessons.push(client)
     },
 

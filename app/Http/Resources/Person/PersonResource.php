@@ -10,7 +10,7 @@ class PersonResource extends JsonResource
     {
         return array_merge([
             'id' => $this->id,
-            // 'names' => $this->names,
+            'names' => $this->names,
             'default_name' => $this->default_name,
             'type' => trimModelClass(get_class($this->resource), true),
         ]);

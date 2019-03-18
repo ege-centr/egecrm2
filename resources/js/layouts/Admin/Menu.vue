@@ -89,12 +89,22 @@ export default {
         route: 'ReportIndex',
         label: 'Отчёты'
       },
+      {
+        icon: 'textsms',
+        route: 'SmsMessageIndex',
+        label: 'SMS',
+      }
     ],
     admin_menu: [
       {
         icon: 'event',
         route: 'DatesAndPrices',
         label: 'Экзамены и цены'
+      },
+      {
+        icon: 'textsms',
+        route: 'SmsTemplateIndex',
+        label: 'Шаблоны'
       },
       {
         icon: 'history',

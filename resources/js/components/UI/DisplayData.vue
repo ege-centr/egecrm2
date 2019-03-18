@@ -12,6 +12,15 @@
             {{ item.title }}
           </v-chip>
       </div>
+      <div v-else-if='customTabs !== null'>
+        <v-chip v-for="(label, id) in tabsWithData" class='pointer ml-0 mr-3'
+          :class="{'primary white--text': id == selected_tab}"
+          @click='selected_tab = id'
+          :key='id'
+        >
+          {{ label }}
+        </v-chip>
+      </div>
       <AllFilter v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' :sort='sort' @updated='filtersUpdated' />
       <v-spacer></v-spacer>
       <slot name='buttons' v-if='items.length > 0'></slot>
@@ -90,6 +99,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    customTabs: {
+      type: Object,
+      default: null,
+      required: false,
+    },
     containerClass: {
       type: String,
       default: '',
@@ -127,11 +141,14 @@ export default {
         this.loading = false
         if (this.page === 1 || this.paginate === null) {
           this.data = response.data.data
+          if (this.tabs && this.tabsWithData.length > 0) {
+            this.selected_tab = this.tabsWithData.slice(-1)[0].id
+          }
+          if (this.customTabs !== null && Object.keys(this.tabsWithData).length > 0) {
+            this.selected_tab = Object.keys(this.tabsWithData)[0]
+          }
         } else {
           this.data.push(...response.data.data)
-        }
-        if (this.tabs && this.tabsWithData.length) {
-          this.selected_tab = this.tabsWithData.slice(-1)[0].id
         }
         if (this.paginate !== null) {
           if (response.data.meta.current_page === response.data.meta.last_page) {
@@ -214,13 +231,22 @@ export default {
     },
 
     items() {
-      return this.tabs ?
-        this.data.filter(e => e.year === this.selected_tab) :
-        this.data
+      if (this.tabs) {
+        return this.data.filter(e => e.year === this.selected_tab)
+      } else if (this.customTabs !== null) {
+        return this.data.filter(e => e[this.customTabs.field] === this.selected_tab)
+      }
+      return this.data
     },
 
     tabsWithData() {
-      return tabsWithData(this.data)
+      if (this.tabs) {
+        return tabsWithData(this.data)
+      } else {
+        return _.omitBy(this.customTabs.data, (label, key) => {
+          return this.data.findIndex(e => e[this.customTabs.field] === key) === -1
+        })
+      }
     },
   }
 }

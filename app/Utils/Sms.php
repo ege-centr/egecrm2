@@ -3,8 +3,8 @@
 namespace App\Utils;
 
 use Illuminate\Support\Facades\Redis;
-use App\Models\Sms as SmsModel;
-use App\Http\Resources\Sms\SmsResource;
+use App\Models\Sms\SmsMessage;
+use App\Http\Resources\SmsMessage\SmsMessageResource;
 
 class Sms
 {
@@ -17,7 +17,9 @@ class Sms
 
 	public static function send($to, $message)
 	{
-		$to = explode(",", $to);
+		if (is_string($to)) {
+            $to = [$to];
+        }
 		foreach ($to as $number) {
 			$number = \App\Utils\Phone::clean($number);
 			$number = trim($number);
@@ -33,7 +35,7 @@ class Sms
 
 			$result = self::exec('send', $params);
 
-            $sms = SmsModel::create([
+            $sms = SmsMessage::create([
                 'id' => explode(",", $result)[0],
             ]);
 		}
@@ -46,18 +48,20 @@ class Sms
             'phone' => $number,
             'get_messages' => 1,
             'fmt' => 3,
-            'start' => (new \DateTime())->modify('-6 months')->format('d.m.Y'),
+            'start' => (new \DateTime())->modify('-1 months')->format('d.m.Y'),
             'cnt' => $cnt,
         ]);
         $all_sms = json_decode($result);
         $result = [];
         if (!isset($all_sms->error)) {
             foreach($all_sms as $sms) {
+                $smsMessage = SmsMessage::find($sms->id);
                 $result[] = [
                     'message' => $sms->message,
                     'status' => $sms->status,
                     'status_name' => $sms->status_name,
-                    'model' => new SmsResource(SmsModel::find($sms->id)),
+                    'phone' => $sms->phone,
+                    'model' => $smsMessage === null ? null : new SmsMessageResource(SmsMessage::find($sms->id)),
                     'created_at' => date('Y-m-d H:i:s', $sms->send_timestamp),
                 ];
             }

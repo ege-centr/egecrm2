@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Sms;
+namespace App\Http\Resources\SmsMessage;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Person\PersonWithPhotoResource;
 
-class SmsResource extends JsonResource
+class SmsMessageResource extends JsonResource
 {
     public function toArray($request)
     {
