@@ -17,6 +17,8 @@ class Lesson extends Model
     const STATUS_CONDUCTED = 'conducted';
     const STATUS_PLANNED = 'planned';
 
+    protected $touches = ['group'];
+
     protected $fillable = [
         'teacher_id', 'cabinet_id', 'date', 'time', 'price',
         'status', 'is_unplanned', 'group_id'

@@ -12,7 +12,7 @@
             {{ item.title }}
           </v-chip>
       </div>
-      <AllFilter v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' :sort='sort' @updated='filtersUpdated' />
+      <AllFilterAlgolia v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' :sort='sort' :facets='facets' @updated='filtersUpdated' />
       <v-spacer></v-spacer>
       <slot name='buttons' v-if='items.length > 0'></slot>
     </div>
@@ -54,7 +54,7 @@
 
 <script>
 
-import { AllFilter } from '@/components/Filter'
+import AllFilterAlgolia from '@/components/FilterAlgolia/All'
 import { tabsWithData } from '@/other/functions'
 import InfiniteLoading from 'vue-infinite-loading'
 
@@ -96,7 +96,7 @@ export default {
     }
   },
 
-  components: { AllFilter, InfiniteLoading },
+  components: { AllFilterAlgolia, InfiniteLoading },
 
   data() {
     return {
@@ -106,6 +106,7 @@ export default {
       infinite_loading: true,
       data: [],
       selected_tab: null,
+      facets: null,
     }
   },
 
@@ -127,6 +128,10 @@ export default {
         this.loading = false
         if (this.page === 1 || this.paginate === null) {
           this.data = response.data.data.hits
+          // на протяжении всех страниц facets один и тот же
+          if (response.data.data.hasOwnProperty('facets') ) {
+            this.facets = response.data.data.facets
+          }
         } else {
           this.data.push(...response.data.data.hits)
         }

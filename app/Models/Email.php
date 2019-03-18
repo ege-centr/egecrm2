@@ -22,7 +22,10 @@ class Email extends Model
     // Получить пользователя по email_id
     public static function getUser($id)
     {
-        return self::whereId($id)->first()->user;
+        if ($id) {
+            return self::whereId($id)->first()->user;
+        }
+        return null;
     }
 
     public function setPasswordProperty($value)

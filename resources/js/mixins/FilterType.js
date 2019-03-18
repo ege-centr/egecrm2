@@ -8,6 +8,11 @@ export default {
       required: false,
       default: null,
     },
+    facet: {
+      type: Object,
+      required: false,
+      default: null,
+    }
   },
 
   data() {

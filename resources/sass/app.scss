@@ -400,3 +400,9 @@ nav {
     }
   }
 }
+
+.v-list_no-transitions {
+  & .v-list__tile__title, & .v-list__tile {
+    transition: none !important;
+  }
+}

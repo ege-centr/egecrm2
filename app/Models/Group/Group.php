@@ -54,19 +54,18 @@ class Group extends Model
     public function toSearchableArray()
     {
         $lessons = collect($this->lessons);
+        $schedule = $this->getSchedule();
         return [
             'id' => $this->id,
             'grade_id' => $this->grade_id,
             'subject_id' => $this->subject_id,
-            'cabinet' => $this->cabinet,
             'year' => $this->year,
-            'teacher' => $this->teacher ? new PersonResource($this->teacher) : null,
+            'teacher_id' => $this->teacher_id,
             'clients_count' => count($this->clients),
             'lessons_count' => $lessons->count(),
             'lessons_conducted_count' => $lessons->where('status', 'conducted')->count(),
             'first_lesson_date' => $lessons->count() > 0 ? $lessons->sortBy('date')->first()->date : null,
-            'schedule' => $this->getSchedule(),
-            // 'schedule' => ['label' => '123']
+            'schedule_label' => $schedule !== null ? $schedule['label'] : null,
         ];
     }
 

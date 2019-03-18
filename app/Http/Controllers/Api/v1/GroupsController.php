@@ -16,7 +16,9 @@ class GroupsController extends Controller
 
     public function index(Request $request)
     {
-        $query = Group::search();
+        $query = Group::search()->with([
+            'facets' => ['*']
+        ]);
         $this->filter($request, $query);
         return $query->paginateRaw($request->paginate);
         // $query = Group::with(['lessons'])->orderBy('id', 'desc');

@@ -86,6 +86,7 @@ return [
     'algolia' => [
         'id' => env('MIX_ALGOLIA_APP_ID', ''),
         'secret' => env('MIX_ALGOLIA_SECRET', ''),
+        'settings_path' => config_path('search'),
     ],
 
 ];

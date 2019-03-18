@@ -10,7 +10,7 @@ export const FILTERS = [
   {label: 'Преподаватель', field: 'teacher_id', type: 'multiple', options: store.state.data.teachers, textField: 'names.abbreviation'},
   {label: 'Предмет', field: 'subject_id', type: 'multiple', options: store.state.data.subjects, textField: 'name'},
   {label: 'Класс', field: 'grade_id', type: 'multiple', options: store.state.data.grades},
-  {label: 'Филиал', field: 'branch_id', type: 'multiple', options: store.state.data.branches, textField: 'full'},
+  // {label: 'Филиал', field: 'branch_id', type: 'multiple', options: store.state.data.branches, textField: 'full'},
 ]
 
 export const SEARCH_INDEX = 'groups'

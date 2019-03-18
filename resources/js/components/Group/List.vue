@@ -19,15 +19,13 @@
           {{ getData('subjects', item.subject_id).three_letters }}–{{ item.grade_id }}
         </span>
       </td>
-      <td>
+      <!-- <td>
         <span v-if="item.cabinet">
           {{ item.cabinet.text }}
         </span>
-      </td>
+      </td> -->
       <td>
-        <span v-if='item.schedule !== null'>
-          {{ item.schedule.label }}
-        </span>
+        {{ item.schedule_label }}
       </td>
       <td>
         <span v-if='item.clients_count'>
