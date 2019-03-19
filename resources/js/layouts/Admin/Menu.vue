@@ -8,6 +8,15 @@
 
     <MenuItem v-for='m in admin_menu' :key='m.route' :item='m' />
 
+    <v-list-tile @click="$store.commit('toggleDrawer', false)">
+      <v-list-tile-action>
+        <v-icon>arrow_back_ios</v-icon>
+      </v-list-tile-action>
+      <v-list-tile-content>
+        <v-list-tile-title>Скрыть</v-list-tile-title>
+      </v-list-tile-content>
+    </v-list-tile> 
+
     <v-list-tile @click="$store.dispatch('logout')">
       <v-list-tile-action>
         <v-icon>exit_to_app</v-icon>

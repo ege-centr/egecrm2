@@ -1,7 +1,7 @@
 <template>
   <v-layout row justify-center>
     <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
-      <v-card v-if='item !== null'>
+      <v-card>
         <v-toolbar dark color="primary">
           <v-btn icon dark @click.native="dialog = false">
             <v-icon>close</v-icon>
@@ -13,7 +13,8 @@
           </v-toolbar-items>
         </v-toolbar>
         <v-card-text>
-          <v-container grid-list-xl class="pa-0 ma-0" fluid>
+          <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
+          <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
             <v-layout wrap row>
               <v-flex md12 class='headline'>
                 Основное
@@ -80,7 +81,7 @@
               <v-flex md12 class='headline'>
                 Права
               </v-flex>
-              <v-flex md4 v-if='rights !== null'>
+              <v-flex md4 v-if='rights.length > 0'>
                 <v-subheader>ЕГЭ-Центр</v-subheader>
                 <div v-for='right in rights.groups.LK2' :key='right'>
                   <v-switch class='ml-3'
@@ -92,7 +93,7 @@
                 ></v-switch>
                 </div>
               </v-flex>
-              <v-flex md4 v-if='rights !== null'>
+              <v-flex md4 v-if='rights.length > 0'>
                 <v-subheader>ЕГЭ-Репетитор</v-subheader>
                 <div v-for='right in rights.groups.EGEREP' :key='right'>
                   <v-switch class='ml-3'
@@ -103,7 +104,7 @@
                 ></v-switch>
                 </div>
               </v-flex>
-              <v-flex md4 v-if='rights !== null'>
+              <v-flex md4 v-if='rights.length > 0'>
                 <v-subheader>Общее</v-subheader>
                 <div v-for='right in rights.groups.COMMON' :key='right'>
                   <v-switch class='ml-3'
@@ -129,21 +130,19 @@ import { MODEL_DEFAULTS, API_URL } from './'
 import VueCropper from 'vue-cropperjs'
 import AvatarLoader from '@/components/AvatarLoader'
 import PhoneEdit from '@/components/Phone/Edit'
+import { DialogMixin } from '@/mixins'
 
 export default {
   data() {
     return {
+      API_URL,
+      MODEL_DEFAULTS,
       ROLES,
-      dialog: false,
-      crop_dialog: false,
-      cropping: false,
-      item: {},
-      loading: true,
-      rights: null,
-      edit_mode: false,
-      saving: false,
+      rights: [],
     }
   },
+
+  mixins: [ DialogMixin ],
 
   components: { AvatarLoader, PhoneEdit },
 
@@ -154,44 +153,11 @@ export default {
   },
 
   methods: {
-    open(item_id = null, defaults = {}) {
-      this.dialog = true
-      if (item_id !== null) {
-        this.edit_mode = true
-        this.loadData(item_id)
-      } else {
-        this.edit_mode = false
-        this.item = {...MODEL_DEFAULTS, ...defaults }
-        this.loading = false
-      }
-    },
-
     add() {
       this.dialog = true
       this.item = {...MODEL_DEFAULTS}
     },
     
-
-    loadData(item_id) {
-      this.loading = true
-      axios.get(apiUrl(API_URL, item_id)).then(r => {
-        this.item = r.data
-        this.loading = false
-      })
-    },
-
-    async storeOrUpdate() {
-      this.loading = true
-      if (this.item.id) {
-        await axios.put(apiUrl(API_URL, this.item.id), this.item)
-      } else {
-        await axios.post(apiUrl(API_URL), this.item)
-      }
-      this.$emit('saved')
-      this.loading = false
-      this.dialog = false
-    },
-
     toggleRight(right) {
       const index = this.item.rights.indexOf(right)
       if (index === -1) {

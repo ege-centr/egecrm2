@@ -18,9 +18,7 @@
       </div>
     </div>
     <div v-if='editable && item.phones.length < max'>
-      <v-btn fab dark small color="red" @click="item.phones.push({phone: '', comment: ''})">
-        <v-icon dark>add</v-icon>
-      </v-btn>
+      <AddBtn @click.native="item.phones.push(MODEL_DEFAULTS)"></AddBtn>
     </div>
     <Sms ref='Sms' />
   </div>
@@ -29,6 +27,7 @@
 <script>
 
 import Sms from './Sms'
+import { MODEL_DEFAULTS } from './'
 
 export default {
   props: {
@@ -47,6 +46,18 @@ export default {
 
   components: { Sms },
 
+  data() {
+    return {
+      MODEL_DEFAULTS,
+    }
+  },
+
+  created() {
+    if (this.item.phones.length === 0) {
+      this.item.phones.push(MODEL_DEFAULTS)
+    }
+  },
+  
   methods: {
     sms(phone) {
       this.$refs.Sms.init(phone.phone)

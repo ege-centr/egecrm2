@@ -6990,9 +6990,9 @@ vue@^2.5.7:
   integrity sha512-mFbcWoDIJi0w0Za4emyLiW72Jae0yjANHbCVquMKijcavBGypqlF7zHRgMa5k4sesdv7hv2rB4JPdZfR+TPfhQ==
 
 vuetify@^1.2.4:
-  version "1.2.4"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.2.4.tgz#b03a634791b1627e7aab89ed4651a5cd1ea2f211"
-  integrity sha512-1Nshre1osuZD/4rzz7avnxzsK8r6cPyx7STIon7pMGn9AVnHEf7pv7157Dft6fwxkriyMyhSTXiLETz/XDLgdg==
+  version "1.5.7"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.5.7.tgz#92e7558f590ccb5696bbd1156381e8537c86c2f9"
+  integrity sha512-e7Vvj9gh41Pth7pXJxH1hrm8wfnvWt3nvxPCnwBWTgr4kiUXTG4CaUBqWVVgyfLjJGJSyR1y1EoRNEP5tJv0HQ==
 
 vuex@^3.0.1:
   version "3.0.1"

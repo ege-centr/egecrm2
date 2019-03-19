@@ -3,7 +3,7 @@
     <v-navigation-drawer
       clipped
       fixed
-      :value="true"
+      :value="$store.state.drawer"
       :width="250"
       app
       dark
@@ -13,6 +13,9 @@
       </div>
       <Menu />
     </v-navigation-drawer>
+    <v-btn class='btn-show-drawer' small float fab v-if='!$store.state.drawer' @click="$store.commit('toggleDrawer', true)">
+      <v-icon>arrow_forward_ios</v-icon>
+    </v-btn>
   </div>
 </template>
 

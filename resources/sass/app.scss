@@ -410,3 +410,14 @@ nav {
 .box-shadow-none {
   box-shadow: none !important;
 }
+
+.btn-show-drawer {
+  position: fixed !important;
+  bottom: 10px;
+  left: 10px;
+  z-index: 99;
+  opacity: .5;
+  &:hover {
+    opacity: 1;
+  }
+}
