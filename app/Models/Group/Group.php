@@ -76,7 +76,7 @@ class Group extends Model
         }
         $weekday_intervals = [
             [10, 11],
-            [12, 13],
+            [12, 15],
             [16, 17],
             [17, 18],
             [18, 19]

@@ -241,8 +241,10 @@ export default {
 
     tabsWithData() {
       if (this.tabs) {
+        console.log(this.tabs, this.data)
         return tabsWithData(this.data)
-      } else {
+      } else if (this.customTabs !== null) { 
+        console.log(this.customTabs, this.data)
         return _.omitBy(this.customTabs.data, (label, key) => {
           return this.data.findIndex(e => e[this.customTabs.field] === key) === -1
         })

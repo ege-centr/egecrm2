@@ -8,6 +8,8 @@
       <template slot='items' slot-scope='{ items }'>
         <ReportList :display-options="{
           teacher: false, 
+          client: false,
+          dimension: true,
           is_available_for_parents: false,
         }" :items='items' />
       </template>

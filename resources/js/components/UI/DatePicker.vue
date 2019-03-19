@@ -19,6 +19,7 @@
       locale='ru'
       :readonly="readonly"
       v-model="date"
+      :first-day-of-week='1'
       @input="$refs.datepicker.save(date)">
     </v-date-picker>
   </v-menu>

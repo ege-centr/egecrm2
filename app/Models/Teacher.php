@@ -66,12 +66,15 @@ class Teacher extends Model
      */
     public function getPhotoAttribute()
     {
-        return [
+        return (object)[
+            'id' => 1,
             'url' => $this->photo_url,
             'url_version' => $this->photo_url,
             'url_original' => $this->photo_url,
             'url_cropped' => $this->photo_url,
             'has_cropped' => 1,
+            'entity_type' => self::class,
+            'entity_id' => $this->id,
         ];
     }
 

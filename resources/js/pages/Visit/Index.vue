@@ -5,6 +5,7 @@
       <v-menu class='mx-1'>
         <span slot='activator' class='sort-label'>{{ date | date }}</span>
         <v-date-picker no-title
+          :first-day-of-week='1'
           locale='ru'
           :min='min'
           v-model="date">

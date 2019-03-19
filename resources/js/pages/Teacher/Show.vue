@@ -65,7 +65,7 @@
       <v-tabs-items v-model="tabs">
         <!-- ГРУППЫ -->
         <v-tab-item>
-          <DisplayData ref='GroupPage'
+          <DisplayDataAlgolia ref='GroupPage'
             :api-url='GROUP_API_URL' 
             :tabs='true'
             :invisible-filters="{teacher_id: $route.params.id}"
@@ -73,7 +73,7 @@
             <template slot='items' slot-scope='{ items }'>
               <GroupList :items='items' :display-options='{teacher: false}' />
             </template>
-          </DisplayData>
+          </DisplayDataAlgolia>
         </v-tab-item>
 
         <!-- ПЛАТЕЖИ -->
@@ -165,6 +165,7 @@ import {
   PaymentAdditionalDialog,
 } from '@/components/Payment/Additional'
 import { DisplayData } from '@/components/UI'
+import DisplayDataAlgolia from '@/components/UI/DisplayDataAlgolia'
 import PreviewMode from '@/other/PreviewMode'
 import Balance from '@/components/Balance/Balance'
 import EmailShow from '@/components/Email/Show'
@@ -183,7 +184,7 @@ import { API_URL as REPORT_API_URL } from '@/components/Report'
 export default {
   components: { 
     GroupList, PaymentList, DisplayData, PaymentDialog, PaymentAdditionalList, PaymentAdditionalDialog, Balance,
-    ReviewAdminList, ReportList, EmailShow, BgAvatar, PhoneList,
+    ReviewAdminList, ReportList, EmailShow, BgAvatar, PhoneList, DisplayDataAlgolia,
   },
 
   data() {

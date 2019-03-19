@@ -25,11 +25,15 @@ export default {
 
   methods: {
     isActive() {
-      // RequestIndex => Request
+      // SmsMessageIndex => SmsMessage
       if (this.$route.name !== null) {
-        const currentRouteComponent = this.$route.name.match(/[A-Z][a-z]+/g)[0]
-        const currentMenuComponent = this.item.route.match(/[A-Z][a-z]+/g)[0]
-        return currentRouteComponent === currentMenuComponent
+        const currentRouteComponent = this.$route.name.match(/[A-Z][a-z]+/g)
+        currentRouteComponent.splice(-1, 1)
+
+        const currentMenuComponent = this.item.route.match(/[A-Z][a-z]+/g)
+        currentMenuComponent.splice(-1, 1)
+
+        return currentRouteComponent.join('') === currentMenuComponent.join('')
       }
     }
   }

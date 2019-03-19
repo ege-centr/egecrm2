@@ -8,11 +8,9 @@ class PhotoResource extends JsonResource
 {
     public function toArray($request)
     {
-        return array_merge(parent::toArray($request), [
-            'url' => $this->url,
-            'url_version' => $this->url_version,
-            'url_original' => $this->url_original,
-            'url_cropped' => $this->url_cropped,
+        return extractFields($this, [
+            'id', 'url', 'url_version', 'url_original', 'url_cropped', 'has_cropped',
+            'entity_type', 'entity_id'
         ]);
     }
 }

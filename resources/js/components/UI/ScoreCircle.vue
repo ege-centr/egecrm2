@@ -16,7 +16,6 @@
 export default {
   props: {
     score: {
-      type: Number,
       required: true,
     }
   }

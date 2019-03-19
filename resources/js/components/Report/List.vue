@@ -25,6 +25,18 @@
             <PersonName :item='item.client' />
           </router-link>
         </td>
+        <td v-if='show.dimension'>
+          <router-link 
+            v-if='item.client !== null'
+            :to="{name: 'ReportTeacherDimension', params: {
+              year: item.year,
+              subject_id: item.subject_id,
+              client_id: item.client.id,
+              teacher_id: item.teacher.id,
+            }}">
+            <PersonName :item='item.client' />
+          </router-link>
+        </td>
         <td>
           <SubjectGrade :item='item' />
         </td>
@@ -124,6 +136,7 @@ export default {
         teacher: true,
         client: true,
         actions: true,
+        dimension: false,
       }
     }
   },
