@@ -159,7 +159,6 @@ export default {
         ...this.params
       })).then(r => {
         this.items.push(...r.data.data)
-        this.items = _.sortBy(this.items, 'date')
       })
     }
     this.loading = false
@@ -184,10 +183,13 @@ export default {
 
   computed: {
     filteredItems() {
+      let items = []
       if (this.selected_subject_tab !== null) {
-        return this.filteredByYear.filter(e => e.group.subject_id === this.selected_subject_tab)
+	  	  items = this.filteredByYear.filter(e => e.group.subject_id === this.selected_subject_tab)
+      } else {
+	  	  items = this.filteredByYear   
       }
-      return this.filteredByYear
+      return _.sortBy(items, (e) => this.isReport(e) ? e.report.date : e.date)
     },
 
     filteredByYear() {
