@@ -26,6 +26,7 @@
     <div v-else>
       <v-hover>
         <v-avatar slot-scope="{ hover }" :size='180' style='overflow: hidden'>
+          <Loader v-if='uploading' />
           <img src='/img/no-profile-img.jpg' />
           <v-slide-y-reverse-transition>
             <div class='photo-actions' v-show='hover'>
