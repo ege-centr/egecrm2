@@ -17,6 +17,9 @@ class Sms
 
 	public static function send($to, $message)
 	{
+        if (app()->environment('production')) {
+            return false;
+        }
 		if (is_string($to)) {
             $to = [$to];
         }

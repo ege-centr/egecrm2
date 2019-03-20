@@ -13,9 +13,9 @@
       </div>
       <Menu />
     </v-navigation-drawer>
-    <v-btn class='btn-show-drawer' small float fab v-if='!$store.state.drawer' @click="$store.commit('toggleDrawer', true)">
-      <v-icon>arrow_forward_ios</v-icon>
-    </v-btn>
+
+    <ShowDrawer v-if='!$store.state.drawer' />
+      
   </div>
 </template>
 
@@ -23,9 +23,10 @@
 
 import Menu from './Menu'
 import SearchBar from '@/components/Search/Bar'
+import ShowDrawer from '@/components/UI/ShowDrawer'
 
 export default {
-  components: { Menu, SearchBar },
+  components: { Menu, SearchBar, ShowDrawer },
 
   created() {
     axios.get(apiUrl('counters')).then(r => {
@@ -34,4 +35,3 @@ export default {
   },
 }
 </script>
-

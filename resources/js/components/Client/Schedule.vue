@@ -125,7 +125,9 @@ export default {
     params: {
       type: Object,
       required: false,
-      default: () => {},
+      default() {
+        return {}
+      },
     }
   },
 
@@ -142,6 +144,7 @@ export default {
   },
   
   async mounted() {
+    debugger
     await axios.get(apiUrl('schedule/client', this.clientId) + queryString(this.params)).then(r => {
       this.items = r.data
       if (this.yearTabs.length) {

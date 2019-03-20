@@ -2,16 +2,7 @@
   <div>
     <Loader transparent v-if='items === null' />
     <div v-else>
-      <div class='mb-3'>
-        <v-chip v-for="year in yearsWithData" class='pointer ml-0 mr-3'
-          :class="{'primary white--text': year == selected_year}"
-          @click='selected_year = year'
-          :key='year'
-        >
-          {{ getData('years', year).title }}
-        </v-chip>
-      </div>
-
+      <YearTabs :items='yearsWithData' :selected-year.sync='selectedYear' class='mb-3' />
       <data-table :items='Object.keys(currentYearItems)' class='balance-table'>
         <template slot-scope='{ item }'>
           <tr style='border-top: 1px solid #e0e0e0; border-bottom: none'>
@@ -72,7 +63,7 @@ export default {
   data() {
     return {
       items: null,
-      selected_year: null,
+      selectedYear: null,
       defaultDisplayOptions: {
         created_at: true,
       },
@@ -85,7 +76,6 @@ export default {
       entity_type: this.entityType,
     })).then(r => {
       this.items = r.data
-      this.selected_year = this.yearsWithData.slice(-1)[0]
     })
   },
 
@@ -105,11 +95,12 @@ export default {
 
   computed: {
     currentYearItems() {
-      return Object.keys(this.items).length > 0 ? this.items[this.selected_year] : []
+      return (this.selectedYear !== null && Object.keys(this.items).length > 0) ? this.items[this.selectedYear] : []
     },
 
     yearsWithData() {
-      return Object.keys(this.items)
+      const years = Object.keys(this.items).map(Number)
+      return this.$store.state.data.years.filter(e => years.includes(e.id))
     },
   }
 }

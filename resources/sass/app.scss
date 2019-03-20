@@ -7,6 +7,7 @@
 @import "_variables";
 @import "_vertical-inputs";
 @import '~codemirror/lib/codemirror.css';
+@import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono&subset=cyrillic');
 
 $font-family: 'Rubik';
 
@@ -232,7 +233,7 @@ nav {
 .CodeMirror {
   height: 93vh;
   & pre {
-    font-family: $font-family;
+    font-family: 'Ubuntu Mono', monospace;
   }
 }
 
@@ -409,15 +410,4 @@ nav {
 
 .box-shadow-none {
   box-shadow: none !important;
-}
-
-.btn-show-drawer {
-  position: fixed !important;
-  bottom: 10px;
-  left: 10px;
-  z-index: 99;
-  opacity: .5;
-  &:hover {
-    opacity: 1;
-  }
 }

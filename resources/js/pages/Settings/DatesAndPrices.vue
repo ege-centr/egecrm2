@@ -2,12 +2,13 @@
   <div>
     <Loader v-if='loading' />
     <div class='mb-3 flex-items'>
-      <div>
+      <YearTabs :selected-year.sync='selectedYear' />
+      <!-- <div>
         <v-chip v-for="year in $store.state.data.years" class='pointer ml-0 mr-3'
-        :class="{'primary white--text': year.id == selected_year}"
-        @click='selected_year = year.id'
+        :class="{'primary white--text': year.id == selectedYear}"
+        @click='selectedYear = year.id'
         :key='year.id'>{{ year.title }}</v-chip>
-      </div>
+      </div> -->
       <v-spacer></v-spacer>
       <!-- <div>
         <v-chip class='pointer ml-0 mr-3'
@@ -119,7 +120,7 @@
                 <div class='headline mt-5'>
                   Праздники и экзамены
                 </div>
-                <v-data-table hide-actions hide-headers :items='current_year_items' :paginate.sync="sortingOptions" class='mt-3'>
+                <v-data-table hide-actions hide-headers :items='currentYearItems' :paginate.sync="sortingOptions" class='mt-3'>
                   <template slot='items' slot-scope="{ item }">
                     <td>
                       {{ item.date | date }}
@@ -172,20 +173,21 @@ const key = 'recommended-prices'
 import Calendar from '@/components/Calendar/Calendar'
 import { DatePicker, DataSelect } from '@/components/UI'
 import Settings from '@/other/settings'
+import YearTabs from '@/components/UI/YearTabs'
 
 export default {
-  components: { Calendar, DatePicker, DataSelect },
+  components: { Calendar, DatePicker, DataSelect, YearTabs },
 
   data() {
     return {
       TYPE_EXAM,
       TYPE_VACATION,
-      selected_year: this.$store.state.data.years.slice(-1)[0].id,
       type: TYPE_EXAM,
       types: [
         { text: 'экзамен', value: TYPE_EXAM },
         { text: 'праздник', value: TYPE_VACATION },
       ],
+      selectedYear: null,
       items: null,
       loading: true,
       saving: false,
@@ -222,7 +224,7 @@ export default {
     add() {
       this.dialog_item = {
         type: TYPE_EXAM,
-        year: this.selected_year,
+        year: this.selectedYear,
       },
       this.dialog = true
     },
@@ -274,12 +276,12 @@ export default {
   },
 
   computed: {
-    current_year_items() {
-      return this.items.filter(e => e.year == this.selected_year)
+    currentYearItems() {
+      return this.items.filter(e => e.year == this.selectedYear)
     },
 
     currentYearRecommendedPrices() {
-      return this.recommendedPrices.filter(e => e.year == this.selected_year)
+      return this.recommendedPrices.filter(e => e.year == this.selectedYear)
     }
   }
 }

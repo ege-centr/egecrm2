@@ -3,19 +3,11 @@
     <Loader v-if='loading' />
 
     <div class='flex-items align-center'>
-      <div v-if='tabs'>
-         <v-chip v-for="item in tabsWithData" class='pointer ml-0 mr-3'
-            :class="{'primary white--text': item.id == selected_tab}"
-            @click='selected_tab = item.id'
-            :key='item.id'
-          >
-            {{ item.title }}
-          </v-chip>
-      </div>
+      <YearTabs v-if='tabs' :items='tabsWithData' :selected-year.sync='selectedTab' />
       <div v-else-if='customTabs !== null'>
         <v-chip v-for="(label, id) in tabsWithData" class='pointer ml-0 mr-3'
-          :class="{'primary white--text': id == selected_tab}"
-          @click='selected_tab = id'
+          :class="{'primary white--text': id == selectedTab}"
+          @click='selectedTab = id'
           :key='id'
         >
           {{ label }}
@@ -119,7 +111,7 @@ export default {
       // для пересоздания компонента
       infinite_loading: true,
       data: [],
-      selected_tab: null,
+      selectedTab: null,
     }
   },
 
@@ -142,10 +134,10 @@ export default {
         if (this.page === 1 || this.paginate === null) {
           this.data = response.data.data
           if (this.tabs && this.tabsWithData.length > 0) {
-            this.selected_tab = this.tabsWithData.slice(-1)[0].id
+            this.selectedTab = this.tabsWithData.slice(-1)[0].id
           }
           if (this.customTabs !== null && Object.keys(this.tabsWithData).length > 0) {
-            this.selected_tab = Object.keys(this.tabsWithData)[0]
+            this.selectedTab = Object.keys(this.tabsWithData)[0]
           }
         } else {
           this.data.push(...response.data.data)
@@ -232,9 +224,9 @@ export default {
 
     items() {
       if (this.tabs) {
-        return this.data.filter(e => e.year === this.selected_tab)
+        return this.data.filter(e => e.year === this.selectedTab)
       } else if (this.customTabs !== null) {
-        return this.data.filter(e => e[this.customTabs.field] === this.selected_tab)
+        return this.data.filter(e => e[this.customTabs.field] === this.selectedTab)
       }
       return this.data
     },

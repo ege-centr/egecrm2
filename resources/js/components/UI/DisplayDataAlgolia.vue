@@ -3,15 +3,7 @@
     <Loader v-if='loading' />
 
     <div class='flex-items align-center'>
-      <div v-if='tabs'>
-         <v-chip v-for="item in tabsWithData" class='pointer ml-0 mr-3'
-            :class="{'primary white--text': item.id == selected_tab}"
-            @click='selected_tab = item.id'
-            :key='item.id'
-          >
-            {{ item.title }}
-          </v-chip>
-      </div>
+      <YearTabs v-if='tabs' :items='tabsWithData' :selected-year.sync='selectedTab' />
       <AllFilterAlgolia v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' :sort='sort' :facets='facets' @updated='filtersUpdated' />
       <v-spacer></v-spacer>
       <slot name='buttons' v-if='items.length > 0'></slot>
@@ -105,7 +97,7 @@ export default {
       // для пересоздания компонента
       infinite_loading: true,
       data: [],
-      selected_tab: null,
+      selectedTab: null,
       facets: null,
     }
   },
@@ -136,7 +128,7 @@ export default {
           this.data.push(...response.data.data.hits)
         }
         if (this.tabs && this.tabsWithData.length) {
-          this.selected_tab = this.tabsWithData.slice(-1)[0].id
+          this.selectedTab = this.tabsWithData.slice(-1)[0].id
         }
         if (this.paginate !== null) {
           if (response.data.current_page >= response.data.last_page) {
@@ -220,7 +212,7 @@ export default {
 
     items() {
       return this.tabs ?
-        this.data.filter(e => e.year === this.selected_tab) :
+        this.data.filter(e => e.year === this.selectedTab) :
         this.data
     },
 

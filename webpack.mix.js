@@ -1,6 +1,7 @@
 const mix = require('laravel-mix');
 
 const webpackConfig = {
+    devtool: 'inline-source-map',
     resolve: {
         alias: {
             sass: path.resolve(__dirname, 'resources/sass'),
