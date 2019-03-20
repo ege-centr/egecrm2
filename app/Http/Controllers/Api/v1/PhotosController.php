@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Photo;
+use App\Http\Resources\Photo\PhotoResource;
 
 class PhotosController extends Controller
 {
@@ -22,7 +23,7 @@ class PhotosController extends Controller
 
         $request->file->storeAs('public' . Photo::UPLOAD_PATH, $photo->filename_original);
 
-        return $photo;
+        return new PhotoResource($photo);
     }
 
     public function crop(Request $request)
@@ -36,7 +37,7 @@ class PhotosController extends Controller
             ->resize(240, null)
             ->toFile(storage_path('app/public' . Photo::UPLOAD_PATH) . $photo->filename_cropped, 'image/jpeg', 60);
 
-        return $photo;
+        return new PhotoResource($photo);
     }
 
     public function destroy($id)
