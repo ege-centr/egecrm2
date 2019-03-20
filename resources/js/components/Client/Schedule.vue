@@ -155,6 +155,7 @@ export default {
     if (this.withReports) {
       await axios.get(apiUrl(REPORT_API_URL) + queryString({
         client_id: this.clientId,
+        exists: true,
         ...this.params
       })).then(r => {
         this.items.push(...r.data.data)
