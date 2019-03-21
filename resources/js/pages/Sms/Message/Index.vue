@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DisplayData :api-url='API_URL'>
+    <DisplayData :api-url='API_URL' :paginate='30'>
       <template slot='items' slot-scope='{ items }'>
         <SmsMessageList :items='items' />
       </template>

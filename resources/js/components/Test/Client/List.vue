@@ -1,5 +1,6 @@
 <template>
   <div>
+    <ResultsDialog :item='testPageOptions' />
     <Loader v-if='loading' />
     <DataTable v-else :items='items'>
       <tr slot-scope='{ item }'>
@@ -20,12 +21,12 @@
           {{ item.test.problems_count  }} вопросов
         </td>
         <td class='text-md-right'>
-          <router-link :to="{ name: 'TestClientStart', params: { id: item.test.id} }">
-            <v-btn v-if='item.results === null' small color='primary'>начать</v-btn>
-            <span v-else>
-              результат: <b>{{ item.results.score }}</b> из {{ item.results.max_score }}
-            </span>
+          <router-link v-if='item.results === null' :to="{ name: 'TestClientStart', params: { id: item.test.id} }">
+            <v-btn small color='primary'>начать</v-btn>
           </router-link>
+          <a @click='testPageOptions = {clientId: clientId, testId: item.test.id}' v-else>
+            результат: <b>{{ item.results.score }}</b> из {{ item.results.max_score }}
+          </a>
         </td>
       </tr>
     </DataTable>
@@ -34,6 +35,7 @@
 
 <script>
 import { API_URL, CLIENT_TESTS_API_URL } from '@/components/Test'
+import ResultsDialog from '@/components/Test/ResultsDialog'
 
 export default {
   props: {
@@ -43,10 +45,13 @@ export default {
     },
   },
 
+  components: { ResultsDialog },
+
   data() {
     return {
       loading: false,
       items: [],
+      testPageOptions: null,
     }
   },
 

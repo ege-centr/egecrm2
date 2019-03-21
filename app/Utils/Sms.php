@@ -44,16 +44,14 @@ class Sms
 		}
     }
 
-    public static function get($number, $cnt = 999)
+    public static function get($params)
     {
-        $number = Phone::clean($number);
-        $result = self::exec('get', [
-            'phone' => $number,
+
+        $result = self::exec('get', array_merge($params, [
             'get_messages' => 1,
             'fmt' => 3,
-            'start' => (new \DateTime())->modify('-1 months')->format('d.m.Y'),
-            'cnt' => $cnt,
-        ]);
+            'cnt' => 1000,
+        ]));
         $all_sms = json_decode($result);
         $result = [];
         if (!isset($all_sms->error)) {

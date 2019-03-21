@@ -68,7 +68,7 @@
                   {{ getData('teachers', item.teacher_id).default_name }}
                 </span>
               </td>
-              <td width='150'>
+              <td width='150' v-if='show.price'>
                 <span v-if='item.status === LESSON_STATUS.CONDUCTED && item.clientLesson.price > 0'>
                   {{ item.clientLesson.price }} руб.
                 </span>
@@ -111,6 +111,7 @@ import { LESSON_STATUS } from '@/components/Lesson'
 import Cabinet from '@/components/UI/Cabinet'
 import { API_URL as REPORT_API_URL } from '@/components/Report'
 import ReportDialog from '@/components/Report/Dialog'
+import DisplayOptions from '@/mixins/DisplayOptions'
 
 export default {
   props: {
@@ -131,15 +132,20 @@ export default {
     }
   },
 
+  mixins: [ DisplayOptions ],
+
   components: { Cabinet, ReportDialog },
   
   data() {
     return {
+      LESSON_STATUS,
       items: null,
       selected_year_tab: null,
       selected_subject_tab: null,
       loading: true,
-      LESSON_STATUS,
+      defaultDisplayOptions: {
+        price: true,
+      },
     }
   },
   

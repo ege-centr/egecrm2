@@ -81,7 +81,7 @@
               <v-flex md12 class='headline'>
                 Права
               </v-flex>
-              <v-flex md4 v-if='rights.length > 0'>
+              <v-flex md4 v-if='rights !== null'>
                 <v-subheader>ЕГЭ-Центр</v-subheader>
                 <div v-for='right in rights.groups.LK2' :key='right'>
                   <v-switch class='ml-3'
@@ -93,7 +93,7 @@
                 ></v-switch>
                 </div>
               </v-flex>
-              <v-flex md4 v-if='rights.length > 0'>
+              <v-flex md4 v-if='rights !== null'>
                 <v-subheader>ЕГЭ-Репетитор</v-subheader>
                 <div v-for='right in rights.groups.EGEREP' :key='right'>
                   <v-switch class='ml-3'
@@ -104,7 +104,7 @@
                 ></v-switch>
                 </div>
               </v-flex>
-              <v-flex md4 v-if='rights.length > 0'>
+              <v-flex md4 v-if='rights !== null'>
                 <v-subheader>Общее</v-subheader>
                 <div v-for='right in rights.groups.COMMON' :key='right'>
                   <v-switch class='ml-3'
@@ -138,7 +138,7 @@ export default {
       API_URL,
       MODEL_DEFAULTS,
       ROLES,
-      rights: [],
+      rights: null,
     }
   },
 

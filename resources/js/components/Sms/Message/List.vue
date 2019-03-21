@@ -11,12 +11,15 @@
           {{ item.phone }}
         </td>
         <td>
-          {{ item.message | truncate(50) }}
+          {{ item.message }}
         </td>
-        <td>
+        <td :class="item.status == 1? 'green--text' : 'red--text'">
           {{ item.status_name }}
         </td>
-        <td class='text-sm-right'>
+        <td class='text-sm-right grey--text'>
+          <span v-if='item.model !== null && item.model.createdUser !== null'>
+            {{ item.createdUser.default_name }}
+          </span>
           {{ item.created_at | date-time }}
         </td>
       </template>

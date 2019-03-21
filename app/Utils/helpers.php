@@ -120,12 +120,15 @@ function extractFields($object, $fields, $merge = [])
     return array_merge($return, $merge);
 }
 
-function imitatePagination($items) {
+/**
+ * если указан $page, то имитируем до этой страницы
+ */
+function imitatePagination($items, $page = null) {
     return [
         'data' => $items,
         'meta' => [
-            'current_page' => 1,
-            'last_page' => 1,
+            'current_page' => $page ? intval($page) : 1,
+            'last_page' => $page ? 50 : 1,
         ],
     ];
 }

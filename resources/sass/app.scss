@@ -411,3 +411,10 @@ nav {
 .box-shadow-none {
   box-shadow: none !important;
 }
+
+.test-results-dialog {
+  & .v-stepper__content {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}

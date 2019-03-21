@@ -12,6 +12,7 @@ class GroupsController extends Controller
 {
     protected $filters = [
         'multiple' => ['year', 'teacher_id', 'subject_id', 'grade_id'],
+        'equals' => ['client_id'],
     ];
 
     public function index(Request $request)

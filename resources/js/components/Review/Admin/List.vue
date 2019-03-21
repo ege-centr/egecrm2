@@ -18,7 +18,7 @@
             {{ item.client.names.short }}
           </router-link>
         </td>
-        <td>
+        <td v-if='show.teacher'>
           <router-link :to="{name: 'TeacherShow', params: {id: item.teacher_id}}" v-if='item.teacher_id > 0'>
             {{ item.teacher.default_name }}
           </router-link>
@@ -91,6 +91,7 @@
 <script>
 import Dialog from './Dialog'
 import { COMMENT_TYPE } from '@/components/Review'
+import DisplayOptions from '@/mixins/DisplayOptions'
 
 export default {
   props: {
@@ -100,11 +101,16 @@ export default {
     }
   },
 
+  mixins: [ DisplayOptions ],
+
   components: { Dialog },
 
   data() {
     return {
       COMMENT_TYPE,
+      defaultDisplayOptions: {
+        teacher: true,
+      },
     }
   },  
 

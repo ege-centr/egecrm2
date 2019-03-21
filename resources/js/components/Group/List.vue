@@ -28,8 +28,8 @@
         {{ item.schedule_label }}
       </td>
       <td>
-        <span v-if='item.clients_count'>
-          {{ item.clients_count }} ученика
+        <span v-if='item.client_ids.length > 0'>
+          {{ item.client_ids.length }} ученика
         </span>
         <span v-else>нет учеников</span>
       </td>

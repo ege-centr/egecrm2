@@ -17,7 +17,7 @@ class Collection extends JsonResource
             'cabinet' => $this->cabinet,
             'year' => $this->year,
             'teacher' => new PersonResource($this->teacher),
-            'clients_count' => count($this->clients),
+            'client_ids' => $this->client_ids,
             'lessons_count' => $lessons->count(),
             'lessons_conducted_count' => $lessons->where('status', 'conducted')->count(),
             'first_lesson_date' => $lessons->count() > 0 ? $lessons->sortBy('date')->first()->date : null,

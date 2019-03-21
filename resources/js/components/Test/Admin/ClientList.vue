@@ -62,29 +62,15 @@
       </v-data-table>
     </div>
 
-     <v-layout row justify-center>
-      <v-dialog :value="testPageOptions !== null" transition="dialog-bottom-transition" fullscreen hide-overlay>
-        <v-card>
-          <v-toolbar dark color="primary">
-            <v-btn icon dark @click.native="testPageOptions = null">
-              <v-icon>close</v-icon>
-            </v-btn>
-            <v-toolbar-title>Результаты теста</v-toolbar-title>
-          </v-toolbar>
-          <v-card-text>
-            <TestClientStartPage :options='testPageOptions' :key='JSON.stringify(testPageOptions)' />
-          </v-card-text>
-        </v-card>
-      </v-dialog>
-    </v-layout>
+    <ResultsDialog :item='testPageOptions' />
   </div>
 </template>
 
 <script>
 import { API_URL, CLIENT_TESTS_API_URL } from '@/components/Test'
 
-import TestClientStartPage from '@/pages/Test/Client/Start'
 import TestCountDown from '@/components/Test/CountDown'
+import ResultsDialog from '@/components/Test/ResultsDialog'
 
 export default {
   props: {
@@ -94,7 +80,7 @@ export default {
     },
   },
 
-  components: { TestClientStartPage, TestCountDown },
+  components: { TestCountDown, ResultsDialog },
   
   data() {
     return {

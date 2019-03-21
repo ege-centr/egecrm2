@@ -61,7 +61,7 @@ class Group extends Model
             'subject_id' => $this->subject_id,
             'year' => $this->year,
             'teacher_id' => $this->teacher_id,
-            'clients_count' => count($this->clients),
+            'client_ids' => GroupClient::where('group_id', $this->id)->pluck('client_id'),
             'lessons_count' => $lessons->count(),
             'lessons_conducted_count' => $lessons->where('status', 'conducted')->count(),
             'first_lesson_date' => $lessons->count() > 0 ? $lessons->sortBy('date')->first()->date : null,
