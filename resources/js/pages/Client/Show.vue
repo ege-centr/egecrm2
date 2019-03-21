@@ -194,7 +194,7 @@
           <DisplayDataAlgolia ref='GroupPage'
             :tabs='true'
             :api-url='GROUP_API_URL' 
-            :invisible-filters="{client_id: $route.params.id}"
+            :invisible-filters="{client_ids: $route.params.id}"
           >
             <template slot='items' slot-scope='{ items }'>
               <GroupList :items='items' />
