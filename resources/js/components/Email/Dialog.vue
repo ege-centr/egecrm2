@@ -85,6 +85,7 @@
 <script>
 import LoadingChip from '@/components/UI/LoadingChip'
 import AddDialog from './AddDialog'
+import { API_URL } from '@/components/Email'
 
 export default {
   components: { LoadingChip, AddDialog },

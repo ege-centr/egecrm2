@@ -32,9 +32,12 @@
           <template slot-scope='{ item }'>
             <tr v-if="withReports && isReport(item)">
               <td colspan='10' class='font-weight-medium text-sm-center'>
-                <a @click='$refs.ReportDialog.open(item.report.id)'>
-                  отчет по {{ getData('subjects', item.subject_id).dative }} от {{ item.report.date | date }}
-                </a>
+                <div class='flex-items align-center justify-center'>
+                  <a @click='$refs.ReportDialog.open(item.report.id)' class='mr-2'>
+                    отчет по {{ getData('subjects', item.subject_id).dative }} от {{ item.report.date | date }}
+                  </a>
+                  <ReportScoreCircles class='ml-2' :item='item.report' />
+                </div>
               </td>
             </tr>
             <tr v-else>
@@ -64,8 +67,11 @@
                 <SubjectGrade :item='item.group' />
               </td>
               <td width='250'>
-                <span v-if='item.teacher_id'>
+                <span v-if='show.teacher && item.teacher_id'>
                   {{ getData('teachers', item.teacher_id).default_name }}
+                </span>
+                <span v-if='show.client !== false'>
+                  {{ show.client.default_name }}
                 </span>
               </td>
               <td width='150' v-if='show.price'>
@@ -99,6 +105,20 @@
               </td>
             </tr>
           </template>
+          <template slot='footer' v-if='withReports'>
+            <tr>
+              <td colspan='10' class='font-weight-medium text-sm-center'>
+                <a style='font-size: 13px' 
+                  @click='$refs.ReportDialog.open(null, {
+                    client_id: clientId,
+                    teacher_id: $route.params.teacher_id,
+                    subject_id: $route.params.subject_id,
+                    year: $route.params.year,
+                  })'
+                >добавить отчет</a>
+              </td>
+            </tr>
+          </template>
         </data-table>
       </v-card-text>
     </v-card>
@@ -112,6 +132,7 @@ import Cabinet from '@/components/UI/Cabinet'
 import { API_URL as REPORT_API_URL } from '@/components/Report'
 import ReportDialog from '@/components/Report/Dialog'
 import DisplayOptions from '@/mixins/DisplayOptions'
+import ReportScoreCircles from '@/components/Report/ScoreCircles'
 
 export default {
   props: {
@@ -134,7 +155,7 @@ export default {
 
   mixins: [ DisplayOptions ],
 
-  components: { Cabinet, ReportDialog },
+  components: { Cabinet, ReportDialog, ReportScoreCircles },
   
   data() {
     return {
@@ -144,6 +165,8 @@ export default {
       selected_subject_tab: null,
       loading: true,
       defaultDisplayOptions: {
+        client: false,
+        teacher: true,
         price: true,
       },
     }

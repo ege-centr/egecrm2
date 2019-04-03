@@ -267,7 +267,7 @@
             :invisible-filters="{client_id: $route.params.id}"
           >
             <template slot='items' slot-scope='{ items }'>
-              <ReviewAdminList :items='items' @updated='() => $refs.ReviewPage.reloadData()' />
+              <ReviewAdminList :display-options="{client: false}" :items='items' @updated='() => $refs.ReviewPage.reloadData()' />
             </template>
           </DisplayData>
         </v-tab-item>
@@ -281,7 +281,7 @@
             :invisible-filters="{client_id: $route.params.id}"
           >
             <template slot='items' slot-scope='{ items }'>
-              <ReportList :items='items' @updated='() => $refs.ReportPage.reloadData()' />
+              <ReportList :display-options='{client: false}' :items='items' @updated='() => $refs.ReportPage.reloadData()' />
             </template>
           </DisplayData>
         </v-tab-item>

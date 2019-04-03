@@ -1,22 +1,19 @@
 <template>
   <div>
     <div class='headline'>DEV</div>
-    <display-list>
-      <template slot='allo'>
-        <div class='green--text'>working!</div>
-      </template>
-    </display-list>
+    <!-- <AddBtn label='Добавить' animated /> -->
+    <div class='outer'>
+      <div class='inner'>
+      </div>
+    </div>
   </div>
 </template>
 
 
 
 <script>
-import DisplayList from '@/components/UI/DisplayList'
 
 export default {
-  components: { DisplayList },
-
   data() {
     return {
      
@@ -26,3 +23,23 @@ export default {
  
 }
 </script>
+
+
+<style scoped lang='scss'>
+  .outer {
+    background: PaleVioletRed;
+    width: 200px;
+    height: 50px;
+    position: relative;
+    border-radius: 40px;
+    overflow: hidden;
+    & .inner {
+      // background: Turquoise;
+      background: white;
+      position: absolute;
+      left: 0;
+      height: 100%;
+      width: 100%;
+    }
+  }
+</style>

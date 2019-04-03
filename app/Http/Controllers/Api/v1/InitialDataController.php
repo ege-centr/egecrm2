@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Factory\{Branch, Subject, Grade, Year};
 use App\Models\{Teacher, Cabinet, User, Admin\Admin};
-use App\Http\Resources\Admin\AdminCollection;
+use App\Http\Resources\Admin\{AdminCollection, AdminLightResource};
 use App\Http\Resources\Teacher\Collection as TeacherCollection;
 
 /**
@@ -17,6 +17,15 @@ class InitialDataController extends Controller
 {
     public function index()
     {
+        $user = null;
+
+        if (User::loggedIn()) {
+            $user = User::fromSession();
+            if (User::isAdmin()) {
+                $user = (new AdminLightResource($user))->resource;
+            }
+        }
+
         return response()->json([
             'data' => [
                 'branches' => Branch::all(),
@@ -28,7 +37,7 @@ class InitialDataController extends Controller
                 'academic_year' => academicYear(),
                 'cabinets' => Cabinet::all(),
             ],
-            'user' => User::fromSession()
+            'user' => User::fromSession(),
         ]);
     }
 }

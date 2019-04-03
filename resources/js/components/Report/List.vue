@@ -4,11 +4,11 @@
     <data-table :items='items'>
       <tr slot-scope="{ item }">
         <td v-if='show.id'>
-          <span v-if='item.report === null' class='red--text'>
-            <!-- <span v-if='item.lesson_count >= REPORT_NEEDED_LESSON_COUNT'>Требуется</span> -->
+          <span v-if='item.report === null' class='grey--text'>
+            не создан
           </span>
           <span v-else>
-            Отчёт №{{ item.report.id }}
+            отчёт №{{ item.report.id }}
           </span>
         </td>
         <td v-if='show.teacher'>
@@ -41,28 +41,7 @@
           <SubjectGrade :item='item' />
         </td>
         <td>
-          <div v-if='item.report !== null' class='d-block nowrap'>
-            <v-tooltip bottom>
-              <ScoreCircle slot='activator' :score='item.report.homework_score' />
-              <span>{{ getCategoryTitle(CATEGORY.homework) }}</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <ScoreCircle slot='activator' :score='item.report.activity_score' />
-              <span>{{ getCategoryTitle(CATEGORY.activity) }}</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <ScoreCircle slot='activator' :score='item.report.behavior_score' />
-              <span>{{ getCategoryTitle(CATEGORY.behavior) }}</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <ScoreCircle slot='activator' :score='item.report.learning_ability_score' />
-              <span>{{ getCategoryTitle(CATEGORY.learningAbility) }}</span>
-            </v-tooltip>
-            <v-tooltip bottom>
-              <ScoreCircle slot='activator' :score='item.report.knowledge_score' />
-              <span>{{ getCategoryTitle(CATEGORY.knowledge) }}</span>
-            </v-tooltip>
-          </div>
+          <ReportScoreCircles :item='item.report' />
         </td>
         <td>
           {{ item.lesson_count }} занятий
@@ -109,8 +88,7 @@
 </template>
 
 <script>
-import { getCategoryTitle, CATEGORY, REPORT_NEEDED_LESSON_COUNT } from '@/components/Report'
-import ScoreCircle from '@/components/UI/ScoreCircle'
+import ReportScoreCircles from '@/components/Report/ScoreCircles'
 import Dialog from '@/components/Report/Dialog'
 import DisplayOptions from '@/mixins/DisplayOptions'
 
@@ -124,12 +102,10 @@ export default {
 
   mixins: [ DisplayOptions ],
 
-  components: { Dialog, ScoreCircle },
+  components: { Dialog, ReportScoreCircles },
 
   data() {
     return {
-      CATEGORY,
-      REPORT_NEEDED_LESSON_COUNT,
       defaultDisplayOptions: {
         id: true,
         is_available_for_parents: true,
@@ -140,9 +116,5 @@ export default {
       }
     }
   },
-  
-  methods: {
-    getCategoryTitle,
-  }
 }
 </script>

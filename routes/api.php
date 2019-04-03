@@ -10,6 +10,8 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
 
     Route::get('initial-data', 'InitialDataController@index');
 
+    Route::get('person', 'PersonController@index');
+
     Route::delete('group-clients', 'GroupClientsController@destroy');
     Route::post('group-clients', 'GroupClientsController@store');
 

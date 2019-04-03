@@ -19,7 +19,7 @@ class AdminLightResource extends JsonResource
         return [
             'id' => $this->id,
             'default_name' => $name ?: $this->nickname,
-            'photo' => new PhotoResource($this->photo)
+            'photo' => new PhotoResource($this->photo),
         ];
     }
 }

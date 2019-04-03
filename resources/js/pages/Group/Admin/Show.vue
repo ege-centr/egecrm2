@@ -4,8 +4,16 @@
     <GroupActDialog v-if='$refs.GroupActPage' ref='GroupActDialog' @updated='$refs.GroupActPage.loadData()' />
     <MoveClientDialog ref='MoveClientDialog' @moved='removeClientFromGroup' />
     
-    <div class='headline mb-4'>
+    <div class='headline mb-4 flex-items align-center'>
       Группа {{ $route.params.id }}
+      <v-chip 
+        readonly
+        class='ml-3'
+        small
+        outline 
+        :color="item.is_archived ? 'grey' : 'success'" 
+        v-if='this.item !== null'>
+        {{ item.is_archived ? 'заархивирована' : 'активна' }}</v-chip>
     </div>
 
     <v-card class='mb-4' :class='config.elevationClass'>

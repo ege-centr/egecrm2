@@ -26,11 +26,6 @@
       <div class='mt-3 item-label'>Всего уроков</div>
       <span>{{ item.lessons.filter(e => e.status !== LESSON_STATUS.CANCELLED).length }}</span>
     </div>
-    <div>
-      <div class='item-label'>Статус</div>
-      <span>{{ item.is_archived ? 'Заархивирована' : 'Активная' }}</span>
-      
-    </div>
     <div class='f-1 text-md-right align-center d-flex' v-if='show.edit'>
       <div>
         <v-btn @click="$emit('open', item.id)" flat icon color="black" class='ma-0'>

@@ -2,18 +2,18 @@
   <div>
     <data-table :items='items'>
       <tr slot-scope="{ item }">
-        <!-- <td>
+        <td>
           <span v-if='item.review !== null'>
-            отзыв {{ item.review.id }}
+            отзыв №{{ item.review.id }}
           </span>
           <span v-else class='grey--text'>
             не создан
           </span>
-        </td> -->
+        </td>
         <td>
           <SubjectGrade :item='item' />
         </td>
-        <td>
+        <td v-if='show.client'>
           <router-link :to="{name: 'ClientShow', params: {id: item.client_id}}" v-if='item.client_id > 0'>
             {{ item.client.names.short }}
           </router-link>
@@ -110,6 +110,7 @@ export default {
       COMMENT_TYPE,
       defaultDisplayOptions: {
         teacher: true,
+        client: true,
       },
     }
   },  

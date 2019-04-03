@@ -13,6 +13,9 @@
     <template slot='no-data'>
       <NoData />
     </template>
+    <template slot='footer' v-if='$slots.footer'>
+      <slot name='footer'></slot>
+    </template>
   </v-data-table>
 </template>
 

@@ -50,19 +50,14 @@
       </v-card-text>
     </v-card>
 
-    <!-- v-ripple -->
     <v-snackbar
       :value='emails.length > 0'
       :timeout='0'
       color='primary'
       class='text-sm-center'
     >
-      <v-btn
-        dark
-        flat
-        @click='sendEmails'
-      >
-        ОТПРАВИТЬ
+      <v-btn dark flat @click='sendEmails'>
+        ОТПРАВИТЬ НА {{ emails.length }} EMAIL
         <v-icon right dark>mail</v-icon>
       </v-btn>
     </v-snackbar>
