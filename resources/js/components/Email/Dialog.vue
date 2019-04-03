@@ -1,5 +1,13 @@
 <template>
   <v-layout row justify-center>
+    <AddDialog ref='AddDialog' @added='(email) => emails.push(email)' />
+    <v-snackbar v-model="uploading_error"
+      :bottom="true"
+      :timeout="6000"
+      color='red'
+    >
+      общий размер файлов больше 20мб
+    </v-snackbar>
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay content-class='email-dialog'>
       <v-card>
         <v-toolbar dark color="primary">
@@ -15,7 +23,7 @@
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-card-text class='px-0'>
+        <v-card-text class='px-0' style='padding-top: 64px'>
           <v-form>
             <v-combobox
               v-model="emails"
@@ -24,6 +32,7 @@
               box
               multiple
               hide-details
+              readonly
             >
               <template slot="selection" slot-scope="data">
                 <v-chip
@@ -33,6 +42,9 @@
                   <span>{{ data.item }}</span>
                 </v-chip>
               </template>
+              <v-btn @click='$refs.AddDialog.open()' slot='append' flat fab small style='height: 32px; width: 32px; margin: 0'>
+                <v-icon style='font-size: 20px'>add</v-icon>
+              </v-btn>
             </v-combobox>
             <v-divider></v-divider>
             <v-text-field
@@ -56,9 +68,9 @@
             ></v-textarea>
           </v-form>
           <hr class="v-divider theme--light">
-          <div class='px-2'>
+          <div class='px-2 mt-2' style='padding-left: 12px !important'>
             <LoadingChip v-for="(file, index) in $upload.files('file').all" :key='file.$id' :file='file' @remove='removeFile(index)' />
-            <v-btn @click='attach' flat fab small style='height: 34px; width: 34px; margin: 4px'>
+            <v-btn @click='attach' flat fab small style='height: 32px; width: 32px; margin: 4px 0'>
               <v-icon style='font-size: 20px'>attach_file</v-icon>
             </v-btn>
           </div>
@@ -72,9 +84,10 @@
 
 <script>
 import LoadingChip from '@/components/UI/LoadingChip'
+import AddDialog from './AddDialog'
 
 export default {
-  components: { LoadingChip },
+  components: { LoadingChip, AddDialog },
 
   data() {
     return {
@@ -190,8 +203,23 @@ export default {
         padding: 0 !important;
       }
     }
-    .v-input__append-inner {
-      display: none;
+
+    & .v-select__slot {
+      & .v-select__selections {
+        flex: initial;
+        & input {
+          display: none;
+        }
+      }
+      & .v-input__append-inner {
+        align-self: center;
+        margin: 0;
+        padding: 0;
+      }
+    }
+
+    & .v-chip {
+      margin-left: 0;
     }
   }
 </style>

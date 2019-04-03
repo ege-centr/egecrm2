@@ -31,7 +31,7 @@
         >
           <template slot-scope='{ item }'>
             <tr v-if="withReports && isReport(item)">
-              <td colspan='10'>
+              <td colspan='10' class='font-weight-bold text-sm-center'>
                 <a @click='$refs.ReportDialog.open(item.report.id)'>
                   отчет по {{ getData('subjects', item.subject_id).dative }} от {{ item.report.date | date }}
                 </a>

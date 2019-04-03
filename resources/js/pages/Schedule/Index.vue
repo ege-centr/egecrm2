@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ClientSchedule :client-id='$store.state.user.id' />
+    <ClientSchedule :client-id='$store.state.user.id' :display-options='{price: false}' />
   </div>
 </template>
 

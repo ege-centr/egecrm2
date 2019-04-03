@@ -37,11 +37,22 @@ class ReportsController extends Controller
         return new ReportResource(Report::find($id));
     }
 
+    public function store(Request $request)
+    {
+        $item = Report::create($request->all());
+        return new ReportResource($item);
+    }
+
     public function update($id, Request $request)
     {
         $item = Report::find($id);
         $item->update($request->all());
         return new ReportResource($item);
+    }
+
+    public function destroy($id)
+    {
+        Report::find($id)->delete();
     }
 
     protected function filterExists(string $field, $value, Builder &$query)

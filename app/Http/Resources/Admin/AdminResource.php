@@ -3,9 +3,10 @@
 namespace App\Http\Resources\Admin;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Phone\PhoneResource;
 use App\Http\Resources\Photo\PhotoResource;
 
-class Light extends JsonResource
+class AdminResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +17,12 @@ class Light extends JsonResource
     public function toArray($request)
     {
         $name = trim(implode(' ', [$this->last_name, $this->first_name]));
-        return [
-            'id' => $this->id,
-            'name' => $name ?: $this->nickname,
-            'photo' => new PhotoResource($this->photo)
-        ];
+        return array_merge(parent::toArray($request), [
+            'default_name' => $name ?: $this->nickname,
+            'phones' => PhoneResource::collection($this->phones),
+            'photo' => new PhotoResource($this->photo),
+            'email' => $this->email,
+            'ips' => $this->ips
+        ]);
     }
 }

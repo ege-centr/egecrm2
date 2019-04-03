@@ -28,8 +28,8 @@ class BalanceController extends Controller
                 $comment = ($lesson->is_unplanned ? 'дополнительное занятие' : 'занятие')
                     . ' ' . date("d.m.y", strtotime($lesson->date))
                     . " в {$lesson->time}, группа {$lesson->group_id} "
-                    . '(' . Subject::getTitle($lesson->subject_id, 'three_letters') . '-'
-                    . Grade::getTitle($lesson->grade_id, 'short') . ')'
+                    . '(' . Subject::getTitle($lesson->group->subject_id, 'three_letters') . '-'
+                    . Grade::getTitle($lesson->group->grade_id, 'short') . ')'
                     . ($lesson->cabinet ? ', кабинет ' . $lesson->cabinet->title : '');
 
                 $items[] = [

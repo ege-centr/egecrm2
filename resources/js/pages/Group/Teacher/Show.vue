@@ -51,14 +51,22 @@
     </v-card>
 
     <!-- v-ripple -->
-    <transition
-      enter-active-class="animated slideInUp"
-      leave-active-class="animated slideOutDown">
-      <div class='send-emails font-weight-medium' v-show='emails.length > 0' @click='sendEmails'>
-        отправить на выбранные адреса
-      </div>
-    </transition>
-    
+    <v-snackbar
+      :value='emails.length > 0'
+      :timeout='0'
+      color='primary'
+      class='text-sm-center'
+    >
+      <v-btn
+        dark
+        flat
+        @click='sendEmails'
+      >
+        ОТПРАВИТЬ
+        <v-icon right dark>mail</v-icon>
+      </v-btn>
+    </v-snackbar>
+
     <div v-if='item !== null'>
       <v-tabs fixed-tabs v-model='tabs' class='mb-4'>
         <v-tab>
@@ -162,28 +170,11 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-.send-emails {
-  $color: #427095;
-  background: $color;
-  color: white;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 10;
-  width: 100%;
-  height: 70px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  text-transform: uppercase;
-  animation-duration: .3s !important;
-  transition: background linear .1s;
-  cursor: pointer;
-  &:hover {
-    background: lighten($color, 10);
+  .teacher-group-show {
+    & .v-snack__content {
+      & button {
+        margin: 0 auto !important;
+      }
+    }
   }
-  &:active {
-    background: darken($color, 10);
-  }
-}
 </style>
