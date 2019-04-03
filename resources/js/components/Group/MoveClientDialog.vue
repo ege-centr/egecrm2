@@ -75,7 +75,7 @@ export default {
         filters.group_id = this.group_id
       }
       axios.get(apiUrl(API_URL) + queryString(filters)).then(r => {
-        this.groups = r.data.data
+        this.groups = r.data.data.hits
         this.loading = false
       })
     },
