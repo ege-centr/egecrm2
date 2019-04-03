@@ -5,7 +5,7 @@ namespace App\Http\Resources\Admin;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Photo\PhotoResource;
 
-class Light extends JsonResource
+class AdminLightResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
