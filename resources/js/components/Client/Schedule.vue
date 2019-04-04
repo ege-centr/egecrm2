@@ -214,7 +214,7 @@ export default {
 
       if (item.status === LESSON_STATUS.CONDUCTED) {
         // skip reports
-        while (this.isReport(this.filteredItems[nextItemIndex])) {
+        while (this.filteredItems[nextItemIndex] !== undefined && this.isReport(this.filteredItems[nextItemIndex])) {
           nextItemIndex++
         }
 
