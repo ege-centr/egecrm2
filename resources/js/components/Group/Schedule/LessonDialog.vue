@@ -34,6 +34,9 @@
                   <div class='vertical-inputs__input' v-if="item.status === LESSON_STATUS.CONDUCTED">
                     <v-text-field v-model='item.price' label='Цена' hide-details></v-text-field>
                   </div>
+                  <div class='vertical-inputs__input' v-if="item.status === LESSON_STATUS.CONDUCTED">
+                    <v-text-field v-model='item.bonus' label='Бонус' hide-details></v-text-field>
+                  </div>
                   <div class="vertical-inputs__input" v-if="item.status !== LESSON_STATUS.CONDUCTED">
                     <v-switch class='ma-0'
                       label="Отменено"

@@ -104,9 +104,7 @@
                 </span>
               </td>
             </tr>
-          </template>
-          <template slot='footer' v-if='withReports'>
-            <tr>
+            <tr v-if='withReports && plannedAfterConducted(item)'>
               <td colspan='10' class='font-weight-medium text-sm-center'>
                 <a style='font-size: 13px' 
                   @click='$refs.ReportDialog.open(null, {
@@ -208,6 +206,30 @@ export default {
     excludeFromIndex(item) {
       return item.status === LESSON_STATUS.CANCELLED
     },
+
+    // кнопку «добавить отчёт» нужно помещать 
+    // после последнего проведённого занятниия
+    plannedAfterConducted(item) {
+      let nextItemIndex = this.filteredItems.findIndex(e => e.id === item.id) + 1
+
+      if (item.status === LESSON_STATUS.CONDUCTED) {
+        // skip reports
+        while (this.isReport(this.filteredItems[nextItemIndex])) {
+          nextItemIndex++
+        }
+
+        return this.filteredItems[nextItemIndex] !== undefined && this.filteredItems[nextItemIndex].status === LESSON_STATUS.PLANNED
+      }
+
+      // если все занятия проведены или все занятия запланированы,
+      // то кнопка в конце списка
+      const lessonCount = this.filteredItems.filter(e => !this.isReport(e) && e.status !== LESSON_STATUS.CANCELLED).length
+      if (this.filteredItems.filter(e => e.status === LESSON_STATUS.CONDUCTED).length === lessonCount || this.filteredItems.filter(e => e.status === LESSON_STATUS.PLANNED).length === lessonCount) {
+        return nextItemIndex === this.filteredItems.length
+      }
+
+      return false
+    }
   },
 
   computed: {

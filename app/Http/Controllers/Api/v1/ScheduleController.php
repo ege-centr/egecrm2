@@ -21,11 +21,13 @@ class ScheduleController extends Controller
 
     public function client($id, Request $request)
     {
-        $group_ids = GroupClient::where('client_id', $id)->pluck('group_id');
+        $current_group_ids = GroupClient::where('client_id', $id)->pluck('group_id');
+        $visited_group_ids = GroupClient::where('client_id', $id)->pluck('group_id');
 
-        // Если ученик не присутствует ни в каких группах, у него нет расписания
-        // TODO: хотя должно быть. должно отображаться то, что он уже посетил
-        if ($group_ids->count() > 0) {
+        $group_ids = array_unique(array_merge($current_group_ids, $visited_group_ids));
+
+        // Если ученик не посещал занятий и не присутствует в группах, у него нет расписания
+        if (count($group_ids) > 0) {
             $query = Lesson::query()
                 ->leftJoin('client_lessons', function($join) use ($id) {
                     $join

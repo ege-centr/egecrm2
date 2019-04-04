@@ -19,6 +19,9 @@ Artisan::command('inspire', function () {
 })->describe('Display an inspiring quote');
 
 
+/**
+ * Пересчитать бонусы по всем занятиям
+ */
 Artisan::command('calculate-bonus', function () {
     $lessons = Lesson::all();
     $bar = $this->output->createProgressBar(count($lessons));
