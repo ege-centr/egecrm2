@@ -23,7 +23,7 @@
             <td width='130'>
               <span class='green--text' v-if='i.sum > 0'>
                 +{{ i.sum }} руб.
-                <div v-if='i.bonus > 0' class='font-weight-medium nowrap'>
+                <div v-if='i.bonus > 0' class='nowrap'>
                   +{{ i.bonus }} руб. бонус
                 </div>
               </span>
