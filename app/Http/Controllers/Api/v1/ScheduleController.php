@@ -21,8 +21,8 @@ class ScheduleController extends Controller
 
     public function client($id, Request $request)
     {
-        $current_group_ids = GroupClient::where('client_id', $id)->pluck('group_id');
-        $visited_group_ids = GroupClient::where('client_id', $id)->pluck('group_id');
+        $current_group_ids = GroupClient::where('client_id', $id)->pluck('group_id')->all();
+        $visited_group_ids = GroupClient::where('client_id', $id)->pluck('group_id')->all();
 
         $group_ids = array_unique(array_merge($current_group_ids, $visited_group_ids));
 
