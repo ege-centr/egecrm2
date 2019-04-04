@@ -55,6 +55,9 @@ class LessonsController extends Controller
         Lesson::find($id)->delete();
     }
 
+    /**
+     * Провести занятие
+     */
     public function conduct($id, Request $request)
     {
         $lesson = Lesson::find($id);
@@ -77,6 +80,10 @@ class LessonsController extends Controller
                 'comment' => isset($client['comment']) ? $client['comment'] : '',
             ]);
         }
+
+        Lesson::whereId($lesson->id)->update([
+            'bonus' => $lesson->calculateBonus(),
+        ]);
 
         return new LessonResource($lesson->fresh());
     }

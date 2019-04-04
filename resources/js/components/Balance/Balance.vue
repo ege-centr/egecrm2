@@ -23,6 +23,9 @@
             <td width='130'>
               <span class='green--text' v-if='i.sum > 0'>
                 +{{ i.sum }} руб.
+                <div v-if='i.bonus > 0' class='font-weight-medium nowrap'>
+                  +{{ i.bonus }} руб. бонус
+                </div>
               </span>
             </td>
             <td  width='130'>
@@ -85,7 +88,7 @@ export default {
       _.each(this.currentYearItems, (items, d) => {
         if (d <= date) {
           sum += items.reduce(function(prev, item) {
-            return prev + item.sum
+            return prev + item.sum + item.bonus
           }, 0)
         }
       })

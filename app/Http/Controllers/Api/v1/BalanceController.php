@@ -34,6 +34,7 @@ class BalanceController extends Controller
 
                 $items[] = [
                     'sum' => $lesson->price,
+                    'bonus' => $lesson->bonus,
                     'comment' => $comment,
                     'date' => $lesson->date,
                     'year' => $lesson->group->year,
@@ -58,6 +59,7 @@ class BalanceController extends Controller
                     'year' => $clientLesson->lesson->group->year,
                     'user' => new PersonResource($clientLesson->lesson->createdUser),
                     'created_at' => $clientLesson->lesson->created_at,
+                    'bonus' => 0,
                 ];
             }
         }
@@ -78,6 +80,7 @@ class BalanceController extends Controller
                 'year' => $payment->year,
                 'user' => new PersonResource($payment->createdUser),
                 'created_at' => $payment->created_at,
+                'bonus' => 0,
             ];
         }
 
@@ -90,6 +93,7 @@ class BalanceController extends Controller
                 'year' => $additionalPayment->year,
                 'user' => new PersonResource($additionalPayment->createdUser),
                 'created_at' => $additionalPayment->created_at,
+                'bonus' => 0,
             ];
         }
 

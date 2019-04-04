@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Foundation\Inspiring;
+use App\Models\Lesson\Lesson;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,16 @@ use Illuminate\Foundation\Inspiring;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->describe('Display an inspiring quote');
+
+
+Artisan::command('calculate-bonus', function () {
+    $lessons = Lesson::all();
+    $bar = $this->output->createProgressBar(count($lessons));
+    foreach($lessons as $lesson)  {
+        Lesson::whereId($lesson->id)->update([
+            'bonus' => $lesson->calculateBonus()
+        ]);
+        $bar->advance();
+    }
+    $bar->finish();
+});
