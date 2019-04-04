@@ -101,7 +101,7 @@ class Lesson extends Model
         $query = self::query()
             ->where('group_id', $this->group_id)
             ->where('teacher_id', $this->teacher_id)
-            ->where('lessons.id', '<=', $this->id)
+            ->whereRaw(sprintf("CONCAT(lessons.date, ' ', lessons.time) <= '%s %s:00'", $this->date, $this->time))
             ->where('status', 'conducted');
 
         $maxClientsCount = (clone $query)
