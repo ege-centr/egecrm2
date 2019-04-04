@@ -107,6 +107,7 @@ class Lesson extends Model
         $maxClientsCount = (clone $query)
             ->leftJoin('client_lessons', 'client_lessons.lesson_id', '=', 'lessons.id')
             ->groupBy('client_id')
+            ->get()
             ->count();
 
         // таких ситуаций в идеале быть не должно
@@ -143,6 +144,14 @@ class Lesson extends Model
         $s = ($p - $r) / (1 - $r);
 
         $bonus = $k * $b * $s;
+
+        // logger(sprintf("lesson_id: %s \t lesson_number: %s \t max_clients_count: %s | clients_count: %s | bonus: %s",
+		// 	$this->id,
+		// 	$lessonNumber,
+		// 	$maxClientsCount,
+		// 	$this->clientLessons()->count(),
+		// 	$bonus
+		// ));
 
         /**
          * если бонус меньше 0, то на самом деле бонус просто не начисляется
