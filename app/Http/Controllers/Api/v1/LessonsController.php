@@ -23,7 +23,9 @@ class LessonsController extends Controller
 
     public function store(Request $request)
     {
-        return new LessonResource(Lesson::create($request->all()));
+        $item = new Lesson($request->all());
+        $item->price = $item->group->teacher_price;
+        return new LessonResource($item);
     }
 
     public function show($id)
@@ -65,7 +67,6 @@ class LessonsController extends Controller
         $lesson->status = 'conducted';
         $lesson->conducted_at = now()->format(DATE_FORMAT);
         $lesson->conducted_email_id = User::emailId();
-        $lesson->price = $group->teacher_price;
         $lesson->topic = $request->topic;
         $lesson->save();
 
