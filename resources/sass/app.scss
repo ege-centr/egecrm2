@@ -423,6 +423,6 @@ nav {
   position: absolute;
   opacity: .5;
   text-align: center;
-  width: 100%;
+  width: calc(100% - 48px);
   pointer-events: none;
 }

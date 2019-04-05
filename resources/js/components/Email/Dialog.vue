@@ -1,12 +1,12 @@
 <template>
   <v-layout row justify-center>
     <AddDialog ref='AddDialog' @added='(email) => emails.push(email)' />
-    <v-snackbar v-model="uploading_error"
+    <v-snackbar v-model="uploadingError"
       :bottom="true"
       :timeout="6000"
       color='red'
     >
-      общий размер файлов больше 20мб
+      {{ uploadingErrorMessage }}
     </v-snackbar>
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay content-class='email-dialog'>
       <v-card>
@@ -78,7 +78,7 @@
           <hr class="v-divider theme--light">
           <div class='px-2 mt-2' style='padding-left: 12px !important'>
             <LoadingChip v-for="(file, index) in $upload.files('file').all" :key='file.$id' :file='file' @remove='removeFile(index)' />
-            <v-btn @click='attach' flat fab small style='height: 32px; width: 32px; margin: 4px 0'>
+            <v-btn @click='attach' flat fab small style='height: 32px; width: 32px; margin: 4px 0' v-if="$upload.files('file').all.length < maxFiles">
               <v-icon style='font-size: 20px'>attach_file</v-icon>
             </v-btn>
           </div>
@@ -101,13 +101,15 @@ export default {
   data() {
     return {
       maxEmails: 30,
+      maxFiles: 30,
       dialog: false,
       sending: false,
       message: '',
       subject: '',
       files: [],
       emails: [],
-      uploading_error: false,
+      uploadingError: false,
+      uploadingErrorMessage: ''
     }
   },
 
@@ -119,21 +121,28 @@ export default {
           multiple: true,
           // 100mb, но ограничение на самом деле 20
           maxSizePerFile: 1024 * 1024 * 100,
-          maxFilesSelect: 20,
+          maxFilesSelect: this.maxFiles + 10,
           url: apiUrl('upload'),
           onSuccess(e, response) {
             this.files.push(response.data)
           },
           // onError(a, b) {
-          //   this.uploading_error = true
+          //   this.uploadingError = true
+          //   this.uploadingErrorMessage = 'нельзя прикреплять более 30 файлов'
           // },
           onBeforeSelect(fileList) {
-            this.uploading_error = false
+            this.uploadingError = false
             let size = 0
+            if (this.$upload.files('file').all.length + fileList.length > this.maxFiles) {
+              this.uploadingError = true
+              this.uploadingErrorMessage = `нельзя прикреплять более ${this.maxFiles} файлов`
+              return false
+            }
             this.$upload.files('file').all.forEach(file => size += file.size)
             _.each(fileList, file => size += file.size)
             if (size / 1024 / 1024 >= 20) {
-              this.uploading_error = true
+              this.uploadingError = true
+              this.uploadingErrorMessage = 'общий размер файлов больше 20мб'
               return false
             }
             return true
