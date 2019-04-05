@@ -20,10 +20,14 @@
               <v-flex md5>
                 <v-layout wrap>
                   <v-flex md12 class='mb-4'>
-                    <div class='font-weight-medium mb-2'>
+                    <div class='font-weight-medium'>
                       Оценка и отзыв ученика (заполняется учеником из его личного кабинета)
                     </div>
-                    <div class='mb-3'>
+                    <div class='caption grey--text' v-if='getComment(COMMENT_TYPE.client)'>
+                      {{ getComment(COMMENT_TYPE.client).createdUser.default_name }}
+                      {{ getComment(COMMENT_TYPE.client).created_at | date-time }}
+                    </div>
+                    <div class='mb-3 mt-2'>
                       <div class='flex-items align-center'>
                         <span class='caption mr-3 input-label'>Оценка</span>
                         <v-rating dense clearable v-model="getComment(COMMENT_TYPE.client).rating"></v-rating>
@@ -34,10 +38,14 @@
                     </div>
                   </v-flex>
                   <v-flex md12 class='mb-4'>
-                    <div class='font-weight-medium mb-2'>
+                    <div class='font-weight-medium'>
                       Предварительная оценка и отзыв ученика (заполняется администратором)
                     </div>
-                    <div class='mb-3'>
+                    <div class='caption grey--text' v-if='getComment(COMMENT_TYPE.admin)'>
+                      {{ getComment(COMMENT_TYPE.admin).createdUser.default_name }}
+                      {{ getComment(COMMENT_TYPE.admin).created_at | date-time }}
+                    </div>
+                    <div class='mb-3 mt-2'>
                       <div class='flex-items align-center'>
                         <span class='caption mr-3 input-label'>Оценка</span>
                         <div class='v-rating v-rating--dense'>
@@ -54,10 +62,14 @@
                     </div>
                   </v-flex>
                   <v-flex md12 class='mb-4'>
-                    <div class='font-weight-medium mb-2'>
+                    <div class='font-weight-medium'>
                       Оценка и отзыв ученика по окончании занятий (заполняется администратором)
                     </div>
-                    <div class='mb-3'>
+                    <div class='caption grey--text' v-if='getComment(COMMENT_TYPE.final)'>
+                      {{ getComment(COMMENT_TYPE.final).createdUser.default_name }}
+                      {{ getComment(COMMENT_TYPE.final).created_at | date-time }}
+                    </div>
+                    <div class='mb-3 mt-2'>
                       <div class='flex-items align-center'>
                         <span class='caption mr-3 input-label'>Оценка</span>
                         <div class='v-rating v-rating--dense'>

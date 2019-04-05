@@ -7,6 +7,7 @@
             <v-icon>close</v-icon>
           </v-btn>
           <v-toolbar-title>{{ edit_mode ? 'Редактирование' : 'Добавление' }} услуги</v-toolbar-title>
+          <TitleCredentials :item='item'/>
           <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn dark flat v-if='edit_mode' @click.native="destroy" :loading='destroying'>Удалить</v-btn>

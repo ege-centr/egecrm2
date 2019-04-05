@@ -42,9 +42,6 @@
             <td>
               {{ i.comment }}
             </td>
-            <td  v-if='show.created_at && i.user'>
-              <Credentials :item='i' user-field='user' />
-            </td>
           </tr>
         </template>
       </data-table>

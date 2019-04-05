@@ -11,8 +11,9 @@ class ReviewResource extends JsonResource
     {
         return extractFields($this, [
             'id', 'teacher_id', 'client_id', 'subject_id', 'grade_id', 'signature', 'is_approved', 'year',
-            'is_published', 'score', 'max_score', 'comments', 'expressive_title'
+            'is_published', 'score', 'max_score', 'expressive_title'
         ], [
+            'comments' => ReviewCommentResource::collection($this->comments),
             'client' => new PersonResource($this->client),
             'reviewer_admin_id' => $this->client->reviewer_admin_id,
         ]);

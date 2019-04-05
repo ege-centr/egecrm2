@@ -43,11 +43,10 @@
                   <v-flex md3>
                     <v-text-field v-model="item.nickname" label="Никнейм"></v-text-field>
                   </v-flex>
+                  <v-flex md12 class='py-0'>
+                    <PhoneEdit :item='item' :max='1' />
+                  </v-flex>
                 </v-layout>
-              </v-flex>
-
-              <v-flex md12>
-                <PhoneEdit :item='item' :max='1' />
               </v-flex>
 
 

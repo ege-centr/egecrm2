@@ -17,10 +17,6 @@
       <td>
         {{ item.date | date }}
       </td>
-      
-      <td>
-        <Credentials :item='item' />
-      </td>
       <td class='text-md-right'>
         <v-btn @click='$refs.DisplayList.edit(item.id)' slot='activator' flat icon color="black" class='ma-0'>
           <v-icon>more_horiz</v-icon>

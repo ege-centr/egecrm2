@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Payment\PaymentAdditional;
+use App\Http\Resources\PaymentAdditional\PaymentAdditionalResource;
 
 class PaymentAdditionalsController extends Controller
 {
@@ -37,7 +38,9 @@ class PaymentAdditionalsController extends Controller
 
     public function show($id)
     {
-        return PaymentAdditional::find($id);
+        return new PaymentAdditionalResource(
+            PaymentAdditional::find($id)
+        );
     }
 
     public function destroy($id)

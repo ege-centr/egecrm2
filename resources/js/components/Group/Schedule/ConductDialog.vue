@@ -19,12 +19,22 @@
             <v-btn dark flat 
               v-if="item.status === LESSON_STATUS.CONDUCTED"
               @click.native="storeOrUpdate" 
+              :disabled='cantEdit'
               :loading='saving'>Сохранить</v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-card-text class='px-0'>
+        <v-card-text class='px-0 relative'>
+          <DivBlocker v-if='cantEdit' />
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
           <div v-else>
+            <v-container class='py-0 mb-4' fluid>
+              <v-layout>
+                <v-flex md12 class='relative'>
+                  <!-- <DivBlocker v-if='item.status === LESSON_STATUS.CONDUCTED' /> -->
+                  <v-text-field hide-details label='Тема занятия' v-model='item.topic' />
+                </v-flex>
+              </v-layout>
+            </v-container>
             <!-- ЗАНЯТИЕ ПРОВЕДЕНО -->
             <div wrap v-if="item.status === LESSON_STATUS.CONDUCTED">
               <v-data-table 
@@ -205,7 +215,10 @@ export default {
 
     conduct() {
       this.conducting = true
-      axios.post(apiUrl(API_URL, 'conduct', this.item.id), {clients: this.item.groupClients}).then(r => {
+      axios.post(apiUrl(API_URL, 'conduct', this.item.id), {
+        topic: this.item.topic,
+        clients: this.item.groupClients
+      }).then(r => {
         this.conducting = false
         this.item = r.data
       })
@@ -231,6 +244,12 @@ export default {
       }
       return headers
     },
+
+    // учитель не может редактировать чужое занятие
+    cantEdit() {
+      return this.$store.state.user.class === ROLES.TEACHER
+        && this.item.teacher_id !== this.$store.state.user.id
+    }
   }
 }
 </script>

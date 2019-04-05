@@ -9,11 +9,14 @@ use App\Models\Client\Client;
 class Request extends Model
 {
     use Enumable, HasPhones, HasCreatedEmail, Commentable;
+
     protected $fillable = [
         'name', 'grade_id', 'comment', 'responsible_admin_id',
         'subjects', 'google_id', 'status', 'branches',
     ];
+
     protected $hidden = ['updated_at'];
+
     protected $commaSeparated = ['subjects', 'branches'];
 
     public function responsibleAdmin()

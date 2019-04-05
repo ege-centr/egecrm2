@@ -8,6 +8,7 @@
           </v-btn>
           <v-toolbar-title>{{ edit_mode ? 'Редактирование' : 'Добавление' }} клиента</v-toolbar-title>
           <v-spacer></v-spacer>
+          <TitleCredentials :item='item'/>
           <v-toolbar-items>
             <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ edit_mode ? 'Сохранить' : 'Добавить' }}</v-btn>
           </v-toolbar-items>
@@ -56,7 +57,7 @@
                         ></v-select>
                       </div>
                       <div class='vertical-inputs__input'>
-                        <EmailField :entity='item' />
+                        <EmailField :entity='item' label='Email (используется в качестве логина)' />
                       </div>
                       <div>
                         <PhoneEdit :item='item' />
@@ -104,8 +105,8 @@
                         <v-text-field v-model="item.representative.address" label="Адрес" hide-details></v-text-field>
                       </div>
                       <div class='vertical-inputs__input'>
-                        <EmailField :entity='item.representative' />
-                        <div class='vertical-inputs__input__message blue--text accent-1'>данный email используется в качестве логина</div>
+                        <EmailField :entity='item.representative' label='Email (используется в качестве логина)' />
+                        <!-- <div class='vertical-inputs__input__message blue--text accent-1'>данный email используется в качестве логина</div> -->
                       </div>
                       <div>
                         <PhoneEdit :item='item.representative' />

@@ -13,7 +13,7 @@
         </td>
         <td width='300'></td>
         <td>
-          {{ getData('subjects', item.subject_id).three_letters }}–{{ item.grade_id }}
+          {{ getData('subjects', item.subject_id).three_letters }}–{{ getData('grades', item.grade_id).short }}
         </td>
         <td class='text-md-right pa-0' width='180'>
           <v-btn slot='activator' small class='btn-td' flat

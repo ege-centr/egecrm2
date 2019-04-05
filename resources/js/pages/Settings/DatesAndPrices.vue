@@ -3,24 +3,7 @@
     <Loader v-if='loading' />
     <div class='mb-3 flex-items'>
       <YearTabs :selected-year.sync='selectedYear' />
-      <!-- <div>
-        <v-chip v-for="year in $store.state.data.years" class='pointer ml-0 mr-3'
-        :class="{'primary white--text': year.id == selectedYear}"
-        @click='selectedYear = year.id'
-        :key='year.id'>{{ year.title }}</v-chip>
-      </div> -->
       <v-spacer></v-spacer>
-      <!-- <div>
-        <v-chip class='pointer ml-0 mr-3'
-        :class="{'primary white--text': type === TYPE_EXAM}"
-        @click='type = TYPE_EXAM'>
-          экзамены
-        </v-chip>
-        <v-chip class='pointer ma-0'
-        :class="{'primary white--text': type === TYPE_VACATION}"
-        @click='type = TYPE_VACATION'>праздники</v-chip>
-      </div> -->
-
     </div>
     <div v-if='items !== null && recommendedPrices !== null'>
       <!-- Праздники и экзамены -->
@@ -90,22 +73,26 @@
       </v-layout>
 
 
+      <div class='headline mb-2'>
+        Рекомендованные цены
+      </div>
+
       <v-card>
         <v-card-text>
           <v-container grid-list-xl class="pa-0 ma-0" fluid>
             <v-layout>
-              <v-flex md6>
+              <v-flex md12>
                 <div class='headline'>
-                  Рекомендованные цены
+                  
                 </div>
                 
                 <v-data-table hide-headers hide-actions :items='currentYearRecommendedPrices'>
                   <template slot='items' slot-scope="{ item }">
                     <tr>
-                      <td>
+                      <td width='300'>
                         {{ getData('grades', item.grade_id).title }}
                       </td>
-                      <td>
+                      <td width='300'>
                         {{ item.price }} руб.
                       </td>
                       <td class='text-md-right'>
@@ -116,20 +103,37 @@
                     </tr>
                   </template>
                 </v-data-table>
+              </v-flex>
+            </v-layout>
+          </v-container>
+        </v-card-text>
+      </v-card>
 
-                <div class='headline mt-5'>
-                  Праздники и экзамены
-                </div>
+
+      <div class='mb-2 mt-4 flex-items align-center' style='justify-content: space-between'>
+        <div class='headline'>Праздники и экзамены</div>
+        <div>
+          <AddBtn animated @click.native='add' />
+        </div>
+      </div>
+      
+      <v-card>
+        <v-card-text>
+          <v-container grid-list-xl class="pa-0 ma-0" fluid>
+            <v-layout>
+              <v-flex md12>
                 <v-data-table hide-actions hide-headers :items='currentYearItems' :paginate.sync="sortingOptions" class='mt-3'>
                   <template slot='items' slot-scope="{ item }">
-                    <td>
+                    <td width='300'>
                       {{ item.date | date }}
                     </td>
-                    <td>
+                    <td width='300'>
                       {{ types.find(e => e.value === item.type).text }}
                     </td>
-                    <td>
-                      <span v-if="item.type === TYPE_EXAM">{{ getData('subjects', item.subject_id).three_letters }}–{{ item.grade_id }}</span>
+                    <td width='300'>
+                      <span v-if="item.type === TYPE_EXAM">
+                        {{ getData('subjects', item.subject_id).three_letters }}–{{ getData('grades', item.grade_id).short }}
+                      </span>
                     </td>
                     <td class='text-md-right'>
                       <v-btn flat icon color="black" class='ma-0' @click='edit(item)'>
@@ -137,23 +141,17 @@
                       </v-btn>
                     </td>
                   </template>
-                  <template slot='footer'>
-                    <tr>
-                      <td colspan='10' class='pa-0'>
-                        <v-btn flat class='btn-td' color='primary' style='height: 48px' small @click='add'>добавить</v-btn>
-                      </td>
-                    </tr>
-                  </template>
                   <template slot='no-data'>
                     <NoData />
                   </template>
                 </v-data-table>
-
               </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
       </v-card>
+
+
     </div>
 
 

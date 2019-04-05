@@ -1,8 +1,17 @@
 <template>
   <div class='teacher-group-show'>
     <EmailDialog ref='EmailDialog' />
-    <div class='headline mb-4'>
+    
+    <div class='headline mb-4 flex-items align-center'>
       Группа {{ $route.params.id }}
+      <v-chip 
+        readonly
+        class='ml-3'
+        small
+        outline 
+        :color="item.is_archived ? 'grey' : 'success'" 
+        v-if='this.item !== null'>
+        {{ item.is_archived ? 'заархивирована' : 'активна' }}</v-chip>
     </div>
 
     <v-card class='mb-4' :class='config.elevationClass'>
@@ -14,7 +23,7 @@
           </v-flex>
           <v-flex md12 class='mt-5' v-if='item.clients.length'>
             <v-data-table
-              class="full-width big-table-headers"
+              class="full-width"
               hide-actions
               :headers="[{sortable: false}, {sortable: false}, {text: 'Ученики', sortable: false}, {text: 'Представители', sortable: false}]"
               :items='item.clients'
@@ -56,7 +65,7 @@
       color='primary'
       class='text-sm-center'
     >
-      <v-btn dark flat @click='sendEmails'>
+      <v-btn dark flat @click='sendEmails' :disabled='emails.length > 30'>
         ОТПРАВИТЬ НА {{ emails.length }} EMAIL
         <v-icon right dark>mail</v-icon>
       </v-btn>

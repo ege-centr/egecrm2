@@ -66,6 +66,7 @@ class LessonsController extends Controller
         $lesson->conducted_at = now()->format(DATE_FORMAT);
         $lesson->conducted_email_id = User::emailId();
         $lesson->price = $group->teacher_price;
+        $lesson->topic = $request->topic;
         $lesson->save();
 
         foreach ($request->clients as $client) {

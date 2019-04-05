@@ -11,6 +11,7 @@ class RequestResource extends JsonResource
     {
         return array_merge(parent::toArray($request), [
             'phones' => PhoneResource::collection($this->phones),
+            'createdUser' => new \PersonResource($this->createdUser),
         ]);
     }
 }

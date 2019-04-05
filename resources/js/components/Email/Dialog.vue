@@ -42,7 +42,14 @@
                   <span>{{ data.item }}</span>
                 </v-chip>
               </template>
-              <v-btn @click='$refs.AddDialog.open()' slot='append' flat fab small style='height: 32px; width: 32px; margin: 0'>
+              <v-btn 
+                v-show='emails.length < maxEmails'
+                @click='$refs.AddDialog.open()' 
+                slot='append' 
+                flat 
+                fab 
+                small 
+                style='height: 32px; width: 32px; margin: 0'>
                 <v-icon style='font-size: 20px'>add</v-icon>
               </v-btn>
             </v-combobox>
@@ -52,6 +59,7 @@
               single-line
               full-width
               hide-details
+              maxlength='100'
               v-model='subject'
             ></v-text-field>
             <v-divider></v-divider>
@@ -92,6 +100,7 @@ export default {
 
   data() {
     return {
+      maxEmails: 30,
       dialog: false,
       sending: false,
       message: '',

@@ -1,10 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Task;
+namespace App\Http\Resources\Review;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use App\Http\Resources\Person\PersonResource;
 
-class Resource extends JsonResource
+class ReviewCommentResource extends JsonResource
 {
     public function toArray($request)
     {

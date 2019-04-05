@@ -33,9 +33,6 @@
               {{ item.date | date }}
             </span>
           </td>
-          <td>
-            <Credentials :item='item' />
-          </td>
           <td class='text-md-right'>
             <v-menu left>
               <v-btn slot='activator' flat icon color="black" class='ma-0'>

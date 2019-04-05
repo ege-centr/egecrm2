@@ -47,9 +47,6 @@
           <span v-if='item.is_confirmed' class='green--text'>подтвержден</span>
           <span v-else>не подтвержден</span>
         </td>
-        <td>
-          <Credentials v-if='item.id' :item='item' />
-        </td>
         <td class='text-md-right'>
           <v-btn @click='$refs.DisplayList.edit(item.id)' slot='activator' flat icon color="black" class='ma-0'>
             <v-icon>more_horiz</v-icon>

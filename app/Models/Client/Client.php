@@ -4,13 +4,13 @@ namespace App\Models\Client;
 
 use Shared\Model;
 use App\Interfaces\UserInterface;
-use App\Traits\{HasPhones, HasEmail, HasPhoto, HasName, Commentable};
+use App\Traits\{HasPhones, HasEmail, HasPhoto, HasName, HasCreatedEmail, Commentable};
 use App\Http\Resources\Teacher\Collection as TeacherResource;
 use App\Models\{Request, Phone, Payment\Payment, Teacher, Contract\Contract, Group\Group, Group\GroupClient};
 
 class Client extends Model implements UserInterface
 {
-    use HasPhones, HasEmail, HasPhoto, HasName, Commentable;
+    use HasPhones, HasEmail, HasPhoto, HasName, HasCreatedEmail, Commentable;
 
     protected $fillable = [
         'first_name', 'last_name', 'middle_name',

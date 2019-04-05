@@ -25,6 +25,7 @@ class Resource extends JsonResource
             'email' => $this->email,
             'photo' => new PhotoResource($this->photo),
             'headTeacher' => $this->getHeadTeacher(),
+            'createdUser' => new \PersonResource($this->createdUser),
         ]);
     }
 }

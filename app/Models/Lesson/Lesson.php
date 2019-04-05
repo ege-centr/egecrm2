@@ -22,7 +22,7 @@ class Lesson extends Model
 
     protected $fillable = [
         'teacher_id', 'cabinet_id', 'date', 'time', 'price',
-        'status', 'is_unplanned', 'group_id', 'bonus'
+        'status', 'is_unplanned', 'group_id', 'bonus', 'topic'
     ];
 
     public function cabinet()

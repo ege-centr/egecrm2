@@ -10,6 +10,9 @@ import SubjectGrade from '@/components/UI/SubjectGrade'
 import Credentials from '@/components/UI/Credentials'
 import Placeholder from '@/components/UI/Placeholder'
 import YearTabs from '@/components/UI/YearTabs'
+import FormDialog from '@/components/UI/FormDialog'
+import TitleCredentials from '@/components/UI/TitleCredentials'
+import DivBlocker from '@/components/UI/DivBlocker'
 
 export const GlobalPlugin = {
   install(Vue, options) {
@@ -50,5 +53,8 @@ export const GlobalPlugin = {
     Vue.component('SubjectGrade', SubjectGrade)
     Vue.component('Placeholder', Placeholder)
     Vue.component('YearTabs', YearTabs)
+    Vue.component('FormDialog', FormDialog)
+    Vue.component('TitleCredentials', TitleCredentials)
+    Vue.component('DivBlocker', DivBlocker)
   }
 }

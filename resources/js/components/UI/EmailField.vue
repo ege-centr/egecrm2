@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-text-field v-model="entity.email.email" label="Email" hide-details></v-text-field>
+    <v-text-field v-model="entity.email.email" :label="label" hide-details></v-text-field>
     <v-layout row justify-center>
       <v-dialog v-model="dialog" max-width="1000px" scrollable>
         <v-card>
@@ -45,7 +45,14 @@
 const API_URL = 'email-messages'
 
 export default {
-  props: ['entity'],
+  props: {
+    entity: {},
+    label: {
+      type: String,
+      required: false,
+      default: 'Email'
+    }
+  },
 
   data() {
     return {

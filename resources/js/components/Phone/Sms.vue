@@ -1,10 +1,23 @@
 <template>
-  <v-layout row justify-center style='position: absolute'>
-    <v-dialog v-model="dialog" max-width="1000px" scrollable>
+  <v-layout row justify-center>
+    <v-dialog v-model="dialog" scrollable transition="dialog-bottom-transition" fullscreen hide-overlay content-class='email-dialog'>
       <v-card>
-        <v-card-title class='title justify-center'>
+        <v-toolbar dark color="primary">
+          <v-btn icon dark @click.native="dialog = false">
+            <v-icon>close</v-icon>
+          </v-btn>
+          <v-toolbar-title>Отправка смс на {{ phone }}</v-toolbar-title>
+            <v-spacer></v-spacer>
+          <v-toolbar-items>
+            <v-btn dark flat :loading='sending' @click='send'>
+              <!-- <v-icon>send</v-icon> -->
+              отправить
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <!-- <v-card-title class='title justify-center'>
           {{ phone }}
-        </v-card-title>
+        </v-card-title> -->
         <v-card-text class='messages'>
           <Loader v-if='messages === null' />
           <div v-else>
@@ -32,10 +45,7 @@
           </div>
         </v-card-text>
         <v-card-actions class='v-card-actions--normal-padding'>
-          <v-textarea v-model='text' label='Сообщение' :counter='true' ref='textarea' :loading='sending'
-            @keydown.enter.prevent='send'
-            @click:append='send'
-            append-icon='send'>
+          <v-textarea v-model='text' label='Сообщение' :counter='true' ref='textarea' :loading='sending'>
           </v-textarea>
         </v-card-actions>
         <!-- <v-card-actions class='justify-center'>
@@ -89,15 +99,8 @@ export default {
 </script>
 
 <style lang='scss' scoped>
-  .v-input__append-inner {
-    align-self: flex-end !important;
-    & i {
-      font-size: 34px;
-      margin-bottom: 18px;
-    }
-  }
   .messages {
-    height: 500px;
+    height: calc(100vh - 180px);
     position: relative;
     &__item {
       display: inline-block;

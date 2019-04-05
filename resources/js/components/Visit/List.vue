@@ -38,9 +38,6 @@
               {{ getData('teachers', item.teacher_id).default_name }}
             </span>
           </td>
-          <td>
-            <Credentials class='grey--text' :item='item' v-if='item.conducted_email_id' />
-          </td>
         </template>
         <NoData slot='no-data' />
       </v-data-table>

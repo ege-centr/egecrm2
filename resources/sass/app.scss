@@ -418,3 +418,11 @@ nav {
     padding-right: 0 !important;
   }
 }
+
+.title-credentials {
+  position: absolute;
+  opacity: .5;
+  text-align: center;
+  width: 100%;
+  pointer-events: none;
+}

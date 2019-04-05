@@ -8,6 +8,7 @@
           </v-btn>
           <v-toolbar-title>{{ edit_mode ? 'Редактирование' : 'Добавление' }} платежа</v-toolbar-title>
           <v-spacer></v-spacer>
+          <TitleCredentials :item='item'/>
           <v-toolbar-items>
             <v-btn dark flat v-if='edit_mode' @click.native="destroy" :loading='destroying'>Удалить</v-btn>
             <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ edit_mode ? 'Сохранить' : 'Добавить' }}</v-btn>

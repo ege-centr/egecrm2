@@ -1,6 +1,6 @@
-<template lang="html">
+<template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay content-class='overflow-hidden'>
+    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card>
         <v-toolbar dark color="primary">
           <v-btn icon dark @click.native="dialog = false">
@@ -8,6 +8,7 @@
           </v-btn>
           <v-toolbar-title>{{ edit_mode ? 'Редактирование' : 'Добавление' }} задачи</v-toolbar-title>
           <v-spacer></v-spacer>
+          <TitleCredentials :item='item'/>
           <v-toolbar-items>
             <v-btn dark flat v-if='edit_mode' @click.native="destroy" :loading='destroying'>Удалить</v-btn>
             <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ edit_mode ? 'Сохранить' : 'Добавить' }}</v-btn>
@@ -85,6 +86,8 @@ export default {
   watch: {
     dialog(newVal) {
       if (newVal === true) {
+        // TODO: убрать костыль. в задачах почему-то скролится
+        $('html').css('overflow', 'hidden')
         this.$upload.on('file', {
           extensions: false,
           maxSizePerFile: 1024 * 1024 * 20,
@@ -106,6 +109,7 @@ export default {
           }
         })
       } else {
+        $('html').css('overflow', 'initial')
         this.$upload.off('file')
       }
     },
