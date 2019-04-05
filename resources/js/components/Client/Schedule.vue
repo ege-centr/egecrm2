@@ -75,12 +75,12 @@
                 </span>
               </td>
               <td width='150' v-if='show.price'>
-                <span v-if='item.status === LESSON_STATUS.CONDUCTED && item.clientLesson.price > 0'>
+                <span v-if='item.status === LESSON_STATUS.CONDUCTED && item.clientLesson && item.clientLesson.price > 0'>
                   {{ item.clientLesson.price }} руб.
                 </span>
               </td>
               <td>
-                <v-tooltip bottom v-if='item.status === LESSON_STATUS.CONDUCTED && item.clientLesson.comment'>
+                <v-tooltip bottom v-if='item.status === LESSON_STATUS.CONDUCTED && item.clientLesson && item.clientLesson.comment'>
                   <v-icon class='cursor-default' slot='activator'>comment</v-icon>
                   <span>{{ item.clientLesson.comment }}</span>
                 </v-tooltip>
@@ -94,7 +94,7 @@
                     отменено
                   </span>
                 </span>
-                <span v-else>
+                <span v-else-if='item.clientLesson'>
                   <span v-if='item.clientLesson.is_absent'>
                     не был
                   </span>
@@ -102,9 +102,12 @@
                     был
                   </span>
                 </span>
+                <span class='grey--text' v-else>
+                  пропущено
+                </span>
               </td>
             </tr>
-            <tr v-if='withReports && plannedAfterConducted(item)'>
+            <tr v-if='withReports && afterLastConducted(item)'>
               <td colspan='10' class='font-weight-medium text-sm-center'>
                 <a style='font-size: 13px' 
                   @click='$refs.ReportDialog.open(null, {
@@ -116,6 +119,12 @@
                 >добавить отчет</a>
               </td>
             </tr>
+          </template>
+          <template slot='footer' v-if='withReports && filteredItems.filter(e => e.status === LESSON_STATUS.PLANNED).length === 0'>
+            <td colspan='10' class='text-sm-center grey--text'>
+              ученик закончил обучение 
+              <!-- по {{ getData('subjects', $route.params.subject_id).dative }} -->
+            </td>
           </template>
         </data-table>
       </v-card-text>
@@ -209,26 +218,8 @@ export default {
 
     // кнопку «добавить отчёт» нужно помещать 
     // после последнего проведённого занятниия
-    plannedAfterConducted(item) {
-      let nextItemIndex = this.filteredItems.findIndex(e => e.id === item.id) + 1
-
-      if (item.status === LESSON_STATUS.CONDUCTED) {
-        // skip reports
-        while (this.filteredItems[nextItemIndex] !== undefined && this.isReport(this.filteredItems[nextItemIndex])) {
-          nextItemIndex++
-        }
-
-        return this.filteredItems[nextItemIndex] !== undefined && this.filteredItems[nextItemIndex].status === LESSON_STATUS.PLANNED
-      }
-
-      // если все занятия проведены или все занятия запланированы,
-      // то кнопка в конце списка
-      const lessonCount = this.filteredItems.filter(e => !this.isReport(e) && e.status !== LESSON_STATUS.CANCELLED).length
-      if (this.filteredItems.filter(e => e.status === LESSON_STATUS.CONDUCTED).length === lessonCount || this.filteredItems.filter(e => e.status === LESSON_STATUS.PLANNED).length === lessonCount) {
-        return nextItemIndex === this.filteredItems.length
-      }
-
-      return false
+    afterLastConducted(item) {
+      return this.filteredItems.findIndex(e => e.id === item.id) === this.lastConductedIndex
     }
   },
 
@@ -258,6 +249,16 @@ export default {
         return this.filteredByYear.findIndex(e => e.group.subject_id === subject.id) !== -1
       })
     },
+
+    lastConductedIndex() {
+      let index = -1
+      this.filteredItems.forEach((item, i) => {
+        if (item.status === LESSON_STATUS.CONDUCTED) {
+          index = i
+        }
+      })
+      return index
+    }
   },
 }
 </script>

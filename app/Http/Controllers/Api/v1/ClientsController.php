@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\{Payment\Payment, Client\Client, Contract\Contract, Photo};
 use App\Http\Resources\Client\{Resource, Collection};
+use App\Utils\Phone;
 
 class ClientsController extends Controller
 {
@@ -35,10 +36,10 @@ class ClientsController extends Controller
     public function store(Request $request)
     {
         $new_model = Client::create($request->input());
-        $new_model->phones()->createMany($request->phones);
+        $new_model->phones()->createMany(Phone::filter($request->phones));
 
         $new_model->representative()->create($request->representative);
-        $new_model->representative->phones()->createMany($request->representative['phones']);
+        $new_model->representative->phones()->createMany(Phone::filter($request->representative['phones']));
         $new_model->representative->email()->create($request->representative['email']);
 
         $new_model->email()->create($request->email);
@@ -61,11 +62,11 @@ class ClientsController extends Controller
         $model->update($request->input());
 
         $model->phones()->delete();
-        $model->phones()->createMany($request->phones);
+        $model->phones()->createMany(Phone::filter($request->phones));
 
         $model->representative->update($request->representative);
         $model->representative->phones()->delete();
-        $model->representative->phones()->createMany($request->representative['phones']);
+        $model->representative->phones()->createMany(Phone::filter($request->representative['phones']));
 
         if ($request->representative['email']['email']) {
             if ($model->representative->email === null) {
@@ -76,7 +77,6 @@ class ClientsController extends Controller
         }
 
         $model->email->update($request->email);
-
 
         return new Resource($model);
     }

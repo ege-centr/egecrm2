@@ -40,12 +40,18 @@
             </span><span v-if='show.year && item.year'>, {{ getData('years', item.year).title }}</span>
           </td>
           <td>
-            <span v-for='subject in item.subjects' :class="{
+            <span v-for='(subject, index) in item.subjects' :class="{
               'error--text': subject.status == SUBJECT_STATUSES[2],
               'orange--text': subject.status == SUBJECT_STATUSES[1]
-            }" :key='subject.id'>
+            }" :key='subject.id'
+              v-show='index < 4'
+            >
               {{ getData('subjects', subject.subject_id).three_letters }}
               <span class='grey--text'>{{ subject.lessons }}</span>
+            </span>
+            <span class='pointer'
+              v-if='item.subjects.length > 4' 
+              small>...
             </span>
           </td>
           <td class='text-md-right'>

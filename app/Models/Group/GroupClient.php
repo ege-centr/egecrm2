@@ -17,6 +17,6 @@ class GroupClient extends Model
 
     public function group()
     {
-        $this->belongsTo(Group::class);
+        return $this->belongsTo(Group::class);
     }
 }

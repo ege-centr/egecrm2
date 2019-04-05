@@ -32,4 +32,11 @@ class Phone
 
         return "+$parts[0] ({$parts[1]}) {$parts[2]}-{$parts[3]}-{$parts[4]}";
     }
+
+    public static function filter($phones)
+    {
+        return array_filter($phones, function ($e) {
+            return ! empty($e['phone']);
+        });
+    }
 }

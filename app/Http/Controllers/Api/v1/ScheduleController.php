@@ -19,6 +19,12 @@ class ScheduleController extends Controller
         'equals' => ['teacher_id', 'subject_id', 'year']
     ];
 
+    /**
+     * фактически проведенные занятия
+     * занятия прошедшие без ученика в группе, в которой ученик сейчас присутствует
+     * отмененные занятия в группе, в которой ученик сейчас присутствует
+     * планируемые занятия в группе, в которой ученик сейчас присутствует
+     */
     public function client($id, Request $request)
     {
         $current_group_ids = GroupClient::where('client_id', $id)->pluck('group_id')->all();
@@ -40,10 +46,9 @@ class ScheduleController extends Controller
                 })
                 ->join('groups', 'groups.id', '=', 'lessons.group_id')
                 ->select(DB::raw('lessons.*, client_lessons.id as client_lesson_id'))
-                // Отображать расписание нужно:
-                // либо с последнего непосещенного
-                // либо всё
-                ->whereRaw("((lessons.status = 'conducted' AND client_lessons.id IS NOT NULL) OR lessons.status != 'conducted')")
+                // если в текущей группе, то отображать все занятиия
+                // если в группе был когда-то, но уже нет, то только посещённые
+                ->whereRaw(sprintf("(lessons.group_id IN (%s) OR (lessons.status = 'conducted' AND client_lessons.id IS NOT NULL))", implode(',', $current_group_ids)))
                 ->whereIn('lessons.group_id', $group_ids)
                 ->orderBy('lessons.date', 'asc')
                 ->orderBy('lessons.time', 'asc');
