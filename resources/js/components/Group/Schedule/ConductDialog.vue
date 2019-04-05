@@ -23,10 +23,10 @@
               :loading='saving'>Сохранить</v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-card-text class='px-0 relative'>
-          <DivBlocker v-if='cantEdit' />
+        <v-card-text class='px-0'>
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
-          <div v-else>
+          <div v-else class='relative'>
+            <DivBlocker v-if='cantEdit' />
             <v-container class='py-0 mb-4' fluid>
               <v-layout>
                 <v-flex md12 class='relative'>
