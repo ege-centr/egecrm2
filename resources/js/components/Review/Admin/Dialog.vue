@@ -23,7 +23,7 @@
                     <div class='font-weight-medium'>
                       Оценка и отзыв ученика (заполняется учеником из его личного кабинета)
                     </div>
-                    <div class='caption grey--text' v-if='getComment(COMMENT_TYPE.client)'>
+                    <div class='caption grey--text' v-if='getComment(COMMENT_TYPE.client) && getComment(COMMENT_TYPE.client).createdUser'>
                       {{ getComment(COMMENT_TYPE.client).createdUser.default_name }}
                       {{ getComment(COMMENT_TYPE.client).created_at | date-time }}
                     </div>
@@ -41,7 +41,7 @@
                     <div class='font-weight-medium'>
                       Предварительная оценка и отзыв ученика (заполняется администратором)
                     </div>
-                    <div class='caption grey--text' v-if='getComment(COMMENT_TYPE.admin)'>
+                    <div class='caption grey--text' v-if='getComment(COMMENT_TYPE.admin) && getComment(COMMENT_TYPE.admin).createdUser'>
                       {{ getComment(COMMENT_TYPE.admin).createdUser.default_name }}
                       {{ getComment(COMMENT_TYPE.admin).created_at | date-time }}
                     </div>
@@ -65,7 +65,7 @@
                     <div class='font-weight-medium'>
                       Оценка и отзыв ученика по окончании занятий (заполняется администратором)
                     </div>
-                    <div class='caption grey--text' v-if='getComment(COMMENT_TYPE.final)'>
+                    <div class='caption grey--text' v-if='getComment(COMMENT_TYPE.final) && getComment(COMMENT_TYPE.final).createdUser'>
                       {{ getComment(COMMENT_TYPE.final).createdUser.default_name }}
                       {{ getComment(COMMENT_TYPE.final).created_at | date-time }}
                     </div>
