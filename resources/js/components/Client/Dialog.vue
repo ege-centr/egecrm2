@@ -56,9 +56,9 @@
                           label="Филиалы"
                         ></v-select>
                       </div>
-                      <div class='vertical-inputs__input'>
-                        <EmailField :entity='item' label='Email (используется в качестве логина)' />
-                      </div>
+
+                      <EmailField class='vertical-inputs__input' :entity='item' label='Email (используется в качестве логина)' />
+
                       <div>
                         <PhoneEdit :item='item' />
                       </div>
@@ -104,10 +104,8 @@
                       <div class='vertical-inputs__input vertical-inputs__input_wide'>
                         <v-text-field v-model="item.representative.address" label="Адрес" hide-details></v-text-field>
                       </div>
-                      <div class='vertical-inputs__input'>
-                        <EmailField :entity='item.representative' label='Email (используется в качестве логина)' />
+                      <EmailField class='vertical-inputs__input' :entity='item.representative' label='Email (используется в качестве логина)' />
                         <!-- <div class='vertical-inputs__input__message blue--text accent-1'>данный email используется в качестве логина</div> -->
-                      </div>
                       <div>
                         <PhoneEdit :item='item.representative' />
                       </div>
@@ -128,7 +126,7 @@
 import ClientMap from '@/components/Client/Map'
 import PhoneEdit from '@/components/Phone/Edit'
 import { MODEL_DEFAULTS, CLASS_NAME, API_URL } from '@/components/Client'
-import EmailField from '@/components/UI/EmailField'
+import EmailField from '@/components/Email/Field'
 import GradeAndYear from '@/components/GradeAndYear'
 import AvatarLoader from '@/components/AvatarLoader'
 import DatePicker from '@/components/UI/DatePicker'

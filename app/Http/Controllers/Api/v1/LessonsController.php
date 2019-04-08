@@ -25,6 +25,7 @@ class LessonsController extends Controller
     {
         $item = new Lesson($request->all());
         $item->price = $item->group->teacher_price;
+        $item->save();
         return new LessonResource($item);
     }
 
@@ -65,7 +66,7 @@ class LessonsController extends Controller
         $lesson = Lesson::find($id);
         $group = Group::find($lesson->group_id);
         $lesson->status = 'conducted';
-        $lesson->conducted_at = now()->format(DATE_FORMAT);
+        $lesson->conducted_at = now()->format(DATE_TIME_FORMAT);
         $lesson->conducted_email_id = User::emailId();
         $lesson->topic = $request->topic;
         $lesson->save();

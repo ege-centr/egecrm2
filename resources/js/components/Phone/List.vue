@@ -1,5 +1,7 @@
 <template>
   <span>
+    <SmsMessageDialog ref='SmsMessageDialog' />
+    <SmsMessageHistory ref='SmsMessageHistory' />
     <span v-for='(phone, index) in items' :key='index'>
       <v-menu :class="{'d-block': block}">
         <span slot='activator' class='flex-items align-center'>
@@ -14,11 +16,17 @@
             </v-list-tile-action>
             <v-list-tile-title>Позвонить</v-list-tile-title>
           </v-list-tile>
-          <v-list-tile @click='sms(phone)'>
+          <v-list-tile @click='$refs.SmsMessageDialog.open(phone.phone)'>
             <v-list-tile-action>
               <v-icon>textsms</v-icon>
             </v-list-tile-action>
             <v-list-tile-title>СМС</v-list-tile-title>
+          </v-list-tile>
+          <v-list-tile @click='$refs.SmsMessageHistory.open(phone.phone)'>
+            <v-list-tile-action>
+              <v-icon>history</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-title>История</v-list-tile-title>
           </v-list-tile>
           <!-- <v-list-tile @click=''>
             <v-list-tile-action>
@@ -29,13 +37,13 @@
         </v-list>
       </v-menu>
     </span>
-    <Sms ref='Sms' />
   </span>
 </template>
 
 <script>
 
-import Sms from './Sms'
+import SmsMessageDialog from '@/components/Sms/Message/Dialog'
+import SmsMessageHistory from '@/components/Sms/Message/History'
 
 export default {
   props: {
@@ -50,15 +58,14 @@ export default {
     },
   },
 
-  components: { Sms },
+  components: { 
+    SmsMessageDialog,
+    SmsMessageHistory,
+  },
 
   methods: {
     call(phone) {
       window.location = `tel:${phone.phone_clean}`
-    },
-
-    sms(phone) {
-      this.$refs.Sms.init(phone.phone)
     },
   }
 }

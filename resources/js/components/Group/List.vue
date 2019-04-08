@@ -12,7 +12,9 @@
         </router-link>
       </td>
       <td v-if='show.teacher' width='300'>
-        {{ item.teacher ? item.teacher.default_name : '' }}
+        <span v-if='item.teacher_id > 0'>
+          {{ getData('teachers', item.teacher_id).default_name }}
+        </span>
       </td>
       <td>
         <span v-if='item.subject_id'>

@@ -45,7 +45,10 @@
                     <DataSelect type='grades' v-model="item.grade_id" />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-text-field v-model="item.sum" label="Cумма" :hint="'рекомендуемая сумма: ' + getRecommendedPrice()"></v-text-field>
+                    <v-text-field v-model="item.sum" label="Cумма" 
+                      :persistent-hint='true'
+                      :hide-details="recommendedPrice === null"
+                      :hint="recommendedPrice === null ? '' : `рекомендуемая сумма: ${recommendedPrice}`"></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>
                       <ClearableSelect v-model='item.discount'
@@ -212,19 +215,6 @@ export default {
       })
     },
 
-    getRecommendedPrice() {
-      if (this.recommendedPrices !== null && this.item.year && this.item.grade_id) {
-        let lesson_count = 0
-        this.item.subjects.forEach(subject => {
-          lesson_count += subject.lessons
-        })
-        const recommendedPrice = this.recommendedPrices.find(e => e.year === this.item.year && e.grade_id === this.item.grade_id)
-        if (recommendedPrice !== null) {
-          return lesson_count * parseInt(recommendedPrice.price)
-        }
-      }
-    },
-
     destroy() {
       this.destroying = true
       axios.delete(apiUrl(API_URL, this.item.id)).then(r => {
@@ -249,6 +239,22 @@ export default {
       }
       this.dialog = false
       this.waitForDialogClose(() => this.saving = false)
+    }
+  },
+
+  computed: {
+    recommendedPrice() {
+      if (this.recommendedPrices !== null && this.item.year && this.item.grade_id) {
+        let lesson_count = 0
+        this.item.subjects.forEach(subject => {
+          lesson_count += subject.lessons
+        })
+        const recommendedPrice = this.recommendedPrices.find(e => e.year === this.item.year && e.grade_id === this.item.grade_id)
+        if (recommendedPrice !== null) {
+          return lesson_count * parseInt(recommendedPrice.price)
+        }
+      }
+      return null
     }
   }
 }

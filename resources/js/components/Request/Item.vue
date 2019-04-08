@@ -14,7 +14,7 @@
                     </span>
                   </div>
                   <div>
-                    {{ item.comment }} 
+                    <div class='mb-1'>{{ item.comment }}</div>
                     <PhoneList :items='item.phones' />
                   </div>
                 </div>

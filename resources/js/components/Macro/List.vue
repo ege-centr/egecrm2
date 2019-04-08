@@ -9,7 +9,12 @@
     >
       <template slot='items' slot-scope="{ item }">
         <td>
-          <a @click='$refs.MacroDialog.open(item)'>{{ item }}</a>
+          {{ item }}
+        </td>
+        <td class='text-sm-right'>
+          <v-btn @click='$refs.MacroDialog.open(item)' flat icon color="black" class='ma-0'>
+            <v-icon>more_horiz</v-icon>
+          </v-btn>
         </td>
       </template>
     </v-data-table>

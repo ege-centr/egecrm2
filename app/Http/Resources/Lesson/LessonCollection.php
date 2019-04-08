@@ -12,7 +12,7 @@ class LessonCollection extends JsonResource
     {
         return extractFields($this, [
             'id', 'date', 'time', 'cabinet_id', 'status', 'conducted_email_id',
-            'created_at', 'teacher_id', 'group', 'clients_count',
+            'created_at', 'teacher_id', 'group', 'clients_count', 'price', 'bonus',
             'is_first_in_group', 'is_not_registered', 'is_unplanned', 'group_id'
         ], [
             'conductedUser' => new PersonResource($this->conductedUser),

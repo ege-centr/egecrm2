@@ -20,10 +20,10 @@ $vertical-input-margin: 20px;
     }
     &__message {
       flex: 1;
-      color: #6f6f6f;
-      margin-left: 18px;
-      top: 14px;
+      margin-left: 20px;
+      top: 20px;
       position: relative;
+      align-self: flex-start;
     }
     &_wide {
       & .v-input {

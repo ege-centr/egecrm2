@@ -10,28 +10,26 @@
           <td width='44' class='pr-0'>
             <LessonStatusCircles :item='item' />
           </td>
-          <td>
+          <td width='150'>
             <router-link :to="{ name: 'GroupShow', params: { id: item.group.id}}">
               Группа {{ item.group.id }}
             </router-link>
           </td>
-          <td>
+          <td width='120'>
             {{ item.time }}
           </td>
-          <td>
+          <td width='150'>
             <span v-if='item.clients_count > 0'>
               {{ item.clients_count }} учеников
             </span>
           </td>
-          <td>
+          <td width='120'>
             <span v-if='item.group.subject_id'>
               <SubjectGrade :item='item.group' />
             </span>
           </td>
-          <td>
-            <span v-if='item.cabinet_id'>
-              {{ getData('cabinets', item.cabinet_id).title }}
-            </span>
+          <td width='120'>
+            <Cabinet v-if='item.cabinet_id' :id='item.cabinet_id' />
           </td>
           <td>
             <span v-if='item.teacher_id'>
@@ -45,8 +43,12 @@
   </div>
 </template>
 
+
+
 <script>
+
 import { LESSON_STATUS, LessonStatusCircles } from '@/components/Lesson'
+import Cabinet from '@/components/UI/Cabinet'
 
 export default {
   props: {
@@ -56,7 +58,7 @@ export default {
     },
   },
 
-  components: { LessonStatusCircles },
+  components: { LessonStatusCircles, Cabinet },
 
   data() {
     return {

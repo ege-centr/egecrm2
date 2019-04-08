@@ -1,6 +1,6 @@
 <template>
   <div class='flex-items'>
-    <BgAvatar :photo='item.teacher.photo' :size='100' class='mr-4' />
+    <BgAvatar :photo='item.teacher ? item.teacher.photo : null' :size='100' class='mr-4' />
     <div class='mr-5 pr-5'>
       <div class='item-label'>Преподаватель</div>
       <router-link v-if='item.teacher' :to="{name: 'TeacherShow', params: {id: item.teacher.id}}">

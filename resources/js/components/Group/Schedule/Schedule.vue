@@ -36,6 +36,15 @@
                     {{ getData('teachers', item.teacher_id).default_name }}
                   </span>
                 </td>
+                <td>
+                  <span v-if='!cantSee(item) && item.price > 0'>
+                    {{ item.price }}
+                    <span v-if='item.bonus > 0' class='green--text'>
+                      + {{ item.bonus }}
+                    </span>
+                    руб.
+                  </span>
+                </td>
                 <td class='text-md-right'>
                   <div v-if='readonly'>
                     <v-btn slot='activator' flat icon small color="black" class='ma-0' 
@@ -71,7 +80,7 @@
               </template>
               <template slot='footer' v-if='!readonly'>
                 <tr>
-                  <td colspan='7' class='pa-0 text-md-center'>
+                  <td colspan='10' class='pa-0 text-md-center'>
                     <v-btn slot='activator' small flat color='primary' class='btn-tr' 
                       @click='$refs.LessonDialog.open(null, {
                           group_id: group.id,
@@ -123,6 +132,7 @@ import { LESSON_STATUS, API_URL } from '@/components/Lesson'
 import LessonStatusCircles from '@/components/Lesson/StatusCircles'
 import LessonDialog from './LessonDialog'
 import ConductDialog from './ConductDialog'
+import { ROLES } from '@/config'
 
 export default {
   components: { 
@@ -176,6 +186,12 @@ export default {
       return index + 1 - cancelled_lessons_count
     },
 
+    // Учитель не может эт видеть
+    cantSee(item) {
+      return this.$store.state.user.class === ROLES.TEACHER
+        && item.teacher_id !== this.$store.state.user.id
+    },
+
     async fillSchedule() {
       if (this.lastPlannedLesson !== null) {
         this.filling = true
@@ -200,7 +216,7 @@ export default {
         return _.sortBy(plannedLessons, 'date').reverse()[0]
       }
       return null
-    }
+    },
   }
 }
 </script>

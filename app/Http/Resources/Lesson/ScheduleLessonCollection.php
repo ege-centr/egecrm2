@@ -15,7 +15,7 @@ class ScheduleLessonCollection extends JsonResource
         // return parent::toArray($request->all());
         return extractFields($this, [
             'id', 'date', 'time', 'cabinet_id', 'status', 'conducted_email_id',
-            'created_at', 'teacher_id', 'group',
+            'created_at', 'teacher_id', 'group', 'topic',
             'is_first_in_group', 'is_not_registered', 'is_unplanned', 'group_id'
         ], [
             'clientLesson' => $this->client_lesson_id ? ClientLesson::find($this->client_lesson_id) : null,

@@ -30,8 +30,12 @@
             <v-container class='py-0 mb-4' fluid>
               <v-layout>
                 <v-flex md12 class='relative'>
-                  <!-- <DivBlocker v-if='item.status === LESSON_STATUS.CONDUCTED' /> -->
-                  <v-text-field hide-details label='Тема занятия' v-model='item.topic' />
+                  <div class='vertical-inputs'>
+                    <div class='vertical-inputs__input vertical-inputs__input_wide'>
+                      <v-textarea label='Тема занятия' v-model='item.topic' maxlength='1000' counter />
+                      <div class='vertical-inputs__input__message'>При проводке занятия отправляются СМС родителям отсутствующих и опоздавших учеников, а также начисляется оплата и бонусы</div>
+                    </div>
+                  </div>
                 </v-flex>
               </v-layout>
             </v-container>
@@ -50,11 +54,14 @@
                     <v-switch color='red' v-model="item.is_absent" hide-details></v-switch>
                   </td>
                   <td width='150'>
-                    <v-icon small v-if="!item.late" class='client-edit-icon'>edit</v-icon>
                     <v-edit-dialog
                       :return-value.sync="item.late"
                       lazy
-                    > {{ item.late }}
+                    > 
+                      <v-btn small flat v-if="!item.late" fab class='client-edit-icon'>
+                        <v-icon>edit</v-icon>
+                      </v-btn>
+                      <span v-else>{{ item.late }}</span>
                       <v-text-field
                         slot="input"
                         v-model="item.late"
@@ -65,11 +72,14 @@
                     </v-edit-dialog>
                   </td>
                   <td width='150' v-if='$store.state.user.class === ROLES.ADMIN'>
-                    <v-icon small v-if="!item.price" class='client-edit-icon'>edit</v-icon>
                     <v-edit-dialog
                       :return-value.sync="item.price"
                       lazy
-                    > {{ item.price }}
+                    > 
+                      <v-btn small flat v-if="!item.price" fab class='client-edit-icon'>
+                        <v-icon>edit</v-icon>
+                      </v-btn>
+                      <span v-else>{{ item.price }}</span>
                       <v-text-field
                         slot="input"
                         v-model="item.price"
@@ -80,11 +90,14 @@
                     </v-edit-dialog>
                   </td>
                   <td>
-                    <v-icon small v-if="!item.comment" class='client-edit-icon'>edit</v-icon>
                     <v-edit-dialog
                       :return-value.sync="item.comment"
                       lazy
-                    > {{ item.comment }}
+                    > 
+                      <v-btn small flat v-if="!item.comment" fab class='client-edit-icon'>
+                        <v-icon>edit</v-icon>
+                      </v-btn>
+                      <span v-else>{{ item.comment }}</span>
                       <v-text-field
                         slot="input"
                         v-model="item.comment"
@@ -240,7 +253,7 @@ export default {
       ]
       if (this.$store.state.user.class === ROLES.ADMIN) {
         headers.splice(3, 0, { text: 'Цена', sortable: false })
-        headers.splice(5, 0, { text: 'Цена', sortable: false })
+        headers.splice(5, 0, { text: '', sortable: false })
       }
       return headers
     },
@@ -265,7 +278,8 @@ export default {
   }
   & .client-edit-icon {
     position: absolute;
-    top: 15px;
+    top: 4px;
+    margin: 0;
   }
 }
 </style>

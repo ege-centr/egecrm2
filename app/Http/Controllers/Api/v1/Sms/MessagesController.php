@@ -26,6 +26,6 @@ class MessagesController extends Controller
     public function send(Request $request)
     {
         $sms = Sms::send($request->phone, $request->text);
-        return Sms::get($request->phone, 1)[0];
+        // return Sms::get($request->phone, 1)[0];
     }
 }

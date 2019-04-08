@@ -17,7 +17,7 @@
           {{ item.status_name }}
         </td>
         <td class='text-sm-right grey--text'>
-          <span v-if='item.model !== null && item.model.createdUser !== null'>
+          <span v-if='item.model !== null && item.model.createdUser !== undefined && item.model.createdUser !== null'>
             {{ item.createdUser.default_name }}
           </span>
           {{ item.created_at | date-time }}

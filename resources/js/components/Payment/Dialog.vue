@@ -24,15 +24,17 @@
                     <ClearableSelect v-model="item.method"
                       :items='ENUMS.methods'
                       label="Cпособ оплаты" />
-                  </div>
-                  <div class='vertical-inputs__input' v-if="item.method === 'card'">
-                    <v-text-field hide-details v-model='item.card_number' 
-                      placeholder='**** **** **** ****'
-                      label='Номер карты' 
-                      mask="#*** **** **** ####"></v-text-field>
-                      <div class='vertical-inputs__input__message' v-if='item.card_number && item.card_number.length > 0'>
-                        <div class='payment-system' :class="'payment-system_' + item.card_number[0]"></div>
+                    <div class='vertical-inputs__input__message' style='top: 0'>
+                      <div class='vertical-inputs__input' v-if="item.method === 'card'">
+                        <v-text-field hide-details v-model='item.card_number' 
+                          placeholder='**** **** **** ****'
+                          label='Номер карты' 
+                          mask="#*** **** **** ####"></v-text-field>
+                          <div class='vertical-inputs__input__message' v-if='item.card_number && item.card_number.length > 0'>
+                            <div class='payment-system' :class="'payment-system_' + item.card_number[0]"></div>
+                          </div>
                       </div>
+                    </div>
                   </div>
                   <div class='vertical-inputs__input'>
                     <ClearableSelect v-model="item.type"

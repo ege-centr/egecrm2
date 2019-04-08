@@ -45,7 +45,7 @@
         </td>
         <td>
           <span v-if='item.is_confirmed' class='green--text'>подтвержден</span>
-          <span v-else>не подтвержден</span>
+          <span v-else class='red--text'>не подтвержден</span>
         </td>
         <td class='text-md-right'>
           <v-btn @click='$refs.DisplayList.edit(item.id)' slot='activator' flat icon color="black" class='ma-0'>

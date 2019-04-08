@@ -53,7 +53,7 @@ class Group extends Model
 
     public function toSearchableArray()
     {
-        $lessons = collect($this->lessons);
+        $lessons = collect($this->lessons()->notCancelled()->get());
         $schedule = $this->getSchedule();
         return [
             'id' => $this->id,

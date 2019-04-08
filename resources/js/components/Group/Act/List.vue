@@ -4,7 +4,7 @@
     <display-list 
       :dialog-component='Dialog'
       :items='items'
-      :model-defaults='modelDefaults'
+      :model-defaults='MODEL_DEFAULTS'
       add-btn-label='добавить акт'
       ref='DisplayList'
     >
@@ -70,6 +70,7 @@
 import Dialog from './Dialog' 
 import Print from '@/components/Print'
 import DisplayList from '@/components/UI/DisplayList'
+import { MODEL_DEFAULTS } from './'
 
 export default {
   props: {
@@ -83,7 +84,8 @@ export default {
 
   data() {
     return {
-      Dialog
+      MODEL_DEFAULTS,
+      Dialog,
     }
   }, 
 }

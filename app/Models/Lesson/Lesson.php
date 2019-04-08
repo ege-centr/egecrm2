@@ -86,6 +86,11 @@ class Lesson extends Model
         return $this->group->groupClients()->count();
     }
 
+    public function scopeNotCancelled($query)
+    {
+        return $query->where('status', '<>', 'cancelled');
+    }
+
     /**
      * Высчитать бонус
      *

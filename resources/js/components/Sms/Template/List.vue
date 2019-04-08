@@ -11,11 +11,8 @@
         <td>
           {{ item.title }}
         </td>
-        <td>
-          {{ item.text | truncate(25) }}
-        </td>
         <td class='text-md-right'>
-          <v-btn @click='$refs.Dialog.open(item.id)' slot='activator' flat icon color="black" class='ma-0'>
+          <v-btn @click='$refs.Dialog.open(item.id)' flat icon color="black" class='ma-0'>
             <v-icon>more_horiz</v-icon>
           </v-btn>
         </td>

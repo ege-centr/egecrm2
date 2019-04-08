@@ -86,6 +86,12 @@
                 </v-tooltip>
               </td>
               <td>
+                <v-tooltip bottom v-if='item.status === LESSON_STATUS.CONDUCTED && item.topic'>
+                  <v-icon class='cursor-default' slot='activator'>chrome_reader_mode</v-icon>
+                  <span>{{ item.topic }}</span>
+                </v-tooltip>
+              </td>
+              <td>
                 <span v-if='item.status !== LESSON_STATUS.CONDUCTED'>
                   <span v-if='item.status === LESSON_STATUS.PLANNED'>
                     планируется
@@ -116,7 +122,9 @@
                     subject_id: $route.params.subject_id,
                     year: $route.params.year,
                   })'
-                >добавить отчет</a>
+                >
+                  добавить отчет по {{ getData('subjects', $route.params.subject_id).dative }}
+                </a>
               </td>
             </tr>
           </template>

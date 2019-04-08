@@ -17,17 +17,20 @@
           <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
             <v-layout wrap>
               <v-flex md4>
-                Тип: {{ TYPE[item.type] }}
+                <div class='vertical-inputs'>
+                  <div class='vertical-inputs__input vertical-inputs__input_wide'>
+                    <v-text-field hide-details v-model='item.title' label='Название'></v-text-field>
+                  </div>
+                  <div class='vertical-inputs__input vertical-inputs__input_wide'>
+                    <v-textarea auto-grow hide-details v-model='item.text' label='Текст'></v-textarea>
+                  </div>
+                </div>
               </v-flex>
-            </v-layout>
-            <v-layout wrap>
-              <v-flex md4>
-                <v-text-field hide-details v-model='item.title' label='Название'></v-text-field>
-              </v-flex>
-            </v-layout>
-            <v-layout wrap>
-              <v-flex md4>
-                <v-textarea auto-grow hide-details v-model='item.text' label='Текст'></v-textarea>
+              <v-flex md4 offset-md1>
+                <p>
+                  Тип: {{ TYPE[item.type] }}
+                </p>
+                <div class='sms-template-description' v-html='item.description'></div>
               </v-flex>
             </v-layout>
           </v-container>
@@ -58,3 +61,14 @@ export default {
   }
 }
 </script>
+
+
+<style lang='scss'>
+  .sms-template-description {
+    & pre {
+      background: #eff0f1;
+      font-family: 'Ubuntu Mono', monospace;
+      display: inline-block;
+    }
+  }
+</style>
