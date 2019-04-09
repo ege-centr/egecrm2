@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Resources\Json\Resource;
-use App\Models\Task;
-use App\Observers\LogsObserver;
+use App\Models\Report\Report;
+use App\Observers\{LogsObserver, ReportsObserver};
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Illuminate\Support\Carbon;
@@ -24,6 +24,8 @@ class AppServiceProvider extends ServiceProvider
         Carbon::serializeUsing(function ($carbon) {
             return $carbon->format('Y-m-d H:i:s');
         });
+
+        Report::observe(ReportsObserver::class);
 
         // Bind logs watcher to all models
         $path = realpath(app_path() . '/Models');

@@ -385,7 +385,7 @@ nav {
 }
 
 .full-height-vh {
-  height: 93vh;
+  height: 90vh;
 }
 
 .active .v-list__tile--link {
@@ -432,4 +432,19 @@ nav {
 }
 .quarter-opacity {
   opacity: .25;
+}
+
+.edit-inside-table {
+  position: absolute !important;
+  top: 4px;
+  margin: 0;
+  left: 14px;
+}
+
+.relative-table {
+  & tr {
+    & td {
+      position: relative;
+    }
+  }
 }

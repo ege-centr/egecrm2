@@ -221,7 +221,8 @@ export default {
 
     // какие позиции не нумеровать?
     excludeFromIndex(item) {
-      return item.status === LESSON_STATUS.CANCELLED
+      return item.status === LESSON_STATUS.CANCELLED // отмененные
+        || (item.clientLesson === null && item.status !== LESSON_STATUS.PLANNED)
     },
 
     // кнопку «добавить отчёт» нужно помещать 

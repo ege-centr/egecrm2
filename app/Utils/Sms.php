@@ -3,19 +3,21 @@
 namespace App\Utils;
 
 use Illuminate\Support\Facades\Redis;
-use App\Models\Sms\SmsMessage;
-use App\Http\Resources\SmsMessage\SmsMessageResource;
+use Symfony\Component\Yaml\Yaml;
+use App\Http\Resources\Person\PersonWithPhotoResource;
+use App\Models\Email;
+use User;
 
 class Sms
 {
-	public static function sendToNumbers($numbers, $message) {
+	public static function sendToNumbers($numbers, $message, $isSecret = false) {
 		foreach ($numbers as $number) {
-			self::send($number, $message);
+			self::send($number, $message, $isSecret);
 		}
 	}
 
 
-	public static function send($to, $message)
+	public static function send($to, $message, $isSecret = false)
 	{
         if (app()->environment('production')) {
             return false;
@@ -29,18 +31,29 @@ class Sms
 			if (!preg_match('/[0-9]{10}/', $number)) {
 				continue;
             }
+
+            $extra = [];
+
+            if (User::loggedIn()) {
+                $extra['created_email_id'] = User::emailId();
+            }
+
+            if ($isSecret) {
+                $extra['is_secret'] = 1;
+            }
+
+            // https://smsc.ru/api/http/send/smsinfo/#menu
+            if (count($extra) > 0) {
+                $message .= "\n~~~\n" . Yaml::dump($extra);
+            }
+
 			$params = array(
                 "fmt"       => 1, // 1 – вернуть ответ в виде чисел: ID и количество SMS через запятую (1234,1)
 				"phones"	=> $number,
-				"mes"		=> $message,
-				"sender"    => "EGE-Repetit",
+                "mes"		=> $message,
             );
 
 			$result = self::exec('send', $params);
-
-            $sms = SmsMessage::create([
-                'id' => explode(",", $result)[0],
-            ]);
 		}
     }
 
@@ -56,15 +69,26 @@ class Sms
         $result = [];
         if (!isset($all_sms->error)) {
             foreach($all_sms as $sms) {
-                $smsMessage = SmsMessage::find($sms->id);
-                $result[] = [
+                $data = [
                     'message' => $sms->message,
                     'status' => $sms->status,
                     'status_name' => $sms->status_name,
                     'phone' => $sms->phone,
-                    'model' => $smsMessage === null ? null : new SmsMessageResource(SmsMessage::find($sms->id)),
                     'created_at' => date('Y-m-d H:i:s', $sms->send_timestamp),
                 ];
+
+                $extra = [];
+                if (isset($sms->comment)) {
+                    $extra = Yaml::parse($sms->comment);
+                }
+
+                $data['createdUser'] = isset($extra['created_email_id']) ?
+                    new PersonWithPhotoResource(Email::getUser($extra['created_email_id'])) :
+                    null;
+
+                $data['is_secret'] = isset($extra['is_secret']);
+
+                $result[] = $data;
             }
         }
         return $result;
@@ -75,6 +99,7 @@ class Sms
         $params['login'] = config('sms.login');
         $params['psw'] = config('sms.psw');
         $params['charset'] = 'utf-8';
+        $params['sender'] = 'EGE-Centr';
         $ch = curl_init(config('sms.host') . $method . '.php');
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 		curl_setopt($ch, CURLOPT_TIMEOUT, 30);

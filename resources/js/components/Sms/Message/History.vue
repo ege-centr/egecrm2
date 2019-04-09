@@ -13,11 +13,11 @@
             <div v-else>
               <div v-if='items.length > 0'>
                 <div v-for='item in items' :key='item.id' class="mb-3 display-flex">
-                  <Avatar :photo='item.model ? item.model.createdUser.photo : null' :size='50' class='mr-3' />
+                  <Avatar :photo='item.createdUser ? item.createdUser.photo : null' :size='50' class='mr-3' />
                   <v-card class='email-messages__item elevation-0 mb-4'>
                     <v-card-text class='py-0 px-3'>
                       <div class='display-flex align-center'>
-                        <span class='font-weight-medium'>{{ item.model ? item.model.createdUser.default_name : 'Неизвестный отправитель' }}</span>
+                        <span class='font-weight-medium'>{{ item.createdUser ? item.createdUser.default_name : 'Неизвестный отправитель' }}</span>
                         <span class='ml-2 caption grey--text'>{{ item.created_at | date-time }}</span>
                         <v-tooltip bottom class='ml-2 cursor-default'>
                           <v-icon small slot="activator" :class="{

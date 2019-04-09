@@ -5,10 +5,19 @@ namespace App\Models\Report;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\{ Teacher, Client\Client };
 use App\Traits\HasCreatedEmail;
+use User;
 
 class Report extends Model
 {
     use HasCreatedEmail;
+
+    const CATEGORIES = [
+        'homework' => 'Выполнение домашнего задания',
+        'activity' => 'Работоспособность и активность на уроках',
+        'behavior' => 'Поведение на уроках',
+        'learning_ability' => 'Способность усваивать новый материал',
+        'knowledge' => 'Выполнение контрольных работ, текущий уровень знаний',
+    ];
 
     protected $fillable = [
         'subject_id', 'homework_score', 'activity_score', 'behavior_score',

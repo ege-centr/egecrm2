@@ -17,26 +17,173 @@
         <v-card-text>
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
           <v-container v-else grid-list-xl class="pa-0 ma-0" style='max-width: 100%'>
-            <v-layout class='mb-3'>
-              <v-flex md6 class='mt-3'>
-                <v-layout wrap align-center v-for='subject in $store.state.data.subjects' :key='subject.id'>
-                  <v-flex style='max-width: 100px; height: 56px'>
-                    <v-btn class='ma-0' flat small :class="getSubjectColor(subject)" @click='toggleSubjectStatus(subject.id)'>
-                      {{ subject.three_letters }}
-                    </v-btn>
-                    <!-- <span :class="getSubjectColor(subject)" @click='toggleSubjectStatus(subject.id)'>{{ subject.three_letters }}</span> -->
-                  </v-flex>
-                  <v-flex class='ml-3' style='max-width: 120px' v-if='findSubject(subject)'>
-                    <v-text-field class='pa-0 ma-0' v-model="findSubject(subject).lessons" label="уроков" hide-details></v-text-field>
-                  </v-flex>
-                  <v-flex class='ml-3' style='max-width: 120px' v-if='findSubject(subject)'>
-                    <v-text-field class='pa-0 ma-0' v-model="findSubject(subject).lessons_planned" label="программа" hide-details></v-text-field>
-                  </v-flex>
-                </v-layout>
+            <v-layout class='justify-space-between'>
+              <!-- ПРЕДМЕТЫ ДОГОВОРА -->
+              <v-flex md3>
+                <v-data-table 
+                  class='relative-table'
+                  :headers="[
+                    {text: 'Предмет', sortable: false},
+                    {text: 'Уроков', sortable: false},
+                    {text: 'Уроков по программе', sortable: false},
+                  ]"
+                  :items='$store.state.data.subjects'
+                  hide-actions
+                >
+                  <template v-slot:items='{ item }'>
+                    <tr>
+                      <td class='pl-0'>
+                        <v-btn class='ma-0' flat small :class="getSubjectColor(item)" @click='toggleSubjectStatus(item.id)'>
+                          {{ item.three_letters }}
+                        </v-btn>
+                      </td>
+                      <td>
+                        <div v-if='findSubject(item)'>
+                          <v-edit-dialog
+                            :return-value.sync="findSubject(item).lessons"
+                            lazy
+                          > 
+                            <v-btn small flat v-if="!findSubject(item).lessons" fab class='edit-inside-table'>
+                              <v-icon>edit</v-icon>
+                            </v-btn>
+                            <span v-else>{{ findSubject(item).lessons }}</span>
+                            <v-text-field
+                              slot="input"
+                              v-model="findSubject(item).lessons"
+                              single-line
+                              v-mask="'##'"
+                            ></v-text-field>
+                          </v-edit-dialog>
+                        </div>
+                      </td>
+                      <td>
+                        <div v-if='findSubject(item)'>
+                          <v-edit-dialog
+                            :return-value.sync="findSubject(item).lessons_planned"
+                            lazy
+                          > 
+                            <v-btn small flat v-if="!findSubject(item).lessons_planned" fab class='edit-inside-table'>
+                              <v-icon>edit</v-icon>
+                            </v-btn>
+                            <span v-else>{{ findSubject(item).lessons_planned }}</span>
+                            <v-text-field
+                              slot="input"
+                              v-model="findSubject(item).lessons_planned"
+                              single-line
+                              v-mask="'##'"
+                            ></v-text-field>
+                          </v-edit-dialog>
+                        </div>
+                      </td>
+                    </tr>
+                  </template>
+                </v-data-table>
               </v-flex>
+              <!-- /ПРЕДМЕТЫ ДОГОВОРА -->
 
 
-              <v-flex md6>
+              <!-- ПЛАТЕЖИ -->
+              <v-flex md4>
+                <v-data-table
+                  v-if='item.payments.length > 0'
+                  class='relative-table'
+                  :headers="[
+                    {text: 'Платеж, руб.', sortable: false},
+                    {text: 'Уроков', sortable: false},
+                    {text: 'Дата', sortable: false},
+                    {text: '', sortable: false},
+                  ]"
+                  :items='item.payments'
+                  hide-actions
+                >
+                  <template v-slot:items='{ item, index }'>
+                    <tr>
+                      <td width='150'>
+                        <v-edit-dialog
+                          :return-value.sync="item.sum"
+                          lazy
+                        > 
+                          <v-btn small flat v-if="!item.sum" fab class='edit-inside-table'>
+                            <v-icon>edit</v-icon>
+                          </v-btn>
+                          <span v-else>{{ item.sum }}</span>
+                          <v-text-field
+                            slot="input"
+                            v-model="item.sum"
+                            single-line
+                            v-mask="'######'"
+                          ></v-text-field>
+                        </v-edit-dialog>
+                      </td>
+                      <td width='150'>
+                        <v-edit-dialog
+                          :return-value.sync="item.lessons"
+                          lazy
+                        > 
+                          <v-btn small flat v-if="!item.lessons" fab class='edit-inside-table'>
+                            <v-icon>edit</v-icon>
+                          </v-btn>
+                          <span v-else>{{ item.lessons }}</span>
+                          <v-text-field
+                            slot="input"
+                            v-model="item.lessons"
+                            single-line
+                            v-mask="'###'"
+                          ></v-text-field>
+                        </v-edit-dialog>
+                      </td>
+                      <td width='250'>
+                        <v-menu
+                          :ref="`datepicker-${index}`"
+                          :return-value.sync="item.date"
+                          min-width="290px"
+                          lazy
+                          transition="scale-transition"
+                        >
+                          <div slot='activator'>
+                            <v-btn v-if='!item.date' small flat fab class='edit-inside-table'>
+                              <v-icon>edit</v-icon>
+                            </v-btn>
+                            <span v-else>
+                              {{ item.date | date }}
+                            </span>
+                          </div>
+                          <v-date-picker no-title
+                            locale='ru'
+                            v-model="item.date"
+                            :first-day-of-week='1'
+                            @input="$refs[`datepicker-${index}`].save(item.date)">
+                          </v-date-picker>
+                        </v-menu>
+                      </td>
+                      <td class='text-sm-right'>
+                        <v-btn flat icon color="red" class='ma-0' @click='removePayment(index)'>
+                          <v-icon>remove</v-icon>
+                        </v-btn>
+                      </td>
+                    </tr>
+                  </template>
+                  <template v-slot:footer>
+                    <tr>
+                      <td colspan='3'></td>
+                      <td class='text-sm-right'>
+                        <v-btn flat icon class='ma-0' @click='addPayment'>
+                          <v-icon>add</v-icon>
+                        </v-btn>
+                      </td>
+                    </tr>
+                  </template>
+                </v-data-table>
+                <NoData v-else>
+                  <AddBtn @click.native='addPayment' label='добавить платеж' />
+                </NoData>
+              </v-flex>
+              <!-- /ПЛАТЕЖИ -->
+
+
+
+              <!-- САМ ДОГОВОР -->
+              <v-flex md3>
                 <div class='vertical-inputs mb-5'>
                   <div class='vertical-inputs__input'>
                     <DataSelect type='years' v-model="item.year" />
@@ -47,8 +194,8 @@
                   <div class='vertical-inputs__input'>
                     <v-text-field v-model="item.sum" label="Cумма" 
                       :persistent-hint='true'
-                      :hide-details="recommendedPrice === null"
-                      :hint="recommendedPrice === null ? '' : `рекомендуемая сумма: ${recommendedPrice}`"></v-text-field>
+                      :hide-details="!recommendedPrice"
+                      :hint="recommendedPrice ? `рекомендуемая сумма: ${recommendedPrice}` : '' "></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>
                       <ClearableSelect v-model='item.discount'
@@ -61,28 +208,9 @@
                     <DatePicker label="Дата" v-model='item.date' />
                   </div>
                 </div>
-
-                <!-- <v-subheader class='pa-0'>Платежи</v-subheader> -->
-                <div class='contract-payment' v-for='(payment, index) in item.payments' :key='index'>
-                  <v-layout class='align-center'>
-                    <v-flex>
-                      <v-text-field hide-details v-model="payment.sum" label="Cумма"></v-text-field>
-                    </v-flex>
-                    <v-flex>
-                      <v-text-field hide-details v-model="payment.lessons" label="Занятий"></v-text-field>
-                    </v-flex>
-                    <v-flex>
-                      <DatePicker label="Дата" v-model='payment.date' />
-                    </v-flex>
-                    <v-btn flat icon color="red" class='ma-0 mr-3' @click='item.payments.splice(index, 1)'>
-                      <v-icon>remove</v-icon>
-                    </v-btn>
-                  </v-layout>
-                </div>
-                <div class='mt-4'>
-                  <AddBtn @click.native='addPayment' label='добавить платеж' />
-                </div>
               </v-flex>
+              <!-- /САМ ДОГОВОР -->
+
             </v-layout>
           </v-container>
         </v-card-text>
@@ -153,6 +281,10 @@ export default {
 
     addPayment() {
       this.item.payments.push({})
+    },
+
+    removePayment(index) {
+      this.item.payments.splice(index, 1)
     },
 
     findSubject(subject) {
@@ -247,7 +379,9 @@ export default {
       if (this.recommendedPrices !== null && this.item.year && this.item.grade_id) {
         let lesson_count = 0
         this.item.subjects.forEach(subject => {
-          lesson_count += subject.lessons
+          if (subject.lessons > 0) {
+            lesson_count += Number(subject.lessons)
+          }
         })
         const recommendedPrice = this.recommendedPrices.find(e => e.year === this.item.year && e.grade_id === this.item.grade_id)
         if (recommendedPrice !== null) {

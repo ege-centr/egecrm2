@@ -10,6 +10,12 @@ class SmsTemplate extends Model
     public $timestamps = false;
     protected $fillable = ['text', 'title'];
 
+    /**
+     * @param array|string $to кому отправить sms
+     * @param array $variables переменные, че каво
+     *
+     * @return void
+     */
     public static function send(
         $to,
         SmsTemplateCode $code,

@@ -39,7 +39,7 @@
                 <td>
                   <span v-if='!cantSee(item) && item.price > 0'>
                     {{ item.price }}
-                    <span v-if='item.bonus > 0' class='green--text'>
+                    <span v-if='item.bonus > 0'>
                       + {{ item.bonus }}
                     </span>
                     руб.

@@ -58,7 +58,7 @@
                       :return-value.sync="item.late"
                       lazy
                     > 
-                      <v-btn small flat v-if="!item.late" fab class='client-edit-icon'>
+                      <v-btn small flat v-if="!item.late" fab class='edit-inside-table'>
                         <v-icon>edit</v-icon>
                       </v-btn>
                       <span v-else>{{ item.late }}</span>
@@ -76,7 +76,7 @@
                       :return-value.sync="item.price"
                       lazy
                     > 
-                      <v-btn small flat v-if="!item.price" fab class='client-edit-icon'>
+                      <v-btn small flat v-if="!item.price" fab class='edit-inside-table'>
                         <v-icon>edit</v-icon>
                       </v-btn>
                       <span v-else>{{ item.price }}</span>
@@ -94,7 +94,7 @@
                       :return-value.sync="item.comment"
                       lazy
                     > 
-                      <v-btn small flat v-if="!item.comment" fab class='client-edit-icon'>
+                      <v-btn small flat v-if="!item.comment" fab class='edit-inside-table'>
                         <v-icon>edit</v-icon>
                       </v-btn>
                       <span v-else>{{ item.comment }}</span>
@@ -149,26 +149,32 @@
                       <v-switch color='red' v-model="item.is_absent" hide-details></v-switch>
                     </td>
                     <td width='150'>
-                      <v-icon small v-if="!item.late" class='client-edit-icon'>edit</v-icon>
                       <v-edit-dialog
                         :return-value.sync="item.late"
                         lazy
-                      > {{ item.late }}
+                      > 
+                        <v-btn small flat v-if="!item.late" fab class='edit-inside-table'>
+                          <v-icon>edit</v-icon>
+                        </v-btn>
+                        <span v-else>{{ item.late }}</span>
                         <v-text-field
                           slot="input"
                           v-model="item.late"
-                          label="Опоздание"
                           single-line
+                          label="Опоздание"
                           v-mask="'##'"
                         ></v-text-field>
                       </v-edit-dialog>
                     </td>
                     <td>
-                      <v-icon small v-if="!item.comment" class='client-edit-icon'>edit</v-icon>
                       <v-edit-dialog
                         :return-value.sync="item.comment"
                         lazy
-                      > {{ item.comment }}
+                      > 
+                        <v-btn small flat v-if="!item.comment" fab class='edit-inside-table'>
+                          <v-icon>edit</v-icon>
+                        </v-btn>
+                        <span v-else>{{ item.comment }}</span>
                         <v-text-field
                           slot="input"
                           v-model="item.comment"
@@ -275,11 +281,6 @@ export default {
         position: relative;
       }
     }
-  }
-  & .client-edit-icon {
-    position: absolute;
-    top: 4px;
-    margin: 0;
   }
 }
 </style>

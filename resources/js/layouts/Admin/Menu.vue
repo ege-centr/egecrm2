@@ -1,13 +1,23 @@
 <template>
   <v-list dense>
     <SearchBar />
-    
+    <SmsMessageDialog ref='SmsMessageDialog' :custom-input='true' />
+
     <MenuItem v-for='m in menu' :key='m.route' :item='m' />
 
     <div class='menu-separator'></div>
 
     <MenuItem v-for='m in admin_menu' :key='m.route' :item='m' />
 
+    <v-list-tile @click="$refs.SmsMessageDialog.open('')">
+      <v-list-tile-action>
+        <v-icon>send</v-icon>
+      </v-list-tile-action>
+      <v-list-tile-content>
+        <v-list-tile-title>SMS</v-list-tile-title>
+      </v-list-tile-content>
+    </v-list-tile> 
+    
     <v-list-tile @click="$store.commit('toggleDrawer', false)">
       <v-list-tile-action>
         <v-icon>arrow_back_ios</v-icon>
@@ -33,9 +43,10 @@
 <script>
 import SearchBar from '@/components/Search/Bar'
 import MenuItem from '@/components/UI/MenuItem'
+import SmsMessageDialog from '@/components/Sms/Message/Dialog'
 
 export default {
-  components: { SearchBar, MenuItem },
+  components: { SearchBar, MenuItem, SmsMessageDialog },
 
   data: () => ({
     drawer: true,
@@ -98,11 +109,6 @@ export default {
         route: 'ReportIndex',
         label: 'Отчёты'
       },
-      {
-        icon: 'textsms',
-        route: 'SmsMessageIndex',
-        label: 'SMS',
-      }
     ],
     admin_menu: [
       {
