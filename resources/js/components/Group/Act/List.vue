@@ -39,7 +39,7 @@
                 <v-icon>more_horiz</v-icon>
               </v-btn>
               <v-list dense>
-                <v-list-tile @click='$refs.GroupActDialog.open(item.id)'>
+                <v-list-tile @click='$refs.DisplayList.edit(item.id)'>
                   <v-list-tile-action>
                     <v-icon>edit</v-icon>
                   </v-list-tile-action>

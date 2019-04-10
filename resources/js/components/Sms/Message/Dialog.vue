@@ -37,10 +37,6 @@
             >
               <template v-slot:append>
                 <div class='v-counter sms-counter'>
-                  <div class='d-inline-block text-sm-center' style='width: 26px'>
-                    {{ counter.remaining }} 
-                  </div>
-                  <span class='quarter-opacity'>|</span>
                   <div class='d-inline-block text-sm-center' style='width: 40px'>
                     {{ counter.messages }} SMS
                   </div>

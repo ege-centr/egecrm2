@@ -17,6 +17,7 @@ class PaymentsObserver
             $payment->bill_number = Payment::query()
                 ->where('type', PaymentType::PAYMENT)
                 ->where('method', PaymentMethod::CASH)
+                ->whereRaw(sprintf("%s = YEAR(NOW())", date('Y', strtotime($payment->date))))
                 ->max('bill_number') + 1;
         }
     }

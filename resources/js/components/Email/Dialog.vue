@@ -72,6 +72,7 @@
               single-line
               @keydown.enter='handleCmdEnter($event)'
               ref='textarea'
+              :rows='10'
               v-model='message' 
             ></v-textarea>
           </v-form>
