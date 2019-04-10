@@ -14,7 +14,10 @@ class PaymentsObserver
             $payment->method === PaymentMethod::CASH &&
             $payment->entity_type === Client::class
         ) {
-            $payment->bill_number = Payment::max('bill_number') + 1;
+            $payment->bill_number = Payment::query()
+                ->where('type', PaymentType::PAYMENT)
+                ->where('method', PaymentMethod::CASH)
+                ->max('bill_number') + 1;
         }
     }
 }
