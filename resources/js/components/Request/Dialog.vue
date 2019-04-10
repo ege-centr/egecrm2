@@ -10,10 +10,10 @@
           <v-spacer></v-spacer>
           <TitleCredentials :item='item'/>
           <v-toolbar-items>
-            <v-btn dark flat v-if='edit_mode' @click.native="destroy" :loading='destroying'>
+            <v-btn dark icon v-if='edit_mode' @click.native="destroy" :loading='destroying'>
               <v-icon>delete</v-icon>
             </v-btn>
-            <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>
+            <v-btn dark icon @click.native="storeOrUpdate" :loading='saving'>
               <v-icon>{{ edit_mode ? 'save' : 'add' }}</v-icon>
             </v-btn>
           </v-toolbar-items>

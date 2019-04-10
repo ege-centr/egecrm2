@@ -4,7 +4,7 @@
     <display-list 
       :dialog-component='Dialog'
       :items='items'
-      :model-defaults='MODEL_DEFAULTS'
+      :model-defaults='modelDefaults'
       add-btn-label='добавить акт'
       ref='DisplayList'
     >
@@ -78,15 +78,27 @@ export default {
       type: Array,
       required: true
     },
+
+    groupId: {
+      type: Number,
+      required: true,
+    }
   },
 
   components: { DisplayList, Print },
 
   data() {
     return {
-      MODEL_DEFAULTS,
       Dialog,
+      modelDefaults: MODEL_DEFAULTS
     }
   }, 
+
+  created() {
+    this.modelDefaults = {
+      ...MODEL_DEFAULTS, 
+      ...{group_id: this.groupId}
+    }
+  }
 }
 </script>
