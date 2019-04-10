@@ -11,7 +11,7 @@ class Payment extends Model
     use HasCreatedEmail;
 
     protected $fillable = [
-        'category', 'type', 'method', 'date', 'sum', 'year', 'entity_type', 'entity_id', 'card_number', 'is_confirmed'
+        'category', 'type', 'method', 'date', 'sum', 'year', 'entity_type', 'entity_id', 'card_number', 'is_confirmed', 'bill_number'
     ];
 
     public function entity()

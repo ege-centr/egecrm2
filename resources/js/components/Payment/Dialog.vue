@@ -34,6 +34,11 @@
                             <div class='payment-system' :class="'payment-system_' + item.card_number[0]"></div>
                           </div>
                       </div>
+                      <div class='vertical-inputs__input' v-if="item.id && item.method === 'cash' && item.type === 'payment' && item.entity_type === 'App\\Models\\Client\\Client'">
+                        <v-text-field hide-details v-model='item.bill_number' 
+                          label='Номер ПКО' 
+                          v-mask="'#####'"></v-text-field>
+                      </div>
                     </div>
                   </div>
                   <div class='vertical-inputs__input'>

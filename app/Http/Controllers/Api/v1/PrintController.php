@@ -7,7 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Models\{
     Contract\Contract,
     Group\Group,
-    Group\GroupAct
+    Group\GroupAct,
+    Payment\Payment
 };
 
 class PrintController extends Controller
@@ -22,6 +23,12 @@ class PrintController extends Controller
     {
         $contract = Contract::find($params['id']);
         return view('print.contract')->with(compact('contract'));
+    }
+
+    private function payment(array $params)
+    {
+        $payment = Payment::find($params['id']);
+        return view('print.payment')->with(compact('payment'));
     }
 
     private function act(array $params)

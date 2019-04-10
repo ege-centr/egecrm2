@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Resources\Json\Resource;
-use App\Models\Report\Report;
-use App\Observers\{LogsObserver, ReportsObserver};
+use App\Models\{Report\Report, Payment\Payment};
+use App\Observers\{LogsObserver, ReportsObserver, PaymentsObserver};
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Illuminate\Support\Carbon;
@@ -26,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
         });
 
         Report::observe(ReportsObserver::class);
+        Payment::observe(PaymentsObserver::class);
 
         // Bind logs watcher to all models
         $path = realpath(app_path() . '/Models');

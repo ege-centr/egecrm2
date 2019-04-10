@@ -73,19 +73,15 @@
       </v-layout>
 
 
-      <div class='headline mb-2'>
+      <div class='headline mb-4'>
         Рекомендованные цены
       </div>
 
       <v-card>
-        <v-card-text>
+        <v-card-text class='pa-0'>
           <v-container grid-list-xl class="pa-0 ma-0" fluid>
             <v-layout>
               <v-flex md12>
-                <div class='headline'>
-                  
-                </div>
-                
                 <v-data-table hide-headers hide-actions :items='currentYearRecommendedPrices'>
                   <template slot='items' slot-scope="{ item }">
                     <tr>
@@ -110,7 +106,7 @@
       </v-card>
 
 
-      <div class='mb-2 mt-4 flex-items align-center' style='justify-content: space-between'>
+      <div class='mb-4 mt-5 flex-items align-center' style='justify-content: space-between'>
         <div class='headline'>Праздники и экзамены</div>
         <div>
           <AddBtn animated @click.native='add' />
@@ -118,11 +114,11 @@
       </div>
       
       <v-card>
-        <v-card-text>
+        <v-card-text class='pa-0'>
           <v-container grid-list-xl class="pa-0 ma-0" fluid>
             <v-layout>
               <v-flex md12>
-                <v-data-table hide-actions hide-headers :items='currentYearItems' :paginate.sync="sortingOptions" class='mt-3'>
+                <v-data-table hide-actions hide-headers :items='currentYearItems' :paginate.sync="sortingOptions">
                   <template slot='items' slot-scope="{ item }">
                     <td width='300'>
                       {{ item.date | date }}
