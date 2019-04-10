@@ -24,7 +24,6 @@ class LessonsController extends Controller
     public function store(Request $request)
     {
         $item = new Lesson($request->all());
-        $item->price = $item->group->teacher_price;
         $item->save();
         return new LessonResource($item);
     }

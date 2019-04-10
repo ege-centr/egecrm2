@@ -37,9 +37,6 @@
                       :items='lessons' />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-text-field hide-details v-model="item.teacher_price" label="Цена за занятие, руб."></v-text-field>
-                  </div>
-                  <div class='vertical-inputs__input'>
                     <v-text-field hide-details v-model="item.duration" label="Длительность занятия, мин."></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>

@@ -33,11 +33,11 @@
                     <TeacherSelect v-model="item.teacher_id" />
                   </div>
                   <div class='vertical-inputs__input relative' v-if='item.id'>
-                    <DivBlocker v-if="item.status === LESSON_STATUS.PLANNED" />
+                    <!-- <DivBlocker v-if="item.status === LESSON_STATUS.PLANNED" /> -->
                     <v-text-field v-model='item.price' label='Цена' hide-details></v-text-field>
                   </div>
                   <div class='vertical-inputs__input relative' v-if='item.id'>
-                    <DivBlocker v-if="item.status === LESSON_STATUS.PLANNED" />
+                    <!-- <DivBlocker v-if="item.status === LESSON_STATUS.PLANNED" /> -->
                     <v-text-field v-model='item.bonus' label='Бонус' hide-details></v-text-field>
                   </div>
                   <div class="vertical-inputs__input" v-if="item.status !== LESSON_STATUS.CONDUCTED">
