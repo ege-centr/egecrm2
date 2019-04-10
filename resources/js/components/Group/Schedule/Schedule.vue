@@ -47,14 +47,14 @@
                 </td>
                 <td class='text-md-right'>
                   <div v-if='readonly'>
-                    <v-btn slot='activator' flat icon small color="black" class='ma-0' 
+                    <v-btn slot='activator' flat icon color="black" class='ma-0' 
                       v-if='item.status !== LESSON_STATUS.CANCELLED'
                       @click='$refs.ConductDialog.open(item.id)'>
                       <v-icon>more_horiz</v-icon>
                     </v-btn>
                   </div>
                   <v-menu v-else>
-                    <v-btn slot='activator' flat icon small color="black" class='ma-0'>
+                    <v-btn slot='activator' flat icon color="black" class='ma-0'>
                       <v-icon>more_horiz</v-icon>
                     </v-btn>
                     <v-list dense>
@@ -78,28 +78,21 @@
                   </v-menu>
                 </td>
               </template>
-              <template slot='footer' v-if='!readonly'>
+              <template slot='footer' v-if='!readonly && items.length > 0'>
                 <tr>
-                  <td colspan='10' class='pa-0 text-md-center'>
-                    <v-btn slot='activator' small flat color='primary' class='btn-tr' 
-                      @click='$refs.LessonDialog.open(null, {
-                          group_id: group.id,
-                          year: group.year,
-                      })'
-                      v-if='lastPlannedLesson === null' >
-                        <v-icon class="mr-1">add</v-icon>
-                        добавить
+                  <td colspan='10' class='text-md-right'>
+                    <v-btn slot='activator' flat icon color='primary' class='mx-0'
+                      @click='addLesson()'
+                      v-if='lastPlannedLesson === null'
+                    >
+                      <v-icon>add</v-icon>
                     </v-btn>
-                    <v-menu style='width: 100%' v-else>
-                      <v-btn slot='activator' small flat color='primary' class='btn-tr' :loading='filling'>
-                        <v-icon class="mr-1">add</v-icon>
-                        добавить
+                    <v-menu v-else>
+                      <v-btn slot='activator' flat icon color='primary' :loading='filling' class='mx-0'>
+                        <v-icon>add</v-icon>
                       </v-btn>
                       <v-list dense>
-                        <v-list-tile @click='$refs.LessonDialog.open(null, {
-                          group_id: group.id,
-                          year: group.year,
-                        })'>
+                        <v-list-tile @click='addLesson()'>
                           <v-list-tile-title>
                             добавить 1 занятие
                           </v-list-tile-title>
@@ -115,7 +108,9 @@
                 </tr>
               </template>
               <template slot='no-data'>
-                <NoData />
+                <NoData>
+                  <AddBtn label='добавить занятие' @click.native='addLesson()' />
+                </NoData>
               </template>
             </v-data-table>
           </v-flex>
@@ -172,6 +167,13 @@ export default {
         }
       }).then(r => {
         this.items = r.data
+      })
+    },
+
+    addLesson() {
+      this.$refs.LessonDialog.open(null, {
+        group_id: this.group.id,
+        year: this.group.year,
       })
     },
 

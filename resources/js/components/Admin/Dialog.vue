@@ -53,30 +53,89 @@
               <v-flex md12 class='headline'>
                 IP адреса
               </v-flex>
-              <v-flex md12 py-0>
-                  <div v-for="(ip, index) in item.ips" :key='ip.id' class='ip-item'>
-                    <v-btn flat icon color="red" class='ma-0 mr-3' @click='item.ips.splice(index, 1)'>
-                      <v-icon>remove</v-icon>
-                    </v-btn>
-                    <v-text-field v-model="ip.ip_from"
-                      placeholder='0.0.0.0' style='width: 150px'></v-text-field>
-                    <span class='mx-2'>–</span>
-                    <v-text-field v-model="ip.ip_to" placeholder='255.255.255.255' style='width: 150px'></v-text-field>
-                    <v-switch class='ml-3'
-                     v-model="ip.confirm_by_sms"
-                     label="подтверждение по sms"
-                     color="success"
-                     hide-details
-                   ></v-switch>
+              <v-flex md12>
+                <div style='width: 700px'>
+                  <v-data-table
+                    v-if='item.ips.length > 0'
+                    class='relative-table'
+                    :headers="[
+                      {text: 'IP от', sortable: false},
+                      {text: 'IP до', sortable: false},
+                      {text: 'Подтверждение по СМС', sortable: false},
+                      {text: '', sortable: false},
+                    ]"
+                    :items='item.ips'
+                    hide-actions
+                  >
+                    <template v-slot:items='{ item, index }'>
+                      <tr>
+                        <td width='150'>
+                          <v-edit-dialog
+                            :return-value.sync="item.ip_from"
+                            lazy
+                          > 
+                            <v-btn small flat v-if="!item.ip_from" fab class='edit-inside-table'>
+                              <v-icon>edit</v-icon>
+                            </v-btn>
+                            <span v-else>{{ item.ip_from }}</span>
+                            <v-text-field
+                              slot="input"
+                              v-model="item.ip_from"
+                              single-line
+                              placeholder='0.0.0.0'
+                            ></v-text-field>
+                          </v-edit-dialog>
+                        </td>
+                        <td width='150'>
+                          <v-edit-dialog
+                            :return-value.sync="item.ip_to"
+                            lazy
+                          > 
+                            <v-btn small flat v-if="!item.ip_to" fab class='edit-inside-table'>
+                              <v-icon>edit</v-icon>
+                            </v-btn>
+                            <span v-else>{{ item.ip_to }}</span>
+                            <v-text-field
+                              slot="input"
+                              placeholder='255.255.255.255'
+                              v-model="item.ip_to"
+                              single-line
+                            ></v-text-field>
+                          </v-edit-dialog>
+                        </td>
+                        <td width='200'>
+                          <v-switch class='ml-3'
+                            v-model="item.confirm_by_sms"
+                            color="success"
+                            hide-details
+                          ></v-switch>
+                        </td>
+                        <td class='text-sm-right'>
+                          <v-btn flat icon color="red" class='ma-0' @click='removeIp(index)'>
+                            <v-icon>remove</v-icon>
+                          </v-btn>
+                        </td>
+                      </tr>
+                    </template>
+                    <template v-slot:footer>
+                      <tr>
+                        <td colspan='3'></td>
+                        <td class='text-sm-right'>
+                          <v-btn color='primary' flat icon class='ma-0' @click='addIp()'>
+                            <v-icon>add</v-icon>
+                          </v-btn>
+                        </td>
+                      </tr>
+                    </template>
+                  </v-data-table>
+                  <NoData v-else>
+                    <AddBtn @click.native='addIp()' />
+                  </NoData>
                 </div>
               </v-flex>
-              <v-flex md12>
-                <v-btn color='primary' small class='ma-0' @click="item.ips.push({})">
-                  <v-icon class="mr-1">add</v-icon>
-                  добавить IP
-                </v-btn>
-              </v-flex>
               
+
+
               <v-flex md12 class='headline'>
                 Права
               </v-flex>
@@ -125,7 +184,7 @@
 <script>
 
 import { ROLES } from '@/config'
-import { MODEL_DEFAULTS, API_URL } from './'
+import { MODEL_DEFAULTS, IP_MODEL_DEFAULTS, API_URL } from './'
 import VueCropper from 'vue-cropperjs'
 import AvatarLoader from '@/components/AvatarLoader'
 import PhoneEdit from '@/components/Phone/Edit'
@@ -154,9 +213,17 @@ export default {
   methods: {
     add() {
       this.dialog = true
-      this.item = {...MODEL_DEFAULTS}
+      this.item = _.clone(MODEL_DEFAULTS)
     },
     
+    addIp() {
+      this.item.ips.push(_.clone(IP_MODEL_DEFAULTS))
+    },
+
+    removeIp(index) {
+      this.item.ips.splice(index, 1)
+    },
+
     toggleRight(right) {
       const index = this.item.rights.indexOf(right)
       if (index === -1) {

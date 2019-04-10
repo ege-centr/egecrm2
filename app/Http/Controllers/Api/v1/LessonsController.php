@@ -4,7 +4,14 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\{Lesson\Lesson, Lesson\ClientLesson, Teacher, Client\Client, Group\Group};
+use App\Models\{
+    Lesson\Lesson,
+    Lesson\ClientLesson,
+    Teacher,
+    Client\Client,
+    Group\Group,
+    Contract\Contract
+};
 use App\Http\Resources\Lesson\{LessonResource, LessonCollection};
 use User;
 
@@ -63,23 +70,37 @@ class LessonsController extends Controller
     public function conduct($id, Request $request)
     {
         $lesson = Lesson::find($id);
-        $group = Group::find($lesson->group_id);
         $lesson->status = 'conducted';
         $lesson->conducted_at = now()->format(DATE_TIME_FORMAT);
         $lesson->conducted_email_id = User::emailId();
         $lesson->topic = $request->topic;
         $lesson->save();
 
-        foreach ($request->clients as $client) {
+        foreach ($request->clients as $c) {
+            $client = Client::find($c['id']);
+
+            // Получаем $price для текущего ученика
+            // Находим активный договор по данному учебному году, по данному классу
+            // Получаем общее кол-во предметов, получаем сумму договора, умножаем всё на скидку
+            $lastContract = $client
+                ->contracts()
+                ->active()
+                ->where('year', $lesson->group->year)
+                ->where('grade_id', $lesson->group->grade_id)
+                ->first();
+
+            // TODO: посчитать price
+
             ClientLesson::create([
-                'client_id' => $client['id'],
+                Client
+                'client_id' => $c['id'],
                 'lesson_id' => $id,
                 // TODO: take price and grade from contracts
                 'grade_id' => Client::whereId($client['id'])->value('grade_id'),
                 'price' => 1600,
-                'is_absent' => isset($client['is_absent']) && $client['is_absent'] === true,
-                'late' => isset($client['late']) ? $client['late'] : null,
-                'comment' => isset($client['comment']) ? $client['comment'] : '',
+                'is_absent' => isset($c['is_absent']) && $c['is_absent'] === true,
+                'late' => isset($c['late']) ? $c['late'] : null,
+                'comment' => isset($c['comment']) ? $c['comment'] : '',
             ]);
         }
 

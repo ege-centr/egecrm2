@@ -167,7 +167,7 @@
                     <tr>
                       <td colspan='3'></td>
                       <td class='text-sm-right'>
-                        <v-btn flat icon class='ma-0' @click='addPayment'>
+                        <v-btn color='primary' flat icon class='ma-0' @click='addPayment'>
                           <v-icon>add</v-icon>
                         </v-btn>
                       </td>

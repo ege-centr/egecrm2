@@ -114,10 +114,11 @@
                 </template>
                 <template slot='footer' v-if='$store.state.user.class === ROLES.ADMIN'>
                   <tr>
-                    <td colspan='7' class='pa-0 text-md-center'>
-                      <v-btn small flat color='primary' class='btn-tr' @click='$refs.AddClientDialog.open()'>
-                        <v-icon class="mr-1">add</v-icon>
-                        добавить ученика
+                    <td colspan='7' class='text-md-right'>
+                      <v-btn slot='activator' flat icon color='primary' class='mx-0'
+                        @click='$refs.AddClientDialog.open()'
+                      >
+                        <v-icon>add</v-icon>
                       </v-btn>
                     </td>
                   </tr>

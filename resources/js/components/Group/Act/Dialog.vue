@@ -32,6 +32,12 @@
                   <div class='vertical-inputs__input'>
                     <DatePicker label="Дата в акте" v-model='item.date' />
                   </div>
+                  <div class='vertical-inputs__input'>
+                    <DatePicker label="Дата от" v-model='item.date_from' />
+                  </div>
+                  <div class='vertical-inputs__input'>
+                    <DatePicker label="Дата до" v-model='item.date_to' />
+                  </div>
                 </div>
               </v-flex>
             </v-layout>

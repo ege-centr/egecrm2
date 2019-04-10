@@ -9,5 +9,7 @@ class GroupAct extends Model
 {
     use HasCreatedEmail;
 
-    protected $fillable = ['group_id', 'sum', 'lesson_count', 'teacher_id', 'date'];
+    protected $fillable = [
+        'group_id', 'sum', 'lesson_count', 'teacher_id', 'date', 'date_from', 'date_to'
+    ];
 }

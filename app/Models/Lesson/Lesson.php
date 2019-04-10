@@ -21,7 +21,7 @@ class Lesson extends Model
     protected $touches = ['group'];
 
     protected $fillable = [
-        'teacher_id', 'cabinet_id', 'date', 'time', 'price',
+        'teacher_id', 'cabinet_id', 'date', 'time', 'price', 'duration',
         'status', 'is_unplanned', 'group_id', 'bonus', 'topic'
     ];
 

@@ -1,8 +1,14 @@
+export const IP_MODEL_DEFAULTS = {
+  ip_from: '',
+  ip_to: '',
+  confirm_by_sms: false,
+}
+
 export const MODEL_DEFAULTS = {
   rights: [],
   email: {},
   photo: null,
-  ips: [{}],
+  ips: [IP_MODEL_DEFAULTS],
   phones: [{phone: '', comment: ''}]
 }
 

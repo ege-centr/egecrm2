@@ -37,14 +37,19 @@
                       :items='lessons' />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-text-field hide-details v-model="item.duration" label="Длительность занятия, мин."></v-text-field>
-                  </div>
-                  <div class='vertical-inputs__input'>
                     <v-switch class='mt-0'
                       label="Готова к запуску"
                       color="success"
                       hide-details
                       v-model='item.is_ready_to_start'
+                    ></v-switch>
+                  </div>
+                  <div class='vertical-inputs__input'>
+                    <v-switch class='mt-0'
+                      label="Договор заключен"
+                      color="success"
+                      hide-details
+                      v-model='item.is_contract_signed'
                     ></v-switch>
                   </div>
                   <div class='vertical-inputs__input'>

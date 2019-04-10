@@ -28,19 +28,44 @@
     </div>
     <div class='f-1 text-md-right align-center d-flex' v-if='show.edit'>
       <div>
-        <v-btn @click="$emit('open', item.id)" flat icon color="black" class='ma-0'>
-          <v-icon>more_horiz</v-icon>
-        </v-btn>
+        <Print ref='Print' :params="{type: 'teacher'}" />
+        <v-menu left>
+          <v-btn slot='activator' flat icon color="black" class='ma-0'>
+            <v-icon>more_horiz</v-icon>
+          </v-btn>
+          <v-list dense>
+            <v-list-tile @click="$emit('open', item.id)">
+                <v-list-tile-action>
+                  <v-icon>edit</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>Редактировать</v-list-tile-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile @click='$refs.Print.open({id: item.id})'>
+                <v-list-tile-action>
+                  <v-icon>print</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                  <v-list-tile-title>Печать договора на преподавателя</v-list-tile-title>
+                </v-list-tile-content>
+            </v-list-tile>
+          </v-list>
+        </v-menu>
       </div>
     </div>
   </div>
 </template>
 
+
+
 <script>
+
 import BgAvatar from '@/components/UI/BgAvatar'
 import { LEVELS } from '@/components/Group'
 import DisplayOptions from '@/mixins/DisplayOptions'
 import { LESSON_STATUS } from '@/components/Lesson'
+import Print from '@/components/Print'
 
 export default {
   props: {
@@ -52,7 +77,7 @@ export default {
 
   mixins: [ DisplayOptions ],
 
-  components: { BgAvatar },
+  components: { BgAvatar, Print },
 
   data() {
     return {

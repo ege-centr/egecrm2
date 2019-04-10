@@ -25,6 +25,12 @@ class PrintController extends Controller
         return view('print.contract')->with(compact('contract'));
     }
 
+    private function teacher(array $params)
+    {
+        $group = Group::find($params['id']);
+        return view('print.teacher')->with(compact('group'));
+    }
+
     private function payment(array $params)
     {
         $payment = Payment::find($params['id']);
