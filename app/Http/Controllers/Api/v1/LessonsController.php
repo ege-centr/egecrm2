@@ -92,7 +92,6 @@ class LessonsController extends Controller
             // TODO: посчитать price
 
             ClientLesson::create([
-                Client
                 'client_id' => $c['id'],
                 'lesson_id' => $id,
                 // TODO: take price and grade from contracts
