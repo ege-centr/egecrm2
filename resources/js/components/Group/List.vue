@@ -17,9 +17,7 @@
         </span>
       </td>
       <td>
-        <span v-if='item.subject_id'>
-          {{ getData('subjects', item.subject_id).three_letters }}–{{ getData('grades', item.grade_id).short }}
-        </span>
+        <SubjectGrade :item='item' />
       </td>
       <!-- <td>
         <span v-if="item.cabinet">
