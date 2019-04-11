@@ -50,7 +50,7 @@
                 <td width='200'>
                   <BranchList :items='props.item.branches' />
                 </td>
-                <td>
+                <td class='flex-items align-center'>
                   <Timeline :items='group.schedule' />
                   <!-- <Bars :group-bars='item.schedule.bars' :client-bars='props.item.bars' /> -->
                 </td>

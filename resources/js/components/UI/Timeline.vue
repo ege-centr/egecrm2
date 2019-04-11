@@ -1,21 +1,25 @@
 <template>
-  <div class='timeline'>
-    <div 
-      v-for='(item, index) in items' 
-      :key='index' >
-      <v-tooltip bottom>
-        <template v-slot:activator='{ on }'>
-          <div 
-            v-on='on'
-            class="timeline__interval"
-            :style="getGetStyle(item)"
-          >
-          </div>
-        </template>
-        <span>
-          {{ item.start }}–{{ item.end }}
-        </span>
-      </v-tooltip>
+  <div>
+    <div v-for='weekday in weekdays' :key='weekday' :class="{'mr-1': weekday}" class='timeline__wrapper'>
+      <div class='timeline'>
+        <div 
+          v-for='(item, index) in getItemsByWeekday(weekday)' 
+          :key='index' >
+          <v-tooltip bottom>
+            <template v-slot:activator='{ on }'>
+              <div 
+                v-on='on'
+                class="timeline__interval"
+                :style="getGetStyle(item)"
+              >
+              </div>
+            </template>
+            <span>
+              {{ item.start }}–{{ item.end }}
+            </span>
+          </v-tooltip>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -33,6 +37,7 @@ export default {
 
   data() {
     return {
+      weekdays: [1, 2, 3, 4, 5, 6, 0],
       timeMin: '10:00',
       timeMax: '21:00',
       // items: [
@@ -62,6 +67,10 @@ export default {
 
     getPercent(time) {
       return this.getNormalizedTimestamp(time) * 100 / this.maxTimestamp 
+    },
+
+    getItemsByWeekday(weekday) {
+      return this.items.filter(e => e.weekday == weekday)
     }
   },
 
@@ -75,7 +84,7 @@ export default {
 
 <style lang="scss">
 .timeline {
-  height: 18px;
+  height: 12px;
   width: 100%;
   background: #C1D2DD;
   position: relative;
@@ -88,6 +97,11 @@ export default {
     &:hover {
       background: rgb(80, 105, 124);
     }
+  }
+  &__wrapper {
+    display: inline-block;
+    width: 50px;
+    position: relative;
   }
 }
 </style>
