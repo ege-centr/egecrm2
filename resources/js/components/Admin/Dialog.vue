@@ -3,13 +3,15 @@
     <v-dialog v-model="dialog" fullscreen hide-overlay transition="dialog-bottom-transition">
       <v-card>
         <v-toolbar dark color="primary">
-          <v-btn icon dark @click.native="dialog = false">
-            <v-icon>close</v-icon>
-          </v-btn>
           <v-toolbar-title>{{ edit_mode ? 'Редактирование' : 'Добавление' }} пользователя</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ edit_mode ? 'Сохранить' : 'Добавить' }}</v-btn>
+            <v-btn dark icon @click.native="storeOrUpdate" :loading='saving'>
+              <v-icon>save_alt</v-icon>
+            </v-btn>
+            <v-btn icon dark @click.native="dialog = false">
+              <v-icon>close</v-icon>
+            </v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-card-text>

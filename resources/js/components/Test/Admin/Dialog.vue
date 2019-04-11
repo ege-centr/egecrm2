@@ -3,13 +3,18 @@
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card>
         <v-toolbar dark color="primary">
-          <v-btn icon dark @click.native="dialog = false">
-            <v-icon>close</v-icon>
-          </v-btn>
           <v-toolbar-title>{{ true ? 'Редактирование' : 'Добавление' }} теста</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ true ? 'Сохранить' : 'Добавить' }}</v-btn>
+            <v-btn dark icon v-if='edit_mode' @click.native="destroy" :loading='destroying' class='mr-5'>
+              <v-icon>delete</v-icon>
+            </v-btn>
+            <v-btn dark icon @click.native="storeOrUpdate" :loading='saving'>
+              <v-icon>save_alt</v-icon>
+            </v-btn>
+            <v-btn icon dark @click.native="dialog = false">
+              <v-icon>close</v-icon>
+            </v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-card-text class='relative test-dialog'>

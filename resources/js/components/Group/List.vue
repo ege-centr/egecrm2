@@ -27,7 +27,7 @@
         </span>
       </td> -->
       <td>
-        {{ item.schedule_label }}
+        <ScheduleString :items='item.schedule' />
       </td>
       <td>
         <span v-if='item.client_ids.length > 0'>
@@ -50,6 +50,7 @@
 <script>
 
 import DisplayOptions from '@/mixins/DisplayOptions'
+import ScheduleString from '@/components/Group/ScheduleString'
 
 export default {
   props: {
@@ -64,6 +65,8 @@ export default {
       required: false,
     }
   },
+
+  components: { ScheduleString },
 
   mixins: [ DisplayOptions ],
 

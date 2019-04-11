@@ -17,9 +17,11 @@
           <v-toolbar-title>Отправка email</v-toolbar-title>
             <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark flat :loading='sending' @click='send'>
-              <!-- <v-icon>send</v-icon> -->
-              отправить
+            <v-btn dark icon @click="send" :loading='sending'>
+              <v-icon>send</v-icon>
+            </v-btn>
+            <v-btn icon dark @click.native="dialog = false">
+              <v-icon>close</v-icon>
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>

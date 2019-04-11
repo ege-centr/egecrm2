@@ -51,68 +51,40 @@ class Group extends Model
         return $this->belongsTo(Subject::class);
     }
 
-    public function toSearchableArray()
-    {
-        $lessons = collect($this->lessons()->notCancelled()->get());
-        $schedule = $this->getSchedule();
-        return [
-            'id' => $this->id,
-            'grade_id' => $this->grade_id,
-            'subject_id' => $this->subject_id,
-            'year' => $this->year,
-            'teacher_id' => $this->teacher_id,
-            'client_ids' => GroupClient::where('group_id', $this->id)->pluck('client_id'),
-            'lessons_count' => $lessons->count(),
-            'lessons_conducted_count' => $lessons->where('status', 'conducted')->count(),
-            'first_lesson_date' => $lessons->count() > 0 ? $lessons->sortBy('date')->first()->date : null,
-            'schedule_label' => $schedule !== null ? $schedule['label'] : null,
-        ];
-    }
+    // public function toSearchableArray()
+    // {
+    //     $lessons = collect($this->lessons()->notCancelled()->get());
+    //     $schedule = $this->getSchedule();
+    //     return [
+    //         'id' => $this->id,
+    //         'grade_id' => $this->grade_id,
+    //         'subject_id' => $this->subject_id,
+    //         'year' => $this->year,
+    //         'teacher_id' => $this->teacher_id,
+    //         'client_ids' => GroupClient::where('group_id', $this->id)->pluck('client_id'),
+    //         'lessons_count' => $lessons->count(),
+    //         'lessons_conducted_count' => $lessons->where('status', 'conducted')->count(),
+    //         'first_lesson_date' => $lessons->count() > 0 ? $lessons->sortBy('date')->first()->date : null,
+    //         'schedule_label' => $schedule !== null ? $schedule['label'] : null,
+    //     ];
+    // }
 
     public function getSchedule()
     {
-        if (! $this->year) {
-            return null;
-        }
-        $weekday_intervals = [
-            [10, 11],
-            [12, 15],
-            [16, 17],
-            [17, 18],
-            [18, 19]
-        ];
-        $weekend_intervals = [
-            [10, 11],
-            [12, 13],
-            [14, 15],
-            [17, 18]
-        ];
-        $bars = [];
-        $labels = [];
-        foreach(Time::WEEKDAYS as $weekday => $label) {
-            $intervals = $weekday >= 6 ? $weekend_intervals : $weekday_intervals;
-            foreach($intervals as $interval) {
-                $result = Lesson::join('groups', 'groups.id', '=', 'lessons.group_id')
-                    ->selectRaw('time, count(*) as cnt')
-                    ->whereRaw("
-                        lessons.is_unplanned=0 AND
-                        lessons.status <> 'cancelled' AND
-                        lessons.group_id={$this->id} AND
-                        groups.year={$this->year} AND
-                        lessons.time BETWEEN '{$interval[0]}:00:00' AND '{$interval[1]}:00:00' AND
-                        DATE_FORMAT(lessons.date, '%w') = " . ($weekday == 7 ? 0 : $weekday))
-                    ->first();
+        $result = Lesson::query()
+            ->selectRaw("DATE_FORMAT(lessons.date, '%w') as `weekday`, `time`, `duration`, count(*) as `count`")
+            ->where('group_id', $this->id)
+            ->groupBy('weekday', 'time', 'duration')
+            ->having('count', '>', 1)
+            ->get()
+            ->all();
 
-                // bars заполняем даже в случае с null
-                $bars[$weekday][] = $result->time;
-                if ($result->cnt >= 2) {
-                    $labels[] = "{$label} в {$result->time}";
-                }
-            }
-        }
-        return [
-            'bars' => $bars,
-            'label' => implode(', ', $labels)
-        ];
+        return array_map(function ($item) {
+            return [
+                'start' => $item->time,
+                'end' => (new \DateTime($item->time))->modify("+{$item->duration} minutes")->format("H:i"),
+                'weekday' => $item->weekday,
+            ];
+        }, $result);
     }
 }

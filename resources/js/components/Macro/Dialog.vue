@@ -3,13 +3,15 @@
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay content-class='overflow-hidden'>
       <v-card>
         <v-toolbar dark color="primary">
-          <v-btn icon dark @click.native="dialog = false">
-            <v-icon>close</v-icon>
-          </v-btn>
           <v-toolbar-title>Редактировать макрос «{{ filename }}»</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark flat @click.native="save" :loading='saving'>Сохранить</v-btn>
+            <v-btn dark icon @click.native="save" :loading='saving'>
+              <v-icon>save_alt</v-icon>
+            </v-btn>
+            <v-btn icon dark @click.native="dialog = false">
+              <v-icon>close</v-icon>
+            </v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-card-text style='padding-top: 76px'>

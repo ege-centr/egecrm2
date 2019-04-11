@@ -51,7 +51,8 @@
                   <BranchList :items='props.item.branches' />
                 </td>
                 <td>
-                  <Bars :group-bars='item.schedule.bars' :client-bars='props.item.bars' />
+                  <Timeline :items='group.schedule' />
+                  <!-- <Bars :group-bars='item.schedule.bars' :client-bars='props.item.bars' /> -->
                 </td>
                 <td class='text-md-right' style='padding-right: 16px'>
                   <v-menu>
@@ -151,12 +152,13 @@ import Comments from '@/components/Comments'
 import { SUBJECT_STATUSES } from '@/components/Contract'
 import BranchList from '@/components/UI/BranchList'
 import GroupInfo from '@/components/Group/Info'
+import Timeline from '@/components/UI/Timeline'
 
 
 export default {
   components: { 
     DisplayData, GroupSchedule, Bars, Visits, GroupDialog, MoveClientDialog, GroupActList, 
-    GroupActDialog, Comments, BranchList, GroupInfo 
+    GroupActDialog, Comments, BranchList, GroupInfo, Timeline
   },
 
   data() {
@@ -194,6 +196,12 @@ export default {
 
     moveClient(client) {
       this.$refs.MoveClientDialog.open(this.item, client)
+    },
+  },
+
+  computed: {
+    group() {
+      return this.item
     },
   }
 }

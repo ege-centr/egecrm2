@@ -3,13 +3,15 @@
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card v-if='clientId !== null' class='grey-background'>
         <v-toolbar dark color="primary">
-          <v-btn icon dark @click.native="dialog = false">
-            <v-icon>close</v-icon>
-          </v-btn>
           <v-toolbar-title>Перенос клиента в другую группу</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark flat @click.native="move" :disabled='selected_group_id === null' :loading='saving'>Перенести</v-btn>
+            <v-btn dark flat @click.native="move" :disabled='selected_group_id === null' :loading='saving'>
+              <v-icon>compare_arrows</v-icon>
+            </v-btn>
+            <v-btn icon dark @click.native="dialog = false">
+              <v-icon>close</v-icon>
+            </v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-card-text class='relative'>

@@ -79,22 +79,23 @@ class Client extends Model implements UserInterface
 
     public function getBars()
     {
-        $client_bars = null;
-        foreach($this->groups as $group) {
-            $group_bars = $group->getSchedule()['bars'];
-            if ($client_bars === null) {
-                $client_bars = $group_bars;
-            } else {
-                foreach($group_bars as $i => $bars) {
-                    foreach($bars as $j => $bar) {
-                        if ($bar !== null && $client_bars[$i][$j] === null) {
-                            $client_bars[$i][$j] = $bar;
-                        }
-                    }
-                }
-            }
-        }
-        return $client_bars;
+        return null;
+        // $client_bars = null;
+        // foreach($this->groups as $group) {
+        //     $group_bars = $group->getSchedule()['bars'];
+        //     if ($client_bars === null) {
+        //         $client_bars = $group_bars;
+        //     } else {
+        //         foreach($group_bars as $i => $bars) {
+        //             foreach($bars as $j => $bar) {
+        //                 if ($bar !== null && $client_bars[$i][$j] === null) {
+        //                     $client_bars[$i][$j] = $bar;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+        // return $client_bars;
     }
 
     public function getSubjectStatus($year, $grade_id, $subject_id)

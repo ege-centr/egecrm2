@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\{Group\Group, Lesson};
 use DB;
-use App\Http\Resources\Group\{Collection as GroupCollection, Resource as GroupResource};
+use App\Http\Resources\Group\{GroupCollection, GroupResource};
 
 class GroupsController extends Controller
 {
@@ -17,28 +17,29 @@ class GroupsController extends Controller
 
     public function index(Request $request)
     {
-        $query = Group::search()->with([
-            'facets' => ['*']
-        ]);
-        $this->filter($request, $query);
-        return $query->paginateRaw($request->paginate);
-        // $query = Group::with(['lessons'])->orderBy('id', 'desc');
-
+        // $query = Group::search()->with([
+        //     'facets' => ['*']
+        // ]);
         // $this->filter($request, $query);
+        // return $query->paginateRaw($request->paginate);
 
-        // if (isset($request->group_id) && $request->group_id) {
-        //     $query->where('id', '<>', $request->group_id);
-        // }
+        $query = Group::with(['lessons'])->orderBy('id', 'desc');
 
-        // if (isset($request->client_id) && $request->client_id) {
-        //     $query->whereExists(function ($query) use ($request) {
-        //         $query->select(DB::raw(1))
-        //             ->from('group_clients')
-        //             ->whereRaw('group_clients.group_id = groups.id AND group_clients.client_id = ' . $request->client_id);
-        //     });
-        // }
+        $this->filter($request, $query);
 
-        // return GroupCollection::collection($query->paginate(100));
+        if (isset($request->group_id) && $request->group_id) {
+            $query->where('id', '<>', $request->group_id);
+        }
+
+        if (isset($request->client_id) && $request->client_id) {
+            $query->whereExists(function ($query) use ($request) {
+                $query->select(DB::raw(1))
+                    ->from('group_clients')
+                    ->whereRaw('group_clients.group_id = groups.id AND group_clients.client_id = ' . $request->client_id);
+            });
+        }
+
+        return GroupCollection::collection($this->showBy($request, $query));
     }
 
     public function store(Request $request)

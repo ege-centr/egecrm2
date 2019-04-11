@@ -191,7 +191,7 @@
 
         <!-- Группы -->
         <v-tab-item>
-          <DisplayDataAlgolia ref='GroupPage'
+          <DisplayData ref='GroupPage'
             :tabs='true'
             :api-url='GROUP_API_URL' 
             :invisible-filters="{client_ids: $route.params.id}"
@@ -199,7 +199,7 @@
             <template slot='items' slot-scope='{ items }'>
               <GroupList :items='items' />
             </template>
-          </DisplayDataAlgolia>
+          </DisplayData>
           <GroupNotAssignedList style='position: relative; top: -24px' 
             v-if='$refs.GroupPage && $refs.ContractPage'
             :year="getGroupPageSelectedTab()"
@@ -309,7 +309,6 @@ import EmailShow from '@/components/Email/Show'
 import BranchList from '@/components/UI/BranchList'
 import { TestAdminClientList } from '@/components/Test'
 import { DisplayData } from '@/components/UI'
-import DisplayDataAlgolia from '@/components/UI/DisplayDataAlgolia'
 import { API_URL as GROUP_API_URL } from '@/components/Group'
 import GroupList from '@/components/Group/List'
 
@@ -369,7 +368,7 @@ export default {
   components: { 
     RequestDialog, RequestItem, Comments, ContractList, GroupList, GroupNotAssignedList, 
     PaymentList, ClientDialog, PhoneList, BranchList, EmailShow, TestAdminClientList,
-    DisplayData, DisplayDataAlgolia, PaymentDialog, ClientSchedule, Balance, ReportList,
+    DisplayData, PaymentDialog, ClientSchedule, Balance, ReportList,
     ReviewAdminList, PaymentAdditionalList, PaymentAdditionalDialog,
   },
 

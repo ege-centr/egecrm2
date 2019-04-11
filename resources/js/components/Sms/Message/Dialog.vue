@@ -3,14 +3,15 @@
     <v-dialog v-model="dialog" scrollable transition="dialog-bottom-transition" fullscreen hide-overlay content-class='email-dialog'>
       <v-card>
         <v-toolbar dark color="primary">
-          <v-btn icon dark @click.native="dialog = false">
-            <v-icon>close</v-icon>
-          </v-btn>
+          
           <v-toolbar-title>Отправка смс <span v-if='!customInput'>на {{ phone }}</span></v-toolbar-title>
             <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark flat :loading='sending' @click='send' :disabled="phone.length !== 18 || text.length === 0">
-              отправить
+            <v-btn icon dark  :loading='sending' @click='send' :disabled="phone.length !== 18 || text.length === 0">
+              <v-icon>send</v-icon>
+            </v-btn>
+            <v-btn icon dark @click.native="dialog = false">
+              <v-icon>close</v-icon>
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>

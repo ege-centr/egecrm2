@@ -7,7 +7,7 @@ use App\Http\Resources\Teacher\Resource as TeacherResource;
 use App\Http\Resources\Client\GroupCollection as ClientCollection;
 use App\Http\Resources\Lesson\LessonResource;
 
-class Resource extends JsonResource
+class GroupResource extends JsonResource
 {
     public function toArray($request)
     {

@@ -89,14 +89,23 @@ class LessonsController extends Controller
                 ->where('grade_id', $lesson->group->grade_id)
                 ->first();
 
-            // TODO: посчитать price
+            // А что если догавар не нашелся?
+            if ($lastContract === null) {
+                $grade_id = null;
+                $price = null;
+            } else {
+                $price = $lastContract->sum / $lastContract->subjects()->sum('lessons');
+                if ($lastContract->discount > 0) {
+                    $price = (100 - $lastContract->discount) / 100 * $price;
+                }
+                $grade_id = $lastContract->grade_id;
+            }
 
             ClientLesson::create([
                 'client_id' => $c['id'],
                 'lesson_id' => $id,
-                // TODO: take price and grade from contracts
-                'grade_id' => Client::whereId($client['id'])->value('grade_id'),
-                'price' => 1600,
+                'grade_id' => $grade_id,
+                'price' => $price,
                 'is_absent' => isset($c['is_absent']) && $c['is_absent'] === true,
                 'late' => isset($c['late']) ? $c['late'] : null,
                 'comment' => isset($c['comment']) ? $c['comment'] : '',

@@ -1,11 +1,14 @@
 <template>
   <div>
-    <div class='headline'>DEV</div>
+    <div class='headline mb-5'>DEV1</div>
+
+    <Timeline />
+
     <!-- <AddBtn label='Добавить' animated /> -->
-    <div class='outer'>
+    <!-- <div class='outer'>
       <div class='inner'>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -13,7 +16,11 @@
 
 <script>
 
+import Timeline from '@/components/UI/Timeline'
+
 export default {
+  components: { Timeline },
+  
   data() {
     return {
      

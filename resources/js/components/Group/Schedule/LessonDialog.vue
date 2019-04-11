@@ -3,15 +3,19 @@
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card>
         <v-toolbar dark color="primary">
-          <v-btn icon dark @click.native="dialog = false">
-            <v-icon>close</v-icon>
-          </v-btn>
           <v-toolbar-title>{{ edit_mode ? 'Редактирование' : 'Добавление' }} занятия</v-toolbar-title>
           <v-spacer></v-spacer>
           <TitleCredentials v-if='item && item.status === LESSON_STATUS.CONDUCTED' :item='item' user-field='conductedUser' time-field='conducted_at' />
           <v-toolbar-items>
-            <v-btn dark flat v-if='edit_mode' @click.native="destroy" :loading='destroying'>Удалить</v-btn>
-            <v-btn dark flat @click.native="storeOrUpdate" :loading='saving'>{{ edit_mode ? 'Сохранить' : 'Добавить' }}</v-btn>
+            <v-btn dark icon v-if='edit_mode' @click.native="destroy" :loading='destroying' class='mr-5'>
+              <v-icon>delete</v-icon>
+            </v-btn>
+            <v-btn dark icon @click.native="storeOrUpdate" :loading='saving'>
+              <v-icon>save_alt</v-icon>
+            </v-btn>
+            <v-btn icon dark @click.native="dialog = false">
+              <v-icon>close</v-icon>
+            </v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-card-text>

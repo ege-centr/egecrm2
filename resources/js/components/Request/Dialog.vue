@@ -11,7 +11,7 @@
               <v-icon>delete</v-icon>
             </v-btn>
             <v-btn dark icon @click.native="storeOrUpdate" :loading='saving'>
-              <v-icon>{{ edit_mode ? 'save_alt' : 'add' }}</v-icon>
+              <v-icon>save_alt</v-icon>
             </v-btn>
             <v-btn icon dark @click.native="dialog = false">
               <v-icon>close</v-icon>

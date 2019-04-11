@@ -4,23 +4,26 @@
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay content-class='conduct-dialog'>
       <v-card>
         <v-toolbar dark color="primary">
-          <v-btn icon dark @click.native="dialog = false">
-            <v-icon>close</v-icon>
-          </v-btn>
           <v-toolbar-title>
             Проводка занятия
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items v-if='item !== null'>
-            <!-- <v-btn dark flat v-if='edit_mode' @click.native="destroy" :loading='destroying'>Удалить</v-btn> -->
             <v-btn dark flat @click.native="conduct" 
               v-if="item.status === LESSON_STATUS.PLANNED"
-              :loading='conducting'>Провести</v-btn>
+              :loading='conducting'>
+              <v-icon>assignment</v-icon>
+            </v-btn>
             <v-btn dark flat 
               v-if="item.status === LESSON_STATUS.CONDUCTED"
               @click.native="storeOrUpdate" 
               :disabled='cantEdit'
-              :loading='saving'>Сохранить</v-btn>
+              :loading='saving'>
+                <v-icon>save_alt</v-icon>
+            </v-btn>
+            <v-btn icon dark @click.native="dialog = false">
+              <v-icon>close</v-icon>
+            </v-btn>
           </v-toolbar-items>
         </v-toolbar>
         <v-card-text class='px-0'>

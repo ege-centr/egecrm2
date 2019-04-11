@@ -18,7 +18,7 @@
       <span v-if='item.subject_id' class='text-capitalize'>{{ getData('subjects', item.subject_id).name }}</span>
       <span v-if='item.grade_id'>, {{ getData('grades', item.grade_id).title }}</span>
       <div class='mt-3 item-label'>Расписание</div>
-      <span>{{ item.schedule.label }}</span>
+      <ScheduleString :items='item.schedule' />
     </div>
     <div class='mr-5 pr-5'>
       <div class='item-label'>Учебный год</div>
@@ -66,6 +66,7 @@ import { LEVELS } from '@/components/Group'
 import DisplayOptions from '@/mixins/DisplayOptions'
 import { LESSON_STATUS } from '@/components/Lesson'
 import Print from '@/components/Print'
+import ScheduleString from '@/components/Group/ScheduleString'
 
 export default {
   props: {
@@ -77,7 +78,7 @@ export default {
 
   mixins: [ DisplayOptions ],
 
-  components: { BgAvatar, Print },
+  components: { BgAvatar, Print, ScheduleString },
 
   data() {
     return {

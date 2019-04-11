@@ -1,6 +1,6 @@
 <template>
   <div>
-    <DisplayDataAlgolia 
+    <DisplayData 
       :tabs='true'
       :api-url='API_URL' 
       :paginate='30' 
@@ -8,18 +8,18 @@
       <template slot='items' slot-scope="{ items }">
         <GroupList :items='items' />
       </template>
-    </DisplayDataAlgolia>
+    </DisplayData>
   </div>
 </template>
 
 <script>
 
-import DisplayDataAlgolia from '@/components/UI/DisplayDataAlgolia'
+import DisplayData from '@/components/UI/DisplayData'
 import { API_URL } from '@/components/Group'
 import GroupList from '@/components/Group/List'
 
 export default {
-  components: { DisplayDataAlgolia, GroupList },
+  components: { DisplayData, GroupList },
   
   data() {
     return {
