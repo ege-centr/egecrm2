@@ -1,5 +1,7 @@
 <template>
-  <v-btn fab dark small color="red">
+  <v-btn fab dark small color="red" :class="{
+    'add-btn_absolute': absolute === '',
+  }">
     <v-icon dark>add</v-icon>
   </v-btn>
   <!-- <div class='add-btn' :class="{

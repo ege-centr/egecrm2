@@ -135,16 +135,20 @@ export default {
       height: $height + 10px;
       top: -5px;
     }
+    &::before {
+      content: '';
+    }
     &:hover {
-      // .timeline__interval::before {
-      //   content: '';
-      //   position: absolute;
-      //   background: black;
-      //   left: 0;
-      //   top: 0;
-      //   width: 100%;
-      //   height: 100%;
-      // }
+
+      .timeline__interval::before {
+        content: '123';
+        // position: absolute;
+        // background: black;
+        // left: 0;
+        // top: 0;
+        // width: 100%;
+        // height: 100%;
+      }
       background: rgb(80, 105, 124);
     }
   }

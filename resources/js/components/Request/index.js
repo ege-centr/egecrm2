@@ -16,7 +16,7 @@ export const MODEL_DEFAULTS = {
 export const FILTERS = [
   {label: 'Статус', field: 'status', type: 'multiple', options: REQUEST_STATUSES},
   {label: 'Класс', field: 'grade_id', type: 'multiple', options: store.state.data.grades},
-  {label: 'Ответственный', field: 'responsible_admin_id', type: 'admin'},
+  {label: 'Ответственный', field: 'responsible_admin_id', type: 'admin', valueField: 'email_id'},
   {label: 'Пользователь', field: 'created_email_id', type: 'admin', valueField: 'email_id'},
   {label: 'Период', field: 'created_at', type: 'interval'}
 ]

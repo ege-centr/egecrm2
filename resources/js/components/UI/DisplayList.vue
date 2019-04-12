@@ -13,7 +13,7 @@
       </template>
       <template slot='no-data'>
         <no-data>
-          <AddBtn :label='addBtnLabel' @click.native='add' />
+          <AddBtn v-if='addBtn' :label='addBtnLabel' @click.native='add' />
         </no-data>
       </template>
     </v-data-table>
