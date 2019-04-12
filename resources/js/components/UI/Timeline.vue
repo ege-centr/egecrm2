@@ -110,7 +110,7 @@ export default {
 
 <style lang="scss">
 .timeline {
-  $height: 14px;
+  $height: 12px;
   height: $height;
   width: 100%;
   background: #C1D2DD;
