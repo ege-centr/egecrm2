@@ -6,7 +6,7 @@
           <v-toolbar-title>Перенос клиента в другую группу</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark flat @click.native="move" :disabled='selected_group_id === null' :loading='saving'>
+            <v-btn dark icon @click.native="move" :disabled='selected_group_id === null' :loading='saving'>
               <v-icon>compare_arrows</v-icon>
             </v-btn>
             <v-btn icon dark @click.native="dialog = false">
@@ -77,17 +77,22 @@ export default {
         filters.group_id = this.group_id
       }
       axios.get(apiUrl(API_URL) + queryString(filters)).then(r => {
-        this.groups = r.data.data.hits
+        this.groups = r.data.data
         this.loading = false
       })
     },
 
     async move() {
-      this.$emit('moved', this.clientId)
       this.saving = true
       await axios.post(apiUrl(GROUP_CLIENTS_API_URL), {
         group_id: this.selected_group_id,
         client_id: this.clientId,
+      })
+      .then(r => {
+        this.$emit('moved', this.clientId)
+      })
+      .catch(e => {
+        this.$store.commit('message', { text: 'Ученик уже присутствует в группе' })
       })
       this.saving = false
       this.dialog = false

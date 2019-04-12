@@ -43,11 +43,13 @@ class Schedule
      * @param int $year год
      * @param int $cabinetId ID кабинета
      * @param int|null $lessonId ID текущего занятия, чтобы не учитывать
+     * @param $current чтобы выделить текущие данные красным цветом
      */
     public static function cabinet(
         int $year,
         int $cabinetId,
-        int $lessonId = null
+        int $lessonId = null,
+        $current = null
     ) : array
     {
         $query = Lesson::query()
@@ -63,6 +65,17 @@ class Schedule
 
         $data = $query->get();
 
+
+        if ($current !== null) {
+            $current = (object) $current;
+            $current->weekday = date('w', strtotime($current->date));
+            $current->is_current = true;
+            $data->push($current);
+            $data->sortBy(function ($item) {
+                return $item->date . ' ' . $item->time;
+            });
+        }
+
         // group by weeks
         $result = [];
         foreach($data as $item) {
@@ -71,7 +84,7 @@ class Schedule
                 'weekday' => $item->weekday,
                 'start' => $item->time,
                 'end' => (new DateTime($item->time))->modify("+{$item->duration} minutes")->format("H:i"),
-                'is_current' => false,
+                'is_current' => $item->is_current ?: false,
                 'date' => $item->date,
             ];
         }

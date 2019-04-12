@@ -1,11 +1,15 @@
 <template>
-  <div class='flex-items align-center'>
-    <span v-if='showDates' class='timeline-weekday-label timeline-weekday-label_start mr-2'>
+  <div class='timeline__wrapper'>
+    <!-- <span v-if='showDates' class='timeline-weekday-label timeline-weekday-label_start mr-2'>
       {{ startOfWeek }}
-    </span>
-    <div v-for='weekday in weekdays' :key='weekday' :class="{'mr-1': weekday}" class='timeline__wrapper'>
+    </span> -->
+    <div v-for='weekday in weekdays' :key='weekday' :class="{
+      'mr-3': weekday === 5,
+      'mr-1': weekday,
+    }" class='timeline__day'>
       <div class='timeline'>
         <div 
+          class='timeline__item'
           v-for='(item, index) in getItemsByWeekday(weekday)' 
           :key='index' >
           <v-tooltip bottom>
@@ -14,7 +18,7 @@
                 v-on='on'
                 class="timeline__interval"
                 :class="{
-                  'timeline__interval_current': item.is_current
+                  [currentClass]: item.is_current
                 }"
                 :style="getGetStyle(item)"
               >
@@ -50,7 +54,13 @@ export default {
       type: Boolean,
       required: false,
       default: false,
-    }
+    },
+
+    currentClass: {
+      type: String,
+      default: 'timeline__interval_current',
+      required: false,
+    },
   },
 
   data() {
@@ -126,13 +136,27 @@ export default {
       top: -5px;
     }
     &:hover {
+      // .timeline__interval::before {
+      //   content: '';
+      //   position: absolute;
+      //   background: black;
+      //   left: 0;
+      //   top: 0;
+      //   width: 100%;
+      //   height: 100%;
+      // }
       background: rgb(80, 105, 124);
     }
   }
-  &__wrapper {
+  &__day {
     display: inline-block;
-    width: 50px;
     position: relative;
+    flex: 1;
+  }
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    width: 100%;
   }
 }
 

@@ -13,6 +13,11 @@ const store = new Vuex.Store({
     data: null,
     loading: false, // depricated?
     counters: {},
+    snackBar: {
+      show: false,
+      text: '',
+      color: 'red'
+    },
     search: {
       query: '',
       results: null,

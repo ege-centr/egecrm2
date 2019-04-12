@@ -50,7 +50,7 @@
                 <td width='200'>
                   <BranchList :items='props.item.branches' />
                 </td>
-                <td class='flex-items align-center'>
+                <td class='flex-items align-center' width='500'>
                   <Timeline :items='props.item.schedule' />
                   <!-- <Bars :group-bars='item.schedule.bars' :client-bars='props.item.bars' /> -->
                 </td>
@@ -60,15 +60,15 @@
                       <v-icon>more_horiz</v-icon>
                     </v-btn>
                      <v-list dense>
-                        <v-list-tile @click='removeClientFromGroup(props.item)'>
+                        <v-list-tile @click='removeClientFromGroup(props.item.id)'>
                           <v-list-tile-action>
                             <v-icon>close</v-icon>
                           </v-list-tile-action>
                           <v-list-tile-title>Удалить из группы</v-list-tile-title>
                         </v-list-tile>
-                        <v-list-tile @click='moveClient(props.item)'>
+                        <v-list-tile @click='moveClient(props.item.id)'>
                           <v-list-tile-action>
-                            <v-icon>repeat</v-icon>
+                            <v-icon>compare_arrows</v-icon>
                           </v-list-tile-action>
                           <v-list-tile-title>Переместить в группу</v-list-tile-title>
                         </v-list-tile>
@@ -189,13 +189,13 @@ export default {
       this.$refs.GroupDialog.open(id)
     },
 
-    removeClientFromGroup(client) {
-      this.item.clients.splice(this.item.clients.findIndex(e => e.id === client.id), 1)
-      axios.delete(apiUrl(GROUP_CLIENTS_API_URL + `?group_id=${this.item.id}&client_id=${client.id}`))
+    removeClientFromGroup(clientId) {
+      this.item.clients.splice(this.item.clients.findIndex(e => e.id === clientId), 1)
+      axios.delete(apiUrl(GROUP_CLIENTS_API_URL + `?group_id=${this.item.id}&client_id=${clientId}`))
     },
 
-    moveClient(client) {
-      this.$refs.MoveClientDialog.open(this.item, client)
+    moveClient(clientId) {
+      this.$refs.MoveClientDialog.open(this.item, clientId)
     },
   },
 }

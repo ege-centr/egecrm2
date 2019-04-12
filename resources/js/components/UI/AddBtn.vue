@@ -1,5 +1,8 @@
 <template>
-  <div class='add-btn' :class="{
+  <v-btn fab dark small color="red">
+    <v-icon dark>add</v-icon>
+  </v-btn>
+  <!-- <div class='add-btn' :class="{
     'add-btn_animated': animated === '',
     'add-btn_absolute': absolute === '',
   }">
@@ -9,7 +12,7 @@
     <div class='add-btn__icon'>
       <v-icon color='white' v-html='icon'></v-icon>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>

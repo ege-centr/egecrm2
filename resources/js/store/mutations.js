@@ -8,6 +8,14 @@ export default {
     state.user = user
   },
 
+  message(state, { text, color = 'red' }) {
+    state.snackBar = {
+      text,
+      color,
+      show: true
+    }
+  },
+
   setCounters(state, counters) {
     state.counters = counters
   },

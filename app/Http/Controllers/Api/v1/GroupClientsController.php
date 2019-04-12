@@ -18,7 +18,6 @@ class GroupClientsController extends Controller
         GroupClient::query()
             ->where('group_id', $request->group_id)
             ->where('client_id', $request->client_id)
-            ->first()
             ->delete();
     }
 }

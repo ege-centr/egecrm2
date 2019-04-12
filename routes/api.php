@@ -34,7 +34,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
     });
 
     Route::get('cabinets/occupied', 'CabinetsController@occupied');
-    Route::get('cabinets/schedule', 'CabinetsController@schedule');
+    Route::post('cabinets/schedule', 'CabinetsController@schedule');
 
     Route::apiResources([
         'admins' => 'AdminsController',

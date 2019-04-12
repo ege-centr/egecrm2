@@ -33,14 +33,15 @@ class CabinetsController extends Controller
     }
 
     /**
-     *
+     * Получить занятость кабинета
      */
     public function schedule(Request $request)
     {
         return Schedule::cabinet(
             $request->year,
             $request->cabinet_id,
-            $request->lesson_id
+            $request->lesson_id,
+            $request->current
         );
     }
 }

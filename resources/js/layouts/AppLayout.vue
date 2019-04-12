@@ -11,6 +11,13 @@
         <SearchResults v-show='$store.state.search.results !== null' />
       </v-container>
     </v-content>
+    <v-snackbar v-model="$store.state.snackBar.show"
+      :bottom="true"
+      :timeout="6000"
+      :color='$store.state.snackBar.color'
+    >
+      {{ $store.state.snackBar.text }}
+    </v-snackbar>
     <!-- <ListenToLogout></ListenToLogout> -->
   </v-app>
 </template>

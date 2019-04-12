@@ -37,6 +37,8 @@
                       :items="$store.state.data.cabinets"
                       label="Кабинет"
                       item-value='id'
+                      append-outer-icon='reorder'
+                      @click:append-outer='getSelectedCabinetSchedule'
                     >
                       <template v-slot:item='props'>
                         <span :class="{
@@ -82,10 +84,10 @@
                       ></v-switch>
                   </div>
                 </div>
-                <div v-if='selectedCabinetSchedule !== null && selectedCabinetSchedule.length > 0'>
+                <div v-if='selectedCabinetSchedule !== null && selectedCabinetSchedule.length > 0' style='width: 500px'>
                   <div class='headline mb-3'>Загрузка кабинета</div>
                   <div v-for='(schedule, weekNumber) in selectedCabinetSchedule' :key='weekNumber' class='mb-1'>
-                    <Timeline :items='schedule' :show-dates='true' />
+                    <Timeline :items='schedule' :show-dates='true' current-class='red' />
                   </div>
                 </div>
               </v-flex>
@@ -132,11 +134,6 @@ export default {
     'item.time': function () {
       this.getOccupiedCabinetIds()
     },
-
-    'item.cabinet_id': function(newVal, oldVal) {
-      // console.log(oldVal, '=>', newVal)
-      this.getSelectedCabinetSchedule()
-    },
   },
   
   methods: {
@@ -170,8 +167,13 @@ export default {
           cabinet_id: this.item.cabinet_id,
           year: this.$parent.group.year,
         }
+
+        // текущее время только в том случае, если заполнены все параметры текущего времени
+        if (this.item.date && this.item.time.length === 5 && this.item.duration > 0) {
+          params.current = _.pick(this.item, ['date', 'time', 'duration'])
+        }
   
-        axios.get(apiUrl('cabinets/schedule'), { params }).then(r => {
+        axios.post(apiUrl('cabinets/schedule'), params).then(r => {
           this.selectedCabinetSchedule = r.data
           this.cabinetsLoading = false
         })
@@ -184,6 +186,10 @@ export default {
       this.$refs.select.isMenuActive = false
       this.$refs.select.blur()
     },
+
+    testy() {
+      console.log('test')
+    }
   }
 }
 </script>
