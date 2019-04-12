@@ -79,7 +79,8 @@ class Client extends Model implements UserInterface
 
     public function getBars()
     {
-        return null;
+        $bars = null;
+        // return null;
         // $client_bars = null;
         // foreach($this->groups as $group) {
         //     $group_bars = $group->getSchedule()['bars'];

@@ -33,6 +33,9 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         Route::get('/{year}/{grade_id}/{subject_id}', 'AbstractGroupsController@show');
     });
 
+    Route::get('cabinets/occupied', 'CabinetsController@occupied');
+    Route::get('cabinets/schedule', 'CabinetsController@schedule');
+
     Route::apiResources([
         'admins' => 'AdminsController',
         'requests' => 'RequestsController',

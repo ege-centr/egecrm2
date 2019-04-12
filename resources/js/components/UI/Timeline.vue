@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div class='flex-items align-center'>
+    <span v-if='showDates' class='timeline-weekday-label timeline-weekday-label_start mr-2'>
+      {{ startOfWeek }}
+    </span>
     <div v-for='weekday in weekdays' :key='weekday' :class="{'mr-1': weekday}" class='timeline__wrapper'>
       <div class='timeline'>
         <div 
@@ -10,17 +13,26 @@
               <div 
                 v-on='on'
                 class="timeline__interval"
+                :class="{
+                  'timeline__interval_current': item.is_current
+                }"
                 :style="getGetStyle(item)"
               >
               </div>
             </template>
             <span>
+              <div v-if="showDates" class='text-sm-center font-weight-medium'>
+                {{ item.date | date }}
+              </div>
               {{ item.start }}–{{ item.end }}
             </span>
           </v-tooltip>
         </div>
       </div>
     </div>
+    <!-- <span v-if='showDates' class='timeline-weekday-label timeline-weekday-label_end ml-2'>
+      {{ endOfWeek }}
+    </span> -->
   </div>
 </template>
 
@@ -32,6 +44,12 @@ export default {
     items: {
       type: Array,
       required: true,
+    },
+
+    showDates: {
+      type: Boolean,
+      required: false,
+      default: false,
     }
   },
 
@@ -77,14 +95,23 @@ export default {
   computed: {
     maxTimestamp() {
       return this.getNormalizedTimestamp(this.timeMax)
-    }
+    },
+
+    startOfWeek() {
+      return moment(this.items[0].date).startOf('week').format('DD.MM.YY')
+    },
+
+    endOfWeek() {
+      return moment(this.items[0].date).endOf('week').format('DD.MM.YY')
+    },
   }
 }
 </script>
 
 <style lang="scss">
 .timeline {
-  height: 12px;
+  $height: 14px;
+  height: $height;
   width: 100%;
   background: #C1D2DD;
   position: relative;
@@ -94,6 +121,10 @@ export default {
     background: #3A5162;
     position: absolute;
     height: 100%;
+    &_current {
+      height: $height + 10px;
+      top: -5px;
+    }
     &:hover {
       background: rgb(80, 105, 124);
     }
@@ -102,6 +133,16 @@ export default {
     display: inline-block;
     width: 50px;
     position: relative;
+  }
+}
+
+.timeline-weekday-label {
+  font-size: 10px;
+  width: 40px;
+  top: 1px; 
+  position: relative;
+  &_start {
+    // text-align: right;
   }
 }
 </style>

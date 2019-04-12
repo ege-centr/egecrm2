@@ -12,7 +12,7 @@ class GroupsController extends Controller
 {
     protected $filters = [
         'multiple' => ['year', 'teacher_id', 'subject_id', 'grade_id'],
-        'equals' => ['client_ids'],
+        // 'equals' => ['client_ids'],
     ];
 
     public function index(Request $request)
@@ -31,11 +31,11 @@ class GroupsController extends Controller
             $query->where('id', '<>', $request->group_id);
         }
 
-        if (isset($request->client_id) && $request->client_id) {
+        if (isset($request->client_ids) && $request->client_ids) {
             $query->whereExists(function ($query) use ($request) {
                 $query->select(DB::raw(1))
                     ->from('group_clients')
-                    ->whereRaw('group_clients.group_id = groups.id AND group_clients.client_id = ' . $request->client_id);
+                    ->whereRaw('group_clients.group_id = groups.id AND group_clients.client_id = ' . $request->client_ids);
             });
         }
 

@@ -51,7 +51,7 @@
                   <BranchList :items='props.item.branches' />
                 </td>
                 <td class='flex-items align-center'>
-                  <Timeline :items='group.schedule' />
+                  <Timeline :items='props.item.schedule' />
                   <!-- <Bars :group-bars='item.schedule.bars' :client-bars='props.item.bars' /> -->
                 </td>
                 <td class='text-md-right' style='padding-right: 16px'>
@@ -198,11 +198,5 @@ export default {
       this.$refs.MoveClientDialog.open(this.item, client)
     },
   },
-
-  computed: {
-    group() {
-      return this.item
-    },
-  }
 }
 </script>
