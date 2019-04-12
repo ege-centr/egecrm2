@@ -15,7 +15,6 @@ class GroupResource extends JsonResource
         foreach($clients as &$client) {
             $client->subject_status = $client->getSubjectStatus($this->year, $this->grade_id, $this->subject_id);
             $client->schedule = Schedule::get($client->groups()->pluck('id')->all(), $this->id);
-            \Debugbar::info($client->schedule);
         }
         return array_merge(parent::toArray($request), [
             'clients' => GroupClientCollection::collection($clients),
