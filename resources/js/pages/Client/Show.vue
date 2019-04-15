@@ -148,7 +148,14 @@
                   <RequestItem :item='item' @openDialog='$refs.RequestDialog.open(item.id)' />
                 </v-flex>
               </v-layout>
-              <v-data-table :items='[]' hide-actions hide-headers :class='config.elevationClass' v-else>
+              <NoData 
+                v-else
+                transparent
+                :height='300'
+                :class='config.elevationClass'
+                style='border-radius: 0'
+              />
+              <!-- <v-data-table :items='[]' hide-actions hide-headers :class='config.elevationClass' v-else>
                 <template slot='no-data'>
                   <no-data>
                     <AddBtn label='добавить заявку' @click.native='$refs.RequestDialog.open(null, {
@@ -156,7 +163,7 @@
                     })' />
                   </no-data>
                 </template>
-              </v-data-table>
+              </v-data-table> -->
             </template>
             <template slot='buttons'>
               <AddBtn label='добавить заявку' animated @click.native='$refs.RequestDialog.open(null, {

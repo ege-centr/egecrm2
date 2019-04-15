@@ -130,9 +130,7 @@
                       </tr>
                     </template>
                   </v-data-table>
-                  <NoData v-else>
-                    <AddBtn @click.native='addIp()' />
-                  </NoData>
+                  <NoData :add='addIp' :height='200' v-else />
                 </div>
               </v-flex>
               

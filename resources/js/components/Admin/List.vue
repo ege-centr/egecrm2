@@ -1,7 +1,14 @@
 <template>
   <div>
     <AdminDialog ref='AdminDialog' />
-    <v-data-table :items='items' item-key='id' hide-headers hide-actions :class='config.elevationClass'>
+    <v-data-table 
+      v-if='items.length > 0'
+      :items='items' 
+      item-key='id' 
+      hide-headers 
+      hide-actions 
+      :class='config.elevationClass'
+    >
       <template slot="items" slot-scope="{ item }">
         <td>
             {{ item.default_name }}
@@ -13,6 +20,10 @@
         </td>
       </template>
     </v-data-table>
+    <NoData 
+      v-else 
+      transparent 
+      :add='() => $refs.AdminDialog.open(null)' />
   </div>
 </template>
 

@@ -7,7 +7,11 @@
       :invisible-filters="{client_id: $store.state.user.id}"
     >
       <template slot='items' slot-scope='{ items }'>
-        <ReviewClientList :items='items' @updated='() => $refs.DisplayData.loadData()' />
+        <ReviewClientList :items='items' @updated='() => $refs.DisplayData.loadData()' v-if='items.length > 0' />
+        <NoData
+          v-else
+          transparent
+        />
       </template>
     </DisplayData>
   </div>

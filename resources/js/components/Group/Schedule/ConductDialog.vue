@@ -48,6 +48,7 @@
                 hide-actions
                 :headers="headers"
                 :items='clientLessons'
+                v-if='clientLessons.length > 0'
               >
                 <template slot="items" slot-scope="{ item }">
                   <td width='200'>
@@ -126,10 +127,11 @@
                     </td>
                   </tr>
                 </template>
-                <template slot='no-data'>
-                  <NoData />
-                </template>
               </v-data-table>
+              <NoData 
+                v-else
+                style='width: calc(100% - 48px); margin: 0 auto'
+                :add='$refs.AddClientDialog.open' />
             </div>
             
             <!-- Планируемое занятие -->

@@ -13,7 +13,7 @@ export const MODEL_DEFAULTS = {
 }
 
 export const FILTERS = [
-  {label: 'Имя', field: 'name', type: 'text'},
+  {label: 'Имя', field: 'name', type: 'input'},
 ]
 
 export const API_URL = 'admins'

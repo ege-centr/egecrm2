@@ -9,9 +9,8 @@
           <v-flex>
             <Calendar :year='group.year' :lessons='items' :with-special-dates='true' :group='this.group' />
           </v-flex>
-          <v-spacer></v-spacer>
           <v-flex>
-            <v-data-table hide-actions hide-headers :items='items' class='mt-3'>
+            <v-data-table hide-actions hide-headers :items='items' class='mt-3' v-if='items.length > 0'>
               <template slot='items' slot-scope="{ index, item }">
                 <td width='24' class='px-2'>
                   <LessonStatusCircles :item='item'  />
@@ -107,12 +106,11 @@
                   </td>
                 </tr>
               </template>
-              <template slot='no-data'>
-                <NoData>
-                  <AddBtn label='добавить занятие' @click.native='addLesson()' />
-                </NoData>
-              </template>
             </v-data-table>
+            <NoData v-else
+                  title='Место для расписания'
+                  text='В выборке отсутствуют элементы. Вы можете добавить их, чтобы изменить ситуацию'
+                  :add='addLesson' />
           </v-flex>
         </v-layout>
       </v-container>

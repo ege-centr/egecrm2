@@ -7,16 +7,19 @@
       hide-actions
       hide-headers
       :items='items'
+      v-if='items.length > 0'
     >
       <template slot='items' slot-scope="{ item, index }">
         <slot name='item' :item='item' :index='index'></slot>
       </template>
-      <template slot='no-data'>
-        <no-data>
-          <AddBtn v-if='addBtn' :label='addBtnLabel' @click.native='add' />
-        </no-data>
-      </template>
     </v-data-table>
+    <NoData
+      v-else
+      :add='add'
+      :height='300'
+      :class='config.elevationClass'
+      style='border-radius: 0'
+    />
   </div>
 </template>
 

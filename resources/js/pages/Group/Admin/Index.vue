@@ -6,7 +6,11 @@
         <AddBtn @click.native='$refs.GroupDialog.open(null)' animated label='добавить группу' />
       </template>
       <template slot='items' slot-scope="{ items }">
-        <GroupList :items='items' />
+        <GroupList v-if='items.length > 0' :items='items' />
+        <NoData 
+          :add='() => $refs.GroupDialog.open(null)'
+          transparent 
+          v-else />
       </template>
     </DisplayData>
   </div>

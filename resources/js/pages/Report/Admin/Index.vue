@@ -2,7 +2,11 @@
   <div>
     <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='30'>
       <template slot='items' slot-scope='{ items }'>
-        <ReportList :items='items' />
+        <ReportList :items='items' v-if='items.length > 0' />
+        <NoData
+          v-else
+          transparent
+        />
       </template>
     </DisplayData>
   </div>

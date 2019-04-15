@@ -9,7 +9,12 @@
       </template>
       
       <template slot='items' slot-scope='{ items }'>
-        <TaskList :items='items' />
+        <TaskList :items='items' v-if='items.length > 0' />
+        <NoData 
+          v-else
+          transparent
+          :add='() => $refs.TaskDialog.open(null)'
+        />
       </template>
     </DisplayData>
   </div>

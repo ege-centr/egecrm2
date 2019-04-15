@@ -178,9 +178,7 @@
                     </tr>
                   </template>
                 </v-data-table>
-                <NoData v-else>
-                  <AddBtn @click.native='addPayment' label='добавить платеж' />
-                </NoData>
+                <NoData :add='addPayment' v-else />
               </v-flex>
               <!-- /ПЛАТЕЖИ -->
 

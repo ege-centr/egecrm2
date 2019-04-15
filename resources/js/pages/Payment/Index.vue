@@ -2,7 +2,13 @@
   <div>
     <DisplayData :api-url='API_URL' :filters='FILTERS' :sort='SORT' :paginate='30'>
       <template slot='items' slot-scope='{ items }'>
-        <PaymentList :items='items' :display-options="{entity: true, addBtn: false}" />
+        <PaymentList :items='items' 
+          v-if='items.length > 0'
+          :display-options="{entity: true, addBtn: false}" />
+        <NoData
+          v-else
+          transparent
+        />
       </template>
     </DisplayData>
   </div>

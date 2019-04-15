@@ -108,7 +108,7 @@
 
       <div class='mb-4 mt-5 flex-items align-center' style='justify-content: space-between'>
         <div class='headline'>Праздники и экзамены</div>
-        <div>
+        <div v-if='currentYearItems.length > 0'>
           <AddBtn animated @click.native='add' />
         </div>
       </div>
@@ -118,29 +118,34 @@
           <v-container grid-list-xl class="pa-0 ma-0" fluid>
             <v-layout>
               <v-flex md12>
-                <v-data-table hide-actions hide-headers :items='currentYearItems' :paginate.sync="sortingOptions">
+                <v-data-table hide-actions hide-headers :items='currentYearItems' :paginate.sync="sortingOptions" v-if='currentYearItems.length > 0'>
                   <template slot='items' slot-scope="{ item }">
-                    <td width='300'>
-                      {{ item.date | date }}
-                    </td>
-                    <td width='300'>
-                      {{ types.find(e => e.value === item.type).text }}
-                    </td>
-                    <td width='300'>
-                      <span v-if="item.type === TYPE_EXAM">
-                        {{ getData('subjects', item.subject_id).three_letters }}–{{ getData('grades', item.grade_id).short }}
-                      </span>
-                    </td>
-                    <td class='text-md-right'>
-                      <v-btn flat icon color="black" class='ma-0' @click='edit(item)'>
-                        <v-icon>more_horiz</v-icon>
-                      </v-btn>
-                    </td>
-                  </template>
-                  <template slot='no-data'>
-                    <NoData />
+                    <tr>
+                      <td width='300'>
+                        {{ item.date | date }}
+                      </td>
+                      <td width='300'>
+                        {{ types.find(e => e.value === item.type).text }}
+                      </td>
+                      <td width='300'>
+                        <span v-if="item.type === TYPE_EXAM">
+                          {{ getData('subjects', item.subject_id).three_letters }}–{{ getData('grades', item.grade_id).short }}
+                        </span>
+                      </td>
+                      <td class='text-md-right'>
+                        <v-btn flat icon color="black" class='ma-0' @click='edit(item)'>
+                          <v-icon>more_horiz</v-icon>
+                        </v-btn>
+                      </td>
+                    </tr>
                   </template>
                 </v-data-table>
+                <NoData
+                  v-else
+                  transparent
+                  :height='300'
+                  :add='add'
+                />
               </v-flex>
             </v-layout>
           </v-container>

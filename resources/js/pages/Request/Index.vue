@@ -9,6 +9,7 @@
           <v-flex xs12 v-for='item in items' :key='item.id'>
             <RequestItem :item='item' @openDialog='$refs.RequestDialog.open' @openClientDialog='$refs.ClientDialog.open' />
           </v-flex>
+          <NoData transparent v-if='items.length === 0' />
         </v-layout>
       </template>
     </DisplayData>

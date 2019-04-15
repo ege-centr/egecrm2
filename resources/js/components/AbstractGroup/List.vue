@@ -5,6 +5,7 @@
       hide-actions
       hide-headers
       :items='items'
+      v-if='items.length > 0'
     >
       <template slot='items' slot-scope="{ item }">
         <td>
@@ -31,6 +32,10 @@
         </td>
       </template>
     </v-data-table>
+    <NoData
+      v-else
+      transparent
+    />
   </div>
 </template>
 <script>

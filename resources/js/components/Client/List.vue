@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-data-table :items='items' item-key='id' hide-headers hide-actions :class='config.elevationClass'>
+    <v-data-table :items='items' item-key='id' hide-headers hide-actions :class='config.elevationClass' v-if='items.length > 0'>
       <template slot="items" slot-scope="{ item }">
         <td>
           <router-link :to="{ name: 'ClientShow', params: { id: item.id }}">
@@ -14,6 +14,9 @@
         </td>
       </template>
     </v-data-table>
+    <NoData 
+      transparent
+      v-else />
     <ClientDialog ref='ClientDialog' />
   </div>
 </template>

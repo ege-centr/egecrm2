@@ -10,12 +10,20 @@
       :api-url='API_URL' 
     >
       <template slot='items' slot-scope='{ items }'>
-        <ReportList :display-options="{
-          id: false,
-          is_available_for_parents: false,
-          client: false,
-          actions: false,
-        }" :items='items' />
+        <ReportList 
+          :display-options="{
+            id: false,
+            is_available_for_parents: false,
+            client: false,
+            actions: false,
+          }" 
+          :items='items' 
+          v-if='items.length > 0'
+        />
+        <NoData
+          v-else
+          transparent
+        />
       </template>
     </DisplayData>
   </div>
