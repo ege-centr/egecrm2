@@ -448,3 +448,18 @@ nav {
     }
   }
 }
+
+.border-radius {
+  border-radius: 4px;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.0;
+  }
+}
+@-webkit-keyframes blink {
+  50% {
+    opacity: 0.0;
+  }
+}

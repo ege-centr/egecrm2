@@ -1,5 +1,5 @@
 <template>
-  <div class='no-data grey--text darken-3' 
+  <div class='no-data border-radius grey--text darken-3' 
     :class="{
       'no-data_transparent': transparent === ''
     }"
@@ -71,7 +71,6 @@ export default {
   text-align: center;
   flex-direction: column;
   background: #f6f7f8;
-  border-radius: 8px;
   width: 100%;
   &_transparent {
     background: transparent;

@@ -36,6 +36,12 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
     Route::get('cabinets/occupied', 'CabinetsController@occupied');
     Route::post('cabinets/schedule', 'CabinetsController@schedule');
 
+    Route::prefix('timeline')->group(function () {
+        foreach(['group', 'cabinet', 'teacher'] as $name) {
+            Route::post($name, "TimelineController@{$name}");
+        }
+    });
+
     Route::apiResources([
         'admins' => 'AdminsController',
         'requests' => 'RequestsController',

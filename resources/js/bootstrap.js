@@ -1,5 +1,7 @@
+import { extendMoment } from 'moment-range'
+
 window._ = require('lodash');
-window.moment = require('moment');
+window.moment = extendMoment(require('moment'));
 window.moment.locale('ru')
 window.Popper = require('popper.js').default;
 window.Cookies = require('js-cookie');

@@ -13,6 +13,9 @@ export default {
 
   methods: {
     open(item_id = null, defaults = {}) {
+      if (_.isFunction(this.beforeOpen)) {
+        this.beforeOpen()
+      }
       this.item = null
       this.dialog = true
       if (item_id !== null) {

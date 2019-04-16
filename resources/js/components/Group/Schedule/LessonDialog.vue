@@ -28,17 +28,22 @@
                     <DatePicker v-if='dialog' label="Дата занятия" v-model='item.date' />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-text-field hide-details v-model='item.time'  label='Время занятия' v-mask="'##:##'"></v-text-field>
+                    <v-text-field 
+                      hide-details 
+                      v-model='item.time' 
+                      label='Время занятия' 
+                      v-mask="'##:##'"
+                      @blur='reloadPreview'
+                    ></v-text-field>
                   </div>
-                  <div class='vertical-inputs__input'>
+                  <div class='vertical-inputs__input' style='display: inline-block'>
                     <v-select hide-details ref='select'
                       :loading='cabinetsLoading'
                       v-model='item.cabinet_id'
                       :items="$store.state.data.cabinets"
                       label="Кабинет"
                       item-value='id'
-                      append-outer-icon='reorder'
-                      @click:append-outer='getSelectedCabinetSchedule'
+                      @blur='reloadPreview'
                     >
                       <template v-slot:item='props'>
                         <span :class="{
@@ -53,12 +58,21 @@
                         </v-list-tile-title>
                       </v-list-tile>
                     </v-select>
+                    <div class='mt-1'>
+                      <a @click='showSchedule = !showSchedule'>
+                        {{ showSchedule ? 'cкрыть' : ' показать' }} расписание
+                      </a>
+                    </div>
                   </div>
                   <div class='vertical-inputs__input'>
                     <TeacherSelect v-model="item.teacher_id" />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-text-field hide-details v-model="item.duration" label="Длительность занятия, мин."></v-text-field>
+                    <v-text-field 
+                      @blur='reloadPreview'
+                      hide-details 
+                      v-model="item.duration" 
+                      label="Длительность занятия, мин."></v-text-field>
                   </div>
                   <div class='vertical-inputs__input relative' v-if='item.id'>
                     <!-- <DivBlocker v-if="item.status === LESSON_STATUS.PLANNED" /> -->
@@ -83,13 +97,23 @@
                         v-model='item.is_unplanned'
                       ></v-switch>
                   </div>
+                  <!-- <div class="vertical-inputs__input">
+                    <v-btn 
+                      style='width: 200px'
+                      color='primary' 
+                      small 
+                      class='ml-0' 
+                      @click='showSchedule = !showSchedule'>
+                      {{ showSchedule ? 'Скрыть' : 'Показать' }} расписание
+                    </v-btn>
+                  </div> -->
                 </div>
-                <div v-if='selectedCabinetSchedule !== null && selectedCabinetSchedule.length > 0' style='width: 500px'>
-                  <div class='headline mb-3'>Загрузка кабинета</div>
-                  <div v-for='(schedule, weekNumber) in selectedCabinetSchedule' :key='weekNumber' class='mb-1'>
-                    <Timeline :items='schedule' :show-dates='true' current-class='red' />
-                  </div>
-                </div>
+                <Preview
+                  v-if='showSchedule'
+                  :item='item'
+                  :group='$parent.group'
+                  ref='Preview'
+                />
               </v-flex>
             </v-layout>
           </v-container>
@@ -104,31 +128,28 @@
 import { DialogMixin } from '@/mixins'
 import { DatePicker, DataSelect, TeacherSelect } from '@/components/UI'
 import { LESSON_STATUS, MODEL_DEFAULTS, API_URL } from '@/components/Lesson'
-import Timeline from '@/components/UI/Timeline'
+import Preview from './Preview'
 
 export default {
   mixins: [ DialogMixin ],
 
-  components: { DatePicker, DataSelect, TeacherSelect, Timeline },
+  components: { DatePicker, DataSelect, TeacherSelect, Preview },
   
   data() {
     return {
       API_URL,
       LESSON_STATUS,
       MODEL_DEFAULTS,
+      showSchedule: false,
       occupiedCabinetIds: [],
       cabinetsLoading: false,
-      selectedCabinetSchedule: null,
     }
-  },
-
-  created() {
-
   },
 
   watch: {
     'item.date': function () {
       this.getOccupiedCabinetIds()
+      this.reloadPreview()
     },
 
     'item.time': function () {
@@ -137,6 +158,10 @@ export default {
   },
   
   methods: {
+    beforeOpen() {
+      this.showSchedule = false
+    },
+
     toggleCancelled(isCancelled) {
       this.item.status = isCancelled ? LESSON_STATUS.CANCELLED : LESSON_STATUS.PLANNED
     },
@@ -159,26 +184,10 @@ export default {
       this.occupiedCabinetIds = []
     },
 
-    getSelectedCabinetSchedule() {
-      if (this.item.cabinet_id && this.$parent.group.year) {
-        this.cabinetsLoading = true
-        let params = {
-          lesson_id: this.item.id,
-          cabinet_id: this.item.cabinet_id,
-          year: this.$parent.group.year,
-        }
-
-        // текущее время только в том случае, если заполнены все параметры текущего времени
-        if (this.item.date && this.item.time.length === 5 && this.item.duration > 0) {
-          params.current = _.pick(this.item, ['date', 'time', 'duration'])
-        }
-  
-        axios.post(apiUrl('cabinets/schedule'), params).then(r => {
-          this.selectedCabinetSchedule = r.data
-          this.cabinetsLoading = false
-        })
+    reloadPreview() {
+      if (this.showSchedule) {
+        this.$refs.Preview.loadData()
       }
-      this.selectedCabinetSchedule = null
     },
 
     clearCabinet() {
@@ -186,9 +195,15 @@ export default {
       this.$refs.select.isMenuActive = false
       this.$refs.select.blur()
     },
+  },
 
-    testy() {
-      console.log('test')
+  computed: {
+    showScheduleEnabled() {
+      return this.item.date && 
+        this.item.time.length === 5 && 
+        this.item.duration > 0 &&
+        this.item.cabinet_id > 0 &&
+        this.item.teacher_id > 0
     }
   }
 }
