@@ -147,6 +147,7 @@ export default {
       position: absolute;
       height: 100%;
       &_current {
+        z-index: 1;
         height: $height + 10px;
         top: -5px;
       }
