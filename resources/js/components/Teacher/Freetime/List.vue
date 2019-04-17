@@ -1,38 +1,17 @@
 <template>
   <div>
-    <Dialog ref='Dialog' @updated='loadData' />
+    <Dialog ref='Dialog' :teacher-id='teacherId' @updated='loadData' />
     <Loader transparent v-if='loading' />
     <div v-else>
       <div v-if='items.length > 0'>
         <div class='text-sm-right mb-3'>
-          <AddBtn @click.native='add' />
+          <AddBtn @click.native='add' icon='edit' />
         </div>
-        <v-data-table
-          hide-actions
-          hide-headers
-          :items='items'
-          :class='config.elevationClass'
-        >
-          <template v-slot:items="{ item, index }">
-            <tr v-if='index === 0'>
-              <td colspan='2'>
-                <TimelineWeek :items='items' />
-              </td>
-            </tr>
-            <tr>
-              <td>
-                {{ DAY_LABELS[item.weekday] }}
-                <span v-if='item.from'>с {{ item.from }}</span>
-                <span v-if='item.to'>до {{ item.to }}</span>
-              </td>
-              <td class='text-sm-right'>
-                <v-btn @click='$refs.Dialog.open(item.id)' flat icon color="black" class='ma-0'>
-                  <v-icon>more_horiz</v-icon>
-                </v-btn>
-              </td>
-            </tr>
-          </template>
-        </v-data-table>
+        <v-card :class='config.elevationClass'>
+          <v-card-text>
+            <TimelineWeek :items='items' :show-weekday='true' />
+          </v-card-text>
+        </v-card>
       </div>
       <v-card v-else :class='config.elevationClass'>
         <v-card-text class='pa-0'>

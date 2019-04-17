@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\TeacherFreetime;
+use App\Models\{Teacher, TeacherFreetime};
 use App\Http\Resources\Teacher\FreetimeResource;
 
 class TeacherFreetimeController extends Controller
@@ -34,8 +34,11 @@ class TeacherFreetimeController extends Controller
 
     public function store(Request $request)
     {
-        $item = TeacherFreetime::create($request->all());
-        return $item;
+        $teacherId = $request->teacher_id;
+        TeacherFreetime::where('teacher_id', $teacherId)->delete();
+        foreach($request->items as $item) {
+            TeacherFreetime::create(array_merge($item, ['teacher_id' => $teacherId]));
+        }
     }
 
     public function destroy($id)
