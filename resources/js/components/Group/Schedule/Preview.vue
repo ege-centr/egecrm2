@@ -1,5 +1,5 @@
 <template>
-  <div style='overflow: hidden' class='relative width-100 grey lighten-4 px-3 py-1 border-radius'>
+  <div style='overflow: hidden' class='relative width-100 px-3'>
     <div class='flex-items mb-3'>
       <v-btn small flat class='ml-0' 
         @click='setMode(mode.teacher)'
@@ -24,7 +24,7 @@
       <div class='flex-items' style='overflow: scroll' v-if='selectedMode === mode.cabinet'>
         <div v-for="cabinet in $store.state.data.cabinets" 
           :key='cabinet.id' 
-          class='mr-3 grey--text'>
+          class='mr-2 grey--text'>
             <div style='font-size: 11px; white-space: nowrap; text-align: center; width: 50px'>
               {{ cabinet.title }}
             </div>
@@ -53,7 +53,7 @@
       </div>
 
       <!-- TEACHER -->
-      <div v-if='selectedMode === mode.teacher' style='width: 454px'>
+      <div v-if='selectedMode === mode.teacher'>
         <TimelineWeek regular :items='items.regular' class='mb-3' :show-weekday='true' />
 
         <div v-for='(weekItems, index) in items.detailed' :key='index' class='mb-2'>

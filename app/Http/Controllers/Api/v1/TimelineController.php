@@ -149,6 +149,18 @@ class TimelineController extends Controller
             ];
         }
 
-        return array_values($result);
+        $current = strtotime("first Monday of September " . $request->year);
+        $end = date('W', strtotime("first Monday of June " . ($request->year + 1)));
+        $resultGroupedByWeeks = [];
+        do {
+            $week = date('W', $current);
+            $resultGroupedByWeeks[$week] = isset($result[$week]) ? array_values($result[$week]) : [];
+            $current = strtotime('next Monday', $current);
+        } while ($week !== $end);
+
+        // Номер недели неважен, JS автоматически сортирует ключи
+        return array_map(function ($items) {
+            return array_values($items);
+        }, $resultGroupedByWeeks);
     }
 }

@@ -3,26 +3,18 @@
     <Dialog ref='Dialog' :teacher-id='teacherId' @updated='loadData' />
     <Loader transparent v-if='loading' />
     <div v-else>
-      <div v-if='items.length > 0'>
-        <div class='text-sm-right mb-3'>
-          <AddBtn @click.native='add' icon='edit' />
-        </div>
+      <div>
         <v-card :class='config.elevationClass'>
           <v-card-text>
-            <TimelineWeek :items='items' :show-weekday='true' />
+            <div class='flex-items align-center'>
+              <TimelineWeek :items='items' :show-weekday='true' />
+              <v-btn flat icon color="black" class='ma-0' @click.native='add'>
+                <v-icon>more_horiz</v-icon>
+              </v-btn>
+            </div>
           </v-card-text>
         </v-card>
       </div>
-      <v-card v-else :class='config.elevationClass'>
-        <v-card-text class='pa-0'>
-          <NoData 
-            :height='300'
-            transparent
-            text='У этого преподавателя нет данных о свободном времени'
-            :add='add'
-          />
-        </v-card-text>
-      </v-card>
     </div>
   </div>
 </template>

@@ -8,7 +8,7 @@
       :items='getItemsByWeekday(weekday)'
       :class="{
         'mr-4': weekday === 5,
-        'mr-3': weekday,
+        'mr-2': weekday,
       }"
       :current-class='currentClass'
       :show-date='showDate'
