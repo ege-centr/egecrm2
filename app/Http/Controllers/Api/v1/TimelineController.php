@@ -20,7 +20,6 @@ class TimelineController extends Controller
         return [
             'regular'  => Schedule::get([
                 'teacher_id' => $teacherId,
-                'group_id' => $request->group_id,
             ], $request->group_id),
             'detailed' => $this->getData($request, [
                 'lessons.teacher_id' => $teacherId
@@ -31,7 +30,9 @@ class TimelineController extends Controller
     public function group(Request $request)
     {
         return [
-            'regular'  => Schedule::get(['group_id' => $request->group_id], $request->group_id),
+            'regular'  => Schedule::get([
+                'group_id' => $request->group_id
+            ], $request->group_id),
             'detailed' => $this->getData($request, [
                 'lessons.group_id' => $request->group_id
             ])

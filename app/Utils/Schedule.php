@@ -13,7 +13,7 @@ class Schedule
     /**
      * Получить регулярное расписание
      *
-     * @param array|int $groupIds ID групп, для которых получаем расписание
+     * @param array $filters фильтры в формате [field => value]
      * @param int|null текущая группа, отображается вытяннутым элементом на timeline
      */
     public static function get(array $filters, int $currentGroupId = null) : array
