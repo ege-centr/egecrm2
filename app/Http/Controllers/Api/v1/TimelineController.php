@@ -20,7 +20,7 @@ class TimelineController extends Controller
         return [
             'regular'  => Schedule::get([
                 'lessons.teacher_id' => $teacherId,
-                'groups.year' => $request->year,
+                'year' => $request->year,
             ], $request->group_id),
             'detailed' => $this->getData($request, [
                 'lessons.teacher_id' => $teacherId
