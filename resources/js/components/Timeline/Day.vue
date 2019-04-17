@@ -137,7 +137,7 @@ export default {
       font-size: 12px; 
       white-space: nowrap; 
       position: absolute;
-      top: -18px;
+      top: -20px;
       left: 4px;
     }
     &__interval {
