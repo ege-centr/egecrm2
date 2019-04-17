@@ -20,7 +20,7 @@ class Schedule
     {
         $query = Lesson::query()
             ->selectRaw("DATE_FORMAT(lessons.date, '%w') as `weekday`, `date`, `time`, `duration`, `group_id`, count(*) as `count`")
-            ->groupBy('weekday', 'time', 'duration')
+            ->groupBy('group_id', 'weekday', 'time', 'duration')
             ->having('count', '>', 1);
 
         // если необходимо срезать по году, то подключаем группу
