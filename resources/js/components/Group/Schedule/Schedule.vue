@@ -223,10 +223,10 @@ export default {
         group_id: this.group.id,
         year: this.group.year,
       }
-      if (this.lastCopiableLesson !== null) {
+      if (this.lastClonableLesson !== null) {
         params = {
           ...params,
-          ..._.pick(this.lastCopiableLesson, ['date', 'time', 'teacher_id', 'price', 'cabinet_id', 'duration'])
+          ..._.pick(this.lastClonableLesson, ['date', 'time', 'teacher_id', 'price', 'cabinet_id', 'duration'])
         }
       }
       this.$refs.LessonDialog.open(null, params)

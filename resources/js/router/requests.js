@@ -4,6 +4,9 @@ export default [
   {
     path: '/requests',
     name: 'RequestIndex',
-    component: RequestIndex
+    component: RequestIndex,
+    meta: {
+      title: 'Заявки'
+    }
   }
 ]

@@ -1,9 +1,12 @@
 <template>
-  <v-btn fab dark small color="red" :class="{
+  <div :class="{
+    'add-btn_animated': animated === '',
     'add-btn_absolute': absolute === '',
   }">
-    <v-icon dark>add</v-icon>
-  </v-btn>
+    <v-btn fab dark small color="red">
+      <v-icon dark>{{ icon }}</v-icon>
+    </v-btn>
+  </div>
   <!-- <div class='add-btn' :class="{
     'add-btn_animated': animated === '',
     'add-btn_absolute': absolute === '',

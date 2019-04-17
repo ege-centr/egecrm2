@@ -57,6 +57,7 @@ router.beforeEach((to, from, next) => {
       if (to.hasOwnProperty('meta') && to.meta.hasOwnProperty('roles')) {
         if (to.meta.roles.indexOf(store.state.user.class) !== -1) {
           urlLog(to)
+          // $('title').html(to.meta.hasOwnProperty('title') ? to.meta.title : 'Личный кабинет')
           next()
         }
       } else {

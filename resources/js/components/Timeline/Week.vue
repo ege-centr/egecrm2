@@ -79,6 +79,9 @@ export default {
     width: 100%;
     &_regular {
       filter: grayscale(100%);
+      & .timeline__day__interval_overlaps {
+        animation: none !important;
+      }
     }
   }
 }

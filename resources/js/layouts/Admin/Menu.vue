@@ -1,5 +1,7 @@
 <template>
   <v-list dense>
+    
+    <!-- <ToggleDrawer /> -->
     <SearchBar />
     <SmsMessageDialog ref='SmsMessageDialog' :custom-input='true' />
 
@@ -44,9 +46,10 @@
 import SearchBar from '@/components/Search/Bar'
 import MenuItem from '@/components/UI/MenuItem'
 import SmsMessageDialog from '@/components/Sms/Message/Dialog'
+import ToggleDrawer from '@/components/UI/ToggleDrawer'
 
 export default {
-  components: { SearchBar, MenuItem, SmsMessageDialog },
+  components: { SearchBar, MenuItem, SmsMessageDialog, ToggleDrawer },
 
   data: () => ({
     drawer: true,

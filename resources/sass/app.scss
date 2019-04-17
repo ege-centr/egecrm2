@@ -261,6 +261,9 @@ nav {
 
 .v-navigation-drawer {
   background: $sidebar-color !important;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 .menu-logo {

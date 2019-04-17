@@ -14,7 +14,7 @@
       <Menu />
     </v-navigation-drawer>
 
-    <ShowDrawer v-if='!$store.state.drawer' />
+    <ToggleDrawer show v-if='!$store.state.drawer' />
       
   </div>
 </template>
@@ -23,10 +23,10 @@
 
 import Menu from './Menu'
 import SearchBar from '@/components/Search/Bar'
-import ShowDrawer from '@/components/UI/ShowDrawer'
+import ToggleDrawer from '@/components/UI/ToggleDrawer'
 
 export default {
-  components: { Menu, SearchBar, ShowDrawer },
+  components: { Menu, SearchBar, ToggleDrawer },
 
   created() {
     axios.get(apiUrl('counters')).then(r => {
