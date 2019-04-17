@@ -61,6 +61,9 @@
         <v-tab>
           Отчёты
         </v-tab>
+         <v-tab>
+          Свободное время
+        </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <!-- ГРУППЫ -->
@@ -146,6 +149,12 @@
             </template>
           </DisplayData>
         </v-tab-item>
+        
+
+        <!-- СВОБОДНОЕ ВРЕМЯ -->
+        <v-tab-item>
+          <TeacherFreetimeList :teacher-id='Number($route.params.id)' />
+        </v-tab-item>
       </v-tabs-items>
     </div>
     <PaymentDialog ref='PaymentDialog' />
@@ -159,6 +168,7 @@
 import { API_URL, CLASS_NAME } from '@/components/Teacher'
 import { API_URL as GROUP_API_URL } from '@/components/Group'
 import GroupList from '@/components/Group/List'
+import TeacherFreetimeList from '@/components/Teacher/Freetime/List'
 import { 
   API_URL as PAYMENT_API_URL, 
   SORT as PAYMENT_SORT,
@@ -189,7 +199,7 @@ import { API_URL as REPORT_API_URL } from '@/components/Report'
 export default {
   components: { 
     GroupList, PaymentList, PaymentDialog, PaymentAdditionalList, PaymentAdditionalDialog, Balance,
-    ReviewAdminList, ReportList, EmailShow, BgAvatar, PhoneList, DisplayData,
+    ReviewAdminList, ReportList, EmailShow, BgAvatar, PhoneList, DisplayData, TeacherFreetimeList,
   },
 
   data() {

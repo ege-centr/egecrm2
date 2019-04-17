@@ -28,6 +28,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
 
     Route::post('lessons/conduct/{id}', 'LessonsController@conduct');
 
+
     Route::prefix('abstract-groups')->group(function() {
         Route::get('/', 'AbstractGroupsController@index');
         Route::get('/{year}/{grade_id}/{subject_id}', 'AbstractGroupsController@show');
@@ -43,6 +44,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
     });
 
     Route::apiResources([
+        'teacher/freetime' => 'TeacherFreetimeController',
         'admins' => 'AdminsController',
         'requests' => 'RequestsController',
         'clients' => 'ClientsController',
