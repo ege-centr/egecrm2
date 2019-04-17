@@ -36,5 +36,9 @@ class Cabinet extends Model
         static::addGlobalScope('order', function(Builder $builder) {
             $builder->orderByRaw('branch_id asc, number asc');
         });
+
+        static::addGlobalScope('unused', function (Builder $builder) {
+            $builder->whereIn('branch_id', [1, 2]);
+        });
     }
 }

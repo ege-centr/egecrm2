@@ -7,8 +7,8 @@
       :key='weekday' 
       :items='getItemsByWeekday(weekday)'
       :class="{
-        'mr-3': weekday === 5,
-        'mr-1': weekday,
+        'mr-4': weekday === 5,
+        'mr-3': weekday,
       }"
       :current-class='currentClass'
       :show-date='showDate'
@@ -51,7 +51,8 @@ export default {
     regular: {
       type: String,
       required: false,
-    }
+    },
+
   },
 
   components: { TimelineDay },

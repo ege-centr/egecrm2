@@ -61,6 +61,12 @@ export default {
       default: false,
     },
 
+    fixedWidth: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
+
     weekday: {
       type: Number,
       required: false,
@@ -126,19 +132,26 @@ export default {
 
 .timeline {
   $height: 12px;
+  $width: 50px;
   &__day {
     display: inline-block;
     position: relative;
-    flex: 1;
+    // flex: 1;
     height: $height;
-    width: 100%;
-    background: #C1D2DD;
+    // width: 100%;
+    width: $width;
+    background: #cfcfcf;
+    &_fixed-width {
+      width: 50px;
+    }
     &__label {
-      font-size: 12px; 
+      font-size: 11px; 
       white-space: nowrap; 
       position: absolute;
       top: -20px;
-      left: 4px;
+      left: 0;
+      width: $width;
+      text-align: center;
     }
     &__interval {
       left: 20%;

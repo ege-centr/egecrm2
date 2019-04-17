@@ -25,7 +25,7 @@
         <div v-for="cabinet in $store.state.data.cabinets" 
           :key='cabinet.id' 
           class='mr-3 grey--text'>
-            <div style='font-size: 12px; white-space: nowrap; text-align: center; width: 50px'>
+            <div style='font-size: 11px; white-space: nowrap; text-align: center; width: 50px'>
               {{ cabinet.title }}
             </div>
 
@@ -41,7 +41,7 @@
 
       <!-- GROUP -->
       <div v-if='selectedMode === mode.group'>
-        <TimelineWeek regular :items='items.regular' :show-weekday='true' class='mb-4' />
+        <TimelineWeek regular :items='items.regular' :show-weekday='true' class='mb-3' />
 
         <div v-for='(weekItems, index) in items.detailed' :key='index' class='mb-2'>
           <TimelineWeek 
@@ -53,8 +53,8 @@
       </div>
 
       <!-- TEACHER -->
-      <div v-if='selectedMode === mode.teacher'>
-        <TimelineWeek regular :items='items.regular' class='mb-4' :show-weekday='true' />
+      <div v-if='selectedMode === mode.teacher' style='width: 454px'>
+        <TimelineWeek regular :items='items.regular' class='mb-3' :show-weekday='true' />
 
         <div v-for='(weekItems, index) in items.detailed' :key='index' class='mb-2'>
           <TimelineWeek 
