@@ -13,7 +13,7 @@ use App\Models\{
     Contract\Contract
 };
 use App\Http\Resources\Lesson\{LessonResource, LessonCollection};
-use User;
+use User, DateTime;
 
 class LessonsController extends Controller
 {
@@ -117,5 +117,48 @@ class LessonsController extends Controller
         ]);
 
         return new LessonResource($lesson->fresh());
+    }
+
+    /**
+     * Прокопировать занятия до июнь-месяца
+     *
+     * @param array $ids ID занятий для копирования
+     */
+    public function massClone(Request $request)
+    {
+        // c каким шагом копировать занятия
+        $step = '+1 week';
+
+        $lessons = Lesson::whereIn('id', $request->ids)->get();
+
+        foreach($lessons as $lesson) {
+            // копируем до июнь-месяца
+            $date = (new DateTime($lesson->date))->modify($step);
+            while($date->format('n') != 6) {
+                Lesson::create([
+                    'date' => $date->format(DATE_FORMAT),
+                    'time' => $lesson->time,
+                    'teacher_id' => $lesson->teacher_id,
+                    'price' => $lesson->price,
+                    'cabinet_id' => $lesson->cabinet_id,
+                    'group_id' => $lesson->group_id,
+                    'year' => $lesson->year,
+                    'duration' => $lesson->duration,
+                ]);
+                $date->modify($step);
+            }
+        }
+    }
+
+    /**
+     * Массовое удаление занятия
+     *
+     * @param array $ids ID занятий для удаления
+     */
+    public function massDestroy(Request $request)
+    {
+        foreach(Lesson::whereIn('id', $request->ids)->get() as $lesson) {
+            $lesson->delete();
+        }
     }
 }

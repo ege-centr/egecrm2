@@ -1,7 +1,8 @@
 <template>
-  <div class='no-data border-radius grey--text darken-3' 
+  <div class='no-data grey--text darken-3' 
     :class="{
-      'no-data_transparent': transparent === ''
+      'no-data_transparent': transparent === '',
+      'no-data_square': square === '',
     }"
     :style='{ height: `${ height }px` }'>
     <div class='headline font-weight-bold'>
@@ -48,9 +49,9 @@ export default {
       required: false,
     },
 
-    isTab: {
-      type: Boolean,
-      default: false,
+    square: {
+      type: String,
+      required: false,
     },
 
     color: {
@@ -72,6 +73,12 @@ export default {
   flex-direction: column;
   background: #f6f7f8;
   width: 100%;
+  border-radius: 4px;
+  &_square {
+    background: white;
+    border-radius: 0;
+    height: 300px !important;
+  }
   &_transparent {
     background: transparent;
   }

@@ -1,5 +1,6 @@
 <template>
   <v-data-table 
+    v-if='items.length > 0'
     class='v-datatable--small'
     :class='config.elevationClass'
     :items='items'
@@ -68,6 +69,10 @@
       </tr>
     </template>
   </v-data-table>
+  <NoData
+    transparent
+    v-else
+  />
 </template>
 
 

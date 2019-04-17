@@ -150,10 +150,11 @@
               </v-layout>
               <NoData 
                 v-else
-                transparent
-                :height='300'
+                square
+                :add='() => $refs.RequestDialog.open(null, {
+                  phones: client.phones,
+                })'
                 :class='config.elevationClass'
-                style='border-radius: 0'
               />
               <!-- <v-data-table :items='[]' hide-actions hide-headers :class='config.elevationClass' v-else>
                 <template slot='no-data'>

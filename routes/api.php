@@ -26,6 +26,9 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
 
     Route::get('schedule/client/{id}', 'ScheduleController@client');
 
+    Route::post('lessons/mass-clone', 'LessonsController@massClone');
+    Route::post('lessons/mass-destroy', 'LessonsController@massDestroy');
+
     Route::post('lessons/conduct/{id}', 'LessonsController@conduct');
 
 

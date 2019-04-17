@@ -1,6 +1,6 @@
 <template>
   <div style='min-height: 200px'>
-    <LessonDialog ref='LessonDialog' />
+    <LessonDialog ref='LessonDialog' @updated='' />
     <ConductDialog ref='ConductDialog' />
     <Loader v-if='items === null' />
     <div v-else>
@@ -9,10 +9,19 @@
           <v-flex>
             <Calendar :year='group.year' :lessons='items' :with-special-dates='true' :group='this.group' />
           </v-flex>
-          <v-flex>
-            <v-data-table hide-actions hide-headers :items='items' class='mt-3' v-if='items.length > 0'>
+          <v-flex class='relative' style='align-self: baseline'>
+            <Loader v-if='loading' />
+            <v-data-table hide-actions hide-headers :items='items' class='mt-3 v-table_no-overflow' v-if='items.length > 0'>
               <template slot='items' slot-scope="{ index, item }">
-                <td width='24' class='px-2'>
+                <td width='24' class='px-2 relative'>
+                  <v-fade-transition>
+                    <v-checkbox 
+                      v-if="selectedMassSelectMode !== null"
+                      :disabled='selectedMassSelectMode === massSelectMode.clone && !isClonable(item)'
+                      class='td-checkbox'
+                      v-model="selectedLessonIds" 
+                      :value='item.id'></v-checkbox>
+                  </v-fade-transition>
                   <LessonStatusCircles :item='item'  />
                 </td>
                 <td width='10' class='px-0'>
@@ -80,29 +89,61 @@
               <template slot='footer' v-if='!readonly && items.length > 0'>
                 <tr>
                   <td colspan='10' class='text-md-right'>
-                    <v-btn slot='activator' flat icon color='primary' class='mx-0'
-                      @click='addLesson()'
-                      v-if='lastPlannedLesson === null'
-                    >
-                      <v-icon>add</v-icon>
-                    </v-btn>
-                    <v-menu v-else>
-                      <v-btn slot='activator' flat icon color='primary' :loading='filling' class='mx-0'>
-                        <v-icon>add</v-icon>
+                    <div v-if='selectedMassSelectMode === null'>
+                      <v-menu>
+                        <v-btn slot='activator' flat icon color='primary' class='mx-0'>
+                          <v-icon>add</v-icon>
+                        </v-btn>
+                        <v-list dense>
+                          <v-list-tile @click='addLesson()'>
+                            <v-list-tile-action>
+                              <v-icon>add</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-title>
+                              добавить 1 занятие
+                            </v-list-tile-title>
+                          </v-list-tile>
+                          <v-list-tile @click="selectedMassSelectMode = massSelectMode.clone">
+                            <v-list-tile-action>
+                              <v-icon>file_copy</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-title>
+                              массовое добавление
+                            </v-list-tile-title>
+                          </v-list-tile>
+                          <v-list-tile @click="selectedMassSelectMode = massSelectMode.destroy">
+                            <v-list-tile-action>
+                              <v-icon>delete</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-title>
+                              массовое удаление
+                            </v-list-tile-title>
+                          </v-list-tile>
+                        </v-list>
+                      </v-menu>
+                    </div>
+                    <div v-else>
+                      <v-btn 
+                        v-if='selectedLessonIds.length === 0'
+                        @click='quitMassSelectMode' 
+                        flat 
+                        icon 
+                        color='primary' 
+                        class='mx-0'>
+                        <v-icon>close</v-icon>
                       </v-btn>
-                      <v-list dense>
-                        <v-list-tile @click='addLesson()'>
-                          <v-list-tile-title>
-                            добавить 1 занятие
-                          </v-list-tile-title>
-                        </v-list-tile>
-                        <v-list-tile @click='fillSchedule'>
-                          <v-list-tile-title>
-                            проставить занятия до 1 июня текущего года
-                          </v-list-tile-title>
-                        </v-list-tile>
-                      </v-list>
-                    </v-menu>
+                      <v-btn 
+                        v-else
+                        @click='massSelectAction' 
+                        flat 
+                        icon 
+                        color='primary' 
+                        class='mx-0'>
+                        <v-icon>
+                          {{ selectedMassSelectMode === massSelectMode.clone ? 'file_copy' : 'delete' }}
+                        </v-icon>
+                      </v-btn>
+                    </div>
                   </td>
                 </tr>
               </template>
@@ -149,7 +190,14 @@ export default {
       LESSON_STATUS,
       dialog: false,
       items: null,
-      filling: false,
+      loading: false,
+
+      selectedLessonIds: [],
+      massSelectMode: {
+        clone: 'clone',
+        destroy: 'destroy',
+      },
+      selectedMassSelectMode: null, // clone | destroy
     }
   },
 
@@ -159,6 +207,7 @@ export default {
 
   methods: {
     async loadData() {
+      this.loading = true
       await axios.get(apiUrl(API_URL), {
         params: {
           group_id: this.group.id,
@@ -166,19 +215,21 @@ export default {
       }).then(r => {
         this.items = r.data
       })
+      this.loading = false
     },
 
     addLesson() {
-      this.$refs.LessonDialog.open(null, {
+      let params = {
         group_id: this.group.id,
         year: this.group.year,
-      })
-    },
-
-    async store(item) {
-      await axios.post(apiUrl(API_URL), item).then(r => {
-        this.items.push(r.data)
-      })
+      }
+      if (this.lastCopiableLesson !== null) {
+        params = {
+          ...params,
+          ..._.pick(this.lastCopiableLesson, ['date', 'time', 'teacher_id', 'price', 'cabinet_id', 'duration'])
+        }
+      }
+      this.$refs.LessonDialog.open(null, params)
     },
 
     indexSkippingCancelledLessons(index) {
@@ -192,20 +243,23 @@ export default {
         && item.teacher_id !== this.$store.state.user.id
     },
 
-    async fillSchedule() {
-      if (this.lastPlannedLesson !== null) {
-        this.filling = true
-        let lastPlannedLesson = clone(this.lastPlannedLesson)
-        let date = lastPlannedLesson.date
-        while (true) {
-          date = moment(date).add(1, 'week').format('YYYY-MM-DD')
-          if (moment(date).format('M') == 6) {
-            this.filling = false
-            return
-          }
-          await this.store({...lastPlannedLesson, date})
-        }
-      }
+    quitMassSelectMode() {
+      this.selectedMassSelectMode = null
+      this.selectedLessonIds = []
+    },
+
+    // занятие можно копировать
+    isClonable(item) {
+      return item.status !== LESSON_STATUS.CANCELLED && !item.is_unplanned
+    },
+
+    async massSelectAction() {
+      const ids = _.clone(this.selectedLessonIds)
+      const action = 'mass-' + this.selectedMassSelectMode
+      this.loading = true
+      this.quitMassSelectMode()
+      await axios.post(apiUrl(API_URL, action), { ids })
+      await this.loadData()
     },
   },
 
@@ -214,6 +268,16 @@ export default {
       const plannedLessons = this.items.filter(e => e.status === LESSON_STATUS.PLANNED)
       if (plannedLessons.length > 0) {
         return _.sortBy(plannedLessons, 'date').reverse()[0]
+      }
+      return null
+    },
+
+    // последнее занятие, с которого можно взяьть данные для дублирования
+    // не внеплановое и не отмененное
+    lastClonableLesson() {
+      const lessons = this.items.filter(e => this.isClonable(e))
+      if (lessons.length > 0) {
+        return _.sortBy(lessons, 'date').reverse()[0]
       }
       return null
     },

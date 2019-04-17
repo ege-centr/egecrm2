@@ -15,10 +15,10 @@
     </v-data-table>
     <NoData
       v-else
+      square
       :add='add'
       :height='300'
       :class='config.elevationClass'
-      style='border-radius: 0'
     />
   </div>
 </template>

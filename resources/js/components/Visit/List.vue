@@ -5,7 +5,10 @@
         {{ formatDate(item.date) }} 
         <span v-if='isToday(item.date)'>(сегодня)</span>
       </div>
-      <v-data-table :items='item.items' item-key='id' hide-headers hide-actions :class='config.elevationClass' class='mb-5'>
+      <v-data-table 
+        v-if='item.items.length > 0'
+        :items='item.items' 
+        item-key='id' hide-headers hide-actions :class='config.elevationClass' class='mb-5'>
         <template slot="items" slot-scope="{ item }">
           <td width='44' class='pr-0'>
             <LessonStatusCircles :item='item' />
@@ -37,8 +40,15 @@
             </span>
           </td>
         </template>
-        <NoData slot='no-data' />
       </v-data-table>
+      <NoData 
+        square
+        class='mb-5'
+        :class='config.elevationClass'
+        text='В этот день занятий не было и не планируется'
+        :height='200'
+        v-else
+      />
     </div>
   </div>
 </template>

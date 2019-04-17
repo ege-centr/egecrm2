@@ -463,3 +463,15 @@ nav {
     opacity: 0.0;
   }
 }
+
+.v-table_no-overflow {
+  & > div {
+    overflow: visible;
+  }
+}
+
+.td-checkbox {
+  position: absolute;
+  left: -30px;
+  top: 11px;
+}
