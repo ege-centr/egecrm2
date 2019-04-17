@@ -2,8 +2,6 @@
   <div>
     <div class='headline mb-5'>DEV1</div>
 
-    <Timeline />
-
     <!-- <AddBtn label='Добавить' animated /> -->
     <!-- <div class='outer'>
       <div class='inner'>
@@ -16,10 +14,9 @@
 
 <script>
 
-import Timeline from '@/components/UI/Timeline'
 
 export default {
-  components: { Timeline },
+  components: {  },
   
   data() {
     return {
