@@ -23,6 +23,11 @@ class Schedule
             ->groupBy('weekday', 'time', 'duration')
             ->having('count', '>', 1);
 
+        // если необходимо срезать по году, то подключаем группу
+        if (isset($filters['year'])) {
+            $query->join('groups', 'groups.id', '=', 'lessons.group_id');
+        }
+
         foreach($filters as $field => $value) {
             if (is_array($value)) {
                 $query->whereIn($field, $value);
