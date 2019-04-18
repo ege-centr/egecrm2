@@ -30,10 +30,6 @@ class TimelineController extends Controller
 
     public function group(Request $request)
     {
-        return $this->getData($request, [
-            'lessons.group_id' => $request->group_id
-        ]);
-
         return [
             'regular'  => Schedule::get([
                 'group_id' => $request->group_id
@@ -163,8 +159,10 @@ class TimelineController extends Controller
         } while ($week !== $end);
 
         // Номер недели неважен, JS автоматически сортирует ключи
-        return array_map(function ($items) {
-            return array_values($items);
-        }, $resultGroupedByWeeks);
+        return array_values(
+            array_map(function ($items) {
+                return array_values($items);
+            }, $resultGroupedByWeeks)
+        );
     }
 }
