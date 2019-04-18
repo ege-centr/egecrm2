@@ -62,7 +62,7 @@
           Отчёты
         </v-tab>
          <v-tab>
-          Свободное время
+          Расписание
         </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
@@ -151,9 +151,9 @@
         </v-tab-item>
         
 
-        <!-- СВОБОДНОЕ ВРЕМЯ -->
+        <!-- Расписание -->
         <v-tab-item>
-          <TeacherFreetimeList :teacher-id='Number($route.params.id)' />
+          <TeacherFreetimeList :teacher-id='Number($route.params.id)' :editable='true' />
         </v-tab-item>
       </v-tabs-items>
     </div>

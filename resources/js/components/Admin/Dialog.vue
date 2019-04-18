@@ -58,12 +58,11 @@
               <v-flex md12>
                 <div style='width: 700px'>
                   <v-data-table
-                    v-if='item.ips.length > 0'
                     class='relative-table'
                     :headers="[
-                      {text: 'IP от', sortable: false},
-                      {text: 'IP до', sortable: false},
-                      {text: 'Подтверждение по СМС', sortable: false},
+                      {text: 'IP от', sortable: false, width: 150},
+                      {text: 'IP до', sortable: false, width: 150},
+                      {text: 'Подтверждение по СМС', sortable: false, width: 200},
                       {text: '', sortable: false},
                     ]"
                     :items='item.ips'
@@ -71,7 +70,7 @@
                   >
                     <template v-slot:items='{ item, index }'>
                       <tr>
-                        <td width='150'>
+                        <td>
                           <v-edit-dialog
                             :return-value.sync="item.ip_from"
                             lazy
@@ -88,7 +87,7 @@
                             ></v-text-field>
                           </v-edit-dialog>
                         </td>
-                        <td width='150'>
+                        <td>
                           <v-edit-dialog
                             :return-value.sync="item.ip_to"
                             lazy
@@ -105,7 +104,7 @@
                             ></v-text-field>
                           </v-edit-dialog>
                         </td>
-                        <td width='200'>
+                        <td>
                           <v-switch class='ml-3'
                             v-model="item.confirm_by_sms"
                             color="success"
@@ -130,7 +129,6 @@
                       </tr>
                     </template>
                   </v-data-table>
-                  <NoData :add='addIp' :height='200' v-else />
                 </div>
               </v-flex>
               

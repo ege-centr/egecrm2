@@ -43,6 +43,9 @@
                           label='Номер ПКО' 
                           v-mask="'#####'"></v-text-field>
                       </div>
+                      <div v-if="!item.id && item.method === 'cash'" class='relative grey--text' style='top: 20px'>
+                        будет присвоен номер ПКО
+                      </div>
                     </div>
                   </div>
                   <div class='vertical-inputs__input'>

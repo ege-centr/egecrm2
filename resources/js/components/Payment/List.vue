@@ -51,7 +51,7 @@
           </td>
           <td class='text-md-right'>
             <v-menu left v-if='item.bill_number > 0'>
-              <v-btn slot='activator' flat icon small color="black" class='ma-0'>
+              <v-btn slot='activator' flat icon color="black" class='ma-0'>
                 <v-icon>more_horiz</v-icon>
               </v-btn>
               <v-list dense>

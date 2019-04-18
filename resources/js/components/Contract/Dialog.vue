@@ -89,12 +89,11 @@
               <!-- ПЛАТЕЖИ -->
               <v-flex md4>
                 <v-data-table
-                  v-if='item.payments.length > 0'
                   class='relative-table'
                   :headers="[
-                    {text: 'Платеж, руб.', sortable: false},
-                    {text: 'Уроков', sortable: false},
-                    {text: 'Дата', sortable: false},
+                    {text: 'Платеж, руб.', sortable: false, width: 150},
+                    {text: 'Уроков', sortable: false, width: 150},
+                    {text: 'Дата', sortable: false, width: 250},
                     {text: '', sortable: false},
                   ]"
                   :items='item.payments'
@@ -102,7 +101,7 @@
                 >
                   <template v-slot:items='{ item, index }'>
                     <tr>
-                      <td width='150'>
+                      <td>
                         <v-edit-dialog
                           :return-value.sync="item.sum"
                           lazy
@@ -119,7 +118,7 @@
                           ></v-text-field>
                         </v-edit-dialog>
                       </td>
-                      <td width='150'>
+                      <td>
                         <v-edit-dialog
                           :return-value.sync="item.lessons"
                           lazy
@@ -136,7 +135,7 @@
                           ></v-text-field>
                         </v-edit-dialog>
                       </td>
-                      <td width='250'>
+                      <td>
                         <v-menu
                           :ref="`datepicker-${index}`"
                           :return-value.sync="item.date"
@@ -178,7 +177,6 @@
                     </tr>
                   </template>
                 </v-data-table>
-                <NoData :add='addPayment' v-else />
               </v-flex>
               <!-- /ПЛАТЕЖИ -->
 

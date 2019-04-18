@@ -9,12 +9,12 @@
           </v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items v-if='item !== null'>
-            <v-btn dark flat @click.native="conduct" 
+            <v-btn dark icon @click.native="conduct" 
               v-if="item.status === LESSON_STATUS.PLANNED"
               :loading='conducting'>
               <v-icon>assignment</v-icon>
             </v-btn>
-            <v-btn dark flat 
+            <v-btn dark icon 
               v-if="item.status === LESSON_STATUS.CONDUCTED"
               @click.native="storeOrUpdate" 
               :disabled='cantEdit'
@@ -48,7 +48,6 @@
                 hide-actions
                 :headers="headers"
                 :items='clientLessons'
-                v-if='clientLessons.length > 0'
               >
                 <template slot="items" slot-scope="{ item }">
                   <td width='200'>
@@ -128,10 +127,6 @@
                   </tr>
                 </template>
               </v-data-table>
-              <NoData 
-                v-else
-                style='width: calc(100% - 48px); margin: 0 auto'
-                :add='$refs.AddClientDialog.open' />
             </div>
             
             <!-- Планируемое занятие -->
@@ -258,13 +253,13 @@ export default {
 
     headers() {
       const headers = [
-        { text: 'Ученик', sortable: false },
-        { text: 'Отсутствовал', sortable: false }, 
-        { text: 'Опоздание', sortable: false },
+        { text: 'Ученик', sortable: false, width: 200 },
+        { text: 'Отсутствовал', sortable: false, width: 150 }, 
+        { text: 'Опоздание', sortable: false, width: 150 },
         { text: 'Комментарий', sortable: false },
       ]
       if (this.$store.state.user.class === ROLES.ADMIN) {
-        headers.splice(3, 0, { text: 'Цена', sortable: false })
+        headers.splice(3, 0, { text: 'Цена', sortable: false, width: 150 })
         headers.splice(5, 0, { text: '', sortable: false })
       }
       return headers

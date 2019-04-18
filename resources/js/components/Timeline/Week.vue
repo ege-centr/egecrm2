@@ -10,6 +10,7 @@
         'mr-4': weekday === 5,
         'mr-2': weekday,
       }"
+      :color='color'
       :current-class='currentClass'
       :show-date='showDate'
       :weekday='weekday'
@@ -53,6 +54,12 @@ export default {
       required: false,
     },
 
+    // цвет интервалов
+    color: {
+      type: String,
+      default: null,
+      required: false,
+    }
   },
 
   components: { TimelineDay },

@@ -68,7 +68,7 @@
           >
             добавить
           </v-btn>
-          <v-btn small color='black' flat icon
+          <v-btn color='black' flat icon
             @click='$refs.Dialog.open(item.report.id)'
             v-if='item.report !== null'
           >

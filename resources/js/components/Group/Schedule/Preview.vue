@@ -54,7 +54,9 @@
 
       <!-- TEACHER -->
       <div v-if='selectedMode === mode.teacher'>
-        <TimelineWeek regular :items='items.regular' class='mb-3' :show-weekday='true' />
+        <TimelineWeek :items='teacherFreetime' color='amber' :show-weekday='true'  class='mb-3'  />
+        
+        <TimelineWeek regular :items='items.regular' class='mb-3' />
 
         <div v-for='(weekItems, index) in items.detailed' :key='index' class='mb-2'>
           <TimelineWeek 
@@ -72,6 +74,7 @@
 <script>
 
 import { API_URL } from '@/components/Timeline'
+import { API_URL as TEACHER_FREETIME_API_URL } from '@/components/Teacher/Freetime'
 import TimelineDay from '@/components/Timeline/Day'
 import TimelineWeek from '@/components/Timeline/Week'
 
@@ -92,6 +95,7 @@ export default {
       selectedMode: mode.cabinet,
       items: null,
       loading: false,
+      teacherFreetime: null,
     }
   },
 
@@ -120,7 +124,18 @@ export default {
         }).then(r => {
           this.items = r.data
           this.loading = false
-        }) 
+        })
+
+        if (this.teacherFreetime === null) {
+          axios.get(apiUrl(TEACHER_FREETIME_API_URL), {
+            params: {
+              teacher_id: this.item.teacher_id
+            }
+          }).then(r => {
+            this.teacherFreetime = r.data.data
+            this.loading = false
+          })
+        } 
       }
     },
 

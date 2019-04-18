@@ -14,6 +14,7 @@
             class="timeline__day__interval"
             :class="{
               [currentClass]: item.is_current,
+              [color]: color !== null,
               [`timeline__day__interval_${item.status}`]: item.status,
               'timeline__day__interval_overlaps': overlaps(item, index),
             }"
@@ -71,6 +72,13 @@ export default {
       type: Number,
       required: false,
     },
+
+    // цвет интервалов
+    color: {
+      type: String,
+      default: null,
+      required: false,
+    }
   },
 
   data() {
@@ -109,6 +117,9 @@ export default {
 
     // время пересекается с другим
     overlaps(item, index) {
+      if (item.overlaps === true) {
+        return true
+      }
       const range = this.getRange(item)
       let overlaps = false
       this.items.forEach((item2, index2) => {
@@ -141,6 +152,7 @@ export default {
     // width: 100%;
     width: $width;
     background: #cfcfcf;
+    overflow-x: hidden;
     &_fixed-width {
       width: 50px;
     }

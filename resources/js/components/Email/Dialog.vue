@@ -11,9 +11,6 @@
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay content-class='email-dialog'>
       <v-card>
         <v-toolbar dark color="primary">
-          <v-btn icon dark @click.native="dialog = false">
-            <v-icon>close</v-icon>
-          </v-btn>
           <v-toolbar-title>Отправка email</v-toolbar-title>
             <v-spacer></v-spacer>
           <v-toolbar-items>

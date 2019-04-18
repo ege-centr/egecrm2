@@ -3,10 +3,11 @@
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card>
         <v-toolbar dark color="primary">
+          <v-toolbar-title>История переписки с {{ email }}</v-toolbar-title>
+          <v-spacer></v-spacer>
           <v-btn icon dark @click.native="dialog = false">
             <v-icon>close</v-icon>
           </v-btn>
-          <v-toolbar-title>История переписки с {{ email }}</v-toolbar-title>
         </v-toolbar>
         <v-card-text class='email-messages'>
             <Loader transparent v-if='items === null' />

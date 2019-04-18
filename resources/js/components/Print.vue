@@ -19,8 +19,8 @@
           <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
             <v-layout wrap>
               <v-flex md12>
-                <!-- <TextEditor v-model='text' /> -->
-                <codemirror style='height: 1000px' :options="cmOptions" v-model='text' />
+                <TextEditor v-model='text' />
+                <!-- <codemirror style='height: 1000px' :options="cmOptions" v-model='text' /> -->
               </v-flex>
               <div id='print-block' v-html='text'></div>
             </v-layout>
@@ -32,9 +32,10 @@
 </template>
 
 <script>
+// import VueFroala from 'vue-froala-wysiwyg'
 import { TextEditor } from '@/components/UI'
-import 'codemirror/mode/htmlmixed/htmlmixed.js'
-import { codemirror } from 'vue-codemirror'
+// import 'codemirror/mode/htmlmixed/htmlmixed.js'
+// import { codemirror } from 'vue-codemirror'
 import printJS from 'print-js'
 
 const API_URL = 'print'
@@ -52,7 +53,7 @@ export default {
     },
   },
 
-  components: { TextEditor, codemirror },
+  components: { TextEditor },
 
   data() {
     return {
