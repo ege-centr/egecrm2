@@ -22,7 +22,13 @@ class PrintController extends Controller
     private function contract(array $params)
     {
         $contract = Contract::find($params['id']);
-        return view('print.contract')->with(compact('contract'));
+
+        return view('print.contract')->with([
+            'contract' => $contract,
+            'representative' => $contract->client->representative,
+            'oneSubjectPrice' => round($contract->discounted_sum / collect($contract->subjects)->sum('lessons')),
+            'contractDate' => date('d.m.Y', strtotime($contract->date)),
+        ]);
     }
 
     private function teacher(array $params)

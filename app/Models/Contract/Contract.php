@@ -3,8 +3,9 @@
 namespace App\Models\Contract;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\{User, Admin\Admin, Client\Client};
+use App\Models\{User, Admin\Admin, Client\Client, Factory\Grade};
 use App\Traits\HasCreatedEmail;
+
 
 class Contract extends Model
 {
@@ -25,6 +26,19 @@ class Contract extends Model
     public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+
+    public function getGradeAttribute()
+    {
+        return Grade::find($this->grade_id);
+    }
+
+    public function getDiscountedSumAttribute()
+    {
+        if ($this->discount > 0) {
+            return round($this->sum - ($this->sum * ($this->discount / 100)));
+        }
+        return $this->sum;
     }
 
     /**

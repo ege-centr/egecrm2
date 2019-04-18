@@ -3,6 +3,7 @@
 namespace App\Models\Contract;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Factory\Subject;
 
 class ContractSubject extends Model
 {
@@ -13,4 +14,9 @@ class ContractSubject extends Model
         'lessons_planned',
         'status'
     ];
+
+    public function getSubjectAttribute()
+    {
+        return Subject::whereId($this->subject_id)->first();
+    }
 }

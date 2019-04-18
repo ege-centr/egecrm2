@@ -7,6 +7,13 @@
   resolved "https://registry.yarnpkg.com/@finpo/vue2-recaptcha-invisible/-/vue2-recaptcha-invisible-1.2.0.tgz#c92f10079ccb454000c35508070d1eac0dfce76e"
   integrity sha512-I6SBqYghcgAyA5BhOpvcE5JELfeaxgYWvDpB5dXG0lSOIQ0z8fjazNY6Oo9X2HrYE1CUis28ySQCtANPf22mFA==
 
+"@tinymce/tinymce-vue@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@tinymce/tinymce-vue/-/tinymce-vue-2.0.0.tgz#41cea256f67f195ac52f71b1cc0bcbda850c86f0"
+  integrity sha512-oUl8r1WvoLsy1NxpFMPNa8hZohkha6biNGLBAhtWUEIsqnmAhvosTPdVj2uroAlK7rjOcDTOy2jIkuNOsLuvtA==
+  dependencies:
+    vue "^2.5.17"
+
 "@types/babel-types@*", "@types/babel-types@^7.0.0":
   version "7.0.6"
   resolved "https://registry.yarnpkg.com/@types/babel-types/-/babel-types-7.0.6.tgz#a7cfaaeee96e90c4c54da0e580aaff3f4cffacac"
@@ -6843,7 +6850,7 @@ vue2-google-maps@^0.10.2:
     babel-runtime "^5.8.0"
     marker-clusterer-plus "^2.1.4"
 
-vue@^2.5.7:
+vue@^2.5.17, vue@^2.5.7:
   version "2.6.10"
   resolved "https://registry.yarnpkg.com/vue/-/vue-2.6.10.tgz#a72b1a42a4d82a721ea438d1b6bf55e66195c637"
   integrity sha512-ImThpeNU9HbdZL3utgMCq0oiMzAkt1mcgy3/E6zWC/G6AaQoeuFdsl9nDhTDU3X1R6FK7nsIUuRACVcjI+A2GQ==

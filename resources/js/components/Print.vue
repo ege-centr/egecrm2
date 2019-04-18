@@ -19,7 +19,8 @@
           <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
             <v-layout wrap>
               <v-flex md12>
-                <TextEditor v-model='text' />
+                <Editor v-model='text' :api-key='tinyMceApiKey' :init='tinyMceInit' />
+                <!-- <TextEditor v-model='text' /> -->
                 <!-- <codemirror style='height: 1000px' :options="cmOptions" v-model='text' /> -->
               </v-flex>
               <div id='print-block' v-html='text'></div>
@@ -33,6 +34,7 @@
 
 <script>
 // import VueFroala from 'vue-froala-wysiwyg'
+import Editor from '@tinymce/tinymce-vue';
 import { TextEditor } from '@/components/UI'
 // import 'codemirror/mode/htmlmixed/htmlmixed.js'
 // import { codemirror } from 'vue-codemirror'
@@ -53,13 +55,17 @@ export default {
     },
   },
 
-  components: { TextEditor },
+  components: { Editor, TextEditor },
 
   data() {
     return {
+      tinyMceApiKey: process.env.MIX_TINYMCE_API_KEY,
       dialog: false,
       loading: true,
       text: '',
+      tinyMceInit: {
+        inline: true,
+      },
       cmOptions: {
         tabSize: 4,
         mode: 'text/html',

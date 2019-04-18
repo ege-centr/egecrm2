@@ -23,7 +23,9 @@
         "laravel/tinker": "^1.0",
         "myclabs/php-enum": "^1.6",
         "predis/predis": "^1.1",
-        "symfony/yaml": "^4.2"
+        "symfony/yaml": "^4.2",
+        "wapmorgan/morphos": "^3.2",
+        "wapmorgan/morphos-blade": "^1.6"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.2",

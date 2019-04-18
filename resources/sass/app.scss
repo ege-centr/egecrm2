@@ -241,6 +241,12 @@ nav {
   height: 85vh;
 }
 
+.mce-content-body {
+  height: 92vh;
+  outline: none;
+  overflow-y: scroll;
+}
+
 .ql-toolbar.ql-snow {
   border-top: none !important;
   border-left: none !important;
