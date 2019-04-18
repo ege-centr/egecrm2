@@ -30,6 +30,10 @@ class TimelineController extends Controller
 
     public function group(Request $request)
     {
+        return $this->getData($request, [
+            'lessons.group_id' => $request->group_id
+        ]);
+
         return [
             'regular'  => Schedule::get([
                 'group_id' => $request->group_id
@@ -154,7 +158,7 @@ class TimelineController extends Controller
         $resultGroupedByWeeks = [];
         do {
             $week = date('W', $current);
-            $resultGroupedByWeeks[$week] = isset($result[$week]) ? array_values($result[$week]) : [];
+            $resultGroupedByWeeks[date('Y-W', $current)] = isset($result[$week]) ? array_values($result[$week]) : [];
             $current = strtotime('next Monday', $current);
         } while ($week !== $end);
 
