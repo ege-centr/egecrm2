@@ -1,7 +1,16 @@
 <template>
   <div>
-    <div class='headline mb-4'>
+    <div class='headline mb-4 flex-items align-center'>
       Клиент {{ clientId || $route.params.id }}
+
+      <v-chip 
+        readonly
+        class='ml-3 no-pointer-events'
+        small
+        outline 
+        :color="client.is_banned ? 'grey' : 'success'" 
+        v-if='this.client !== null'>
+        {{ client.is_banned ? 'архив' : 'активен' }}</v-chip>
     </div>
     <v-card class='mb-4' :class='config.elevationClass'>
       <v-card-text class='relative card-with-loader'>

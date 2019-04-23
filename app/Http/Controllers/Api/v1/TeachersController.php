@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Teacher;
-use App\Http\Resources\Teacher\{Collection as TeacherCollection, Resource as TeacherResource};
+use App\Http\Resources\Teacher\{TeacherCollection, TeacherResource};
 
 class TeachersController extends Controller
 {

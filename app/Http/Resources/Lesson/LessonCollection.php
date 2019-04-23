@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Lesson;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Teacher\Collection as TeacherCollection;
+use App\Http\Resources\Teacher\TeacherCollection;
 use PersonResource;
 
 class LessonCollection extends JsonResource

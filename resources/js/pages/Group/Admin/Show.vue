@@ -8,7 +8,7 @@
       Группа {{ $route.params.id }}
       <v-chip 
         readonly
-        class='ml-3'
+        class='ml-3 no-pointer-events'
         small
         outline 
         :color="item.is_archived ? 'grey' : 'success'" 

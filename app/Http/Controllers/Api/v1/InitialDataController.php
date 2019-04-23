@@ -5,9 +5,15 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Factory\{Branch, Subject, Grade, Year};
-use App\Models\{Teacher, Cabinet, User, Admin\Admin};
+use App\Models\{
+    Teacher,
+    Cabinet,
+    User,
+    Admin\Admin,
+    Background
+};
 use App\Http\Resources\Admin\{AdminCollection, AdminLightResource};
-use App\Http\Resources\Teacher\Collection as TeacherCollection;
+use App\Http\Resources\Teacher\TeacherCollection;
 
 /**
  * Загрузка изначальных данных,
@@ -17,14 +23,14 @@ class InitialDataController extends Controller
 {
     public function index()
     {
-        $user = null;
+        // $user = null;
 
-        if (User::loggedIn()) {
-            $user = User::fromSession();
-            if (User::isAdmin()) {
-                $user = (new AdminLightResource($user))->resource;
-            }
-        }
+        // if (User::loggedIn()) {
+        //     $user = User::fromSession();
+        //     if (User::isAdmin()) {
+        //         $user = (new AdminLightResource($user))->resource;
+        //     }
+        // }
 
         return response()->json([
             'data' => [
@@ -36,8 +42,9 @@ class InitialDataController extends Controller
                 'teachers' => TeacherCollection::collection(Teacher::get()),
                 'academic_year' => academicYear(),
                 'cabinets' => Cabinet::all(),
+                'background' => Background::get(),
             ],
-            'user' => User::fromSession(),
+            'user' => User::loggedIn() ? User::fromSession() : null,
         ]);
     }
 }

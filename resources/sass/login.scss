@@ -138,7 +138,7 @@ input[type="password"] {
 }
 
 .wallpaper-by {
-    position: absolute;
+    position: fixed;
     right: 10px;
     bottom: 10px;
     background: rgba(255, 255, 255, .5);
@@ -228,16 +228,27 @@ input[type="password"] {
  	line-height: 18px;
  }
 
- .login-errors {
+ .login-message {
      position: absolute;
-     background: #fadedf;
+     
      font-size: 12px;
      width: 220px;
      margin-left: -20px;
      margin-top: 12px;
      padding: 12px 20px;
-     color: #c40000;
+     &_error {
+        background: #fadedf;
+        color: #c40000;
+     }
+     &_success {
+      background: #e0fade;
+      color: #007115;
+     }
  }
+
+.login-success-text {
+  color: #007115;
+}
 
 .input-groups {
     width: 100%;
@@ -250,4 +261,18 @@ input:focus:-ms-input-placeholder { color:transparent; } /* IE 10+ */
 
 .grecaptcha-badge {
     visibility: hidden;
+}
+
+.login-bottom-links {
+  font-size: 12px;
+  margin-top: 18px;
+  display: flex;
+  flex-direction: column;
+  & a {
+    color: #337ab7;
+    margin-top: 4px;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }

@@ -8,7 +8,7 @@ use App\Http\Resources\Group\Collection as GroupCollection;
 use App\Http\Resources\{Test\ClientTest, Phone\PhoneResource};
 use App\Http\Resources\Photo\PhotoResource;
 
-class Resource extends JsonResource
+class ClientResource extends JsonResource
 {
     public function toArray($request)
     {
@@ -18,6 +18,7 @@ class Resource extends JsonResource
             'default_name' => $this->default_name,
             // 'requests' => $this->getRequests(),
             // 'payments' => $this->payments,
+            'birthdate' => $this->birthdate,
             'groups' => $this->groups,
             'contracts' => ContractResource::collection($this->contracts),
             'representative' => new Representative($this->representative),
@@ -26,6 +27,7 @@ class Resource extends JsonResource
             'photo' => new PhotoResource($this->photo),
             'headTeacher' => $this->getHeadTeacher(),
             'createdUser' => new \PersonResource($this->createdUser),
+            'is_banned' => $this->isBanned(),
         ]);
     }
 }

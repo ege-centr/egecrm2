@@ -1,9 +1,9 @@
 <template>
   <div>
-    <v-dialog v-model="dialog" width="500">
+    <v-dialog v-model="dialog" width="500" persistent>
       <v-card>
-        <v-card-title>
-          <span class="headline">Сессия завершится через {{ seconds_until_logout }}...</span>
+        <v-card-title class='justify-center'>
+          <span class="headline">Сессия завершится через {{ secondsUntilLogout }}...</span>
         </v-card-title>
         <v-card-text>
         <v-layout wrap align-center>
@@ -11,6 +11,7 @@
         <v-card-actions>
          <v-spacer></v-spacer>
          <v-btn color="primary" @click.native="continueSession">Продолжить сессию</v-btn>
+         <v-spacer></v-spacer>
        </v-card-actions>
       </v-card-text>
     </v-card>
@@ -23,7 +24,7 @@ export default {
   data() {
     return {
       dialog: false,
-      seconds_until_logout: null,
+      secondsUntilLogout: null,
       interval: null
     }
   },
@@ -43,24 +44,26 @@ export default {
           case 'notify':
             return this.logoutCountdown()
           case 'destroy':
-            return window.location.href = '/logout'
+            location.reload()
+            break
         }
       })
     },
 
     logoutCountdown() {
       this.dialog = true
-      this.seconds_until_logout = 59
+      this.secondsUntilLogout = 59
       this.interval = setInterval(() => {
-        this.seconds_until_logout--
-        if (this.seconds_until_logout <= 0) {
-          location.reload()
+        if (this.secondsUntilLogout <= 0) {
+          this.$store.dispatch('logout')
+        } else {
+          this.secondsUntilLogout--
         }
-      })
+      }, 1000)
     },
 
     continueSession() {
-      axios.get("/auth/continue-session")
+      axios.get(apiUrl('continue-session'))
       this.interval = null
       this.dialog = false
     }

@@ -5,19 +5,12 @@
       'show-drawer_show': isShow,
       'show-drawer_hide': !isShow,
     }"
-    @mouseover="hover = true"
-    @mouseleave="hover = false"
     @click="$store.commit('toggleDrawer', isShow ? true : false)">
-    <transition
-      :enter-active-class="isShow ? 'animated slideInLeft' : 'animated slideInRight'"
-      :leave-active-class="isShow ? 'animated slideOutLeft' : 'animated slideOutRight'"
-    >
-        <div class='show-drawer__btn' v-if='hover'>
-          <v-icon color='white'>
-            {{ isShow ? 'arrow_forward_ios' : 'arrow_backward_ios' }}
-          </v-icon>
-        </div>
-    </transition>
+      <div class='show-drawer__btn'>
+        <v-icon color='white'>
+          {{ isShow ? 'arrow_forward_ios' : 'arrow_back_ios' }}
+        </v-icon>
+      </div>
   </div>
 </template>
 
@@ -60,28 +53,52 @@ export default {
       width: 30px;
       & .show-drawer {
         &__btn {
-          padding-left: 6px;
+          right: -30px;
+          & .v-icon {
+            right: -10px;
+          }
+        }
+      }
+      &:hover {
+        .show-drawer__btn {
+          right: 0;
+          & .v-icon {
+            opacity: 1;
+          }
         }
       }
     }
     &_show {
       & .show-drawer {
         &__btn {
+          left: -30px;
           background: #213846;
+          & .v-icon {
+            left: -2px;
+          }
+        }
+      }
+      &:hover {
+        .show-drawer__btn {
+          left: 0;
+          & .v-icon {
+            opacity: 1;
+          }
         }
       }
     }
     &__btn {
-      animation-duration: .3s;
       // background: #213846;
+      transition: all ease-in-out .3s;
+      position: relative;
       display: flex;
       align-items: center;
       height: 100%;
       cursor: pointer;
       & .v-icon {
-        animation-duration: .5s;
+        transition: opacity ease-in-out .7s;
+        opacity: 0;
         position: relative;
-        left: -2px;
       }
     }
   }

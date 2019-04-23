@@ -1,8 +1,8 @@
 <template>
   <v-app id="inspire">
-    <ClientLayout v-if='$store.state.user.class === CLIENT_CLASS_NAME' @logout='logout' />
-    <TeacherLayout v-if='$store.state.user.class === TEACHER_CLASS_NAME' @logout='logout' />
-    <AdminLayout @logout='logout' v-if='$store.state.user.class === ADMIN_CLASS_NAME' />
+    <ClientLayout v-if='$store.state.user.class === CLIENT_CLASS_NAME' />
+    <TeacherLayout v-if='$store.state.user.class === TEACHER_CLASS_NAME' />
+    <AdminLayout v-if='$store.state.user.class === ADMIN_CLASS_NAME' />
     <v-content>
       <v-container fluid>
         <transition name="fade">
@@ -18,7 +18,7 @@
     >
       {{ $store.state.snackBar.text }}
     </v-snackbar>
-    <!-- <ListenToLogout></ListenToLogout> -->
+    <ListenToLogout />
   </v-app>
 </template>
 
@@ -31,6 +31,7 @@
   import { CLASS_NAME as TEACHER_CLASS_NAME } from '@/components/Teacher'
   import { CLASS_NAME as ADMIN_CLASS_NAME } from '@/components/Admin'
   import { SearchResults } from '@/components/Search'
+  import ListenToLogout from '@/components/ListenToLogout'
 
   export default {
     data() {
@@ -41,13 +42,6 @@
       }
     },
 
-    components: { AdminLayout, TeacherLayout, ClientLayout, SearchResults },
-    
-    methods: {
-      logout() {
-        axios.get(apiUrl('logout'))
-        this.$store.commit('setUser', null)
-      }
-    }
+    components: { AdminLayout, TeacherLayout, ClientLayout, SearchResults, ListenToLogout },
   }
 </script>

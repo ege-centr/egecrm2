@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use ReCaptcha\ReCaptcha;
 use App\Models\{User, Email};
+use App\Http\Resources\Admin\AdminResource;
 
 class LoginController extends Controller
 {
@@ -21,7 +22,11 @@ class LoginController extends Controller
         // }
 
         $response = User::login($request->credentials);
-        return response()->json($response->status === 200 ? User::fromSession() : $response->data, $response->status);
+        return response()->json(
+            $response->status === 200 ?
+            new AdminResource(User::fromSession()) :
+            $response->data, $response->status
+        );
     }
 
     public function logout()

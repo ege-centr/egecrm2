@@ -1,6 +1,6 @@
 <template>
   <div>
-    <AppLayout v-if="$store.state.user"></AppLayout>
+    <AppLayout v-if="$store.state.user"></AppLayout> 
     <LoginLayout v-else></LoginLayout>
   </div>
 </template>

@@ -1,11 +1,17 @@
 <template>
   <div>
-    <center autocomplete="off" class="login-form animated fadeIn">
+    <Loader v-if='backgroundLoading' />
+    <center autocomplete="off" class="login-form animated fadeIn" v-else>
         <div class="login-logo group">
-            <img src="/img/svg/logo.svg" />
+            <Avatar v-if='lastLoggedUser' :photo='lastLoggedUser.photo' :size='54' />
+            <img v-else src="/img/svg/logo.svg" />
         </div>
-        <div class="input-groups">
-            <div class="group">
+        <div class="input-groups" v-if='!forgotPasswordScreen'>
+            <div class="group" v-if='lastLoggedUser'>
+                <input :disabled="true" type="text"
+                  ref="login" :value='lastLoggedUser.default_name' autocomplete="off">
+            </div>
+            <div class="group" v-else>
                 <input :disabled="sms_verification" type="text" placeholder="логин" autofocus
                   ref="login" v-model="credentials.login" autocomplete="off" @keyup.enter="imitateSubmit">
             </div>
@@ -23,9 +29,25 @@
               </div>
             </div>
         </div>
-        <div v-show="error" class="login-errors">
-          {{ error }}
+        <ForgotPassword
+          @message='setMessage'
+          @back='forgotPasswordScreen = false' 
+        v-else />
+        <div class='login-bottom-links' v-if='!forgotPasswordScreen'>
+          <a v-if='lastLoggedUser' @click='forgetLastUser'>другой пользователь</a>
+          <a v-else @click='forgotPasswordScreen = true'>забыли пароль?</a>
         </div>
+        <div v-if="message !== null" class="login-message" :class="{
+          'login-message_success': message.type === 'success',
+          'login-message_error': message.type === 'error',
+        }" v-html='message.text'></div>
+        
+        <span v-if='backgroundAllowed && background.admin !== null' class="wallpaper-by animated fadeInRight">
+          <span v-if='background.title'>
+            {{ background.title }} –
+          </span>
+          by {{ background.admin.default_name }}
+        </span>
     </center>
   </div>
 </template>
@@ -33,25 +55,40 @@
 <script>
   import gRecaptcha from '@finpo/vue2-recaptcha-invisible';
   import Cookies from 'js-cookie';
+  import ForgotPassword from '@/components/ForgotPassword'
 
   const TMP_CREDENTIALS_KEY = 'tmp-credentials'
   const API_URL = 'login'
+  const LAST_LOGGED_USER_KEY = 'lastLoggedUser'
 
   export default {
-    components: { gRecaptcha },
+    components: { gRecaptcha, ForgotPassword },
 
     data() {
       return {
         credentials: {},
         loading: false,
+        backgroundLoading: false,
         sms_verification: false,
-        error: null
+        message: null,
+        lastLoggedUser: null,
+        forgotPasswordScreen: false,
+        backgroundAllowed: false,
       }
     },
 
     created() {
+      if (LAST_LOGGED_USER_KEY in localStorage) {
+        this.lastLoggedUser = JSON.parse(localStorage.getItem(LAST_LOGGED_USER_KEY))
+        this.credentials.login = this.lastLoggedUser.email.email
+        this.backgroundAllowed = true
+        this.loadBackground()
+      }
+
       // TODO: какого хрена при уходе с элемента его стили сохраняются в HEAD?
-      $('body').css({'background-color': '#337ab7'})
+      $('body').css({
+        background: this.backgroundAllowed ? this.$store.state.data.background.url : '#337ab7'
+      })
       this.MIX_RECAPTCHA_SITE = process.env.MIX_RECAPTCHA_SITE
       const tmp_credentials = Cookies.getJSON(TMP_CREDENTIALS_KEY)
       if (tmp_credentials) {
@@ -61,7 +98,7 @@
     },
 
     destroyed() {
-      $('body').css({'background-color': ''})
+      $('body').css({'background': ''})
     },
 
     methods: {
@@ -79,6 +116,7 @@
 
       callback(token) {
         this.loading = true
+        this.message = null
         axios.post(apiUrl(API_URL), {
           credentials: this.credentials,
           token
@@ -92,18 +130,58 @@
               break
             default:
               Cookies.remove(TMP_CREDENTIALS_KEY)
-              this.$store.commit('setUser', response.data)
-              // location.reload()
+              if (window.location.search.substr(1).indexOf('url=') === 0) {
+                // логин с другого сайта
+                // отработает Sso middleware и редеректнет куда надо
+                location.reload()
+              } else {
+                // логин локально
+                this.$store.commit('setUser', response.data)
+                localStorage.setItem('lastLoggedUser', JSON.stringify(response.data))
+                this.$router.push(window.location.pathname)
+                this.loading = false
+              }
           }
-        }).catch(error => {
-          this.error = error.response.data
-        }).then(() => {
+        }).catch(e => {
+          // this.setMessage(e.response.data)
+          this.setMessage('в доступе отказано')
           this.loading = false
         })
       },
 
       imitateSubmit() {
         this.$refs.submit.querySelector('button').click()
+      },
+
+      forgetLastUser() {
+        localStorage.removeItem(LAST_LOGGED_USER_KEY)
+        this.credentials = {}
+        this.lastLoggedUser = null
+      },
+
+      setMessage(text, type = 'error') {
+        if (text === null) {
+          this.message = null
+        } else {
+          this.message = { text, type }
+        }
+      },
+
+      loadBackground() {
+        this.backgroundLoading = true
+        let img = new Image
+        img.addEventListener('load', () => {
+          console.log('background loaded')
+          this.backgroundLoading = false
+        })
+        img.src = this.background.src
+        console.log(img)
+      },
+    },
+
+    computed: {
+      background() {
+        return this.$store.state.data.background
       }
     }
   }

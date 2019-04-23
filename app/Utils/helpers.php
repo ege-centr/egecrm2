@@ -132,3 +132,8 @@ function imitatePagination($items, $page = null) {
         ],
     ];
 }
+
+function errorResponse($error, $status = 422)
+{
+    return response(compact('error'), $status);
+}

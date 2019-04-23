@@ -2,7 +2,7 @@
   <div class='loader-wrapper' :class="{
     'loader-wrapper_transparent': transparent === ''
   }">
-    <v-progress-circular :size="50" color="primary" indeterminate></v-progress-circular>
+    <v-progress-circular :size="50" color="#1976d2" indeterminate></v-progress-circular>
   </div>
 </template>
 

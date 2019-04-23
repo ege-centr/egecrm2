@@ -62,6 +62,10 @@
                         ></v-select>
                       </div>
 
+                       <div class='vertical-inputs__input'>
+                        <DatePicker v-model='item.birthdate' label="Дата рождения" />
+                      </div>
+
                       <EmailField class='vertical-inputs__input' :entity='item' label='Email (используется в качестве логина)' />
 
                       <div>

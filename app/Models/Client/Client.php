@@ -5,7 +5,7 @@ namespace App\Models\Client;
 use Shared\Model;
 use App\Interfaces\UserInterface;
 use App\Traits\{HasPhones, HasEmail, HasPhoto, HasName, HasCreatedEmail, Commentable};
-use App\Http\Resources\Teacher\Collection as TeacherResource;
+use App\Http\Resources\Teacher\TeacherCollection;
 use App\Models\{Request, Phone, Payment\Payment, Teacher, Contract\Contract, Group\Group, Group\GroupClient};
 
 class Client extends Model implements UserInterface
@@ -15,7 +15,7 @@ class Client extends Model implements UserInterface
     protected $fillable = [
         'first_name', 'last_name', 'middle_name',
         'grade_id', 'year', 'branches', 'school',
-        'reviewer_admin_id',
+        'reviewer_admin_id', 'birthdate'
     ];
 
     protected $commaSeparated = ['branches'];
@@ -45,9 +45,15 @@ class Client extends Model implements UserInterface
         return $this->hasMany(ClientTest::class);
     }
 
+    /**
+     * Есть договоры на текущий или будущий учебный год
+     */
     public function isBanned()
     {
-        return false;
+        return !$this
+            ->contracts()
+            ->whereIn('year', [academicYear(), academicYear() + 1])
+            ->exists();
     }
 
     public function allowedToLogin()
@@ -72,31 +78,9 @@ class Client extends Model implements UserInterface
     public function getHeadTeacher()
     {
         if ($this->head_teacher_id) {
-            return new TeacherResource(Teacher::find($this->head_teacher_id));
+            return new TeacherCollection(Teacher::find($this->head_teacher_id));
         }
         return null;
-    }
-
-    public function getBars()
-    {
-        $bars = null;
-        // return null;
-        // $client_bars = null;
-        // foreach($this->groups as $group) {
-        //     $group_bars = $group->getSchedule()['bars'];
-        //     if ($client_bars === null) {
-        //         $client_bars = $group_bars;
-        //     } else {
-        //         foreach($group_bars as $i => $bars) {
-        //             foreach($bars as $j => $bar) {
-        //                 if ($bar !== null && $client_bars[$i][$j] === null) {
-        //                     $client_bars[$i][$j] = $bar;
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-        // return $client_bars;
     }
 
     public function getSubjectStatus($year, $grade_id, $subject_id)

@@ -433,7 +433,11 @@ nav {
   opacity: .5;
   text-align: center;
   width: calc(100% - 48px);
+}
+
+.no-pointer-events {
   pointer-events: none;
+  cursor: default;
 }
 
 .half-opacity {

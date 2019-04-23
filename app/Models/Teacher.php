@@ -85,7 +85,7 @@ class Teacher extends Model
 
     public function isBanned()
     {
-        return false;
+        return $this->in_egecentr != 2;
     }
 
     public function allowedToLogin()

@@ -1,7 +1,17 @@
 <template>
   <div>
-    <div class='headline mb-4'>
+    <div class='headline mb-4 flex-items align-center'>
       {{ getData('teachers', $route.params.id).default_name }}
+
+      <v-chip 
+        readonly
+        class='ml-3 no-pointer-events'
+        small
+        outline 
+        :color="item.is_banned ? 'grey' : 'success'" 
+        v-if='this.item !== null'>
+          {{ STATUS[item.in_egecentr] }}
+        </v-chip>
     </div>
 
     <v-card class='mb-4' :class='config.elevationClass'>
@@ -165,7 +175,7 @@
 
 
 <script>
-import { API_URL, CLASS_NAME } from '@/components/Teacher'
+import { API_URL, CLASS_NAME, STATUS } from '@/components/Teacher'
 import { API_URL as GROUP_API_URL } from '@/components/Group'
 import GroupList from '@/components/Group/List'
 import TeacherFreetimeList from '@/components/Teacher/Freetime/List'
@@ -204,6 +214,7 @@ export default {
 
   data() {
     return {
+      STATUS,
       GROUP_API_URL,
       PAYMENT_API_URL,
       PAYMENT_ADDITIONAL_API_URL,

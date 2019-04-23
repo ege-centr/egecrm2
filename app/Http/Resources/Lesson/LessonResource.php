@@ -4,7 +4,7 @@ namespace App\Http\Resources\Lesson;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Person\PersonResource;
-use App\Http\Resources\Teacher\Collection as TeacherResource;
+use App\Http\Resources\Teacher\TeacherCollection;
 
 class LessonResource extends JsonResource
 {
@@ -15,7 +15,7 @@ class LessonResource extends JsonResource
             'createdUser' => new PersonResource($this->createdUser),
             'conductedUser' => new PersonResource($this->conductedUser),
             'clientLessons' => ClientLessonInSchedule::collection($this->clientLessons),
-            'teacher' => new TeacherResource($this->teacher),
+            'teacher' => new TeacherCollection($this->teacher),
         ]);
     }
 }

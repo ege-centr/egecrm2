@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\{Payment\Payment, Client\Client, Contract\Contract, Photo};
-use App\Http\Resources\Client\{Resource, Collection};
+use App\Http\Resources\Client\{ClientResource, ClientCollection};
 use App\Utils\Phone;
 
 class ClientsController extends Controller
@@ -21,7 +21,7 @@ class ClientsController extends Controller
         $query = Client::orderBy('id', 'desc');
 
         if (isset($request->get_all) && $request->get_all) {
-            return Collection::collection($query->orderByName()->get());
+            return ClientCollection::collection($query->orderByName()->get());
         }
 
         $this->filter($request, $query);
@@ -30,7 +30,7 @@ class ClientsController extends Controller
             $query->whereRaw("grade_id + (" . academicYear() .  " - `year`) IN ({$request->current_grade_id})");
         }
 
-        return Collection::collection($this->showBy($request, $query));
+        return ClientCollection::collection($this->showBy($request, $query));
     }
 
     public function store(Request $request)
@@ -48,12 +48,12 @@ class ClientsController extends Controller
             Photo::bind($request->photo['id'], $new_model);
         }
 
-        return response(new Resource($new_model), 201);
+        return response(new ClientResource($new_model), 201);
     }
 
     public function show($id)
     {
-        return new Resource(Client::find($id));
+        return new ClientResource(Client::find($id));
     }
 
     public function update(Request $request, $id)
@@ -78,7 +78,7 @@ class ClientsController extends Controller
 
         $model->email->update($request->email);
 
-        return new Resource($model);
+        return new ClientResource($model);
     }
 
     public function destroy($id)

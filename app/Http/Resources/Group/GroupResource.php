@@ -3,7 +3,7 @@
 namespace App\Http\Resources\Group;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\Teacher\Resource as TeacherResource;
+use App\Http\Resources\Teacher\TeacherResource;
 use App\Http\Resources\Lesson\LessonResource;
 use App\Utils\Schedule;
 

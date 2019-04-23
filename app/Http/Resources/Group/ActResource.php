@@ -4,7 +4,7 @@ namespace App\Http\Resources\Group;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Person\PersonResource;
-use App\Http\Resources\Teacher\Collection as TeacherResource;
+use App\Http\Resources\Teacher\TeacherCollection;
 
 class ActResource extends JsonResource
 {
@@ -12,7 +12,7 @@ class ActResource extends JsonResource
     {
         return array_merge(parent::toArray($request), [
             'createdUser' => new PersonResource($this->createdUser),
-            'teacher' => new TeacherResource($this->teacher),
+            'teacher' => new TeacherCollection($this->teacher),
         ]);
     }
 }

@@ -6,7 +6,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Redis;
 use App\Http\Resources\Admin\Resource as AdminResource;
 use App\Utils\Sms;
-use App\Models\{Admin\Admin, Client\Client, Teacher, Email};
+use App\Models\{Admin\Admin, Client\Client, Teacher, Email, Log};
+use App\Utils\SessionService;
+
 use DB;
 
 class User extends Model
@@ -20,12 +22,14 @@ class User extends Model
 
          # проверка логина
         if (! $query->exists()) {
+            self::authLog('неверный логин', ['email' => $data['login']]);
             return self::errorResponse('неверный email');
         }
 
         # проверка пароля
         $query->where('password', Email::toPassword($data['password']));
         if (! $query->exists()) {
+            self::authLog('неверный пароль');
             return self::errorResponse('неверный пароль');
         }
 
@@ -35,6 +39,7 @@ class User extends Model
 
         # забанен ли?
         if ($user->isBanned()) {
+            self::authLog('пользователь заблокирован');
             return self::errorResponse('пользователь заблокирован');
         } else {
             $allowed_to_login = $user->allowedToLogin();
@@ -47,6 +52,7 @@ class User extends Model
                     // если уже был отправлен – проверяем
                     if (! empty($sent_code)) {
                         if (@$data['code'] != $sent_code) {
+                            self::authLog('неверный смс-код');
                             return self::errorResponse('неверный смс-код');
                         } else {
                             Redis::del(cacheKey('codes', $entity_id));
@@ -54,12 +60,16 @@ class User extends Model
                     } else {
                         // иначе отправляем код
                         Sms::verify($user);
+                        self::authLog('', [], 'sms_code_sent');
                         return (object)['data' => null, 'status' => 202];
                     }
                 }
                 $_SESSION['user'] = compact('entity_id', 'class');
+                SessionService::action();
+                self::authLog('', [], 'success');
                 return (object)['data' => $user, 'status' => 200];
             } else {
+                self::authLog('нет прав доступа для данного IP');
                 return self::errorResponse('нет прав доступа для данного IP');
             }
         }
@@ -69,7 +79,10 @@ class User extends Model
 
     public static function logout()
     {
-        unset($_SESSION['user']);
+        if (isset($_SESSION["user"]) && $_SESSION["user"]) {
+            SessionService::destroy();
+            unset($_SESSION['user']);
+        }
     }
 
     /*
@@ -77,7 +90,7 @@ class User extends Model
 	 */
 	public static function loggedIn()
 	{
-        if (isset($_SESSION["user"]) && $_SESSION["user"]) {
+        if (isset($_SESSION["user"]) && $_SESSION["user"] && SessionService::exists()) {
             $user = User::fromSession();
             return !$user->isBanned()
                 && $user->allowedToLogin() !== false
@@ -96,7 +109,7 @@ class User extends Model
             $entity_id = $_SESSION['user']['entity_id'];
             // dd([$class, $entity_id]);
             // info('loading admin...');
-            // @todo: намана доллар сделай
+            // TODO: намана доллар сделай
             $query = $class::query();
             if ($class !== Teacher::class) {
                 $query->with('photo');
@@ -149,5 +162,19 @@ class User extends Model
     public static function isInPreviewMode()
     {
         return isset($_SESSION['real_user']);
+    }
+
+    /**
+     * Кастом лог авторизации
+     */
+    private static function authLog($message = '', $data = [], $type = 'fail')
+    {
+        Log::create([
+            'type' => Log::TYPE_AUTH,
+            'data' => array_merge($data, [
+                $type => $message,
+                'user_agent' => @$_SERVER['HTTP_USER_AGENT'],
+            ])
+        ]);
     }
 }

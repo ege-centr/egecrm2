@@ -7,11 +7,11 @@ export const tabsWithData = function(items) {
   })
 }
 
-export const objectToOptionsArray = function(obj) {
+export const objectToOptionsArray = function(obj, valueField = 'value', textField = 'text') {
   const result = []
   Object.entries(obj).forEach(e => result.push({
-    value: Number(e[0]),
-    text: e[1]
+    [valueField]: Number(e[0]),
+    [textField]: e[1]
   }))
   return result
 }

@@ -28,10 +28,10 @@ class Email extends Model
         return null;
     }
 
-    public function setPasswordProperty($value)
-    {
-        $this->attributes['password'] = self::toPassword($value);
-    }
+    // public function setPasswordProperty($value)
+    // {
+    //     $this->attributes['password'] = self::toPassword($value);
+    // }
 
     public static function toPassword(string $clean_password)
     {

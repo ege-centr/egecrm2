@@ -6,15 +6,16 @@ use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Phone\PhoneResource;
 use App\Http\Resources\Photo\PhotoResource;
 
-class Resource extends JsonResource
+class TeacherResource extends JsonResource
 {
     public function toArray($request)
     {
         return extractFields($this, [
-            'id', 'names', 'email', 'subjects_ec', 'default_name'
+            'id', 'names', 'email', 'subjects_ec', 'default_name', 'in_egecentr'
         ], [
             'phones' => $this->phones,
             'photo' => $this->photo,
+            'is_banned' => $this->isBanned(),
         ]);
     }
 }

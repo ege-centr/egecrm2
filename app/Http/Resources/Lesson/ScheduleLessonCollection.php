@@ -4,7 +4,6 @@ namespace App\Http\Resources\Lesson;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Resources\Admin\Light as AdminResource;
-use App\Http\Resources\Teacher\Collection as TeacherResource;
 use App\Http\Resources\Person\PersonResource;
 use App\Models\Lesson\ClientLesson;
 
