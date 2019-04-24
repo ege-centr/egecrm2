@@ -30,7 +30,14 @@
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
           <div v-else-if='item.topic' class='relative'>
             <DivBlocker v-if='cantEdit' />
-            <div class='px-3 mb-4'>При проводке занятия отправляются СМС родителям отсутствующих и опоздавших учеников, а также начисляется оплата и бонусы</div>
+            <v-alert
+              :value="true"
+              type="info"
+              outline
+              class='mx-3 mb-4'
+            >
+              При проводке занятия отправляются СМС родителям отсутствующих и опоздавших учеников, а также начисляется оплата и бонусы
+            </v-alert>
             <!-- ЗАНЯТИЕ ПРОВЕДЕНО -->
             <div wrap v-if="item.status === LESSON_STATUS.CONDUCTED">
               <v-data-table 
