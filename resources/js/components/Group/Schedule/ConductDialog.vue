@@ -28,20 +28,9 @@
         </v-toolbar>
         <v-card-text class='px-0'>
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
-          <div v-else class='relative'>
+          <div v-else-if='item.topic' class='relative'>
             <DivBlocker v-if='cantEdit' />
-            <v-container class='py-0 mb-4' fluid>
-              <v-layout>
-                <v-flex md12 class='relative'>
-                  <div class='vertical-inputs'>
-                    <div class='vertical-inputs__input vertical-inputs__input_wide'>
-                      <v-textarea label='Тема занятия' v-model='item.topic' maxlength='1000' counter />
-                      <div class='vertical-inputs__input__message'>При проводке занятия отправляются СМС родителям отсутствующих и опоздавших учеников, а также начисляется оплата и бонусы</div>
-                    </div>
-                  </div>
-                </v-flex>
-              </v-layout>
-            </v-container>
+            <div class='px-3 mb-4'>При проводке занятия отправляются СМС родителям отсутствующих и опоздавших учеников, а также начисляется оплата и бонусы</div>
             <!-- ЗАНЯТИЕ ПРОВЕДЕНО -->
             <div wrap v-if="item.status === LESSON_STATUS.CONDUCTED">
               <v-data-table 
@@ -187,6 +176,14 @@
                   </template>
                 </v-data-table>
               </v-flex>
+            </div>
+          </div>
+          <div v-else class='full-height-vh flex-items align-center justify-center grey--text' style='flex-direction: column'>
+            <div style='opacity: .2'>
+              <v-icon size='100'>chrome_reader_mode</v-icon>
+            </div>
+            <div class='subheading'>
+              Установите тему занятия
             </div>
           </div>
         </v-card-text>

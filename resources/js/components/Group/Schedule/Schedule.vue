@@ -2,6 +2,7 @@
   <div style='min-height: 200px'>
     <LessonDialog ref='LessonDialog' @updated='' />
     <ConductDialog ref='ConductDialog' />
+    <TopicDialog ref='TopicDialog' />
     <Loader v-if='items === null' />
     <div v-else>
       <v-container grid-list-xl class="pa-0 ma-0" fluid>
@@ -55,11 +56,29 @@
                 </td>
                 <td class='text-md-right'>
                   <div v-if='readonly'>
-                    <v-btn slot='activator' flat icon color="black" class='ma-0' 
-                      v-if='item.status !== LESSON_STATUS.CANCELLED'
-                      @click='$refs.ConductDialog.open(item.id)'>
-                      <v-icon>more_horiz</v-icon>
-                    </v-btn>
+                    <v-menu>
+                      <v-btn slot='activator' flat icon color="black" class='ma-0'>
+                        <v-icon>more_horiz</v-icon>
+                      </v-btn>
+                      <v-list dense>
+                        <v-list-tile @click='$refs.TopicDialog.open(item.id)' v-if='item.status !== LESSON_STATUS.CANCELLED'>
+                          <v-list-tile-action>
+                            <v-icon>chrome_reader_mode</v-icon>
+                          </v-list-tile-action>
+                          <v-list-tile-content>
+                            <v-list-tile-title>Установить тему</v-list-tile-title>
+                          </v-list-tile-content>
+                        </v-list-tile>
+                        <v-list-tile @click='$refs.ConductDialog.open(item.id)'>
+                          <v-list-tile-action>
+                            <v-icon>assignment_turned_in</v-icon>
+                          </v-list-tile-action>
+                          <v-list-tile-content>
+                            <v-list-tile-title>Провести</v-list-tile-title>
+                          </v-list-tile-content>
+                        </v-list-tile>
+                      </v-list>
+                    </v-menu>
                   </div>
                   <v-menu v-else>
                     <v-btn slot='activator' flat icon color="black" class='ma-0'>
@@ -72,6 +91,14 @@
                           </v-list-tile-action>
                           <v-list-tile-content>
                             <v-list-tile-title>Редактировать</v-list-tile-title>
+                          </v-list-tile-content>
+                      </v-list-tile>
+                      <v-list-tile @click='$refs.TopicDialog.open(item.id)' v-if='item.status !== LESSON_STATUS.CANCELLED'>
+                          <v-list-tile-action>
+                            <v-icon>chrome_reader_mode</v-icon>
+                          </v-list-tile-action>
+                          <v-list-tile-content>
+                            <v-list-tile-title>Установить тему</v-list-tile-title>
                           </v-list-tile-content>
                       </v-list-tile>
                       <v-list-tile @click='$refs.ConductDialog.open(item.id)'>
@@ -166,11 +193,12 @@ import { LESSON_STATUS, API_URL } from '@/components/Lesson'
 import LessonStatusCircles from '@/components/Lesson/StatusCircles'
 import LessonDialog from './LessonDialog'
 import ConductDialog from './ConductDialog'
+import TopicDialog from './TopicDialog'
 import { ROLES } from '@/config'
 
 export default {
   components: { 
-    Calendar, LessonStatusCircles, LessonDialog, ConductDialog 
+    Calendar, LessonStatusCircles, LessonDialog, ConductDialog, TopicDialog
   },
 
   props: {
