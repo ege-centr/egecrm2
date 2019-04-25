@@ -3,7 +3,6 @@ import { extendMoment } from 'moment-range'
 window._ = require('lodash');
 window.moment = extendMoment(require('moment'));
 window.moment.locale('ru')
-window.Popper = require('popper.js').default;
 window.Cookies = require('js-cookie');
 // window.algolia = require('algoliasearch')(process.env.MIX_ALGOLIA_APP_ID, process.env.MIX_ALGOLIA_SECRET);
 
@@ -15,8 +14,6 @@ window.Cookies = require('js-cookie');
 
 try {
     window.$ = window.jQuery = require('jquery');
-
-    require('bootstrap');
 } catch (e) {}
 
 /**
