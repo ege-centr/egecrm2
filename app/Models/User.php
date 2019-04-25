@@ -90,12 +90,14 @@ class User extends Model
 	 */
 	public static function loggedIn()
 	{
-        if (isset($_SESSION["user"]) && $_SESSION["user"] && SessionService::exists()) {
-            $user = User::fromSession();
-            return !$user->isBanned()
-                && $user->allowedToLogin() !== false
-                // если админ, надо проверить, что данные по пользователю не менялись
-                && (get_class($user) !== Admin::class || !$user->wasUpdated());
+        if (isset($_SESSION["user"]) && $_SESSION["user"]) {
+            if (User::isInPreviewMode() || SessionService::exists()) {
+                $user = User::fromSession();
+                return !$user->isBanned()
+                    && $user->allowedToLogin() !== false
+                    // если админ, надо проверить, что данные по пользователю не менялись
+                    && (get_class($user) !== Admin::class || !$user->wasUpdated());
+            }
         }
         return false;
 	}

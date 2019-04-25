@@ -9,12 +9,12 @@
           <v-card-text>
             <div class='flex-items align-center'>
               <TimelineWeek :items='items' :show-weekday='true' color='amber' />
-              <v-btn flat icon color="black" class='ma-0' @click.native='add'>
+              <v-btn flat icon color="black" class='ma-0' @click.native='add' style='position: absolute; right: 10px'>
                 <v-icon>more_horiz</v-icon>
               </v-btn>
             </div>
             <div v-if='schedule !== null'>
-              <TimelineWeek regular :items='schedule.regular' class='mt-3 mb-2' />
+              <TimelineWeek regular :items='schedule.regular' class='mt-3 mb-3' />
               <div v-for='(weekItems, index) in schedule.detailed' :key='index' class='mb-2'>
                 <TimelineWeek 
                   current-class='red'

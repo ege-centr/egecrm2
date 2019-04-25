@@ -2,7 +2,15 @@
   <div>
     <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='30'>
       <template slot='items' slot-scope='{ items }'>
-        <ContractList :items='items' v-if='items.length > 0' :display-options='{client: true, year: true, addBtn: false}' />
+        <ContractList 
+          v-if='items.length > 0' 
+          :items='items'
+          :display-options='{
+            client: true, 
+            year: true, 
+            addBtn: false,
+            payments: false,
+          }' />
         <NoData
           v-else
           transparent

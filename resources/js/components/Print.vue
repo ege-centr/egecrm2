@@ -14,12 +14,12 @@
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-card-text class='relative'>
+        <v-card-text class='relative' style='padding-top: 76px'>
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
           <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
             <v-layout wrap>
-              <v-flex md12>
-                <Editor v-model='text' :api-key='tinyMceApiKey' :init='tinyMceInit' />
+              <v-flex md12 class='py-0'>
+                <Editor v-model='text' :api-key='tinyMceApiKey' :init='tinyMceInit' style='padding-top: 10px' />
                 <!-- <TextEditor v-model='text' /> -->
                 <!-- <codemirror style='height: 1000px' :options="cmOptions" v-model='text' /> -->
               </v-flex>

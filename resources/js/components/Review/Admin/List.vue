@@ -4,24 +4,24 @@
       <tr slot-scope="{ item }">
         <td>
           <span v-if='item.review !== null'>
-            отзыв №{{ item.review.id }}
+            {{ item.review.id }}
           </span>
           <span v-else class='grey--text'>
             не создан
           </span>
         </td>
-        <td>
-          <SubjectGrade :item='item' />
+        <td v-if='show.teacher'>
+          <router-link :to="{name: 'TeacherShow', params: {id: item.teacher_id}}" v-if='item.teacher_id > 0'>
+            {{ item.teacher.default_name }}
+          </router-link>
         </td>
         <td v-if='show.client'>
           <router-link :to="{name: 'ClientShow', params: {id: item.client_id}}" v-if='item.client_id > 0'>
             {{ item.client.names.short }}
           </router-link>
         </td>
-        <td v-if='show.teacher'>
-          <router-link :to="{name: 'TeacherShow', params: {id: item.teacher_id}}" v-if='item.teacher_id > 0'>
-            {{ item.teacher.default_name }}
-          </router-link>
+        <td>
+          <SubjectGrade :item='item' />
         </td>
         <td>
           {{ item.lesson_count }} занятий

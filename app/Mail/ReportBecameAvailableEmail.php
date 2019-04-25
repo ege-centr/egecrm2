@@ -7,6 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Models\Report\Report;
+use App\Models\Factory\Subject;
 
 class ReportBecameAvailableEmail extends Mailable
 {
@@ -32,7 +33,7 @@ class ReportBecameAvailableEmail extends Mailable
     public function build()
     {
         return $this
-            ->subject('Доступен новый отчёт')
+            ->subject('Доступен отчёт по ' . Subject::getTitle($this->report->subject_id, 'dative') . ' №' . $this->report->id)
             ->view('mail.report')->with([
                 'report' => $this->report,
             ]);

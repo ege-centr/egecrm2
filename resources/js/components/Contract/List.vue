@@ -26,7 +26,7 @@
           <td>
             {{ item.sum }} руб.
           </td>
-          <td>
+          <td v-if='show.payments'>
             <span v-if='item.payment_count > 0'>
               {{ item.payment_count }} платежа
             </span>
@@ -126,6 +126,7 @@ export default {
         client: false,
         year: false,
         addBtn: true,
+        payments: true,
       },
     }
   },

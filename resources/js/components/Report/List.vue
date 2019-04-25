@@ -8,7 +8,7 @@
             не создан
           </span>
           <span v-else>
-            отчёт №{{ item.report.id }}
+            {{ item.report.id }}
           </span>
         </td>
         <td v-if='show.teacher'>
@@ -25,6 +25,12 @@
             <PersonName :item='item.client' />
           </router-link>
         </td>
+         <td>
+          <SubjectGrade :item='item' />
+        </td>
+        <td>
+          {{ item.lesson_count }} занятий
+        </td>
         <td v-if='show.dimension'>
           <router-link 
             v-if='item.client !== null'
@@ -38,13 +44,7 @@
           </router-link>
         </td>
         <td>
-          <SubjectGrade :item='item' />
-        </td>
-        <td>
           <ReportScoreCircles :item='item.report' />
-        </td>
-        <td>
-          {{ item.lesson_count }} занятий
         </td>
         <td>
           <div v-if='item.report !== null'>
