@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use App\Traits\Cacheable;
 
 class Cabinet extends Model
 {
+    use Cacheable;
+
     public $timestamps = false;
 
     public function toArray()

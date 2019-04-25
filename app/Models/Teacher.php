@@ -4,13 +4,13 @@ namespace App\Models;
 
 use Shared\Model;
 use Illuminate\Database\Eloquent\Builder;
-use App\Traits\HasName;
+use App\Traits\{HasName, Cacheable};
 use App\Models\{Payment\Payment, Group\Group};
 use App\Utils\Phone;
 
 class Teacher extends Model
 {
-    use HasName;
+    use HasName, Cacheable;
 
     protected $commaSeparated = ['subjects_ec'];
 

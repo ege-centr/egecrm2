@@ -34,14 +34,14 @@ class InitialDataController extends Controller
 
         return response()->json([
             'data' => [
-                'branches' => Branch::all(),
-                'subjects' => Subject::all(),
-                'grades' => Grade::all(),
+                'branches' => Branch::getCached(),
+                'subjects' => Subject::getCached(),
+                'grades' => Grade::getCached(),
                 'years' => Year::all(),
                 'admins' => AdminCollection::collection(Admin::with(['email', 'photo'])->get()),
-                'teachers' => TeacherCollection::collection(Teacher::get()),
+                'teachers' => TeacherCollection::collection(Teacher::getCached()),
                 'academic_year' => academicYear(),
-                'cabinets' => Cabinet::all(),
+                'cabinets' => Cabinet::getCached(),
                 'background' => Background::get(),
             ],
             'user' => User::loggedIn() ? User::fromSession() : null,
