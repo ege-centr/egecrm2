@@ -1,9 +1,10 @@
 <template lang="html">
   <div>
-    <DisplayData :api-url='API_URL' :filters='FILTERS' :sort='SORT' :paginate='30'>
+    <DisplayData ref='DisplayData' :api-url='API_URL' :filters='FILTERS' :sort='SORT' :paginate='30'>
       <template slot='items' slot-scope='{ items }'>
         <PaymentList :items='items' 
           v-if='items.length > 0'
+          @updated='$refs.DisplayData.reloadData()'
           :display-options="{entity: true, addBtn: false}" />
         <NoData
           v-else

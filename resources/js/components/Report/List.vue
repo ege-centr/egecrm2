@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Dialog ref='Dialog' />
+    <Dialog ref='Dialog' @updated="$emit('updated')" />
     <data-table :items='items'>
       <tr slot-scope="{ item }">
         <td v-if='show.id'>

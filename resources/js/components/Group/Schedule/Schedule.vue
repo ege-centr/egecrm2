@@ -1,6 +1,6 @@
 <template>
   <div style='min-height: 200px'>
-    <LessonDialog ref='LessonDialog' @updated='' />
+    <LessonDialog ref='LessonDialog' @updated='loadData' />
     <ConductDialog ref='ConductDialog' />
     <TopicDialog ref='TopicDialog' />
     <Loader v-if='items === null' />

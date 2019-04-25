@@ -167,7 +167,7 @@ export default {
     },
 
     getOccupiedCabinetIds() {
-      if (this.item.date && this.item.time && this.item.time.length === 5) {
+      if (this.item && this.item.date && this.item.time && this.item.time.length === 5) {
         this.cabinetsLoading = true
 
         let params = _.pick(this.item, ['date', 'time'])

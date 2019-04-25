@@ -109,7 +109,12 @@
           <Visits :group='item' />
         </v-tab-item>
         <v-tab-item>
-          <DisplayData ref='GroupActPage' :api-url='GROUP_ACTS_API_URL' :invisible-filters='{group_id: item.id}' container-class='py-0 mt-4'>
+          <DisplayData 
+            :api-url='GROUP_ACTS_API_URL' 
+            :invisible-filters='{group_id: item.id}' 
+            ref='GroupActPage' 
+            container-class='py-0 mt-4'
+          >
             <template slot='items' slot-scope='{ items }'>
               <GroupActList :items='items' :group-id='item.id' @updated='$refs.GroupActPage.loadData()' />
             </template>

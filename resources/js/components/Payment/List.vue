@@ -8,6 +8,7 @@
       :add-btn='show.addBtn'
       add-btn-label='добавить платеж'
       ref='DisplayList'
+      @updated="$emit('updated')"
     >
       <template slot='item' slot-scope="{ item }">
         <tr>

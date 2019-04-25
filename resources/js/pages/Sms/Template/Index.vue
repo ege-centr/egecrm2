@@ -1,8 +1,11 @@
 <template>
   <div>
-    <DisplayData :api-url='API_URL' :custom-tabs="{field: 'type', data: TYPE}">
+    <DisplayData ref='DisplayData' :api-url='API_URL' :custom-tabs="{field: 'type', data: TYPE}">
       <template slot='items' slot-scope='{ items }'>
-        <SmsTemplateList :items='items' />
+        <SmsTemplateList
+          :items='items'
+          @updated='$refs.DisplayData.reloadData()' 
+        />
       </template>
     </DisplayData>
   </div>

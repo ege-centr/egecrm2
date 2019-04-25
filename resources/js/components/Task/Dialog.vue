@@ -5,7 +5,7 @@
         <v-toolbar dark color="primary">
           <v-toolbar-title>{{ edit_mode ? 'Редактирование' : 'Добавление' }} задачи</v-toolbar-title>
           <v-spacer></v-spacer>
-          <TitleCredentials v-if='item.id' :item='item'/>
+          <TitleCredentials :item='item'/>
           <v-toolbar-items>
             <v-btn dark icon v-if='edit_mode' @click.native="destroy" :loading='destroying' class='mr-5'>
               <v-icon>delete</v-icon>
@@ -44,7 +44,7 @@
           </v-container>
         </v-card-text>
 
-          <div class='flex-items align-center mt-3'>
+          <div v-if='!loading' class='flex-items align-center mt-3'>
             <v-chip close v-for='(attachment, index) in item.attachments' :key='index' @input='remove(index)'>
               <span v-if="typeof(attachment) === 'object'">{{ attachment.original_name }}</span>
               <span v-else>{{ attachment }}</span>

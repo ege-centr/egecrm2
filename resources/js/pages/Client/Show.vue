@@ -191,7 +191,7 @@
             :invisible-filters="{client_id: client.id}"
           >
             <template slot='items' slot-scope='{ items }'>
-              <ContractList :items='items' :client='client' @updated='$refs.ContractPage.loadData' />
+              <ContractList :items='items' :client-id='client.id' @updated='$refs.ContractPage.loadData' />
             </template>
           </DisplayData>
         </v-tab-item>
@@ -237,7 +237,7 @@
             <template slot='items' slot-scope='{ items }'>
               <PaymentList 
                 :items='items' 
-                :model-defaults='{ entity_id: $route.params.id, entity_type: CLASS_NAME }' 
+                :model-defaults='{ entity_id: $route.params.id, entity_type: userTypes.client }' 
                 @updated='$refs.PaymentPage.loadData()'
               />
             </template>
@@ -253,7 +253,7 @@
           >
             <template slot='items' slot-scope='{ items }'>
               <PaymentAdditionalList 
-                :model-defaults='{ entity_id: $route.params.id, entity_type: CLASS_NAME }'
+                :model-defaults='{ entity_id: $route.params.id, entity_type: userTypes.client }'
                 :items='items' 
                 @updated='$refs.PaymentAdditionalPage.loadData()'
               />
@@ -305,7 +305,7 @@
 
       </v-tabs-items>
     </div>
-    <ClientDialog ref='ClientDialog' />
+    <ClientDialog ref='ClientDialog' @updated='loadData' />
     <PaymentDialog ref='PaymentDialog' v-if='$refs.PaymentPage' @updated='$refs.PaymentPage.reloadData' />
     <RequestDialog ref='RequestDialog' v-if='$refs.RequestPage' @updated='$refs.RequestPage.loadData' />
     <PaymentAdditionalDialog ref='PaymentAdditionalDialog' />

@@ -5,8 +5,10 @@
       :dialog-component='Dialog'
       :items='items'
       :add-btn='show.addBtn'
+      :model-defaults='modelDefaults'
       add-btn-label='добавить договор'
       ref='DisplayList'
+      @updated="$emit('updated')"
     >
       <template slot='item' slot-scope='{ item }'>
         <tr>
@@ -112,6 +114,11 @@ export default {
       type: Array,
       required: true
     },
+
+    clientId: {
+      type: Number,
+      required: false,
+    }
   },
 
   components: { DisplayList, Print },
@@ -130,5 +137,14 @@ export default {
       },
     }
   },
+
+  computed: {
+    modelDefaults() {
+      if (this.clientId) {
+        return {client_id: this.clientId}
+      }
+      return {}
+    }
+  }
 }
 </script>

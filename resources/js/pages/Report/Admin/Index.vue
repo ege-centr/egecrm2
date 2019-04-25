@@ -1,8 +1,12 @@
 <template>
   <div>
-    <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='30'>
+    <DisplayData ref='DisplayData' :api-url='API_URL' :filters='FILTERS' :paginate='30'>
       <template slot='items' slot-scope='{ items }'>
-        <ReportList :items='items' v-if='items.length > 0' />
+        <ReportList 
+          v-if='items.length > 0' 
+          :items='items'
+          @updated='$refs.DisplayData.reloadData()'
+        />
         <NoData
           v-else
           transparent

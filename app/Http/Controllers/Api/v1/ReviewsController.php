@@ -62,6 +62,11 @@ class ReviewsController extends Controller
         return new ReviewResource($review);
     }
 
+    public function destroy($id)
+    {
+        Review::find($id)->delete();
+    }
+
     private function adminIndex(Request $request)
     {
         $query = AbstractReview::query();

@@ -384,7 +384,7 @@ export default {
           }
         })
         const recommendedPrice = this.recommendedPrices.find(e => e.year === this.item.year && e.grade_id === this.item.grade_id)
-        if (recommendedPrice !== null) {
+        if (recommendedPrice !== undefined) {
           return lesson_count * parseInt(recommendedPrice.price)
         }
       }

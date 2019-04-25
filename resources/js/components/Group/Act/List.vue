@@ -7,6 +7,7 @@
       :model-defaults='modelDefaults'
       add-btn-label='добавить акт'
       ref='DisplayList'
+      @updated="$emit('updated')"
     >
       <template slot='item' slot-scope='{ item }'>
         <tr>

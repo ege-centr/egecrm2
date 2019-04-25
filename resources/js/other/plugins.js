@@ -12,6 +12,7 @@ import Placeholder from '@/components/UI/Placeholder'
 import YearTabs from '@/components/UI/YearTabs'
 import TitleCredentials from '@/components/UI/TitleCredentials'
 import DivBlocker from '@/components/UI/DivBlocker'
+import USER_TYPES from '@/other/user-types'
 
 export const GlobalPlugin = {
   install(Vue, options) {
@@ -28,6 +29,8 @@ export const GlobalPlugin = {
     Vue.prototype.waitForDialogClose = (f) => {
       Vue.nextTick(() => f(), 200)
     }
+
+    Vue.prototype.userTypes = USER_TYPES
 
     // Vue.prototype.toggleEnum = function(obj, field, statuses) {
     //   let status = statuses.indexOf(obj[field])

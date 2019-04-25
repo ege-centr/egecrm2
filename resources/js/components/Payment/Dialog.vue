@@ -38,12 +38,12 @@
                             <div class='payment-system' :class="'payment-system_' + item.card_number[0]"></div>
                           </div>
                       </div>
-                      <div class='vertical-inputs__input' v-if="showPko">
+                      <div class='vertical-inputs__input' v-if="item.id && showPko">
                         <v-text-field hide-details v-model='item.bill_number' 
                           label='Номер ПКО' 
                           v-mask="'#####'"></v-text-field>
                       </div>
-                      <div v-if="showPko" class='relative grey--text' style='top: 20px'>
+                      <div v-if="!item.id && showPko" class='relative grey--text' style='top: 20px'>
                         будет присвоен номер ПКО
                       </div>
                     </div>
@@ -154,10 +154,9 @@ export default {
 
   computed: {
     showPko() {
-      return this.item.id && 
-        this.item.method === 'cash' && 
+      return this.item.method === 'cash' && 
         this.item.type === 'payment' && 
-        this.item.entity_type === 'App\\Models\\Client\\Client'
+        this.item.entity_type === this.userTypes.client
     }
   }  
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class='title-credentials' v-if="item !== null && (userField in item) && (timeField in item)">
+  <div class='title-credentials' v-if="item !== null && item.hasOwnProperty(userField) && item.hasOwnProperty(timeField)">
     {{ item[userField].default_name }}
     {{ item[timeField] | date-time }}
   </div>

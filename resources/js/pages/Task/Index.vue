@@ -1,15 +1,17 @@
 <template>
   <div>
-    
-    <TaskDialog ref='TaskDialog' />
-    
-    <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='15'>
+    <TaskDialog ref='TaskDialog' @updated="$refs.DisplayData.reloadData()" />
+    <DisplayData ref='DisplayData' :api-url='API_URL' :filters='FILTERS' :paginate='15'>
       <template slot='buttons'>
         <AddBtn animated label='добавить задачу' @click.native='$refs.TaskDialog.open(null)' />
       </template>
       
       <template slot='items' slot-scope='{ items }'>
-        <TaskList :items='items' v-if='items.length > 0' />
+        <TaskList 
+          v-if='items.length > 0'
+          :items='items' 
+          @updated="$refs.DisplayData.reloadData()"
+        />
         <NoData 
           v-else
           transparent

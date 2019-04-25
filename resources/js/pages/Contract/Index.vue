@@ -1,9 +1,10 @@
 <template>
   <div>
-    <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='30'>
+    <DisplayData ref='DisplayData' :api-url='API_URL' :filters='FILTERS' :paginate='30'>
       <template slot='items' slot-scope='{ items }'>
         <ContractList 
           v-if='items.length > 0' 
+          @updated='$refs.DisplayData.reloadData()'
           :items='items'
           :display-options='{
             client: true, 

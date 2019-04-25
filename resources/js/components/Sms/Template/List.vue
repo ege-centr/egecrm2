@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Dialog ref='Dialog' />
+    <Dialog ref='Dialog' @updated="$emit('updated')" />
     <v-data-table
       :class='config.elevationClass'
       hide-actions

@@ -37,9 +37,7 @@ class PaymentsController extends Controller
 
     public function store(Request $request)
     {
-        return Payment::create(array_merge($request->input(), [
-            'entity_type' => getModelClass($request->entity_type, true)
-        ]));
+        return Payment::create($request->all());
     }
 
     public function show($id)

@@ -175,8 +175,12 @@ export default {
       this.loading = true
       this.page = 1
       this.data = []
-      this.infinite_loading = false
-      Vue.nextTick(() => this.infinite_loading = true)
+      if (this.paginate === null) {
+        this.loadData()
+      } else {
+        this.infinite_loading = false
+        Vue.nextTick(() => this.infinite_loading = true)
+      }
       // this.loadData()
       // this.$refs.InfiniteLoading.$emit('infinite', this.$refs.InfiniteLoading.stateChanger)
       // Vue.nextTick(() => {
