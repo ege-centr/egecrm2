@@ -83,12 +83,12 @@
         this.credentials.login = this.lastLoggedUser.email.email
         this.backgroundAllowed = true
         this.loadBackground()
+      } else {
+        $('body').css({
+          background: '#337ab7'
+        })
       }
 
-      // TODO: какого хрена при уходе с элемента его стили сохраняются в HEAD?
-      $('body').css({
-        background: this.backgroundAllowed ? this.$store.state.data.background.url : '#337ab7'
-      })
       this.MIX_RECAPTCHA_SITE = process.env.MIX_RECAPTCHA_SITE
       const tmp_credentials = Cookies.getJSON(TMP_CREDENTIALS_KEY)
       if (tmp_credentials) {
@@ -171,11 +171,12 @@
         this.backgroundLoading = true
         let img = new Image
         img.addEventListener('load', () => {
-          console.log('background loaded')
+          $('body').css({
+            background: this.background.url
+          })
           this.backgroundLoading = false
         })
         img.src = this.background.src
-        console.log(img)
       },
     },
 
