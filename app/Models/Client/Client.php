@@ -25,6 +25,11 @@ class Client extends Model implements UserInterface
         return $this->hasOne(Representative::class);
     }
 
+    public function getDefaultNameAttribute()
+    {
+        return $this->names->lastF;
+    }
+
     public function contracts()
     {
         return $this->hasMany(Contract::class);

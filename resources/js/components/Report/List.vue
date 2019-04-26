@@ -15,14 +15,14 @@
           <router-link 
             v-if='item.teacher !== null'
             :to="{name: 'TeacherShow', params: {id: item.teacher.id}}">
-            <PersonName :item='item.teacher' />
+            {{ item.teacher.default_name }}
           </router-link>
         </td>
         <td v-if='show.client'>
           <router-link 
             v-if='item.client !== null'
             :to="{name: 'ClientShow', params: {id: item.client.id}}">
-            <PersonName :item='item.client' />
+            {{ item.client.default_name }}
           </router-link>
         </td>
          <td>

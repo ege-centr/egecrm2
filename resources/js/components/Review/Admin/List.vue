@@ -17,7 +17,7 @@
         </td>
         <td v-if='show.client'>
           <router-link :to="{name: 'ClientShow', params: {id: item.client_id}}" v-if='item.client_id > 0'>
-            {{ item.client.names.short }}
+            {{ item.client.default_name }}
           </router-link>
         </td>
         <td>

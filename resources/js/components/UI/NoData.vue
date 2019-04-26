@@ -11,10 +11,7 @@
     <div class='no-data__text' :class="{'pb-0': add === undefined}">
       {{ text }}
     </div>
-    <v-btn :color='color' dark round v-if='add !== undefined' @click='add'>
-      <v-icon class='mr-1' style='position'>add</v-icon>
-      добавить
-    </v-btn>
+    <AddBtn v-if='add' @click.native='add' />
   </div>
 </template>
 
@@ -41,7 +38,7 @@ export default {
 
     height: {
       type: Number,
-      default: 500,
+      default: 700,
     },
 
     transparent: {

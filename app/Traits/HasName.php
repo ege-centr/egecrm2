@@ -9,6 +9,7 @@ trait HasName
         return (object)[
             'full' => implode(' ', [$this->last_name, $this->first_name, $this->middle_name]),
             'short' => implode(' ', [$this->first_name, $this->last_name]),
+            'lastF' => $this->last_name . ' ' . mb_substr($this->first_name, 0, 1) . '.',
             'abbreviation' => $this->last_name . ' ' . mb_substr($this->first_name, 0, 1) . '. ' . mb_substr($this->middle_name, 0, 1) . '.'
         ];
     }

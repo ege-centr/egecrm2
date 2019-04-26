@@ -14,7 +14,7 @@
         <tr>
           <td v-if='show.client'>
             <router-link :to="{name: 'ClientShow', params: {id: item.client.id}}">
-              <PersonName :item='item.client' field='names.abbreviation' />
+              {{ item.client.default_name }}
             </router-link>
           </td>
           <td>
@@ -28,22 +28,17 @@
           <td>
             {{ item.sum }} руб.
           </td>
-          <td v-if='show.payments'>
-            <span v-if='item.payment_count > 0'>
-              {{ item.payment_count }} платежа
-            </span>
-            <span v-else>
-              платежей нет
-            </span>
-          </td>
           <td>
             <span v-if='item.grade_id'>
               {{ getData('grades', item.grade_id).title }}
             </span>
           </td>
-          <td v-if='show.year'>
-            <span v-if='item.year'>
-              {{ getData('years', item.year).title }}
+          <td>
+            <span v-if='item.discount > 0'>
+              скидка {{ item.discount }}%
+            </span>
+            <span v-else class='grey--text'>
+              скидок нет
             </span>
           </td>
           <td>
