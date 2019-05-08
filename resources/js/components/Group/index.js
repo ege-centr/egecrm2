@@ -6,7 +6,7 @@ export const GROUP_CLIENTS_API_URL = 'group-clients'
 export const GROUP_ACTS_API_URL = 'group-acts'
 
 export const FILTERS = [
-  {label: 'Год', field: 'year', type: 'multiple', options: store.state.data.years},
+  {label: 'Год', field: 'year', type: 'multiple', options: _.clone(store.state.data.years)},
   {label: 'Преподаватель', field: 'teacher_id', type: 'multiple', options: store.state.data.teachers, textField: 'names.abbreviation'},
   {label: 'Предмет', field: 'subject_id', type: 'multiple', options: store.state.data.subjects, textField: 'name'},
   {label: 'Класс', field: 'grade_id', type: 'multiple', options: store.state.data.grades},

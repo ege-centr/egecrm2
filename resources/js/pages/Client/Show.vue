@@ -191,7 +191,7 @@
             :invisible-filters="{client_id: client.id}"
           >
             <template slot='items' slot-scope='{ items }'>
-              <ContractList :items='items' :client-id='client.id' @updated='$refs.ContractPage.loadData' />
+              <ContractList :items='items' :client-id='client.id' @updated='() => $refs.ContractPage.loadData()' />
             </template>
           </DisplayData>
         </v-tab-item>

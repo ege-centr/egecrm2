@@ -9,5 +9,5 @@ class Comment extends Model
 {
     use HasCreatedEmail;
 
-    protected $fillable = ['text'];
+    protected $fillable = ['text', 'entity_type', 'entity_id'];
 }

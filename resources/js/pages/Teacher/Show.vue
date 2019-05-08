@@ -71,8 +71,11 @@
         <v-tab>
           Отчёты
         </v-tab>
-         <v-tab>
+        <v-tab>
           Расписание
+        </v-tab>
+        <v-tab>
+          Комментарии
         </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
@@ -165,6 +168,16 @@
         <v-tab-item>
           <TeacherFreetimeList :teacher-id='Number($route.params.id)' :editable='true' />
         </v-tab-item>
+
+        <!-- Комментарии -->
+        <v-tab-item>
+          <v-card :class='config.elevationClass'>
+            <v-card-text>
+              <Comments :class-name='CLASS_NAME' :entity-id='Number($route.params.id)' />
+            </v-card-text>
+          </v-card>
+        </v-tab-item>
+
       </v-tabs-items>
     </div>
     <PaymentDialog ref='PaymentDialog' />
@@ -179,6 +192,7 @@ import { API_URL, CLASS_NAME, STATUS } from '@/components/Teacher'
 import { API_URL as GROUP_API_URL } from '@/components/Group'
 import GroupList from '@/components/Group/List'
 import TeacherFreetimeList from '@/components/Teacher/Freetime/List'
+import Comments from '@/components/Comments'
 import { 
   API_URL as PAYMENT_API_URL, 
   SORT as PAYMENT_SORT,
@@ -210,6 +224,7 @@ export default {
   components: { 
     GroupList, PaymentList, PaymentDialog, PaymentAdditionalList, PaymentAdditionalDialog, Balance,
     ReviewAdminList, ReportList, EmailShow, BgAvatar, PhoneList, DisplayData, TeacherFreetimeList,
+    Comments,
   },
 
   data() {

@@ -55,37 +55,12 @@
                   </span>
                 </td>
                 <td class='text-md-right'>
-                  <div v-if='readonly'>
-                    <v-menu>
-                      <v-btn slot='activator' flat icon color="black" class='ma-0'>
-                        <v-icon>more_horiz</v-icon>
-                      </v-btn>
-                      <v-list dense>
-                        <v-list-tile @click='$refs.TopicDialog.open(item.id)' v-if='item.status !== LESSON_STATUS.CANCELLED'>
-                          <v-list-tile-action>
-                            <v-icon>chrome_reader_mode</v-icon>
-                          </v-list-tile-action>
-                          <v-list-tile-content>
-                            <v-list-tile-title>Установить тему</v-list-tile-title>
-                          </v-list-tile-content>
-                        </v-list-tile>
-                        <v-list-tile @click='$refs.ConductDialog.open(item.id)'>
-                          <v-list-tile-action>
-                            <v-icon>assignment_turned_in</v-icon>
-                          </v-list-tile-action>
-                          <v-list-tile-content>
-                            <v-list-tile-title>Провести</v-list-tile-title>
-                          </v-list-tile-content>
-                        </v-list-tile>
-                      </v-list>
-                    </v-menu>
-                  </div>
-                  <v-menu v-else>
+                  <v-menu>
                     <v-btn slot='activator' flat icon color="black" class='ma-0'>
                       <v-icon>more_horiz</v-icon>
                     </v-btn>
                     <v-list dense>
-                      <v-list-tile @click='$refs.LessonDialog.open(item.id)'>
+                      <v-list-tile @click='$refs.LessonDialog.open(item.id)' v-if='!readonly'>
                           <v-list-tile-action>
                             <v-icon>edit</v-icon>
                           </v-list-tile-action>
@@ -178,7 +153,7 @@
             <NoData v-else
                   title='Место для расписания'
                   text='В выборке отсутствуют элементы. Вы можете добавить их, чтобы изменить ситуацию'
-                  :add='addLesson' />
+                  :add='readonly ? undefined : addLesson' />
           </v-flex>
         </v-layout>
       </v-container>

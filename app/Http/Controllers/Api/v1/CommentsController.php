@@ -19,8 +19,11 @@ class CommentsController extends Controller
 
     public function store(Request $request)
     {
-        $model = getMorphModel($request->class, $request->entity_id);
-        $comment = $model->comments()->create(['text' => $request->text]);
+        $comment = Comment::create([
+           'text' => $request->text,
+           'entity_type' => getModelClass($request->class, true),
+           'entity_id' => $request->entity_id,
+        ]);
         return new CommentResource($comment);
     }
 

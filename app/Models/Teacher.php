@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Shared\Model;
 use Illuminate\Database\Eloquent\Builder;
-use App\Traits\{HasName, Cacheable};
+use App\Traits\{HasName, Cacheable, Commentable};
 use App\Models\{Payment\Payment, Group\Group};
 use App\Utils\Phone;
 

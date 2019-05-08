@@ -24,7 +24,7 @@ export const ENUMS = {
 export const FILTERS = [
   {label: 'Тип', field: 'type', type: 'multiple', options: ENUMS.types},
   {label: 'Метод', field: 'method', type: 'multiple', options: ENUMS.methods},
-  {label: 'Год', field: 'year', type: 'multiple', options: store.state.data.years},
+  {label: 'Год', field: 'year', type: 'multiple', options: _.clone(store.state.data.years)},
   {label: 'Категория', field: 'category', type: 'multiple', options: ENUMS.categories},
   {label: 'От кого', field: 'entity_type', type: 'multiple', options: [
     {id: ROLES.TEACHER, title: 'преподаватель'},
