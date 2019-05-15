@@ -57,5 +57,14 @@ export default {
     idField() {
       return this.item.valueField || 'id'
     },
+
+    // если есть facet, то не показывать пустые
+    availableOptions() {
+      console.log(this.facet)
+      if (this.facet !== null) {
+        return this.item.options.filter(option => this.facet[option[this.idField]] > 0)
+      }
+      return this.item.options
+    }
   }
 }

@@ -13,7 +13,14 @@
           {{ label }}
         </v-chip>
       </div>
-      <AllFilter v-if='filters !== null' :items='filters' :pre-installed='preInstalledFilters' :sort='sort' @updated='filtersUpdated' />
+      <AllFilter 
+        v-if='filters !== null' 
+        :items='filters' 
+        :pre-installed='preInstalledFilters' 
+        :sort='sort' 
+        :facets='facets'
+        @updated='filtersUpdated'
+      />
       <v-spacer></v-spacer>
       <slot name='buttons' v-if='items.length > 0'></slot>
     </div>
@@ -96,10 +103,11 @@ export default {
       default: null,
       required: false,
     },
+
     containerClass: {
       type: String,
       default: '',
-    }
+    },
   },
 
   components: { AllFilter, InfiniteLoading },
@@ -112,6 +120,7 @@ export default {
       infinite_loading: true,
       data: [],
       selectedTab: null,
+      facets: null,
     }
   },
 
@@ -131,6 +140,8 @@ export default {
         // ...this.getSort(),
       })).then(response => {
         this.loading = false
+        console.log(response)
+        this.facets = 'facets' in response.data ? response.data.facets : null
         if (this.page === 1 || this.paginate === null) {
           this.data = response.data.data
           if (this.tabs && this.tabsWithData.length > 0) {

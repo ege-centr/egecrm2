@@ -82,7 +82,7 @@
           <v-container grid-list-xl class="pa-0 ma-0" fluid>
             <v-layout>
               <v-flex md12 class='py-0'>
-                <v-data-table hide-headers hide-actions :items='currentYearRecommendedPrices'>
+                <v-data-table hide-headers hide-actions :items='currentYearRecommendedPrices' :class='config.elevationClass'>
                   <template slot='items' slot-scope="{ item }">
                     <tr>
                       <td width='300'>
@@ -118,7 +118,7 @@
           <v-container grid-list-xl class="pa-0 ma-0" fluid>
             <v-layout>
               <v-flex md12 class='py-0'>
-                <v-data-table hide-actions hide-headers :items='currentYearItems' :paginate.sync="sortingOptions" v-if='currentYearItems.length > 0'>
+                <v-data-table hide-actions hide-headers :items='currentYearItems' :paginate.sync="sortingOptions" v-if='currentYearItems.length > 0' :class='config.elevationClass'>
                   <template slot='items' slot-scope="{ item }">
                     <tr>
                       <td width='300'>

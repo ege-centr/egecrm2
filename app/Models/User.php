@@ -91,7 +91,10 @@ class User extends Model
 	public static function loggedIn()
 	{
         if (isset($_SESSION["user"]) && $_SESSION["user"]) {
-            if (User::isInPreviewMode() || SessionService::exists()) {
+            if (User::isInPreviewMode()) {
+                return true;
+            }
+            if (SessionService::exists()) {
                 $user = User::fromSession();
                 return !$user->isBanned()
                     && $user->allowedToLogin() !== false

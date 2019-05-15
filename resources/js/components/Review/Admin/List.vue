@@ -12,7 +12,7 @@
         </td>
         <td v-if='show.teacher'>
           <router-link :to="{name: 'TeacherShow', params: {id: item.teacher_id}}" v-if='item.teacher_id > 0'>
-            {{ item.teacher.default_name }}
+            {{ getData('teachers', item.teacher_id).default_name }}
           </router-link>
         </td>
         <td v-if='show.client'>
@@ -27,27 +27,27 @@
           {{ item.lesson_count }} занятий
         </td>
         <td width='40' class='td-border px-1 text-md-center'>
-          <span v-if='item.review !== null && getComment(item, COMMENT_TYPE.client)'>
-            {{ getComment(item, COMMENT_TYPE.client).rating }}
+          <span v-if='item.review !== null && item.client_rating !== null'>
+            {{ item.client_rating }}
           </span>
         </td>
         <td width='40' class='td-border px-1 text-md-center'>
-          <span v-if='item.review !== null && getComment(item, COMMENT_TYPE.admin)'>
-            <span class='grey--text' v-if='getComment(item, COMMENT_TYPE.admin).rating === -1'>
+          <span v-if='item.review !== null && item.admin_rating !== null'>
+            <span class='grey--text' v-if='item.admin_rating === -1'>
               –
             </span>
             <span v-else>
-              {{ getComment(item, COMMENT_TYPE.admin).rating }}
+              {{ item.admin_rating }}
             </span>
           </span>
         </td>
         <td width='40' class='td-border px-1 text-md-center'>
-          <span v-if='item.review !== null && getComment(item, COMMENT_TYPE.final)'>
-            <span class='grey--text' v-if='getComment(item, COMMENT_TYPE.final).rating === -1'>
+          <span v-if='item.review !== null && item.final_rating !== null'>
+            <span class='grey--text' v-if='item.final_rating === -1'>
               –
             </span>
             <span v-else>
-              {{ getComment(item, COMMENT_TYPE.final).rating }}
+              {{ item.final_rating }}
             </span>
           </span>
         </td>

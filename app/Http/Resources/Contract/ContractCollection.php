@@ -16,6 +16,7 @@ class ContractCollection extends JsonResource
             'sum' => $this->sum,
             'grade_id' => $this->grade_id,
             'discount' => $this->discount,
+            'year' => $this->year,
             'client' => new PersonResource($this->client),
             'createdUser' => new PersonResource($this->createdUser),
             'version' => $this->version,

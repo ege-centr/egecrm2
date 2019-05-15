@@ -13,9 +13,9 @@
         </td>
         <td v-if='show.teacher'>
           <router-link 
-            v-if='item.teacher !== null'
-            :to="{name: 'TeacherShow', params: {id: item.teacher.id}}">
-            {{ item.teacher.default_name }}
+            v-if='item.teacher_id > 0'
+            :to="{name: 'TeacherShow', params: {id: item.teacher_id}}">
+            {{ getData('teachers', item.teacher_id).default_name }}
           </router-link>
         </td>
         <td v-if='show.client'>

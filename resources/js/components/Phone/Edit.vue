@@ -5,16 +5,16 @@
         <div class='mr-3 vertical-input'>
           <v-text-field hide-details
             :disabled='!editable'
-            placeholder='+7 (###) ###-##-##'
+            placeholder='Телефон'
             v-mask="'+7 (###) ###-##-##'"
-            v-model="phone.phone" :label="`Телефон ${index + 1}`"
+            v-model="phone.phone"
           >
           </v-text-field>
         </div>
         <div class='mr-3 vertical-input'>
           <v-text-field v-model="phone.comment" hide-details
             :disabled='!editable'
-            :label="`Комментарий`">
+            placeholder="Комментарий">
           </v-text-field>
         </div>
         <v-btn v-if='item.phones.length > 1' flat icon color="red" class='ma-0' @click='item.phones.splice(index, 1)'>

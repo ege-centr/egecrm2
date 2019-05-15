@@ -17,14 +17,12 @@ class UserLogin
      */
     public function handle($request, Closure $next)
     {
+        // return $next($request);
         if (User::loggedIn()) {
             // TODO: queue
             SessionService::action();
             return $next($request);
         }
         return response(null, 401);
-        // if ($request->isMethod('get')) {
-        //     return
-        // }
     }
 }

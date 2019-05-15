@@ -32,7 +32,7 @@
     </v-menu>
 
     <v-menu
-      v-show='notUsedFilters.length'
+      v-show='availableFilters.length'
       bottom
       origin="center center"
       transition="scale-transition"
@@ -47,7 +47,7 @@
       </v-chip>
 
       <v-list dense v-if='item === null'>
-        <v-list-tile v-for='(item, index) in notUsedFilters' @click='select(item)' :key='index' :class="{'sort-tile': item.type === 'sort'}">
+        <v-list-tile v-for='(item, index) in availableFilters' @click='select(item)' :key='index' :class="{'sort-tile': item.type === 'sort'}">
           <v-list-tile-title>
             {{ item.label }}
           </v-list-tile-title>
@@ -57,7 +57,12 @@
           <v-list-tile-title>сортировать</v-list-tile-title>
         </v-list-tile> -->
       </v-list>
-      <component :is="getTypeComponentName(item)" :item='item' @selected='apply' v-else />
+      <component 
+        :facet='facets !== null ? facets[item.field] : null' 
+        :is="getTypeComponentName(item)" 
+        :item='item' 
+        @selected='apply' 
+        v-else />
     </v-menu>
   </div>
 </template>
@@ -99,6 +104,11 @@ export default {
       type: Object,
       default: null,
       required: false,
+    },
+
+    facets: {
+      type: Object,
+      default: null
     },
 
     // sort: {
@@ -276,8 +286,12 @@ export default {
   },
 
   computed: {
-    notUsedFilters() {
-      const not_used_filters = []
+    // Доступные фильтры:
+    // 1) Ещё не выбранные
+    // 2) Если переданы facets, то внутри должны быть элементы
+    availableFilters() {
+      // 1) Ещё не выбранные
+      let availableFilters = []
       this.items.forEach(item => {
         let filter_used = false
         this.filters.forEach(filter => {
@@ -289,10 +303,14 @@ export default {
           }
         })
         if (!filter_used) {
-          not_used_filters.push(item)
+          availableFilters.push(item)
         }
       })
-      return not_used_filters
+      // 2) Если переданы facets, то внутри должны быть элементы
+      if (this.facets !== null) {
+        availableFilters = availableFilters.filter(e => e.field in this.facets)
+      }
+      return availableFilters
     },
   }
 }

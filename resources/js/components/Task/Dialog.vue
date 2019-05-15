@@ -38,13 +38,13 @@
                     ></v-select>
                   </div>
                 </div>
-                <TextEditor v-model='item.text' style='height: 82vh !important' />
+                <TextEditor v-model='item.text' class='task-text-editor' />
               </v-flex>
             </v-layout>
           </v-container>
         </v-card-text>
 
-          <div v-if='!loading' class='flex-items align-center mt-3'>
+          <div v-if='!loading' class='flex-items align-center mt-3 task-attachments'>
             <v-chip close v-for='(attachment, index) in item.attachments' :key='index' @input='remove(index)'>
               <span v-if="typeof(attachment) === 'object'">{{ attachment.original_name }}</span>
               <span v-else>{{ attachment }}</span>
@@ -59,7 +59,6 @@
             </v-btn>
             <span v-if='uploading_error' class='error--text'>размер файла больше 20мб</span>
           </div>
-
       </v-card>
     </v-dialog>
   </v-layout>
@@ -90,8 +89,6 @@ export default {
   watch: {
     dialog(newVal) {
       if (newVal === true) {
-        // TODO: убрать костыль. в задачах почему-то скролится
-        $('html').css('overflow', 'hidden')
         this.$upload.on('file', {
           extensions: false,
           maxSizePerFile: 1024 * 1024 * 20,
@@ -113,7 +110,6 @@ export default {
           }
         })
       } else {
-        $('html').css('overflow', 'initial')
         this.$upload.off('file')
       }
     },
@@ -131,7 +127,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   .custom-toolbar {
     position: absolute;
     right: 3px;
@@ -140,5 +136,16 @@ export default {
       margin-right: 10px;
       width: 250px;
     }
+  }
+
+  .task-text-editor {
+    & .quillWrapper {
+      height: 82vh !important;
+    }
+  }
+
+  .task-attachments {
+    position: absolute;
+    bottom: 0;
   }
 </style>

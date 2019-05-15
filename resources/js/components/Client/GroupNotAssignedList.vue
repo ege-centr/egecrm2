@@ -1,7 +1,6 @@
 <template>
   <div>
     <v-data-table v-if='items.length'
-      class='group-not-assigned-table'
       :class='config.elevationClass'
       hide-actions
       hide-headers
@@ -66,6 +65,10 @@ export default {
     }
   },
 
+  updated() {
+    this.$emit('updated')
+  },
+
   methods: {
     loadFittingGroups(item, index) {
       this.currentIndex = index
@@ -77,7 +80,7 @@ export default {
     items() {
       const items = []
       const active_contracts = this.contracts.filter(e => e.is_active)
-      console.log(active_contracts)
+      // console.log(active_contracts)
       // получить человеко-предметы
       active_contracts.forEach(contract => {
         contract.subjects.forEach(subject => {
@@ -100,13 +103,3 @@ export default {
   }
 }
 </script>
-
-<style lang='scss'>
-  .group-not-assigned-table {
-    clip-path: inset(0px -10px -10px -10px);
-    & .v-table tbody tr:first-child {
-      border-top: 1px solid #e0e0e0;
-    }
-  }
-    
-</style>

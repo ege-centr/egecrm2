@@ -4,12 +4,15 @@ namespace App\Models\Review;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\{ Teacher, Client\Client, Lesson\ClientLesson };
+use Laravel\Scout\Searchable;
 
 class AbstractReview extends Model
 {
+    use Searchable;
+
     protected $table = 'client_lessons';
 
-    protected $with = ['review'];
+    protected $primaryKey = 'reviews.id';
 
     public function review()
     {
@@ -35,6 +38,30 @@ class AbstractReview extends Model
             ->where('groups.subject_id', $this->subject_id)
             ->where('groups.year', $this->year)
             ->count();
+    }
+
+    public function toSearchableArray()
+    {
+        $ratings = [];
+        foreach(['client', 'admin', 'final'] as $type) {
+            $comment = $this->review === null ? null : $this->review->comments->where('type', $type)->first();
+            $ratings[$type . '_rating'] = $comment === null ? null : $comment->rating;
+        }
+
+        return extractFields($this, [
+            'review_id', 'year', 'subject_id', 'teacher_id',
+            'grade_id', 'client_id', 'lesson_count'
+        ], $ratings);
+    }
+
+    public function searchableAs()
+    {
+        return 'abstract_reviews';
+    }
+
+    public function getScoutKey()
+    {
+        return uniqid();
     }
 
 

@@ -488,3 +488,28 @@ nav {
   left: -30px;
   top: 11px;
 }
+
+.group-not-assigned-list {
+  position: relative; 
+  top: -24px;
+  & .v-table {
+    clip-path: inset(0px -10px -10px -10px);
+    & .v-table tbody tr:first-child {
+      border-top: 1px solid #e0e0e0;
+    }
+  }
+}
+
+.elevation-debug {
+  box-shadow: 0 0 6px 1px limegreen !important;
+}
+
+// .overflow-y-hidden {
+//   & > body:before {
+//     content: '';
+//     background: white;
+//     position: fixed;
+//     height: 100%;
+//     width: 100%;
+//   }
+// }

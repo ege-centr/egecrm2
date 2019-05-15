@@ -6,30 +6,34 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Report\{Report, AbstractReport};
-use App\Http\Resources\Report\{AbstractReportCollection, ReportResource};
+use App\Models\Client\Client;
+use App\Http\Resources\Report\{AbstractReportCollection, ReportResource, ReportCollection};
+use App\Http\Resources\AlgoliaResult;
 
 class ReportsController extends Controller
 {
-    protected $filterTablePrefix = [
-        'client_lessons' => ['client_id'],
-        'lessons' => ['teacher_id'],
-        'groups' => ['year', 'subject_id'],
-        'reports' => ['is_available_for_parents']
-    ];
-
     protected $filters = [
-        'equals' => ['client_id', 'is_available_for_parents'],
+        'equals' => ['client_id', 'is_available_for_parents', 'exists'],
         'multiple' => ['year', 'subject_id', 'teacher_id'],
-        'exists' => ['exists']
     ];
 
     public function index(Request $request)
     {
-        $query = AbstractReport::query();
+        $query = AbstractReport::search()->with([
+            'facets' => ['*']
+        ]);
         $this->filter($request, $query);
-        return AbstractReportCollection::collection(
-           $this->showBy($request, $query)
-        );
+        $result = new AlgoliaResult($query->paginateRaw($request->paginate));
+        $result->getCollection()->transform(function ($items, $key) {
+            if ($key === 'hits') {
+                foreach($items as &$item) {
+                    $item['client'] = new \PersonResource(Client::find($item['client_id']));
+                    $item['report'] = $item['report_id'] > 0 ? new ReportCollection(Report::find($item['report_id'])) : null;
+                }
+            }
+            return $items;
+        });
+        return $result;
     }
 
     public function show($id)
@@ -53,14 +57,5 @@ class ReportsController extends Controller
     public function destroy($id)
     {
         Report::find($id)->delete();
-    }
-
-    protected function filterExists(string $field, $value, Builder &$query)
-    {
-        if (intval($value) === 0) {
-            $query->whereNull('reports.id');
-        } else {
-            $query->whereNotNull('reports.id');
-        }
     }
 }

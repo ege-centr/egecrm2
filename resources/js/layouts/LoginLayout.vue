@@ -8,12 +8,11 @@
         </div>
         <div class="input-groups" v-if='!forgotPasswordScreen'>
             <div class="group" v-if='lastLoggedUser'>
-                <input :disabled="true" type="text"
-                  ref="login" :value='lastLoggedUser.default_name' autocomplete="off">
+                <input :disabled="true" type="text" :value='lastLoggedUser.default_name' autocomplete="username">
             </div>
             <div class="group" v-else>
                 <input :disabled="sms_verification" type="text" placeholder="логин" autofocus
-                  ref="login" v-model="credentials.login" autocomplete="off" @keyup.enter="imitateSubmit">
+                  ref="login" v-model="credentials.login" autocomplete="username" @keyup.enter="imitateSubmit">
             </div>
             <div class="group">
                 <input :disabled="sms_verification" type="password" placeholder="пароль" ref="password"

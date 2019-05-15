@@ -23,7 +23,7 @@ export const GlobalPlugin = {
     }
 
     Vue.prototype.config = {
-      elevationClass: 'elevation-3',
+      elevationClass: 'elevation-3 elevation-debug',
     }
 
     Vue.prototype.waitForDialogClose = (f) => {

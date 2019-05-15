@@ -15,7 +15,7 @@
               <v-icon>assignment</v-icon>
             </v-btn>
             <v-btn dark icon 
-              v-if="item.status === LESSON_STATUS.CONDUCTED"
+              v-if="item.status === LESSON_STATUS.CONDUCTED && item.topic"
               @click.native="storeOrUpdate" 
               :disabled='cantEdit'
               :loading='saving'>

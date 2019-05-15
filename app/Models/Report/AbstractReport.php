@@ -5,15 +5,18 @@ namespace App\Models\Report;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\{ Teacher, Client\Client, Lesson\ClientLesson };
 use Illuminate\Database\Eloquent\Builder;
+use Laravel\Scout\Searchable;
 
 /**
  * Абстрактный, возможно ещё не созданный отчет
  */
 class AbstractReport extends Model
 {
-    protected $table = 'client_lessons';
+    use Searchable;
 
-    protected $with = ['report'];
+    protected $primaryKey = 'reports.id';
+
+    protected $table = 'client_lessons';
 
     // кол-во занятий до того, как потребуется отчет
     // (с этой цифры включительно уже требуется)
@@ -32,6 +35,16 @@ class AbstractReport extends Model
     public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+
+    public function searchableAs()
+    {
+        return 'abstract_reports';
+    }
+
+    public function getScoutKey()
+    {
+        return uniqid();
     }
 
     /**
@@ -66,6 +79,15 @@ class AbstractReport extends Model
             ->count();
     }
 
+    public function toSearchableArray()
+    {
+        return array_merge($this->toArray(), [
+            'lesson_count' => $this->lesson_count,
+            'exists' => intval($this->report_id > 0),
+        ]);
+    }
+
+
     public static function boot()
     {
         parent::boot();
@@ -82,7 +104,7 @@ class AbstractReport extends Model
                 })
                 ->selectRaw('
                     reports.id as report_id, groups.year, groups.subject_id, lessons.teacher_id,
-                    client_lessons.grade_id, client_lessons.client_id,
+                    client_lessons.grade_id, client_lessons.client_id, reports.is_available_for_parents,
                     min(lessons.date) as lesson_date, reports.date as report_date
                 ')
                 ->groupBy('reports.id', 'client_lessons.client_id', 'lessons.teacher_id', 'groups.subject_id', 'groups.year');

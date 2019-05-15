@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
+use GuzzleHttp\Client;
 
 class UploadToCdn extends Command
 {
@@ -39,5 +40,19 @@ class UploadToCdn extends Command
     {
         \Storage::disk('spaces')->put('lk2/js/app.js', file_get_contents(public_path() . '/js/app.js'));
         \Storage::disk('spaces')->put('lk2/css/app.css', file_get_contents(public_path() . '/css/app.css'));
+
+        $client = new Client([
+            'base_uri' => 'https://api.digitalocean.com/v2/',
+        ]);
+
+        $client->request('DELETE', 'cdn/endpoints/' . config('do.spaces-endpoint-id') . '/cache', [
+            'headers' => [
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . config('do.api-key'),
+            ],
+            'json' => [
+                'files' => ['lk2/*']
+            ]
+        ]);
     }
 }

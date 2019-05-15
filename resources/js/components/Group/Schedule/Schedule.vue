@@ -7,7 +7,7 @@
     <div v-else>
       <v-container grid-list-xl class="pa-0 ma-0" fluid>
         <v-layout>
-          <v-flex md3>
+          <v-flex md3 class='mr-3'>
             <Calendar :year='group.year' :lessons='items' :with-special-dates='true' :group='this.group' />
           </v-flex>
           <v-flex class='relative' style='align-self: baseline'>
@@ -44,6 +44,12 @@
                   <span v-if='item.teacher_id'>
                     {{ getData('teachers', item.teacher_id).default_name }}
                   </span>
+                </td>
+                <td>
+                  <v-tooltip bottom v-if='item.topic'>
+                    <v-icon class='cursor-default' slot='activator'>chrome_reader_mode</v-icon>
+                    <span>{{ item.topic }}</span>
+                  </v-tooltip>
                 </td>
                 <td>
                   <span v-if='!cantSee(item) && item.price > 0'>

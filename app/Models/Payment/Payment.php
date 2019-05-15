@@ -21,6 +21,6 @@ class Payment extends Model
 
     public function getClassNameAttribute($value)
     {
-        return trim(self::class, 'App\\Models\\');
+        return trim($this->entity_type, 'App\\Models\\');
     }
 }

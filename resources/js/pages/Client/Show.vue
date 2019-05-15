@@ -212,18 +212,22 @@
             :tabs='true'
             :api-url='GROUP_API_URL' 
             :invisible-filters="{client_ids: $route.params.id}"
+            v-show='!hideGroupPage'
           >
             <template slot='items' slot-scope='{ items }'>
               <GroupList :items='items' />
             </template>
           </DisplayData>
-          <GroupNotAssignedList style='position: relative; top: -24px' 
+          <GroupNotAssignedList 
+            ref='GroupNotAssignedList'
+            :class="{'group-not-assigned-list': !hideGroupPage}" 
             v-if='$refs.GroupPage && $refs.ContractPage'
             :year="getGroupPageSelectedTab()"
             :contracts='$refs.ContractPage.data'
             :groups='$refs.GroupPage.data'
             :client-id='client.id'
             @moved='$refs.GroupPage.loadData' 
+            @updated='recalcHideGroupPage = recalcHideGroupPage + 1'
           />
         </v-tab-item>
 
@@ -379,6 +383,8 @@ export default {
       tabs: null,
       loading: true,
       client: null,
+      // TODO: жесткий костыль
+      recalcHideGroupPage: 1,
     }
   },
 
@@ -419,6 +425,18 @@ export default {
       }
       return null
     },
+  },
+
+  computed: {
+    // скрыть компонент групп в случае если нет групп, но есть болота
+    // чтобы в компоненте групп не отображалось "нет данных"
+    hideGroupPage() {
+      this.recalcHideGroupPage++
+      if (this.$refs.GroupPage === undefined || this.$refs.GroupNotAssignedList === undefined) {
+        return false
+      }
+      return this.$refs.GroupPage.data.length === 0 && this.$refs.GroupNotAssignedList.items.length > 0
+    }
   }
 }
 </script>
