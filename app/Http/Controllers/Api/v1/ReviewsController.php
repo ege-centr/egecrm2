@@ -60,6 +60,9 @@ class ReviewsController extends Controller
         Review::find($id)->delete();
     }
 
+    /**
+     * По моей речи
+     */
     private function adminIndex(Request $request)
     {
         $query = AbstractReview::search()->with([
@@ -84,11 +87,13 @@ class ReviewsController extends Controller
      */
     private function clientIndex(Request $request)
     {
-        $items = ClientLesson::join('lessons', 'lessons.id', '=', 'client_lessons.lesson_id')
+        $items = ClientLesson::query()
+            ->join('lessons', 'lessons.id', '=', 'client_lessons.lesson_id')
+            ->join('groups', 'lessons.group_id', '=', 'groups.id')
             ->where('client_lessons.client_id', User::id())
             ->selectRaw('count(*) as lesson_count, client_lessons.grade_id, client_lessons.client_id')
-            ->addSelect('lessons.year', 'lessons.subject_id', 'lessons.group_id')
-            ->groupBy('lessons.teacher_id', 'lessons.year', 'lessons.subject_id')
+            ->addSelect('groups.year', 'groups.subject_id', 'lessons.group_id')
+            ->groupBy('lessons.teacher_id', 'groups.year', 'groups.subject_id')
             ->get();
 
         foreach($items as $item) {

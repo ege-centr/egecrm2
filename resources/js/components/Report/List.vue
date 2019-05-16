@@ -38,7 +38,7 @@
               year: item.year,
               subject_id: item.subject_id,
               client_id: item.client.id,
-              teacher_id: item.teacher.id,
+              teacher_id: item.teacher_id,
             }}">
             <PersonName :item='item.client' />
           </router-link>

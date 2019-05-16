@@ -11,8 +11,8 @@ use App\Models\{
     Teacher
 };
 use App\Http\Resources\{
-    Client\Collection as ClientCollection,
-    Teacher\Collection as TeacherCollection
+    Client\ClientCollection,
+    Teacher\TeacherCollection
 };
 
 class SearchController extends Controller

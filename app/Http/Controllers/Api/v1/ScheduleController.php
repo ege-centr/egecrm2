@@ -48,7 +48,14 @@ class ScheduleController extends Controller
                 ->select(DB::raw('lessons.*, client_lessons.id as client_lesson_id'))
                 // если в текущей группе, то отображать все занятиия
                 // если в группе был когда-то, но уже нет, то только посещённые
-                ->whereRaw(sprintf("(lessons.group_id IN (%s) OR (lessons.status = 'conducted' AND client_lessons.id IS NOT NULL))", implode(',', $current_group_ids)))
+                ->whereRaw(
+                    sprintf(
+                        "(lessons.group_id IN (%s) OR (lessons.status = 'conducted' AND client_lessons.id IS NOT NULL))",
+                        // $current_group_ids может быть пустым, тогда в mysql будет ошибка
+                        // where (lessons.group_id IN () ...
+                        count($current_group_ids) > 0 ? implode(',', $current_group_ids) : '-1'
+                    )
+                )
                 ->whereIn('lessons.group_id', $group_ids)
                 ->orderBy('lessons.date', 'asc')
                 ->orderBy('lessons.time', 'asc');

@@ -4,7 +4,7 @@
       <v-card>
         <v-toolbar dark color="primary">
           
-          <v-toolbar-title>Отправка смс <span v-if='!customInput'>на {{ phone }}</span></v-toolbar-title>
+          <v-toolbar-title>Отправка смс</v-toolbar-title>
             <v-spacer></v-spacer>
           <v-toolbar-items>
             <v-btn icon dark  :loading='sending' @click='send' :disabled="phone.length !== 18 || text.length === 0">
@@ -18,7 +18,7 @@
         <v-card-text class='px-0' style='padding-top: 70px'>
           <v-form class='sms-message-form'>
             <v-text-field hide-details
-              v-if='customInput'
+              :readonly='!customInput'
               v-mask="'+7 (###) ###-##-##'"
               single-line
               full-width
@@ -26,7 +26,7 @@
               label='Телефон'
             >
             </v-text-field>
-            <v-divider v-if='customInput'></v-divider>
+            <v-divider></v-divider>
             <v-textarea
               label="Сообщение"
               full-width

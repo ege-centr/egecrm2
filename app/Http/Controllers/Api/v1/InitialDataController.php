@@ -14,6 +14,7 @@ use App\Models\{
 };
 use App\Http\Resources\Admin\{AdminCollection, AdminLightResource};
 use App\Http\Resources\Teacher\TeacherCollection;
+use App\Http\Resources\Photo\PhotoResource;
 
 /**
  * Загрузка изначальных данных,
@@ -23,15 +24,6 @@ class InitialDataController extends Controller
 {
     public function index()
     {
-        // $user = null;
-
-        // if (User::loggedIn()) {
-        //     $user = User::fromSession();
-        //     if (User::isAdmin()) {
-        //         $user = (new AdminLightResource($user))->resource;
-        //     }
-        // }
-
         return response()->json([
             'data' => [
                 'branches' => Branch::getCached(),
