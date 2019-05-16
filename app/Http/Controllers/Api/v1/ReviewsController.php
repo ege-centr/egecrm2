@@ -20,8 +20,7 @@ class ReviewsController extends Controller
 
     protected $filters = [
         'equals' => ['client_id'],
-        'multiple' => ['teacher_id', 'year', 'subject_id'],
-        'rating' => ['client', 'admin', 'final'],
+        'multiple' => ['teacher_id', 'year', 'subject_id', 'client_rating', 'admin_rating', 'final_rating'],
     ];
 
     public function index(Request $request)
