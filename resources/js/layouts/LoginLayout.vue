@@ -136,10 +136,12 @@
               } else {
                 // логин локально
                 // this.$store.commit('setUser', response.data)
-                localStorage.setItem('lastLoggedUser', JSON.stringify(response.data))
+                // localStorage.setItem('lastLoggedUser', JSON.stringify(response.data))
                 // this.$router.push(window.location.pathname)
                 // this.loading = false
-                location.reload()
+                setTimeout(() => {
+                  location.reload()
+                }, 300);
               }
           }
         }).catch(e => {
