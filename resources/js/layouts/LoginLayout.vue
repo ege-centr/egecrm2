@@ -11,11 +11,11 @@
                 <input :disabled="true" type="text" :value='lastLoggedUser.default_name' autocomplete="username">
             </div>
             <div class="group" v-else>
-                <input :disabled="sms_verification" type="text" placeholder="логин" autofocus
+                <input :disabled="sms_verification" type="text" placeholder="логин" autofocus readonly onfocus="this.removeAttribute('readonly')"
                   ref="login" v-model="credentials.login" autocomplete="username" @keyup.enter="imitateSubmit">
             </div>
             <div class="group">
-                <input :disabled="sms_verification" type="password" placeholder="пароль" ref="password"
+                <input :disabled="sms_verification" type="password" placeholder="пароль" ref="password" readonly onfocus="this.removeAttribute('readonly')"
                   v-model="credentials.password" autocomplete="new-password" @keyup.enter="imitateSubmit">
             </div>
             <div class="group" v-show="sms_verification">

@@ -60,7 +60,6 @@ export default {
 
     // если есть facet, то не показывать пустые
     availableOptions() {
-      console.log(this.facet)
       if (this.facet !== null) {
         return this.item.options.filter(option => this.facet[option[this.idField]] > 0)
       }
