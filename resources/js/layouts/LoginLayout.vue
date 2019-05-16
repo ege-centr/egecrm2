@@ -11,7 +11,7 @@
                 <input :disabled="true" type="text" :value='lastLoggedUser.default_name' autocomplete="username">
             </div>
             <div class="group" v-else>
-                <input :disabled="sms_verification" type="text" placeholder="логин" autofocus readonly onfocus="this.removeAttribute('readonly')"
+                <input :disabled="sms_verification" type="text" placeholder="логин" readonly onfocus="this.removeAttribute('readonly')"
                   ref="login" v-model="credentials.login" autocomplete="username" @keyup.enter="imitateSubmit">
             </div>
             <div class="group">
@@ -135,10 +135,11 @@
                 location.reload()
               } else {
                 // логин локально
-                this.$store.commit('setUser', response.data)
+                // this.$store.commit('setUser', response.data)
                 localStorage.setItem('lastLoggedUser', JSON.stringify(response.data))
-                this.$router.push(window.location.pathname)
-                this.loading = false
+                // this.$router.push(window.location.pathname)
+                // this.loading = false
+                location.reload()
               }
           }
         }).catch(e => {
