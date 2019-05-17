@@ -56,7 +56,7 @@ export default {
       items: null,
       scheduleLoading: false,
       schedule: null,
-      selectedYear: this.$store.state.data.years.splice(-1)[0].id
+      selectedYear: _.clone(this.$store.state.data.years).splice(-1)[0].id
     }
   },
   

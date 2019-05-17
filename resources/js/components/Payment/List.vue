@@ -14,7 +14,7 @@
         <tr>
           <td v-if='show.entity'>
             <router-link v-if='item.entity' :to="{
-              name: item.class_name === ROLES.CLIENT ? 'ClientShow' : 'TeacherShow',  
+              name: item.entity_type === userTypes.client ? 'ClientShow' : 'TeacherShow',  
               params: {id: item.entity.id}
             }">
               <PersonName :item='item.entity' />
@@ -90,7 +90,6 @@
 import Dialog from './Dialog'
 import DisplayList from '@/components/UI/DisplayList'
 import DisplayOptions from '@/mixins/DisplayOptions'
-import { ROLES } from '@/config'
 import { ENUMS } from './'
 import Print from '@/components/Print'
 
@@ -115,7 +114,6 @@ export default {
   data() {
     return {
       ENUMS,
-      ROLES,
       Dialog,
       defaultDisplayOptions: {
         entity: false,

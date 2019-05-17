@@ -81,6 +81,16 @@ function getMorphModel($class, $entity_id) {
     return $class::find($entity_id);
 }
 
+function getEntity($entity_type, $entity_id)
+{
+    $class = '\\' . $entity_type;
+    return $class::find($entity_id);
+}
+
+function getUserByEmailId(int $emailId)
+{
+    return \App\Models\Email::find($emailId)->user;
+}
 
 /**
  * Текущий учебный год

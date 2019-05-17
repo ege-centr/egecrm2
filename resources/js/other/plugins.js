@@ -16,10 +16,12 @@ import USER_TYPES from '@/other/user-types'
 
 export const GlobalPlugin = {
   install(Vue, options) {
-    Vue.prototype.getData = function(field, id) {
-      const result = this.$store.state.data[field].find(e => e.id == id)
-      return result
-      // return result || {}
+    Vue.prototype.getData = function(field, id = null) {
+      const data = this.$store.state.data[field]
+      if (id !== null) {
+        return data.find(e => e.id == id)
+      }
+      return _.clone(data)
     }
 
     Vue.prototype.config = {
