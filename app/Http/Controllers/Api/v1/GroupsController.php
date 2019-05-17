@@ -22,7 +22,7 @@ class GroupsController extends Controller
             'facets' => ['*']
         ]);
         $this->filter($request, $query);
-        return new AlgoliaResult($query->paginateRaw($request->paginate));
+        return new AlgoliaResult($query->paginateRaw($request->paginate ?: SHOW_ALL));
 
         // $query = Group::with(['lessons'])->orderBy('id', 'desc');
 
