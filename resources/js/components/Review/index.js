@@ -13,7 +13,7 @@ export const COMMENT_TYPE = {
 }
 
 export const FILTERS = [
-  {field: 'year', type: 'multiple', label: 'Год', options: _.clone(store.state.data.years)},
+  {field: 'year', type: 'multiple', label: 'Год', options: store.state.data.years},
   {field: 'subject_id', type: 'multiple', label: 'Предмет', options: store.state.data.subjects, textField: 'name'},
   {label: 'Преподаватель', field: 'teacher_id', type: 'multiple', options: store.state.data.teachers, textField: 'names.abbreviation'},
   {label: 'Оценка ученика', field: 'client_rating', type: 'multiple', options: [

@@ -21,7 +21,7 @@ export const GlobalPlugin = {
       if (id !== null) {
         return data.find(e => e.id == id)
       }
-      return _.clone(data)
+      return data
     }
 
     Vue.prototype.config = {
