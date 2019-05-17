@@ -14,6 +14,7 @@
           </tr>
           <tr v-for='(i, date) in currentYearItems[item]' 
             class='no-borders'
+            :key='date'
           >
             <td width='130'>
               <span v-if='currentYearItems[item].length === currentYearItems[item].findIndex(e => e === i) + 1'>
