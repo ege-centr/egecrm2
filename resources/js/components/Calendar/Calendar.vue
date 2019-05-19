@@ -51,13 +51,6 @@ export default {
       },
       required: false,
     },
-    specialDates: {
-      type: Array,
-      default() {
-        return []
-      },
-      required: false,
-    },
     withSpecialDates: {
       type: Boolean,
       required: false,
@@ -74,6 +67,7 @@ export default {
       // все дни в году, разбитые по месяцам и неделям
       CALENDAR_MONTHS,
       days_by_months_and_weeks: {},
+      specialDates: [],
       week_days: [
         {id: 1, label: 'ПН'},
         {id: 2, label: 'ВТ'},

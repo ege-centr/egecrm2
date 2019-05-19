@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card v-if='group.lessons.length > 0'>
+    <v-card v-if='group.lessons.length > 0' :class='config.elevationClass'>
       <v-card-text class='relative'>
         <div class='visits'>
           <div class='visits__dates'>

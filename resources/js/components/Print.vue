@@ -6,7 +6,7 @@
           <v-toolbar-title>{{ title }}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark icon @click.native="print" :loading='saving'>
+            <v-btn dark icon @click.native="print">
               <v-icon>print</v-icon>
             </v-btn>
             <v-btn icon dark @click.native="dialog = false">

@@ -11,4 +11,10 @@ class ReviewComment extends Model
     use HasCreatedEmail;
 
     protected $fillable = ['rating', 'text', 'type'];
+    protected $touches = ['review'];
+
+    public function review()
+    {
+        return $this->belongsTo(Review::class);
+    }
 }

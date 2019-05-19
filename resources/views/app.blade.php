@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Личный кабинет</title>
     <link rel="stylesheet" href="{{ app()->environment('local') ? mix('css/app.css') : config('app.spaces-url') . 'css/app.css' }}">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">

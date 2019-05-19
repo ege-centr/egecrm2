@@ -9,7 +9,7 @@
           <v-toolbar-title>Результаты теста</v-toolbar-title>
         </v-toolbar>
         <v-card-text class='test-results-dialog'>
-          <TestClientStartPage :options='item' :key='JSON.stringify(item)' />
+          <TestClientStartPage v-if='item !== null' :options='item' :key='JSON.stringify(item)' />
         </v-card-text>
       </v-card>
     </v-dialog>

@@ -61,7 +61,7 @@ class AbstractReview extends Model
 
     public function getScoutKey()
     {
-        return uniqid();
+        return $this->review_id;
     }
 
 

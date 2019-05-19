@@ -94,6 +94,9 @@ export default {
       teachers: [],
       lessons: [],
       saving: false,
+
+      // TODO: перевести на Dialog компонент 
+      destroying: false,
     }
   },
   
@@ -136,6 +139,11 @@ export default {
       this.$emit('updated', this.item)
       this.waitForDialogClose(() => this.saving = false)
     },
+
+    // TODO: перевести на удаление
+    destroy() {
+
+    }
   },
 }
 </script>
