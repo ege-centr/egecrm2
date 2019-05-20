@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Utils\Schedule;
-use App\Models\Lesson\Lesson;
+use App\Models\Lesson\{Lesson, LessonStatus};
 use App\Models\{Cabinet, Group\GroupClient};
 use DateTime;
 
@@ -152,34 +152,40 @@ class TimelineController extends Controller
             // logger(json_encode($item, JSON_PRETTY_PRINT));
             $item->start = $item->time;
             $item->end = (new DateTime($item->time))->modify("+{$item->duration} minutes")->format("H:i");
-            $item->overlaps = Lesson::query()
-                ->where('date', $item->date)
-                ->whereRaw(sprintf("
-                    (
-                        '%s' <= CAST(ADDTIME(`time`, `duration` * 100) AS CHAR) AND
-                        '%s' >= CAST(`time` AS CHAR)
-                    )
-                    AND
-                    (
-                        teacher_id = %d OR
-                        cabinet_id = %d %s
-                    )
-                ",
-                    $item->start,
-                    $item->end,
-                    $item->teacher_id,
-                    $item->cabinet_id,
-                    $item->client_ids ? "OR
-                        EXISTS (
-                            SELECT 1 FROM group_clients
-                            WHERE group_id = lessons.group_id
-                            AND client_id IN ({$item->client_ids})
-                        )" : ''
-                ))
-                ->when($item->id, function ($query, $id) {
-                    return $query->where('id', '<>', $id);
-                })
-                ->exists();
+            
+            // проведённые занятия не проверяем на overlaps
+            if ($item->status === LessonStatus::CONDUCTED) {
+                $item->overlaps = false;
+            } else {
+                $item->overlaps = Lesson::query()
+                    ->where('date', $item->date)
+                    ->whereRaw(sprintf("
+                        (
+                            '%s' <= CAST(ADDTIME(`time`, `duration` * 100) AS CHAR) AND
+                            '%s' >= CAST(`time` AS CHAR)
+                        )
+                        AND
+                        (
+                            teacher_id = %d OR
+                            cabinet_id = %d %s
+                        )
+                    ",
+                        $item->start,
+                        $item->end,
+                        $item->teacher_id,
+                        $item->cabinet_id,
+                        $item->client_ids ? "OR
+                            EXISTS (
+                                SELECT 1 FROM group_clients
+                                WHERE group_id = lessons.group_id
+                                AND client_id IN ({$item->client_ids})
+                            )" : ''
+                    ))
+                    ->when($item->id, function ($query, $id) {
+                        return $query->where('id', '<>', $id);
+                    })
+                    ->exists();
+            }
         }
 
         $result = [];
