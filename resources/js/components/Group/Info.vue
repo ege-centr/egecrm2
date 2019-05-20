@@ -18,11 +18,17 @@
       <span v-if='item.subject_id' class='text-capitalize'>{{ getData('subjects', item.subject_id).name }}</span>
       <span v-if='item.grade_id'>, {{ getData('grades', item.grade_id).title }}</span>
       <div class='mt-3 item-label'>Расписание</div>
-      <ScheduleString :items='item.schedule' />
+      <ScheduleString v-if='item.schedule.length > 0' :items='item.schedule' />
+      <span v-else>Не установлено</span>
     </div>
     <div class='mr-5 pr-5'>
       <div class='item-label'>Учебный год</div>
-      <span>{{ item.year }}–{{ item.year + 1 }}</span>
+      <span v-if='item.year'>
+        {{ getData('years', item.year).title }}
+      </span>
+      <span v-else>
+        Не установлен
+      </span>
       <div class='mt-3 item-label'>Всего уроков</div>
       <span>{{ item.lessons.filter(e => e.status !== LESSON_STATUS.CANCELLED).length }}</span>
     </div>

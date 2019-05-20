@@ -36,6 +36,9 @@
                   <div class='vertical-inputs__input'>
                     <DataSelect type='grades' v-model="item.grade_id" />
                   </div>
+                  <div class='vertical-inputs__input'>
+                    <DataSelect v-model='item.subject_id' type='subjects' />
+                  </div>
                   <div class='vertical-inputs__input' v-if='lessons.length > 0'>
                     <ClearableSelect label='Критическая дата старта' v-model="item.latest_start_lesson_id" 
                       :item-text='(e) => $options.filters.date(e.date)' 
