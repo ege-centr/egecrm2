@@ -103,7 +103,9 @@
             <template slot='items' slot-scope='{ items }'>
               <PaymentList 
                 :items='items' 
-                :model-defaults='{ entity_id: $route.params.id, entity_type: userTypes.teacher }' />
+                :model-defaults='{ entity_id: $route.params.id, entity_type: userTypes.teacher }' 
+                @updated='$refs.PaymentPage.loadData()'
+              />
             </template>
           </DisplayData>
         </v-tab-item>
@@ -124,6 +126,7 @@
               <PaymentAdditionalList 
                 :items='items' 
                 :model-defaults='{ entity_id: $route.params.id, entity_type: userTypes.teacher }' 
+                @updated='$refs.PaymentAdditionalPage.loadData()'
               />
             </template>
           </DisplayData>
