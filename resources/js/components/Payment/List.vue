@@ -17,7 +17,7 @@
               name: item.entity_type === userTypes.client ? 'ClientShow' : 'TeacherShow',  
               params: {id: item.entity.id}
             }">
-              <PersonName :item='item.entity' />
+              {{ item.entity.default_name }}
             </router-link>
           </td>
           <td>
