@@ -63,38 +63,7 @@ class TimelineController extends Controller
             ->orderBy('lessons.date', 'asc')
             ->orderBy('lessons.time', 'asc');
 
-        $data = $query->get();
-
-        if (isset($current->date)) {
-            $current->is_current = true;
-            $current->status = null;
-            $current->client_ids = GroupClient::where('group_id', $request->group_id)->pluck('client_id')->implode(',');
-            $data->push($current);
-            $data->sortBy(function ($item) {
-                return $item->date . ' ' . $item->time;
-            });
-        }
-
-        $data = $data->all();
-        $this->addOverlaps($data);
-
-        $result = [];
-
-        // Группировка
-        // cabinet_id =>
-        //  week_day =>
-        //      item
-        //      item
-        foreach($data as $item) {
-            $date = new DateTime($item->date);
-            $result[$item->cabinet_id][$date->format('W')][] = [
-                'start' => $item->time,
-                'end' => (new DateTime($item->time))->modify("+{$item->duration} minutes")->format("H:i"),
-                'is_current' => $item->is_current ?: false,
-                'date' => $item->date,
-                'status' => $item->status,
-            ];
-        }
+        $result = $this->getResult($query, true);
 
         // Сгруппировать по неделям, начиная с 1 недели сентября
         // По конец мая
@@ -122,8 +91,6 @@ class TimelineController extends Controller
     {
         $current = (object) $request->current;
 
-
-
         $query = Lesson::notCancelled()
             ->selectRaw("
                 lessons.`date`, `status`, `time`, `duration`, `group_id`, lessons.`teacher_id`, `cabinet_id`, lessons.`id`,
@@ -141,33 +108,7 @@ class TimelineController extends Controller
             $query->where($field, $value);
         }
 
-        $data = $query->get();
-
-        if (isset($current->date)) {
-            $current->is_current = true;
-            $current->status = null;
-            $current->client_ids = GroupClient::where('group_id', $request->group_id)->pluck('client_id')->implode(',');
-            $data->push($current);
-            $data->sortBy(function ($item) {
-                return $item->date . ' ' . $item->time;
-            });
-        }
-
-        $data = $data->all();
-        $this->addOverlaps($data);
-
-        $result = [];
-        foreach($data as $item) {
-            $date = new DateTime($item->date);
-            $result[$date->format('W')][] = [
-                'start' => $item->start,
-                'end' => $item->end,
-                'is_current' => $item->is_current ?: false,
-                'date' => $item->date,
-                'status' => $item->status,
-                'overlaps' => $item->overlaps,
-            ];
-        }
+        $result = $this->getResult($query);
 
         $current = strtotime("first Monday of September " . $request->year);
         $end = date('W', strtotime("first Monday of June " . ($request->year + 1)));
@@ -194,8 +135,20 @@ class TimelineController extends Controller
      *  – с одним и тем же учеником
      *  – с одним и тем же преподом
      */
-    private function addOverlaps(array &$items)
+    private function getResult($query, bool $groupByCabinet = false)
     {
+        $items = $query->get();
+
+        if (isset($current->date)) {
+            $current->is_current = true;
+            $current->status = null;
+            $current->client_ids = GroupClient::where('group_id', $request->group_id)->pluck('client_id')->implode(',');
+            $items->push($current);
+            $items->sortBy(function ($item) {
+                return $item->date . ' ' . $item->time;
+            });
+        }
+
         foreach($items as &$item) {
             // logger(json_encode($item, JSON_PRETTY_PRINT));
             $item->start = $item->time;
@@ -229,5 +182,30 @@ class TimelineController extends Controller
                 })
                 ->exists();
         }
+
+        $result = [];
+        foreach($items as $item) {
+            $date = new DateTime($item->date);
+            $data = [
+                'start' => $item->start,
+                'end' => $item->end,
+                'is_current' => $item->is_current ?: false,
+                'date' => $item->date,
+                'status' => $item->status,
+                'overlaps' => $item->overlaps,
+            ];
+            if ($groupByCabinet) {
+                // Группировка
+                // cabinet_id =>
+                //  week_day =>
+                //      item
+                //      item
+                $result[$item->cabinet_id][$date->format('W')][] = $data;
+            } else {
+                $result[$date->format('W')][] = $data;
+            }
+        }
+
+        return $result;
     }
 }
