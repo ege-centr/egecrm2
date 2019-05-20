@@ -27,7 +27,11 @@ class Client extends Model implements UserInterface
 
     public function getDefaultNameAttribute()
     {
-        return $this->names->lastF;
+        $name = $this->names->lastF;
+        if (empty(trim($name))) {
+            return 'пусто';
+        }
+        return $name;
     }
 
     public function contracts()
