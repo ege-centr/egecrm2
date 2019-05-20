@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :key='$route.params.id'>
     <div class='headline mb-4 flex-items align-center'>
       Клиент {{ clientId || $route.params.id }}
 
@@ -395,25 +395,24 @@ export default {
     ReviewAdminList, PaymentAdditionalList, PaymentAdditionalDialog,
   },
 
-  created() {
-    this.loadData()
-  },
-
   watch: {
-    tabs(newVal) {
-      // tests tab
-      if (newVal === 5) {
-        // 123
-        // 
-      }
-    },
+    '$route.params': {
+        handler() {
+          this.loadData()
+        },
+        immediate: true,
+    }
   },
 
   methods: {
     loadData() {
-      axios.get(apiUrl(API_URL, (this.clientId || this.$route.params.id))).then(r => {
-        this.client = r.data
-        this.loading = false
+      this.client = null
+      this.loading = true
+      Vue.nextTick(() => {
+        axios.get(apiUrl(API_URL, (this.clientId || this.$route.params.id))).then(r => {
+          this.client = r.data
+          this.loading = false
+        })
       })
     },
 

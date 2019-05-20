@@ -244,15 +244,24 @@ export default {
     }
   },
 
-  created() {
-    this.loadData()
+  watch: {
+    '$route.params': {
+        handler() {
+          this.loadData()
+        },
+        immediate: true,
+    }
   },
 
   methods: {
     loadData() {
-      axios.get(apiUrl(API_URL, this.$route.params.id)).then(r => {
-        this.item = r.data
-        this.loading = false
+      this.item = null
+      this.loading = true
+      Vue.nextTick(() => {
+        axios.get(apiUrl(API_URL, this.$route.params.id)).then(r => {
+          this.item = r.data
+          this.loading = false
+        })
       })
     },
   }
