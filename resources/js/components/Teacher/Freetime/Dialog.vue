@@ -136,7 +136,7 @@ export default {
       API_URL,
       MODEL_DEFAULTS,
       DAY_LABELS,
-      itemsLoading: false,
+      itemsLoading: true,
       items: null,
       days: [
         {value: 1, text: 'ПН'},
