@@ -32,7 +32,7 @@ export default {
   
   methods: {
     search: _.debounce(function() {
-      if (this.$store.state.search.query.length <= 3) {
+      if (this.$store.state.search.query.length < 3) {
         this.$store.commit('setSearchResults', null)
         return
       }
