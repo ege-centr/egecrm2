@@ -72,6 +72,7 @@ class TimelineController extends Controller
             return $item->date . ' ' . $item->time;
         });
 
+        $data = $data->all();
         $this->addOverlaps($data);
 
         $result = [];
@@ -149,6 +150,7 @@ class TimelineController extends Controller
             });
         }
 
+        $data = $data->all();
         $this->addOverlaps($data);
 
         $result = [];
