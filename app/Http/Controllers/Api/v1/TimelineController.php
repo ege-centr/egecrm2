@@ -47,23 +47,21 @@ class TimelineController extends Controller
      */
     public function cabinet(Request $request)
     {
-        $current = (object) $request->current;
-
         $query = Lesson::notCancelled()
             ->selectRaw("
-                lessons.`date`, `status`, `cabinet_id`,  `time`, `duration`, `group_id`,
+                lessons.`date`, `status`, `time`, `duration`, `group_id`, lessons.`teacher_id`, `cabinet_id`, lessons.`id`,
                 (SELECT GROUP_CONCAT(client_id) FROM group_clients WHERE group_id = lessons.group_id) as `client_ids`
             ")
             ->join('groups', 'groups.id', '=', 'lessons.group_id')
-            ->whereRaw("DATE_FORMAT(lessons.date, '%w') = " . date('w', strtotime($current->date)))
+            ->whereRaw("DATE_FORMAT(lessons.date, '%w') = " . date('w', strtotime($request->current['date'])))
             ->where('groups.year', $request->year)
-            ->when(isset($current->id), function ($query) use ($current) {
-                return $query->where('lessons.id', '<>', $current->id);
+            ->when(isset($request->current['id']), function ($query) use ($request) {
+                return $query->where('lessons.id', '<>', $request->current['id']);
             })
             ->orderBy('lessons.date', 'asc')
             ->orderBy('lessons.time', 'asc');
 
-        $result = $this->getResult($query, true);
+        $result = $this->getResult($query, $request, true);
 
         // Сгруппировать по неделям, начиная с 1 недели сентября
         // По конец мая
@@ -89,8 +87,7 @@ class TimelineController extends Controller
 
     private function getData(Request $request, $filters = [])
     {
-        $current = (object) $request->current;
-
+        // TODO: тут и в cabinets() почти одно и то же, с небольшой разницей
         $query = Lesson::notCancelled()
             ->selectRaw("
                 lessons.`date`, `status`, `time`, `duration`, `group_id`, lessons.`teacher_id`, `cabinet_id`, lessons.`id`,
@@ -98,8 +95,8 @@ class TimelineController extends Controller
             ")
             ->join('groups', 'groups.id', '=', 'lessons.group_id')
             ->where('groups.year', $request->year)
-            ->when(isset($current->id), function ($query) use ($current) {
-                return $query->where('lessons.id', '<>', $current->id);
+            ->when(isset($request->current['id']), function ($query) use ($request) {
+                return $query->where('lessons.id', '<>', $request->current['id']);
             })
             ->orderBy('lessons.date', 'asc')
             ->orderBy('lessons.time', 'asc');
@@ -108,7 +105,7 @@ class TimelineController extends Controller
             $query->where($field, $value);
         }
 
-        $result = $this->getResult($query);
+        $result = $this->getResult($query, $request);
 
         $current = strtotime("first Monday of September " . $request->year);
         $end = date('W', strtotime("first Monday of June " . ($request->year + 1)));
@@ -135,8 +132,10 @@ class TimelineController extends Controller
      *  – с одним и тем же учеником
      *  – с одним и тем же преподом
      */
-    private function getResult($query, bool $groupByCabinet = false)
+    private function getResult($query, $request, bool $groupByCabinet = false)
     {
+        $current = (object) $request->current;
+
         $items = $query->get();
 
         if (isset($current->date)) {
