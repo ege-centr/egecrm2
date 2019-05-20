@@ -65,12 +65,15 @@ class TimelineController extends Controller
 
         $data = $query->get();
 
-        $current->is_current = true;
-        $current->status = null;
-        $data->push($current);
-        $data->sortBy(function ($item) {
-            return $item->date . ' ' . $item->time;
-        });
+        if (isset($current->date)) {
+            $current->is_current = true;
+            $current->status = null;
+            $current->client_ids = GroupClient::where('group_id', $request->group_id)->pluck('client_id')->implode(',');
+            $data->push($current);
+            $data->sortBy(function ($item) {
+                return $item->date . ' ' . $item->time;
+            });
+        }
 
         $data = $data->all();
         $this->addOverlaps($data);
