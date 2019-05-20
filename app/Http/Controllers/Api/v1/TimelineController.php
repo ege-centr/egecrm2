@@ -50,7 +50,10 @@ class TimelineController extends Controller
         $current = (object) $request->current;
 
         $query = Lesson::notCancelled()
-            ->selectRaw("lessons.`date`, `status`, `cabinet_id`,  `time`, `duration`, `group_id`")
+            ->selectRaw("
+                lessons.`date`, `status`, `cabinet_id`,  `time`, `duration`, `group_id`,
+                (SELECT GROUP_CONCAT(client_id) FROM group_clients WHERE group_id = lessons.group_id) as `client_ids`
+            ")
             ->join('groups', 'groups.id', '=', 'lessons.group_id')
             ->whereRaw("DATE_FORMAT(lessons.date, '%w') = " . date('w', strtotime($current->date)))
             ->where('groups.year', $request->year)
@@ -69,6 +72,7 @@ class TimelineController extends Controller
             return $item->date . ' ' . $item->time;
         });
 
+        $this->addOverlaps($data);
 
         $result = [];
 
@@ -114,6 +118,8 @@ class TimelineController extends Controller
     {
         $current = (object) $request->current;
 
+
+
         $query = Lesson::notCancelled()
             ->selectRaw("
                 lessons.`date`, `status`, `time`, `duration`, `group_id`, lessons.`teacher_id`, `cabinet_id`, lessons.`id`,
@@ -143,44 +149,7 @@ class TimelineController extends Controller
             });
         }
 
-        // проверить пересечения
-        // в одну дату и время не может быть сразу 2 занятия:
-        //  * в одном и том же кабинете
-        //  * с одним и тем же учеником
-        //  * с одним и тем же преподом
-        foreach($data as &$item) {
-            // logger(json_encode($item, JSON_PRETTY_PRINT));
-            $item->start = $item->time;
-            $item->end = (new DateTime($item->time))->modify("+{$item->duration} minutes")->format("H:i");
-            $item->overlaps = Lesson::query()
-                ->where('date', $item->date)
-                ->whereRaw(sprintf("
-                    (
-                        '%s' <= CAST(ADDTIME(`time`, `duration` * 100) AS CHAR) AND
-                        '%s' >= `time`
-                    )
-                    AND
-                    (
-                        teacher_id = %d OR
-                        cabinet_id = %d %s
-                    )
-                ",
-                    $item->start,
-                    $item->end,
-                    $item->teacher_id,
-                    $item->cabinet_id,
-                    $item->client_ids ? "OR
-                        EXISTS (
-                            SELECT 1 FROM group_clients
-                            WHERE group_id = lessons.group_id
-                            AND client_id IN ({$item->client_ids})
-                        )" : ''
-                ))
-                ->when($item->id, function ($query, $id) {
-                    return $query->where('id', '<>', $id);
-                })
-                ->exists();
-        }
+        $this->addOverlaps($data);
 
         $result = [];
         foreach($data as $item) {
@@ -210,5 +179,50 @@ class TimelineController extends Controller
                 return array_values($items);
             }, $resultGroupedByWeeks)
         );
+    }
+
+    /**
+     * Проверить каждый зуб на пересечения
+     *
+     *  В одну дату и время не может быть сразу 2 занятия:
+     *  – в одном и том же кабинете
+     *  – с одним и тем же учеником
+     *  – с одним и тем же преподом
+     */
+    private function addOverlaps(array &$items)
+    {
+        foreach($items as &$item) {
+            // logger(json_encode($item, JSON_PRETTY_PRINT));
+            $item->start = $item->time;
+            $item->end = (new DateTime($item->time))->modify("+{$item->duration} minutes")->format("H:i");
+            $item->overlaps = Lesson::query()
+                ->where('date', $item->date)
+                ->whereRaw(sprintf("
+                    (
+                        '%s' <= CAST(ADDTIME(`time`, `duration` * 100) AS CHAR) AND
+                        '%s' >= CAST(`time` AS CHAR)
+                    )
+                    AND
+                    (
+                        teacher_id = %d OR
+                        cabinet_id = %d %s
+                    )
+                ",
+                    $item->start,
+                    $item->end,
+                    $item->teacher_id,
+                    $item->cabinet_id,
+                    $item->client_ids ? "OR
+                        EXISTS (
+                            SELECT 1 FROM group_clients
+                            WHERE group_id = lessons.group_id
+                            AND client_id IN ({$item->client_ids})
+                        )" : ''
+                ))
+                ->when($item->id, function ($query, $id) {
+                    return $query->where('id', '<>', $id);
+                })
+                ->exists();
+        }
     }
 }
