@@ -19,20 +19,20 @@ class PaymentsController extends Controller
 
     public function index(Request $request)
     {
-        // $query = Payment::search()->with([
-        //     'facets' => ['*'],
-        // ]);
-        // $this->filter($request, $query);
-        // $result = new AlgoliaResult($query->paginateRaw($request->paginate));
-        // $result->getCollection()->transform(function ($items, $key) {
-        //     if ($key === 'hits') {
-        //         foreach($items as &$item) {
-        //             $item['entity'] = new PersonResource(getEntity($item['entity_type'], $item['entity_id']));
-        //         }
-        //     }
-        //     return $items;
-        // });
-        // return $result;
+        $query = Payment::search()->with([
+            'facets' => ['*'],
+        ]);
+        $this->filter($request, $query);
+        $result = new AlgoliaResult($query->paginateRaw($request->paginate));
+        $result->getCollection()->transform(function ($items, $key) {
+            if ($key === 'hits') {
+                foreach($items as &$item) {
+                    $item['entity'] = new PersonResource(getEntity($item['entity_type'], $item['entity_id']));
+                }
+            }
+            return $items;
+        });
+        return $result;
 
         $query = Payment::query();
         $this->filter($request, $query);

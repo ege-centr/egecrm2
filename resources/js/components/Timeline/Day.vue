@@ -117,17 +117,16 @@ export default {
 
     // время пересекается с другим
     overlaps(item, index) {
-      if (item.overlaps === true) {
-        return true
-      }
-      const range = this.getRange(item)
-      let overlaps = false
-      this.items.forEach((item2, index2) => {
-        if (index !== index2 && !overlaps) {
-          overlaps = range.overlaps(this.getRange(item2))
-        }
-      })
-      return overlaps
+      return item.overlaps === true
+      // Полагаемся только на бэкэнд
+      // const range = this.getRange(item)
+      // let overlaps = false
+      // this.items.forEach((item2, index2) => {
+      //   if (index !== index2 && !overlaps) {
+      //     overlaps = range.overlaps(this.getRange(item2))
+      //   }
+      // })
+      // return overlaps
     },
   },
   

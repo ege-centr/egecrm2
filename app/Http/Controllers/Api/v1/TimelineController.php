@@ -156,8 +156,8 @@ class TimelineController extends Controller
                 ->where('date', $item->date)
                 ->whereRaw(sprintf("
                     (
-                        ('%s' BETWEEN `time` AND `time` + INTERVAL `duration` MINUTE) OR
-                        ('%s' BETWEEN `time` AND `time` + INTERVAL `duration` MINUTE)
+                        '%s' <= CAST(ADDTIME(`time`, `duration` * 100) AS CHAR) AND
+                        '%s' >= `time`
                     )
                     AND
                     (
