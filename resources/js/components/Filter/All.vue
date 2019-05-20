@@ -308,7 +308,9 @@ export default {
       })
       // 2) Если переданы facets, то внутри должны быть элементы
       if (this.facets !== null) {
-        availableFilters = availableFilters.filter(e => e.field in this.facets)
+        // эти фильтры без каунтеров
+        const alwaysShow = ['interval', 'sort', 'input']
+        availableFilters = availableFilters.filter(e => e.field in this.facets || alwaysShow.includes(e.type) || e.hasOwnProperty('skipFacets'))
       }
       return availableFilters
     },

@@ -29,13 +29,13 @@ export const FILTERS = [
   {label: '№ договора', field: 'number', type: 'input'},
   {label: 'Год', field: 'year', type: 'multiple', options: store.state.data.years},
   {label: 'Класс', field: 'grade_id', type: 'multiple', options: store.state.data.grades},
-  {label: 'Версия', field: 'version', type: 'multiple', options: [
+  {label: 'Версия', field: 'version', skipFacets: true, type: 'multiple', options: [
     {id: 'first', title: 'первая'},
     {id: 'last', title: 'последняя'},
   ]},
-  {label: 'Пользователь', field: 'created_email_id', type: 'admin'},
-  {label: 'Дата создания', field: 'date', type: 'interval'},
-  {label: 'Дата создания из реквизитов', field: 'created_at', type: 'interval'},
+  {label: 'Пользователь', field: 'created_email_id', type: 'admin', valueField: 'email_id'},
+  {label: 'Дата создания', field: 'date_timestamp', type: 'interval'},
+  {label: 'Дата создания из реквизитов', field: 'created_at_timestamp', type: 'interval'},
 ]
 
 

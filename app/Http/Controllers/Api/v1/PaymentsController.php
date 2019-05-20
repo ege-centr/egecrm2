@@ -12,37 +12,43 @@ use PersonResource;
 class PaymentsController extends Controller
 {
     protected $filters = [
-        'multiple' => ['year', 'category', 'method', 'type', 'is_confirmed'],
+        'multiple' => ['year', 'is_confirmed'],
         'equals' => ['created_email_id', 'entity_id'],
-        'interval' => ['date'],
+        'timestamp' => ['date_timestamp'],
     ];
 
     public function index(Request $request)
     {
+        $filters = [];
+        foreach(['category', 'method', 'type', 'entity_type'] as $field) {
+            if ($request->input($field)) {
+                $values = explode(',', $request->input($field));
+                $filters[] = implode(' OR ', array_map(function ($value) use ($field) {
+                    return $field . ':' . $value;
+                }, $values));
+            }
+        }
+
         $query = Payment::search()->with([
             'facets' => ['*'],
+            'filters' => implode(' AND ', $filters)
         ]);
+
         $this->filter($request, $query);
         $result = new AlgoliaResult($query->paginateRaw($request->paginate));
         $result->getCollection()->transform(function ($items, $key) {
             if ($key === 'hits') {
                 foreach($items as &$item) {
-                    $item['entity'] = new PersonResource(getEntity($item['entity_type'], $item['entity_id']));
+                    $entity = getEntity($item['entity_type'], $item['entity_id']);
+                    $item['entity'] = $entity ? new PersonResource(getEntity($item['entity_type'], $item['entity_id'])) : null;
                 }
+            }
+            if ($key === 'facets' && count($items) === 0) {
+                return null;
             }
             return $items;
         });
         return $result;
-
-        $query = Payment::query();
-        $this->filter($request, $query);
-        if (isset($request->entity_type) && $request->entity_type) {
-            $query->whereIn('entity_type', array_map(function($e) {
-                return getModelClass($e, true);
-            }, explode(',', $request->entity_type)));
-        }
-        $query->orderBy('id', 'desc');
-        return PaymentCollection::collection($this->showBy($request, $query));
     }
 
     public function update(Request $request, $id)

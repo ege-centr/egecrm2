@@ -4,35 +4,51 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Contract\{Contract, ContractPayment, Contractsubject};
+use App\Models\Contract\{Contract, ContractPayment, ContractSubject};
 use App\Http\Resources\Contract\{ContractResource, ContractCollection};
+use App\Http\Resources\AlgoliaResult;
+use App\Models\Client\Client;
 
 class ContractsController extends Controller
 {
     protected $filters = [
         'equals' => ['client_id', 'number'],
         'multiple' => ['year', 'grade_id', 'created_email_id'],
-        'interval' => ['created_at', 'date'],
+        'timestamp' => ['date_timestamp', 'created_at_timestamp'],
     ];
 
     public function index(Request $request)
     {
-        $query = Contract::orderBy('date', 'desc');
+        $query = Contract::search()->with([
+            'facets' => ['*'],
+        ]);
+
         $this->filter($request, $query);
 
         if (isset($request->version)) {
             $versions = explode(',', $request->version);
-            $query->where(function($query) use ($versions) {
-                if (in_array('last', $versions)) {
-                    $query->active();
-                }
-                if (in_array('first', $versions)) {
-                    $query->where('version', 1);
-                }
-            });
+            if (in_array('last', $versions)) {
+                $query->where('is_active', true);
+            }
+            if (in_array('first', $versions)) {
+                $query->where('version', 1);
+            }
         }
 
-        return ContractCollection::collection($this->showBy($request, $query));
+        $result = new AlgoliaResult($query->paginateRaw($request->paginate));
+        $result->getCollection()->transform(function ($items, $key) {
+            if ($key === 'hits') {
+                foreach($items as &$item) {
+                    $item['subjects'] = ContractSubject::where('contract_id', $item['id'])->get();
+                    $item['client'] = new \PersonResource(Client::find($item['client_id']));
+                }
+            }
+            if ($key === 'facets' && count($items) === 0) {
+                return null;
+            }
+            return $items;
+        });
+        return $result;
     }
 
     public function show($id)

@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\{Lesson\ClientLesson, Teacher};
+use App\Models\{Lesson\ClientLesson, Teacher, Email};
 use App\Models\Factory\{Grade, Subject, Branch};
 use Illuminate\Database\Eloquent\Collection;
 use PersonResource;
@@ -64,7 +64,25 @@ class BalanceController extends Controller
             }
         }
 
-        $payments = app()->call('App\Http\Controllers\Api\v1\PaymentsController@index')->items();
+        $additionalPayments = app()->call('App\Http\Controllers\Api\v1\PaymentAdditionalsController@index')->items();
+        foreach($additionalPayments as $additionalPayment) {
+            $items[] = [
+                'sum' => $isTeacher ? $additionalPayment->sum : $additionalPayment->sum * -1,
+                'comment' => $additionalPayment->purpose,
+                'date' => $additionalPayment->date,
+                'year' => $additionalPayment->year,
+                'user' => new PersonResource($additionalPayment->createdUser),
+                'created_at' => $additionalPayment->created_at,
+                'bonus' => 0,
+            ];
+        }
+
+        /**
+         * В новом подходе не используем короткие Client\Client – только полный путь к классам
+         */
+        $request->merge(['entity_type' => getModelClass($request->entity_type, true)]);
+        $payments = app()->call('App\Http\Controllers\Api\v1\PaymentsController@index');
+        $payments = json_decode(json_encode($payments))->data;
         foreach($payments as $payment) {
             if ($payment->type === 'payment') {
                 $sum = $isTeacher ? $payment->sum * -1 : $payment->sum;
@@ -78,21 +96,8 @@ class BalanceController extends Controller
                 'comment' => $comment,
                 'date' => $payment->date,
                 'year' => $payment->year,
-                'user' => new PersonResource($payment->createdUser),
+                'user' => new PersonResource(Email::getUser($payment->created_email_id)),
                 'created_at' => $payment->created_at,
-                'bonus' => 0,
-            ];
-        }
-
-        $additionalPayments = app()->call('App\Http\Controllers\Api\v1\PaymentAdditionalsController@index')->items();
-        foreach($additionalPayments as $additionalPayment) {
-            $items[] = [
-                'sum' => $isTeacher ? $additionalPayment->sum : $additionalPayment->sum * -1,
-                'comment' => $additionalPayment->purpose,
-                'date' => $additionalPayment->date,
-                'year' => $additionalPayment->year,
-                'user' => new PersonResource($additionalPayment->createdUser),
-                'created_at' => $additionalPayment->created_at,
                 'bonus' => 0,
             ];
         }

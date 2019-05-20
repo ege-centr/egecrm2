@@ -92,6 +92,17 @@ class Controller extends BaseController
         }
     }
 
+    protected function filterTimestamp(string $field, $value, &$query)
+    {
+        $value = json_decode($value);
+        if (isset($value->start)) {
+            $query->where($field, '>=', strtotime($value->start));
+        }
+        if (isset($value->end)) {
+            $query->where($field, '<=', strtotime($value->end));
+        }
+    }
+
     protected function filterLikeMultiple(array $fields, $value, &$query)
     {
         $query->where(function ($query) use ($fields, $value) {

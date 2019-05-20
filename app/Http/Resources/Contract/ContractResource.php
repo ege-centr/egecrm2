@@ -10,7 +10,7 @@ class ContractResource extends JsonResource
     public function toArray($request)
     {
         return array_merge(parent::toArray($request), [
-            'is_active' => $this->isActive(),
+            'is_active' => $this->is_active,
             'payments' => $this->payments,
             'subjects' => $this->subjects,
             'createdUser' => new PersonResource($this->createdUser),

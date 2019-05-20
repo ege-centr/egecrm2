@@ -20,7 +20,7 @@ class ContractCollection extends JsonResource
             'client' => new PersonResource($this->client),
             'createdUser' => new PersonResource($this->createdUser),
             'version' => $this->version,
-            'is_active' => $this->isActive(),
+            'is_active' => $this->is_active,
             'subjects' => $this->subjects,
             'created_at' => $this->created_at,
         ];

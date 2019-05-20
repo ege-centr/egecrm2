@@ -2,24 +2,19 @@
 
 return [
     'searchableAttributes' => [
-        'type',
-        'method',
+        'number',
         'year',
-        'category',
-        'is_confirmed',
+        'grade_id',
+        'client_id',
+        'version',
         'created_email_id',
         'date_timestamp',
-        'entity_id',
-        'entity_type',
+        'created_at_timestamp'
     ],
 
     'attributesForFaceting' => [
-        'type',
-        'method',
         'year',
-        'category',
-        'entity_type',
-        'is_confirmed',
+        'grade_id',
         'created_email_id',
     ],
 

@@ -22,14 +22,12 @@ class Payment extends Model
 
     public function toSearchableArray()
     {
-        $array = extractFields($this, [
-            'id', 'category', 'type', 'method', 'date', 'sum', 'year',
-            'is_confirmed', 'bill_number', 'entity_type', 'entity_id'
+        return extractFields($this, [
+            'id', 'category', 'type', 'method', 'date', 'sum', 'year', 'created_email_id',
+            'is_confirmed', 'bill_number', 'entity_type', 'entity_id', 'created_at'
+        ], [
+            'date_timestamp' => strtotime($this->date)
         ]);
-
-        $array = $this->transform($array);
-
-        return $array;
     }
 
     public function getClassNameAttribute($value)

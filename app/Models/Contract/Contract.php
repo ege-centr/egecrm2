@@ -5,11 +5,11 @@ namespace App\Models\Contract;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\{User, Admin\Admin, Client\Client, Factory\Grade};
 use App\Traits\HasCreatedEmail;
-
+use Laravel\Scout\Searchable;
 
 class Contract extends Model
 {
-    use HasCreatedEmail;
+    use HasCreatedEmail, Searchable;
 
     protected $fillable = ['year', 'grade_id', 'sum', 'date', 'discount', 'number', 'client_id'];
 
@@ -41,11 +41,22 @@ class Contract extends Model
         return $this->sum;
     }
 
+    public function toSearchableArray()
+    {
+        return extractFields($this, [
+            'id', 'number', 'date', 'sum', 'grade_id', 'discount',
+            'year', 'client_id', 'version', 'is_active', 'created_email_id'
+        ], [
+            'date_timestamp' => strtotime($this->date),
+            'created_at_timestamp' => strtotime($this->created_at),
+        ]);
+    }
+
     /**
      * Активная (текущая) версия договора
      * должна быть последняя в цепи версий
      */
-    public function isActive()
+    public function getIsActiveAttribute()
     {
         return $this->version == self::chain($this->number)->max('version');
     }

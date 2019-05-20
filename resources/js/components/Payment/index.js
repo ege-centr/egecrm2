@@ -1,5 +1,5 @@
 import store from '@/store'
-import { ROLES } from '@/config'
+import USER_TYPES from '@/other/user-types'
 
 export const API_URL = 'payments'
 
@@ -27,15 +27,15 @@ export const FILTERS = [
   {label: 'Год', field: 'year', type: 'multiple', options: store.state.data.years},
   {label: 'Категория', field: 'category', type: 'multiple', options: ENUMS.categories},
   {label: 'От кого', field: 'entity_type', type: 'multiple', options: [
-    {id: ROLES.TEACHER, title: 'преподаватель'},
-    {id: ROLES.CLIENT, title: 'клиент'},
+    {id: USER_TYPES.teacher, title: 'преподаватель'},
+    {id: USER_TYPES.client, title: 'клиент'},
   ]},
   {label: 'Статус', field: 'is_confirmed', type: 'multiple', options: [
     {id: 0, title: 'не подтвержден'},
     {id: 1, title: 'подтвержден'},
   ]},
   {label: 'Пользователь', field: 'created_email_id', type: 'admin', valueField: 'email_id'},
-  {label: 'Дата', field: 'date', type: 'interval'},
+  {label: 'Дата', field: 'date_timestamp', type: 'interval'},
   {label: 'Сортировка', field: 'sort', type: 'sort', valueField: 'field', options: [
     {field: 'created_at', type: 'desc', title: 'по дате проводки'},
     {field: 'date', type: 'desc', title: 'по дате'},
