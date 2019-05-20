@@ -77,10 +77,7 @@ class BalanceController extends Controller
             ];
         }
 
-        /**
-         * В новом подходе не используем короткие Client\Client – только полный путь к классам
-         */
-        $request->merge(['entity_type' => getModelClass($request->entity_type, true)]);
+
         $payments = app()->call('App\Http\Controllers\Api\v1\PaymentsController@index');
         $payments = json_decode(json_encode($payments))->data;
         foreach($payments as $payment) {

@@ -19,6 +19,12 @@ class PaymentsController extends Controller
 
     public function index(Request $request)
     {
+        /**
+         * В новом подходе не используем короткие Client\Client – только полный путь к классам
+         */
+        if (isset($request->entity_type) && $request->entity_type && strpos($request->entity_type, 'App') === false) {
+            $request->merge(['entity_type' => getModelClass($request->entity_type, true)]);
+        }
         $filters = [];
         foreach(['category', 'method', 'type', 'entity_type'] as $field) {
             if ($request->input($field)) {
