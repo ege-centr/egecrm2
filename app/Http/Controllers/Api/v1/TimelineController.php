@@ -152,7 +152,7 @@ class TimelineController extends Controller
             // logger(json_encode($item, JSON_PRETTY_PRINT));
             $item->start = $item->time;
             $item->end = (new DateTime($item->time))->modify("+{$item->duration} minutes")->format("H:i");
-            
+
             // проведённые занятия не проверяем на overlaps
             if ($item->status === LessonStatus::CONDUCTED) {
                 $item->overlaps = false;
@@ -161,8 +161,8 @@ class TimelineController extends Controller
                     ->where('date', $item->date)
                     ->whereRaw(sprintf("
                         (
-                            '%s' <= CAST(ADDTIME(`time`, `duration` * 100) AS CHAR) AND
-                            '%s' >= CAST(`time` AS CHAR)
+                            TIME('%s') <= TIME(CONCAT(`date`, ' ', `time`) + INTERVAL `duration` MINUTE) AND
+                            TIME('%s') >= `time`
                         )
                         AND
                         (
