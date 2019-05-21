@@ -40,10 +40,12 @@
       v-model="menu"
     >
       <v-chip slot='activator' class='pointer white--text' color='primary' @click='item = null'>
-        <v-avatar class='pl-2'>
-          <v-icon>equalizer</v-icon>
+        <v-avatar class='pl-2 mr-0'>
+          <v-icon>add</v-icon>
         </v-avatar>
-        Добавить фильтр
+        <span style='position: relative; top: -1px'>
+          фильтр
+        </span>
       </v-chip>
 
       <v-list dense v-if='item === null'>

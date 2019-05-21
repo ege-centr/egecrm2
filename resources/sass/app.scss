@@ -504,12 +504,11 @@ nav {
   box-shadow: 0 0 6px 1px limegreen !important;
 }
 
-// .overflow-y-hidden {
-//   & > body:before {
-//     content: '';
-//     background: white;
-//     position: fixed;
-//     height: 100%;
-//     width: 100%;
-//   }
-// }
+.v-btn_xs {
+  height: 30px !important;
+  width: 30px !important;
+}
+
+.v-textarea.v-text-field--box.v-text-field--single-line .v-label, .v-textarea.v-text-field--enclosed.v-text-field--single-line .v-label {
+  top: 8px !important;
+}

@@ -65,7 +65,7 @@
                     </div>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <TeacherSelect v-model="item.teacher_id" />
+                    <TeacherSelect v-model="item.teacher_id" only-active />
                   </div>
                   <div class='vertical-inputs__input'>
                     <v-text-field 

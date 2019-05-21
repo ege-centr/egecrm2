@@ -1,8 +1,8 @@
 <template>
   <div style='min-height: 200px'>
     <LessonDialog ref='LessonDialog' @updated='loadData' />
-    <ConductDialog ref='ConductDialog' />
-    <TopicDialog ref='TopicDialog' />
+    <ConductDialog ref='ConductDialog' @updated='loadData' />
+    <TopicDialog ref='TopicDialog'  @updated='loadData' />
     <Loader v-if='items === null' />
     <div v-else>
       <v-container grid-list-xl class="pa-0 ma-0" fluid>

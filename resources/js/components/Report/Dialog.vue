@@ -23,45 +23,80 @@
           <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
             
             <v-layout wrap v-for='categoryName in CATEGORY' :key='categoryName' class='mb-4 px-3'>
-              <v-flex md5>
-                <div class='font-weight-medium mb-2'>
+              <v-flex md12 class='pb-0'>
+                <div class='title font-weight-bold mb-2'>
                   {{ getCategoryTitle(categoryName) }}
                 </div>
-                <div class='mb-3'>
+                <div class='mb-1'>
                   <div class='flex-items align-center'>
-                    <span class='caption mr-3 input-label'>Оценка</span>
-                    <v-rating dense clearable v-model="item[categoryName + '_score']"></v-rating>
+                    <span class='mr-1'>Оценка</span>
+                    <v-menu>
+                      <v-btn class='v-btn_xs' small fab dark flat slot='activator' :class="getColorClass(item[categoryName + '_score'])">
+                        <span v-if="item[categoryName + '_score'] > 0">
+                          {{ item[categoryName + '_score'] }}
+                        </span>
+                        <v-icon v-else>edit</v-icon>
+                      </v-btn>
+                       <v-list dense>
+                         <v-list-tile @click='setScore(null, categoryName)'>
+                          <v-list-tile-title class='grey--text'>
+                            не установлено
+                          </v-list-tile-title>
+                        </v-list-tile>
+                         <v-list-tile v-for='score in [1, 2, 3, 4, 5]' :key='score' @click='setScore(score, categoryName)'>
+                            <v-list-tile-title>
+                              {{ score }}
+                            </v-list-tile-title>
+                         </v-list-tile>
+                       </v-list>
+                    </v-menu>
+                    <!-- <v-rating dense clearable v-model="item[categoryName + '_score']"></v-rating> -->
                   </div>
                 </div>
-                <div>
-                  <v-textarea counter auto-grow label='Комментарий' v-model="item[categoryName + '_comment']"></v-textarea>
-                </div>
               </v-flex>
-              <v-flex offset-md1 md5>
-                <span class='font-weight-bold red--text' v-if='categoryName !== CATEGORY.behavior'>ПИШИТЕ ПОДРОБНЕЕ.</span>
-                {{ getCategoryDescription(categoryName) }}
+              <v-flex md12 class='pa-0'>
+                <div>
+                  <v-textarea 
+                    full-width
+                    auto-grow
+                    single-line
+                    counter 
+                    label='Комментарий' 
+                    maxlength="1000"
+                    v-model="item[categoryName + '_comment']"></v-textarea>
+                </div>
+                <hr class="v-divider theme--light">
               </v-flex>
             </v-layout>
 
 
               <v-layout wrap class='mb-4 px-3'>
-                <v-flex md5>
-                  <div class='font-weight-medium mb-2'>
+                <v-flex md12>
+                  <div class='title font-weight-bold mb-2'>
                     Рекомендации родителям
                   </div>
-                  <v-textarea counter auto-grow label='Комментарий' v-model="item.recommendation"></v-textarea>
                 </v-flex>
-                  <v-flex offset-md1 md5>
-                  <span class='font-weight-bold red--text'>ПИШИТЕ ПОДРОБНЕЕ.</span>
-                  Например: какой-либо необходимости контроля или воздействия со стороны родителей не вижу, так как процесс идет отлично
+                 <v-flex md12 class='pa-0'>
+                  <div>
+                    <v-textarea 
+                      full-width
+                      auto-grow
+                      single-line
+                      maxlength="1000"
+                      counter 
+                      label='Комментарий' 
+                      v-model="item.recommendation"></v-textarea>
+                  </div>
+                  <hr class="v-divider theme--light">
                 </v-flex>
               </v-layout>
 
 
               <v-layout wrap class='mb-4 pink lighten-5'>
-                <v-flex md5 style='padding-left: 28px'>
-                  <div class='font-weight-medium mb-2'>
-                    Прогноз баллов на экзамене (информация доступна только администраторам)
+                <v-flex md5 style='padding-left: 28px'>    
+                  <div class='title font-weight-bold mb-2'>
+                    Прогноз баллов на экзамене 
+                    <!-- (информация доступна только администраторам) -->
                   </div>
                   <v-layout>
                     <v-flex md4>
@@ -102,7 +137,7 @@
 
 <script>
 
-import { API_URL, MODEL_DEFAULTS, CATEGORY, getCategoryTitle, getCategoryDescription } from './'
+import { API_URL, MODEL_DEFAULTS, CATEGORY, getCategoryTitle, getCategoryDescription, getColorClass } from './'
 import { DialogMixin } from '@/mixins'
 import { DatePicker } from '@/components/UI'
 import { ROLES } from '@/config'
@@ -124,6 +159,11 @@ export default {
   methods: {
     getCategoryTitle,
     getCategoryDescription,
+    getColorClass,
+
+    setScore(score, categoryName) {
+      this.item[categoryName + '_score'] = score
+    },
   }
 }
 </script>

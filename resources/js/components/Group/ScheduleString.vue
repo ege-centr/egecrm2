@@ -16,7 +16,8 @@ export default {
 
   methods: {
     getDayLabel(item) {
-      return DAY_LABELS[moment(item.date).day()]
+      return DAY_LABELS[item.weekday]
+      // return DAY_LABELS[moment(item.date).day()]
     },
   },
 }

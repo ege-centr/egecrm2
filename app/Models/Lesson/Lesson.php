@@ -63,7 +63,7 @@ class Lesson extends Model
     public function getIsFirstInGroupAttribute()
     {
         return $this->date === self::where('group_id', $this->group_id)
-            ->where('status', '<>', self::STATUS_CANCELLED)
+            ->where('status', '<>', LessonStatus::CANCELLED)
             ->min('date');
     }
 
@@ -74,8 +74,8 @@ class Lesson extends Model
     {
         return $this->date < now()->format(DATE_FORMAT)
             && $this->date > now()->sub(new \DateInterval('P10D'))
-            && $this->status !== self::STATUS_CANCELLED
-            && $this->status !== self::STATUS_CONDUCTED;
+            && $this->status !== LessonStatus::CANCELLED
+            && $this->status !== LessonStatus::CONDUCTED;
     }
 
     public function getClientsCountAttribute()
@@ -88,7 +88,7 @@ class Lesson extends Model
 
     public function scopeNotCancelled($query)
     {
-        return $query->where('status', '<>', 'cancelled');
+        return $query->where('status', '<>', LessonStatus::CANCELLED);
     }
 
     /**

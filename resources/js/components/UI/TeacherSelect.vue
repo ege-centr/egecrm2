@@ -2,7 +2,7 @@
   <v-select hide-details ref='select'
     :value='value'
     @input="value => $emit('input', value)"
-    :items="$store.state.data.teachers"
+    :items="items"
     :label="label"
     item-value='id'
     item-text='default_name'
@@ -35,6 +35,8 @@ export default {
       default: false,
       required: false,
     },
+
+    onlyActive: Boolean,
   },
 
   methods: {
@@ -43,6 +45,15 @@ export default {
       this.$emit('input', null)
       this.$refs.select.blur()
     },
+  },
+
+  computed: {
+    items() {
+      if (this.onlyActive) {
+        return this.$store.state.data.teachers.filter(e => e.in_egecentr === 2 || e.id === this.value)
+      }
+      return this.$store.state.data.teachers
+    }
   }
 }
 </script>

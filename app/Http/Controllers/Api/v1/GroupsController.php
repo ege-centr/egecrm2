@@ -23,24 +23,6 @@ class GroupsController extends Controller
         ]);
         $this->filter($request, $query);
         return new AlgoliaResult($query->paginateRaw($request->paginate ?: SHOW_ALL));
-
-        // $query = Group::with(['lessons'])->orderBy('id', 'desc');
-
-        // $this->filter($request, $query);
-
-        // if (isset($request->group_id) && $request->group_id) {
-        //     $query->where('id', '<>', $request->group_id);
-        // }
-
-        // if (isset($request->client_ids) && $request->client_ids) {
-        //     $query->whereExists(function ($query) use ($request) {
-        //         $query->select(DB::raw(1))
-        //             ->from('group_clients')
-        //             ->whereRaw('group_clients.group_id = groups.id AND group_clients.client_id = ' . $request->client_ids);
-        //     });
-        // }
-
-        // return GroupCollection::collection($this->showBy($request, $query));
     }
 
     public function store(Request $request)

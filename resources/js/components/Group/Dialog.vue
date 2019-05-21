@@ -25,10 +25,10 @@
               <v-flex md12>
                 <div class='vertical-inputs'>
                   <div class='vertical-inputs__input'>
-                    <TeacherSelect v-model='item.teacher_id' />
+                    <TeacherSelect v-model='item.teacher_id' only-active />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <TeacherSelect v-model='item.head_teacher_id' label="Классный руководитель" />
+                    <TeacherSelect v-model='item.head_teacher_id' label="Классный руководитель" only-active />
                   </div>
                   <div class='vertical-inputs__input'>
                     <DataSelect type='years' v-model="item.year" />

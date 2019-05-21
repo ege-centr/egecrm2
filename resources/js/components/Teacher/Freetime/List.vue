@@ -63,6 +63,7 @@ export default {
 
   created() {
     this.loadData()
+    this.loadSchedule()
   },
 
   watch: {

@@ -245,6 +245,7 @@ export default {
       }).then(r => {
         this.conducting = false
         this.item = r.data
+        this.$emit('updated')
       })
     },
   },

@@ -209,9 +209,6 @@ export default {
 
 <style lang='scss'>
   .email-dialog {
-    & .v-textarea.v-text-field--enclosed.v-text-field--single-line .v-label {
-      top: 8px !important;
-    }
     & .v-input__slot {
       background: white !important;
       &:before, &:after {

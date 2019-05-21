@@ -45,3 +45,12 @@ export const getCategoryDescription = function(category) {
     case CATEGORY.knowledge: return 'Например: выполняет контрольные работы отлично. Текущий уровень знаний по математике растет очень уверенно. В конце учебного года, что касается именно математики, можно выйти на уровень, требуемый в серьезных вузах, например, МГУ, МГТУ им. Баумана, ГУ-ВШЭ и др.'
   }
 }
+
+export const getColorClass = function(score) {
+  return {
+    'grey lighten-1': !score,
+    'red': score < 4 && score > 0,
+    'orange': score === 4,
+    'green': score === 5,
+  }
+}
