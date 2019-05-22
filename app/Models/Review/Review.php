@@ -42,6 +42,12 @@ class Review extends Model
         });
 
         static::created(function ($model) {
+            AbstractReview::search()->where([
+                'client_id', $model->client_id,
+                'teacher_id', $model->teacher_id,
+                'subject_id', $model->subject_id,
+                'year', $model->year,
+            ])->first()->unsearchable();
             self::syncSearchable($model->id);
         });
 
