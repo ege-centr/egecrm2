@@ -61,7 +61,12 @@ class AbstractReview extends Model
 
     public function getScoutKey()
     {
-        return $this->review_id;
+        return $this->review_id ?? implode('-', [
+            $this->client_id,
+            $this->teacher_id,
+            $this->subject_id,
+            $this->year,
+        ]);
     }
 
 

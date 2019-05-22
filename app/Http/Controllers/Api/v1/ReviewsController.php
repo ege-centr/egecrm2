@@ -19,7 +19,21 @@ class ReviewsController extends Controller
 
     public function index(Request $request)
     {
-            return $this->{strtolower(class_basename($_SESSION['user']['class'])) . 'Index'}($request);
+        $query = AbstractReview::search()->with([
+            'facets' => ['*']
+        ]);
+        $this->filter($request, $query);
+        $result = new AlgoliaResult($query->paginateRaw($request->paginate ?: SHOW_ALL));
+        $result->getCollection()->transform(function ($items, $key) {
+            if ($key === 'hits') {
+                foreach($items as &$item) {
+                    $item['client'] = new \PersonResource(Client::find($item['client_id']));
+                    $item['review'] = $item['review_id'] > 0 ? new ReviewCollection(Review::find($item['review_id'])) : null;
+                }
+            }
+            return $items;
+        });
+        return $result;
     }
 
     public function store(Request $request)
@@ -58,57 +72,5 @@ class ReviewsController extends Controller
     public function destroy($id)
     {
         Review::find($id)->delete();
-    }
-
-    /**
-     * По моей речи
-     */
-    private function adminIndex(Request $request)
-    {
-        $query = AbstractReview::search()->with([
-            'facets' => ['*']
-        ]);
-        $this->filter($request, $query);
-        $result = new AlgoliaResult($query->paginateRaw($request->paginate ?: SHOW_ALL));
-        $result->getCollection()->transform(function ($items, $key) {
-            if ($key === 'hits') {
-                foreach($items as &$item) {
-                    $item['client'] = new \PersonResource(Client::find($item['client_id']));
-                    $item['review'] = $item['review_id'] > 0 ? new ReviewCollection(Review::find($item['review_id'])) : null;
-                }
-            }
-            return $items;
-        });
-        return $result;
-    }
-
-    /**
-     * По речи клиентов
-     */
-    private function clientIndex(Request $request)
-    {
-        $items = ClientLesson::query()
-            ->join('lessons', 'lessons.id', '=', 'client_lessons.lesson_id')
-            ->join('groups', 'lessons.group_id', '=', 'groups.id')
-            ->where('client_lessons.client_id', User::id())
-            ->selectRaw('count(*) as lesson_count, client_lessons.grade_id, client_lessons.client_id')
-            ->addSelect('groups.year', 'groups.subject_id', 'lessons.group_id')
-            ->groupBy('lessons.teacher_id', 'groups.year', 'groups.subject_id')
-            ->get();
-
-        foreach($items as $item) {
-            $item->review = new ReviewResource(Review::where([
-                ['year', $item->year],
-                ['client_id', $item->client_id],
-                ['teacher_id', $item->teacher_id],
-                ['grade_id', $item->grade_id],
-                ['subject_id', $item->subject_id]
-            ])->first());
-
-        }
-
-        return imitatePagination(
-            ClientReviewCollection::collection($items)
-        );
     }
 }

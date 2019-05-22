@@ -44,7 +44,12 @@ class AbstractReport extends Model
 
     public function getScoutKey()
     {
-        return $this->report_id ?? uniqid();
+        return $this->report_id ?? implode('-', [
+            $this->client_id,
+            $this->teacher_id,
+            $this->subject_id,
+            $this->year,
+        ]);
     }
 
     /**
