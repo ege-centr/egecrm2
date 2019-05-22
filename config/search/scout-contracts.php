@@ -1,18 +1,15 @@
 <?php
 
 return [
-    'searchableAttributes' => [
-        'number',
-        'year',
-        'grade_id',
-        'client_id',
-        'version',
-        'created_email_id',
-        'date_timestamp',
-        'created_at_timestamp'
-    ],
+    'searchableAttributes' => ['id'],
 
     'attributesForFaceting' => [
+        'filterOnly(number)',
+        'filterOnly(version)',
+        'filterOnly(client_id)',
+        'filterOnly(date_timestamp)',
+        'filterOnly(created_at_timestamp)',
+
         'year',
         'grade_id',
         'created_email_id',

@@ -1,6 +1,8 @@
 <?php
 
 return [
+    'searchableAttributes' => ['client_id'],
+
     'attributesForFaceting' => [
         'teacher_id',
         'year',

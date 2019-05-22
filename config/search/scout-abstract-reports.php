@@ -1,16 +1,11 @@
 <?php
 
 return [
-    'searchableAttributes' => [
-        'year',
-        'subject_id',
-        'teacher_id',
-        'client_id',
-        'available_for_parents',
-        'exists',
-    ],
+    'searchableAttributes' => ['client_id'],
 
     'attributesForFaceting' => [
+        'filterOnly(available_for_parents)',
+        'filterOnly(client_id)',
         'teacher_id',
         'year',
         'subject_id',

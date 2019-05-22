@@ -1,10 +1,16 @@
 <?php
-$data = ['year', 'teacher_id', 'subject_id', 'grade_id'];
 return [
-    'searchableAttributes' => [implode(', ', $data)],
-    'attributesForFaceting' => array_merge($data, ['filterOnly(client_ids)']),
+    'searchableAttributes' => ['id'],
+
+    'attributesForFaceting' => [
+        'year',
+        'teacher_id',
+        'subject_id',
+        'grade_id',
+        'filterOnly(client_ids)'
+    ],
+
     'customRanking' => [
         'desc(id)',
     ],
-    'attributesToHighlight' => [],
 ];
