@@ -42,12 +42,16 @@ class Review extends Model
         });
 
         static::created(function ($model) {
-            AbstractReview::search()->where([
-                'client_id', $model->client_id,
-                'teacher_id', $model->teacher_id,
-                'subject_id', $model->subject_id,
-                'year', $model->year,
-            ])->first()->unsearchable();
+            // TODO: не находится по
+            // App\Models\Review\AbstractReview::search()->where('client_id', 35019)->get();
+            // а через paginateRaw находится
+            // AbstractReview::search()
+            //     ->where('client_id', $model->client_id)
+            //     ->where('teacher_id', $model->teacher_id)
+            //     ->where('subject_id', $model->subject_id)
+            //     ->where('year', $model->year)
+            //     ->first()
+            //     ->unsearchable();
             self::syncSearchable($model->id);
         });
 

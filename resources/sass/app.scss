@@ -2,14 +2,14 @@
 @import "~animate.css/animate";
 @import '~vuetify/dist/vuetify.min';
 // @import url('//fonts.googleapis.com/css?family=Rubik:400,500,700,400italic&subset=cyrillic');
-@import url('https://fonts.googleapis.com/css?family=Rubik:400,400i,500,700&subset=cyrillic');
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,400i,500,700');
 @import url('//fonts.googleapis.com/css?family=Material+Icons');
 @import "_variables";
 @import "_vertical-inputs";
 @import '~codemirror/lib/codemirror.css';
 @import url('https://fonts.googleapis.com/css?family=Ubuntu+Mono&subset=cyrillic');
 
-$font-family: 'Rubik';
+$font-family: 'Roboto';
 
 body, .application, .display-1, .headline {
   font-family: $font-family, sans-serif !important;
@@ -166,7 +166,7 @@ textarea {
     position: relative;
     & .v-toolbar {
       position: fixed;
-      z-index: 2;
+      z-index: 3;
     }
     & > .v-card__text {
       padding-top: 80px;
@@ -492,9 +492,11 @@ nav {
 .group-not-assigned-list {
   position: relative; 
   top: -24px;
-  & .v-table {
+  & > div:first-child {
     clip-path: inset(0px -10px -10px -10px);
-    & .v-table tbody tr:first-child {
+  }
+  & .v-table {
+    & tbody tr:first-child {
       border-top: 1px solid #e0e0e0;
     }
   }

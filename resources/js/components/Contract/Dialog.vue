@@ -88,6 +88,7 @@
 
               <!-- ПЛАТЕЖИ -->
               <v-flex md4>
+                <DatePicker class='mb-5' label="Сегодняшняя дата (для дебага)" v-model='todayDate' />
                 <v-data-table
                   class='relative-table'
                   :headers="[
@@ -177,6 +178,9 @@
                     </tr>
                   </template>
                 </v-data-table>
+                <div class='text-sm-center mt-3'>
+                  <a @click='item.payments = paymentsAutofillData' v-show='paymentsAutofillData !== null'>заполнить автоматически</a>
+                </div>
               </v-flex>
               <!-- /ПЛАТЕЖИ -->
 
@@ -235,6 +239,7 @@ import {
 
 import Settings from '@/other/settings'
 import { DatePicker, DataSelect } from '@/components/UI'
+import PaymentsAutofill from './PaymentsAutofill'
 
 export default {
   components: { DataSelect, DatePicker },
@@ -252,6 +257,7 @@ export default {
       edit_mode: true,
       destroying: false,
       recommendedPrices: null,
+      todayDate: moment().format('YYYY-MM-DD'),
     }
   },
 
@@ -371,24 +377,39 @@ export default {
       }
       this.dialog = false
       this.waitForDialogClose(() => this.saving = false)
-    }
+    },
   },
 
   computed: {
     recommendedPrice() {
       if (this.recommendedPrices !== null && this.item.year && this.item.grade_id) {
-        let lesson_count = 0
-        this.item.subjects.forEach(subject => {
-          if (subject.lessons > 0) {
-            lesson_count += Number(subject.lessons)
-          }
-        })
         const recommendedPrice = this.recommendedPrices.find(e => e.year === this.item.year && e.grade_id === this.item.grade_id)
         if (recommendedPrice !== undefined) {
-          return lesson_count * parseInt(recommendedPrice.price)
+          return this.lessonCount * parseInt(recommendedPrice.price)
         }
       }
       return null
+    },
+
+    lessonCount() {
+      return this.item.subjects.reduce((prev, subject) => prev + Number(subject.lessons), 0)
+    },
+
+    discountedSum() {
+      if (this.item.discount > 0) {
+        return Math.round(this.item.sum - (this.item.sum * (this.discount / 100)))
+      }
+      return this.item.sum
+    },
+
+    paymentsAutofillData() {
+      const paymentsAutofill = new PaymentsAutofill(
+        this.item.payments.length, 
+        this.lessonCount,
+        this.discountedSum,
+        this.todayDate
+      )
+      return paymentsAutofill.getPayments()
     }
   }
 }

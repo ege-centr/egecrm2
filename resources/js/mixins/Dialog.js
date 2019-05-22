@@ -8,11 +8,17 @@ export default {
       loading: true,
       edit_mode: true,
       destroying: false,
+
+      // дополнительные параметры диалога
+      // используются, например, чтобы открыть диалог в режиме просмотра 
+      // для отчетов из ЛК ученика
+      options: {},
     }
   },
 
   methods: {
-    open(item_id = null, defaults = {}) {
+    open(item_id = null, defaults = {}, options = {}) {
+      this.options = options
       if (_.isFunction(this.beforeOpen)) {
         this.beforeOpen()
       }

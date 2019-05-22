@@ -3,14 +3,14 @@
     <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card>
         <v-toolbar dark color="primary">
-          <v-toolbar-title>{{ edit_mode ? 'Редактирование' : 'Добавление' }} отчёта</v-toolbar-title>
+          <v-toolbar-title>{{ edit_mode ? (readOnly ? 'Просмотр' : 'Редактирование') : 'Добавление' }} отчёта</v-toolbar-title>
           <v-spacer></v-spacer>
-          <TitleCredentials :item='item'/>
+          <TitleCredentials v-if='!readOnly' :item='item'/>
           <v-toolbar-items>
-            <v-btn dark icon v-if='edit_mode' @click.native="destroy" :loading='destroying' class='mr-5'>
+            <v-btn v-if="!readOnly" dark icon @click.native="destroy" :loading='destroying' class='mr-5'>
               <v-icon>delete</v-icon>
             </v-btn>
-            <v-btn dark icon @click.native="storeOrUpdate" :loading='saving'>
+            <v-btn v-if="!readOnly" dark icon @click.native="storeOrUpdate" :loading='saving'>
               <v-icon>save_alt</v-icon>
             </v-btn>
             <v-btn icon dark @click.native="dialog = false">
@@ -20,8 +20,8 @@
         </v-toolbar>
         <v-card-text class='px-0'>
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
-          <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
-            
+          <v-container grid-list-xl class="pa-0 ma-0 relative" fluid v-else>
+            <DivBlocker v-if='readOnly' />
             <v-layout wrap v-for='categoryName in CATEGORY' :key='categoryName' class='mb-4 px-3'>
               <v-flex md12 class='pb-0'>
                 <div class='title font-weight-bold mb-2'>
@@ -164,6 +164,12 @@ export default {
     setScore(score, categoryName) {
       this.item[categoryName + '_score'] = score
     },
-  }
+  },
+
+  computed: {
+    readOnly() {
+      return 'readOnly' in this.options
+    }
+  },
 }
 </script>

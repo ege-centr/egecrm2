@@ -77,7 +77,7 @@
         </td>
         <td class='text-md-right pa-0' width='100' v-else>
             <v-btn small color='primary' class='btn-td' flat v-if='item.report !== null'
-              @click="$router.push({name: 'ReportShow', params: {id: item.report.id}})"
+              @click='$refs.Dialog.open(item.report.id, {}, {readOnly: true})'
             >
               просмотр
             </v-btn>

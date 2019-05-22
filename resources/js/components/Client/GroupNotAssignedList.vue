@@ -1,10 +1,10 @@
 <template>
   <div>
     <v-data-table v-if='items.length'
-      :class='config.elevationClass'
       hide-actions
       hide-headers
       :items='items'
+      :class='config.elevationClass'
     >
       <template slot='items' slot-scope="{ item, index }">
         <td width='200'>

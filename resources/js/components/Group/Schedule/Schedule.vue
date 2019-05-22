@@ -7,7 +7,7 @@
     <div v-else>
       <v-container grid-list-xl class="pa-0 ma-0" fluid>
         <v-layout>
-          <v-flex md3 class='mr-3'>
+          <v-flex md3 style='margin-right: 70px'>
             <Calendar :year='group.year' :lessons='items' :with-special-dates='true' :group='this.group' />
           </v-flex>
           <v-flex class='relative' style='align-self: baseline'>
