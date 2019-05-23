@@ -545,3 +545,9 @@ nav {
       max-width: 100% !important;
     }
 }
+
+.v-snack_global {
+  & .v-snack__content {
+    justify-content: center !important;
+  }
+}

@@ -15,6 +15,7 @@
       :bottom="true"
       :timeout="6000"
       :color='$store.state.snackBar.color'
+      class='v-snack_global'
     >
       {{ $store.state.snackBar.text }}
     </v-snackbar>

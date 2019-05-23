@@ -181,7 +181,13 @@ export default {
         this.$upload.reset('file')
         this.dialog = false
         this.emails = []
-        this.waitForDialogClose(() => this.sending = false)
+        this.waitForDialogClose(() => {
+          this.sending = false
+          this.$store.commit('message', {
+            text: 'сообщение отправлено',
+            color: 'green'
+          })
+        })
       })
     },
 
