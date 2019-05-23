@@ -33,10 +33,7 @@
               <template slot='items' slot-scope="props">
                 <td width='200'>
                   <router-link :to="{name: 'ClientShow', params: { id: props.item.id }}" 
-                    :class="{
-                      'orange--text': props.item.subject_status === SUBJECT_STATUSES.SUBJECT_STATUS_TO_BE_TERMINATED,
-                      'red--text': props.item.subject_status === SUBJECT_STATUSES.SUBJECT_STATUS_TERMINATED,
-                    }"
+                    :class="getSubjectStatusClass(props.item.subject_status)"
                   >
                     <PersonName :item='props.item'/>
                   </router-link>
@@ -155,7 +152,7 @@ import { API_URL as GROUP_ACTS_API_URL } from '@/components/Group/Act'
 import GroupActDialog from '@/components/Group/Act/Dialog'
 import GroupActList from '@/components/Group/Act/List'
 import Comments from '@/components/Comments'
-import { SUBJECT_STATUSES } from '@/components/Contract'
+import { getSubjectStatusClass } from '@/components/Contract'
 import BranchList from '@/components/UI/BranchList'
 import GroupInfo from '@/components/Group/Info'
 import TimelineWeek from '@/components/Timeline/Week'
@@ -172,7 +169,6 @@ export default {
       LEVELS,
       CLASS_NAME,
       GROUP_ACTS_API_URL,
-      SUBJECT_STATUSES,
       loading: true,
       item: null,
       tabs: null,
@@ -184,6 +180,8 @@ export default {
   },
 
   methods: {
+    getSubjectStatusClass,
+
     loadData() {
       axios.get(apiUrl(`${API_URL}/${this.$route.params.id}`)).then(r => {
         this.item = r.data

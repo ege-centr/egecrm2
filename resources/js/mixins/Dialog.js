@@ -32,6 +32,9 @@ export default {
         this.item = {...this.MODEL_DEFAULTS, ...defaults }
         this.loading = false
       }
+      if (_.isFunction(this.afterOpen)) {
+        this.afterOpen(item_id, defaults, options)
+      }
     },
 
     loadData(item_id) {

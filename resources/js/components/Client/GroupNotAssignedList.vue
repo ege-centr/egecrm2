@@ -12,7 +12,7 @@
         </td>
         <td width='300'></td>
         <td>
-          {{ getData('subjects', item.subject_id).three_letters }}–{{ getData('grades', item.grade_id).short }}
+          {{ getData('subjects', item.subject_id).three_letters }}
         </td>
         <td class='text-md-right pa-0' width='180'>
           <v-btn slot='activator' small class='btn-td' flat
@@ -26,7 +26,7 @@
 
 <script>
 
-import { SUBJECT_STATUS_TERMINATED } from '@/components/Contract'
+import { SUBJECT_STATUS } from '@/components/Contract'
 import { API_URL, GROUP_CLIENTS_API_URL } from '@/components/Group'
 import MoveClientDialog from '@/components/Group/MoveClientDialog'
 
@@ -84,13 +84,12 @@ export default {
       // получить человеко-предметы
       active_contracts.forEach(contract => {
         contract.subjects.forEach(subject => {
-          if (subject.status !== SUBJECT_STATUS_TERMINATED) {
+          if (subject.status !== SUBJECT_STATUS.terminated) {
             // если человек не состоит в такой группе
             // TODO: не подгружать группы клиента
-            if (!this.groups.find(e => e.year === contract.year && e.grade_id === contract.grade_id && e.subject_id === subject.subject_id)) {
+            if (!this.groups.find(e => e.year === contract.year && e.subject_id === subject.subject_id)) {
               items.push({
                 year: contract.year,
-                grade_id: contract.grade_id,
                 subject_id: subject.subject_id,
               })
             }

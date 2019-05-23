@@ -1,6 +1,7 @@
 <template>
   <div class='loader-wrapper' :class="{
-    'loader-wrapper_transparent': transparent === ''
+    'loader-wrapper_transparent': transparent,
+    'loader-wrapper_block': block
   }">
     <v-progress-circular :size="50" color="#1976d2" indeterminate></v-progress-circular>
   </div>
@@ -8,7 +9,10 @@
 
 <script>
 export default {
-  props: ['transparent'],
+  props: {
+    transparent: Boolean,
+    block: Boolean,
+  }
 }
 </script>
 
@@ -29,6 +33,11 @@ export default {
     align-items: center;
     background: rgba(white, .8);
     border-radius: $border-radius;
+    &_block {
+      height: 100px;
+      background: none;
+      position: relative;
+    }
     &_transparent {
       min-height: 300px;
       background: none;

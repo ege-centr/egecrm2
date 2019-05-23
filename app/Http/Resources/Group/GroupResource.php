@@ -13,14 +13,22 @@ class GroupResource extends JsonResource
     {
         $clients = $this->clients;
         foreach($clients as &$client) {
-            $client->subject_status = $client->getSubjectStatus($this->year, $this->grade_id, $this->subject_id);
+            $client->subject_status = $client->getSubjectStatus($this->year, $this->subject_id);
             $client->schedule = Schedule::get([
                 'group_id' => $client->groups()->pluck('id')->all()
             ], $this->id);
         }
+
+        $lessons = $this->lessons;
+        foreach($lessons as &$lesson) {
+            foreach($lesson->clientLessons as &$clientLesson) {
+                $clientLesson->client->subject_status = $clientLesson->client->getSubjectStatus($this->year, $this->subject_id);
+            }
+        }
+
         return array_merge(parent::toArray($request), [
             'clients' => GroupClientCollection::collection($clients),
-            'lessons' => LessonResource::collection($this->lessons),
+            'lessons' => LessonResource::collection($lessons),
             'teacher' => new TeacherResource($this->teacher),
             'schedule' => Schedule::get(['group_id' => $this->id], $this->id)
         ]);

@@ -30,7 +30,7 @@
             >
               <template slot='items' slot-scope="props">
                 <td width='300'>
-                  <PersonName :item='props.item'/>
+                  <PersonName :class="getSubjectStatusClass(props.item.subject_status)" :item='props.item'/>
                 </td>
                 <td width='150'>
                   30%
@@ -109,8 +109,9 @@ import GroupSchedule from '@/components/Group/Schedule/Schedule'
 import GroupVisits from '@/components/Group/Visits'
 import GroupInfo from '@/components/Group/Info'
 
+import { getSubjectStatusClass } from '@/components/Contract'
+
 import Comments from '@/components/Comments'
-import { SUBJECT_STATUSES } from '@/components/Contract'
 import EmailShow from '@/components/Email/Show'
 import EmailDialog from '@/components/Email/Dialog'
 
@@ -124,7 +125,6 @@ export default {
     return {
       LEVELS,
       CLASS_NAME,
-      SUBJECT_STATUSES,
       loading: true,
       item: null,
       tabs: null,
@@ -137,6 +137,8 @@ export default {
   },
 
   methods: {
+    getSubjectStatusClass,
+    
     loadData() {
       axios.get(apiUrl(`${API_URL}/${this.$route.params.id}`)).then(r => {
         this.item = r.data

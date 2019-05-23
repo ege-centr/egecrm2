@@ -21,77 +21,214 @@
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
           <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
             <v-layout>
-              <v-flex md5>
+              <v-flex md12>
                 <v-layout wrap>
-                  <v-flex md12 class='mb-4'>
-                    <div class='font-weight-medium'>
-                      Оценка и отзыв ученика (заполняется учеником из его личного кабинета)
+                  <v-flex md12 class='pb-0'>
+                    <div class='flex-items mb-2'>
+                      <div class='title font-weight-bold mr-2'>
+                        Отзыв ученика 
+                      </div>
+                      <div class='grey--text' style='position: relative; top: 1px'>
+                        заполняется учеником из его ЛК
+                      </div>
                     </div>
-                    <div class='caption grey--text' v-if='getComment(COMMENT_TYPE.client) && getComment(COMMENT_TYPE.client).createdUser'>
+                    <div class='flex-items align-center'>
+                      <span class='mr-1 subheading'>Оценка</span>
+                      <v-menu>
+                        <v-btn class='v-btn_xs' small fab dark flat slot='activator' 
+                          :class="getColorClass(getComment(COMMENT_TYPE.client).rating)">
+                          <span v-if="getComment(COMMENT_TYPE.client).rating > 0">
+                            {{ getComment(COMMENT_TYPE.client).rating }}
+                          </span>
+                          <v-icon v-else>edit</v-icon>
+                        </v-btn>
+                        <v-list dense>
+                          <v-list-tile @click='setRating(null, COMMENT_TYPE.client)'>
+                            <v-list-tile-title class='grey--text'>
+                              не установлено
+                            </v-list-tile-title>
+                          </v-list-tile>
+                          <v-list-tile v-for='rating in [1, 2, 3, 4, 5]' :key='rating' @click='setRating(rating, COMMENT_TYPE.client)'>
+                              <v-list-tile-title>
+                                {{ rating }}
+                              </v-list-tile-title>
+                          </v-list-tile>
+                        </v-list>
+                      </v-menu>
+                    </div>
+                  </v-flex>
+                  <v-flex md12 class='pa-0 relative'>
+                    <div>
+                      <v-textarea 
+                        full-width
+                        auto-grow
+                        single-line
+                        label='Комментарий' 
+                        v-model="getComment(COMMENT_TYPE.client).text"></v-textarea>
+                    </div>
+                    <div class='absolute-credentials grey--text' v-if='getComment(COMMENT_TYPE.client) && getComment(COMMENT_TYPE.client).createdUser'>
                       {{ getComment(COMMENT_TYPE.client).createdUser.default_name }}
                       {{ getComment(COMMENT_TYPE.client).created_at | date-time }}
                     </div>
-                    <div class='mb-3 mt-2'>
-                      <div class='flex-items align-center'>
-                        <span class='caption mr-3 input-label'>Оценка</span>
-                        <v-rating dense clearable v-model="getComment(COMMENT_TYPE.client).rating"></v-rating>
+                    <hr class="v-divider theme--light">
+                  </v-flex>
+
+
+
+                  <v-flex md12 class='pb-0'>
+                    <div class='flex-items mb-2'>
+                      <div class='title font-weight-bold mr-2'>
+                        Предварительная оценка
+                      </div>
+                      <div class='grey--text' style='position: relative; top: 1px'>
+                        заполняется администратором после 1–2 занятий
                       </div>
                     </div>
-                    <div>
-                      <v-textarea auto-grow hide-details label='Отзыв' v-model='getComment(COMMENT_TYPE.client).text'></v-textarea>
+                    <div class='flex-items align-center'>
+                      <span class='mr-1 subheading'>Оценка</span>
+                      <v-menu>
+                        <v-btn class='v-btn_xs' small fab dark flat slot='activator' 
+                          :class="getColorClass(getComment(COMMENT_TYPE.admin).rating)">
+                          <span v-if="getComment(COMMENT_TYPE.admin).rating > 0">
+                            {{ getComment(COMMENT_TYPE.admin).rating }}
+                          </span>
+                          <v-icon v-else-if='getComment(COMMENT_TYPE.admin).rating === -1'>remove</v-icon>
+                          <v-icon v-else>edit</v-icon>
+                        </v-btn>
+                        <v-list dense>
+                          <v-list-tile v-for='rating in [null, -1, 1, 2, 3, 4, 5]' :key='rating' @click='setRating(rating, COMMENT_TYPE.admin)'>
+                              <v-list-tile-title>
+                                <span v-if='rating === null' class='grey--text'>
+                                  не установлено
+                                </span>
+                                <span v-else-if='rating === -1'>
+                                  не собирать
+                                </span>
+                                <span v-else>
+                                  {{ rating }}
+                                </span>
+                              </v-list-tile-title>
+                          </v-list-tile>
+                        </v-list>
+                      </v-menu>
                     </div>
                   </v-flex>
-                  <v-flex md12 class='mb-4'>
-                    <div class='font-weight-medium'>
-                      Предварительная оценка и отзыв ученика (заполняется администратором)
+                  <v-flex md12 class='pa-0 relative'>
+                    <div>
+                      <v-textarea 
+                        full-width
+                        auto-grow
+                        single-line
+                        label='Комментарий' 
+                        v-model="getComment(COMMENT_TYPE.admin).text"></v-textarea>
                     </div>
-                    <div class='caption grey--text' v-if='getComment(COMMENT_TYPE.admin) && getComment(COMMENT_TYPE.admin).createdUser'>
+                    <div class='absolute-credentials grey--text' v-if='getComment(COMMENT_TYPE.admin) && getComment(COMMENT_TYPE.admin).createdUser'>
                       {{ getComment(COMMENT_TYPE.admin).createdUser.default_name }}
                       {{ getComment(COMMENT_TYPE.admin).created_at | date-time }}
                     </div>
-                    <div class='mb-3 mt-2'>
-                      <div class='flex-items align-center'>
-                        <span class='caption mr-3 input-label'>Оценка</span>
-                        <div class='v-rating v-rating--dense'>
-                          <v-icon class='cursor-default' v-if='getComment(COMMENT_TYPE.admin).rating === -1'>star</v-icon>
-                          <v-icon class='pointer' 
-                            v-if='getComment(COMMENT_TYPE.admin).rating !== -1'
-                            @click='getComment(COMMENT_TYPE.admin).rating = -1'>star_border</v-icon>
-                        </div>
-                        <v-rating dense clearable v-model="getComment(COMMENT_TYPE.admin).rating"></v-rating>
+                    <hr class="v-divider theme--light">
+                  </v-flex>
+
+                  
+                   <v-flex md12 class='pb-0'>
+                    <div class='flex-items mb-2'>
+                      <div class='title font-weight-bold mr-2'>
+                        Финальная оценка
+                      </div>
+                      <div class='grey--text' style='position: relative; top: 1px'>
+                        заполняется администратором после окончания всех занятий
                       </div>
                     </div>
-                    <div>
-                      <v-textarea auto-grow hide-details label='Отзыв' v-model='getComment(COMMENT_TYPE.admin).text'></v-textarea>
+                    <div class='flex-items align-center'>
+                      <span class='mr-1 subheading'>Оценка</span>
+                      <v-menu>
+                        <v-btn class='v-btn_xs' small fab dark flat slot='activator' 
+                          :class="getColorClass(getComment(COMMENT_TYPE.final).rating)">
+                          <span v-if="getComment(COMMENT_TYPE.final).rating > 0">
+                            {{ getComment(COMMENT_TYPE.final).rating }}
+                          </span>
+                          <v-icon v-else-if='getComment(COMMENT_TYPE.final).rating === -1'>remove</v-icon>
+                          <v-icon v-else>edit</v-icon>
+                        </v-btn>
+                        <v-list dense>
+                          <v-list-tile v-for='rating in [null, -1, 1, 2, 3, 4, 5]' :key='rating' @click='setRating(rating, COMMENT_TYPE.final)'>
+                              <v-list-tile-title>
+                                <span v-if='rating === null' class='grey--text'>
+                                  не установлено
+                                </span>
+                                <span v-else-if='rating === -1'>
+                                  не собирать
+                                </span>
+                                <span v-else>
+                                  {{ rating }}
+                                </span>
+                              </v-list-tile-title>
+                          </v-list-tile>
+                        </v-list>
+                      </v-menu>
                     </div>
                   </v-flex>
-                  <v-flex md12 class='mb-4'>
-                    <div class='font-weight-medium'>
-                      Оценка и отзыв ученика по окончании занятий (заполняется администратором)
+                  <v-flex md12 class='pa-0 relative'>
+                    <div>
+                      <v-textarea 
+                        class='textarea-padding-fix'
+                        full-width
+                        auto-grow
+                        hide-details
+                        label='Текст отзыва' 
+                        v-model="getComment(COMMENT_TYPE.final).text"></v-textarea>
                     </div>
-                    <div class='caption grey--text' v-if='getComment(COMMENT_TYPE.final) && getComment(COMMENT_TYPE.final).createdUser'>
+                    <div>
+                      <v-text-field 
+                        hide-details
+                        full-width 
+                        v-model='item.signature' 
+                        label='Подпись'
+                      ></v-text-field>
+                    </div>
+                    <div>
+                      <v-text-field 
+                        hide-details
+                        full-width 
+                        v-model='item.expressive_title' 
+                        label='Экспрессивный заголовок'
+                      ></v-text-field>
+                    </div>
+                    <div class='no-border-input mt-0'>
+                      <div class='flex-items align-center inline-inputs'>
+                        <v-text-field style='width: 128px' hide-details v-model='item.score' label='Набранный балл' />
+                        <span class='grey--text two-inputs-separator'>/</span>
+                        <v-text-field style='width: 200px' hide-details v-model='item.max_score' label='Максимальный балл' />
+                      </div>
+                    </div>
+                    <div class='no-border-input'>
+                      <AdminSelect v-model='item.reviewer_admin_id' label='Ответственный' />
+                    </div>
+                  </v-flex>
+                  <v-flex md12 class='pb-0 mt-2'>
+                     <v-switch class='ma-0'
+                      label="Опубликован"
+                      hide-details
+                      v-model='item.is_published'
+                      ></v-switch>
+                  </v-flex>
+                  <v-flex md12>
+                     <v-switch class='ma-0'
+                      label="Подтвержден"
+                      hide-details
+                      v-model='item.is_approved'
+                      ></v-switch>
+                  </v-flex>
+                  <v-flex md12 class='pa-0 mb-5 mt-3 relative'>
+                     <div class='absolute-credentials grey--text' v-if='getComment(COMMENT_TYPE.final) && getComment(COMMENT_TYPE.final).createdUser'>
                       {{ getComment(COMMENT_TYPE.final).createdUser.default_name }}
                       {{ getComment(COMMENT_TYPE.final).created_at | date-time }}
                     </div>
-                    <div class='mb-3 mt-2'>
-                      <div class='flex-items align-center'>
-                        <span class='caption mr-3 input-label'>Оценка</span>
-                        <div class='v-rating v-rating--dense'>
-                          <v-icon class='cursor-default' v-if='getComment(COMMENT_TYPE.final).rating === -1'>star</v-icon>
-                          <v-icon class='pointer' 
-                            v-if='getComment(COMMENT_TYPE.final).rating !== -1'
-                            @click='getComment(COMMENT_TYPE.final).rating = -1'>star_border</v-icon>
-                        </div>
-                        <v-rating dense clearable v-model="getComment(COMMENT_TYPE.final).rating"></v-rating>
-                      </div>
-                    </div>
-                    <div>
-                      <v-textarea auto-grow hide-details label='Отзыв' v-model='getComment(COMMENT_TYPE.final).text'></v-textarea>
-                    </div>
+                    <hr class="v-divider theme--light">
                   </v-flex>
                 </v-layout>
               </v-flex>
-              <v-flex md6 offset-md1>
+              <!-- <v-flex md6 offset-md1>
                 <v-layout wrap>
                   <v-flex md12>
                     <v-textarea label='Экспрессивный заголовок' hide-details auto-grow v-model='item.expressive_title'></v-textarea>
@@ -124,7 +261,7 @@
                       ></v-switch>
                   </v-flex>
                 </v-layout>
-              </v-flex>
+              </v-flex> -->
             </v-layout>
           </v-container>
         </v-card-text>
@@ -138,6 +275,7 @@
 import { API_URL, MODEL_DEFAULTS, COMMENT_TYPE } from '../'
 import { DialogMixin } from '@/mixins'
 import { AdminSelect } from '@/components/UI'
+import { getColorClass } from '@/components/Report'
 
 export default {
   mixins: [ DialogMixin ],
@@ -153,18 +291,7 @@ export default {
   },
 
   methods: {
-    getRatingColor(rating) {
-      if (rating <= 3) {
-        return 'red'
-      }
-      if (rating === 4) {
-        return 'orange'
-      }
-      if (rating === 5) {
-        return 'green'
-      }
-      return 'primary'
-    },
+    getColorClass,
 
     getComment(type) {
       const index = this.item.comments.findIndex(e => e.type === type)
@@ -176,7 +303,11 @@ export default {
         })
       }
       return this.item.comments.find(e => e.type === type)
-    }
+    },
+
+     setRating(rating, type) {
+      this.getComment(type).rating = rating
+    },
   },
 }
 </script>

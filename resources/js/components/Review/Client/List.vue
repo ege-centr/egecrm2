@@ -14,13 +14,10 @@
           </span>
         </td>
         <td>
-          <span v-if='item.review'>
-            <v-rating 
-              dense
-              small
-              readonly
-              :value='item.review.comments.find(e => e.type === COMMENT_TYPE.client).rating' />
-          </span>
+          <ScoreCircle 
+            v-if='item.review' 
+            :score='item.review.comments.find(e => e.type === COMMENT_TYPE.client).rating' 
+          />
         </td>
         <td class='text-md-right pa-0' width='180'>
           <v-btn flat color='primary' small v-if='item.review === null'
@@ -37,6 +34,7 @@
 <script>
 import Dialog from './Dialog'
 import { COMMENT_TYPE } from '@/components/Review'
+import ScoreCircle from '@/components/UI/ScoreCircle'
 
 export default {
   props: {
@@ -46,7 +44,7 @@ export default {
     }
   },
 
-  components: { Dialog },
+  components: { Dialog, ScoreCircle },
 
   data() {
     return {

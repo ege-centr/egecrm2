@@ -58,18 +58,13 @@
         </td>
         <td class='text-md-right pa-0' width='100' v-if='show.actions'>
           <v-btn small color='primary' class='btn-td' flat
-            @click='$refs.Dialog.open(null, {
-              year: item.year,
-              subject_id: item.subject_id,
-              client_id: item.client_id,
-              teacher_id: item.teacher_id,
-            })'
+            @click='$refs.Dialog.open(null, getDefaultData(item))'
             v-if='item.report === null'
           >
             добавить
           </v-btn>
           <v-btn color='black' flat icon
-            @click='$refs.Dialog.open(item.report.id)'
+            @click='$refs.Dialog.open(item.report.id, getDefaultData(item))'
             v-if='item.report !== null'
           >
               <v-icon>more_horiz</v-icon>
@@ -77,7 +72,7 @@
         </td>
         <td class='text-md-right pa-0' width='100' v-else>
             <v-btn small color='primary' class='btn-td' flat v-if='item.report !== null'
-              @click='$refs.Dialog.open(item.report.id, {}, {readOnly: true})'
+              @click='$refs.Dialog.open(item.report.id, getDefaultData(item), {readOnly: true})'
             >
               просмотр
             </v-btn>
@@ -116,5 +111,14 @@ export default {
       }
     }
   },
+
+  methods: {
+    getDefaultData(item) {
+      return _.pick(item, [
+        'year', 'subject_id', 'client_id', 'teacher_id', 
+        'report_date', 'report_id', 'lesson_date' // это параметры для получения 
+      ])
+    }
+  }
 }
 </script>

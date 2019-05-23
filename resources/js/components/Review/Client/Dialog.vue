@@ -21,16 +21,51 @@
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
           <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
             <v-layout>
-              <v-flex md6>
-                <div class='mb-3'>
-                  <div class='flex-items align-center'>
-                    <span class='caption mr-3 input-label'>Оценка</span>
-                    <v-rating dense clearable v-model="item.comments[0].rating"></v-rating>
-                  </div>
-                </div>
-                <div>
-                  <v-textarea hide-details label='Отзыв' v-model='item.comments[0].text'></v-textarea>
-                </div>
+              <v-flex md12>
+                <v-layout wrap>
+                  <v-flex md12 class='pb-0'>
+                    <div class='flex-items mb-2'>
+                      <div class='title font-weight-bold mr-2'>
+                        Отзыв ученика 
+                      </div>
+                    </div>
+                    <div class='flex-items align-center'>
+                      <span class='mr-1 subheading'>Оценка</span>
+                      <v-menu>
+                        <v-btn class='v-btn_xs' small fab dark flat slot='activator' 
+                          :class="getColorClass(getComment(COMMENT_TYPE.client).rating)">
+                          <span v-if="getComment(COMMENT_TYPE.client).rating > 0">
+                            {{ getComment(COMMENT_TYPE.client).rating }}
+                          </span>
+                          <v-icon v-else>edit</v-icon>
+                        </v-btn>
+                        <v-list dense>
+                          <v-list-tile @click='setRating(null, COMMENT_TYPE.client)'>
+                            <v-list-tile-title class='grey--text'>
+                              не установлено
+                            </v-list-tile-title>
+                          </v-list-tile>
+                          <v-list-tile v-for='rating in [1, 2, 3, 4, 5]' :key='rating' @click='setRating(rating, COMMENT_TYPE.client)'>
+                              <v-list-tile-title>
+                                {{ rating }}
+                              </v-list-tile-title>
+                          </v-list-tile>
+                        </v-list>
+                      </v-menu>
+                    </div>
+                  </v-flex>
+                  <v-flex md12 class='pa-0 relative'>
+                    <div>
+                      <v-textarea 
+                        full-width
+                        auto-grow
+                        single-line
+                        label='Комментарий' 
+                        v-model="getComment(COMMENT_TYPE.client).text"></v-textarea>
+                    </div>
+                    <hr class="v-divider theme--light">
+                  </v-flex>
+                </v-layout>
               </v-flex>
             </v-layout>
           </v-container>
@@ -42,8 +77,9 @@
 
 <script>
 
-import { API_URL, MODEL_DEFAULTS } from '../'
+import { API_URL, MODEL_DEFAULTS, COMMENT_TYPE } from '../'
 import { DialogMixin } from '@/mixins'
+import { getColorClass } from '@/components/Report'
 
 export default {
   mixins: [ DialogMixin ],
@@ -52,22 +88,28 @@ export default {
     return {
       API_URL,
       MODEL_DEFAULTS,
+      COMMENT_TYPE,
     }
   },
 
   methods: {
-    getRatingColor(rating) {
-      if (rating <= 3) {
-        return 'red'
+   getColorClass,
+
+   getComment(type) {
+      const index = this.item.comments.findIndex(e => e.type === type)
+      if (index === -1) {
+        this.item.comments.push({
+          rating: null,
+          text: '',
+          type,
+        })
       }
-      if (rating === 4) {
-        return 'orange'
-      }
-      if (rating === 5) {
-        return 'green'
-      }
-      return 'primary'
-    }
+      return this.item.comments.find(e => e.type === type)
+    },
+
+    setRating(rating, type) {
+      this.getComment(type).rating = rating
+    },
   }
 }
 </script>

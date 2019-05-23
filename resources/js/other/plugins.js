@@ -34,6 +34,10 @@ export const GlobalPlugin = {
 
     Vue.prototype.userTypes = USER_TYPES
 
+    Vue.prototype.isAdmin = function() {
+      return this.$store.state.user.entity_type === USER_TYPES.admin  
+    }
+
     // Vue.prototype.toggleEnum = function(obj, field, statuses) {
     //   let status = statuses.indexOf(obj[field])
     //   console.log('from', statuses[status], status)

@@ -11,10 +11,9 @@
           <v-flex md12>
             <div class='flex-items'>
               <div class='mr-5 pr-5'>
-                <div class='item-label'>Предмет и класс</div>
+                <div class='item-label'>Предмет</div>
                 <span>
-                  {{ getData('subjects', $route.params.subject_id).name }}, 
-                  {{ getData('grades', $route.params.grade_id).title }}
+                  {{ getData('subjects', $route.params.subject_id).name }}
                 </span>
               </div>
               <div class='mr-5 pr-5'>
@@ -87,7 +86,6 @@ export default {
       axios.get(apiUrl(
         API_URL, 
         this.abstractGroup.year, 
-        this.abstractGroup.grade_id, 
         this.abstractGroup.subject_id
       )).then(r => {
         this.clients = r.data
@@ -109,7 +107,6 @@ export default {
       return {
         year: parseInt(this.$route.params.year),
         subject_id: parseInt(this.$route.params.subject_id),
-        grade_id: parseInt(this.$route.params.grade_id),
       }
     }
   }

@@ -36,11 +36,6 @@
                   {{ item.time }}
                 </td>
                 <td>
-                  <span v-if='item.cabinet_id'>
-                    {{ getData('cabinets', item.cabinet_id).title }}
-                  </span>
-                </td>
-                <td>
                   <span v-if='item.teacher_id'>
                     {{ getData('teachers', item.teacher_id).default_name }}
                   </span>
@@ -61,12 +56,13 @@
                   </span>
                 </td>
                 <td class='text-md-right'>
-                  <v-menu>
+                  <!-- меню отображается только в случае, если админ || либо если препод работает со своими занятиями -->
+                  <v-menu v-if='isAdmin() || $store.state.user.id === item.teacher_id'>
                     <v-btn slot='activator' flat icon color="black" class='ma-0'>
                       <v-icon>more_horiz</v-icon>
                     </v-btn>
                     <v-list dense>
-                      <v-list-tile @click='$refs.LessonDialog.open(item.id)' v-if='!readonly'>
+                      <v-list-tile @click='$refs.LessonDialog.open(item.id)' v-if='isAdmin()'>
                           <v-list-tile-action>
                             <v-icon>edit</v-icon>
                           </v-list-tile-action>
@@ -92,9 +88,13 @@
                       </v-list-tile>
                     </v-list>
                   </v-menu>
+                  <!-- если препод видит чужие занятия, то кнопка сразу переводящая в диалог проводки/просмотра проведенного -->
+                   <v-btn v-else flat icon color="black" class='ma-0' @click='$refs.ConductDialog.open(item.id)'>
+                      <v-icon>more_horiz</v-icon>
+                    </v-btn>
                 </td>
               </template>
-              <template slot='footer' v-if='!readonly && items.length > 0'>
+              <template slot='footer' v-if='isAdmin() && items.length > 0'>
                 <tr>
                   <td colspan='10' class='text-md-right'>
                     <div v-if='selectedMassSelectMode === null'>
@@ -159,7 +159,7 @@
             <NoData v-else
                   title='Место для расписания'
                   text='В выборке отсутствуют элементы. Вы можете добавить их, чтобы изменить ситуацию'
-                  :add='readonly ? undefined : addLesson' />
+                  :add='isAdmin() ? addLesson : undefined' />
           </v-flex>
         </v-layout>
       </v-container>
@@ -186,12 +186,6 @@ export default {
     group: {
       required: true
     },
-
-    readonly: {
-      type: Boolean,
-      required: false,
-      default: false,
-    }
   },
 
   data() {

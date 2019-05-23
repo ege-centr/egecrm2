@@ -48,7 +48,7 @@ export const getCategoryDescription = function(category) {
 
 export const getColorClass = function(score) {
   return {
-    'grey lighten-1': !score,
+    'grey lighten-1': !score || score === -1,
     'red': score < 4 && score > 0,
     'orange': score === 4,
     'green': score === 5,

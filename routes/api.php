@@ -45,7 +45,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
 
         Route::prefix('abstract-groups')->group(function() {
             Route::get('/', 'AbstractGroupsController@index');
-            Route::get('/{year}/{grade_id}/{subject_id}', 'AbstractGroupsController@show');
+            Route::get('/{year}/{subject_id}', 'AbstractGroupsController@show');
         });
 
         Route::get('cabinets/occupied', 'CabinetsController@occupied');
@@ -56,6 +56,8 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
                 Route::post($name, "TimelineController@{$name}");
             }
         });
+
+        Route::post('reports/client-lessons', 'ReportsController@clientLessons');
 
         Route::apiResources([
             'teacher/freetime' => 'TeacherFreetimeController',

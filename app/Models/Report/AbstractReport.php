@@ -56,20 +56,20 @@ class AbstractReport extends Model
      * Для созданных отчётов = спустя какое кол-во занятий был создан отчёт?
      * Для абстрактных = сколько занятий прошло с момента последнего отчета?
      */
-    public function getLessonCountAttribute()
+    public static function getClientLessons($abstractReport)
     {
         $query = ClientLesson::join('lessons', 'lessons.id', '=', 'client_lessons.lesson_id')
             ->join('groups', 'groups.id', '=', 'lessons.group_id')
-            ->where('client_lessons.client_id', $this->client_id)
-            ->where('lessons.teacher_id', $this->teacher_id)
-            ->where('groups.subject_id', $this->subject_id)
-            ->where('groups.year', $this->year);
+            ->where('client_lessons.client_id', $abstractReport->client_id)
+            ->where('lessons.teacher_id', $abstractReport->teacher_id)
+            ->where('groups.subject_id', $abstractReport->subject_id)
+            ->where('groups.year', $abstractReport->year);
 
-        if ($this->report_id === null) {
-            return $query->where('lessons.date', '>=', $this->lesson_date)->count();
+        if ($abstractReport->report_id === null) {
+            return $query->where('lessons.date', '>=', $abstractReport->lesson_date);
         }
         return $query
-            ->where('lessons.date', '<=', $this->report_date)
+            ->where('lessons.date', '<=', $abstractReport->report_date)
             ->whereRaw("lessons.date > IFNULL(
                 (
                     select max(reports.date) from reports
@@ -78,16 +78,15 @@ class AbstractReport extends Model
                         reports.teacher_id = lessons.teacher_id and
                         reports.subject_id = groups.subject_id and
                         reports.year = groups.year and
-                        reports.date < '{$this->report_date}'
+                        reports.date < '{$abstractReport->report_date}'
                 ), '0000-00-00')
-            ")
-            ->count();
+            ");
     }
 
     public function toSearchableArray()
     {
         return array_merge($this->toArray(), [
-            'lesson_count' => $this->lesson_count,
+            'lesson_count' => self::getClientLessons($this)->count(),
             'exists' => intval($this->report_id > 0),
         ]);
     }

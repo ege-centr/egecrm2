@@ -9,20 +9,16 @@ export const MODEL_DEFAULTS = {
   year: null,
 }
 
-export const SUBJECT_STATUS_ACTIVE = 'active'
-export const SUBJECT_STATUS_TO_BE_TERMINATED = 'to_be_terminated'
-export const SUBJECT_STATUS_TERMINATED = 'terminated'
+export const SUBJECT_STATUS = {
+  active: 'active',
+  to_be_terminated: 'to_be_terminated',
+  terminated: 'terminated',
+}
 
 export const SUBJECT_STATUS_LABELS = [
-  {id: SUBJECT_STATUS_ACTIVE, title: 'активный'},
-  {id: SUBJECT_STATUS_TO_BE_TERMINATED, title: 'к расторжению'},
-  {id: SUBJECT_STATUS_TERMINATED, title: 'расторжен'},
-]
-
-export const SUBJECT_STATUSES = [
-  SUBJECT_STATUS_ACTIVE,
-  SUBJECT_STATUS_TO_BE_TERMINATED,
-  SUBJECT_STATUS_TERMINATED,
+  {id: SUBJECT_STATUS.active, title: 'активный'},
+  {id: SUBJECT_STATUS.to_be_terminated, title: 'к расторжению'},
+  {id: SUBJECT_STATUS.terminated, title: 'расторжен'},
 ]
 
 export const FILTERS = [
@@ -40,7 +36,15 @@ export const FILTERS = [
 
 
 export const SUBJECT_DEFAULTS = {
-  status: SUBJECT_STATUS_ACTIVE
+  status: SUBJECT_STATUS.active
 }
 
 export const DISCOUNTS = [4, 6, 8, 10, 15, 20, 30, 40, 50, 70, 90]
+
+export const getSubjectStatusClass = function(status) {
+  return {
+    'grey--text': status === null,
+    'orange--text': status === SUBJECT_STATUS.to_be_terminated,
+    'red--text': status === SUBJECT_STATUS.terminated,
+  }
+}

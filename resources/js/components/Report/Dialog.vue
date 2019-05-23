@@ -19,9 +19,30 @@
           </v-toolbar-items>
         </v-toolbar>
         <v-card-text class='px-0'>
+          
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
           <v-container grid-list-xl class="pa-0 ma-0 relative" fluid v-else>
             <DivBlocker v-if='readOnly' />
+            <Loader block v-if='clientLessons === null' />
+            <v-layout wrap class='mb-4 px-3' v-else>
+              <v-flex md12 class='pb-0'>
+                <div class='title font-weight-bold mb-3'>Занятия</div>
+                <div v-for='clientLesson in clientLessons'>
+                  {{ clientLesson.lesson.date | date }} – 
+                  <span v-if='clientLesson.is_absent' class='red--text'>
+                    не был
+                  </span>
+                  <span v-else>
+                    <span v-if='clientLessons.late > 0'>опоздал на {{ clientLesson.late }} мин.</span>
+                    <span v-else>был</span>
+                  </span>
+                </div>
+              </v-flex>
+              <v-flex md12 class='pa-0 mt-3'>
+                <hr class="v-divider theme--light">
+              </v-flex>
+            </v-layout>
+
             <v-layout wrap v-for='categoryName in CATEGORY' :key='categoryName' class='mb-4 px-3'>
               <v-flex md12 class='pb-0'>
                 <div class='title font-weight-bold mb-2'>
@@ -29,7 +50,7 @@
                 </div>
                 <div class='mb-1'>
                   <div class='flex-items align-center'>
-                    <span class='mr-1'>Оценка</span>
+                    <span class='mr-1 subheading'>Оценка</span>
                     <v-menu>
                       <v-btn class='v-btn_xs' small fab dark flat slot='activator' :class="getColorClass(item[categoryName + '_score'])">
                         <span v-if="item[categoryName + '_score'] > 0">
@@ -50,7 +71,6 @@
                          </v-list-tile>
                        </v-list>
                     </v-menu>
-                    <!-- <v-rating dense clearable v-model="item[categoryName + '_score']"></v-rating> -->
                   </div>
                 </div>
               </v-flex>
@@ -92,7 +112,7 @@
               </v-layout>
 
 
-              <v-layout wrap class='mb-4 pink lighten-5'>
+              <v-layout wrap class='mb-4 pink lighten-5' v-if='!readOnly'>
                 <v-flex md5 style='padding-left: 28px'>    
                   <div class='title font-weight-bold mb-2'>
                     Прогноз баллов на экзамене 
@@ -153,6 +173,8 @@ export default {
       MODEL_DEFAULTS,
       CATEGORY,
       ROLES,
+
+      clientLessons: null,
     }
   },
 
@@ -160,6 +182,16 @@ export default {
     getCategoryTitle,
     getCategoryDescription,
     getColorClass,
+
+    beforeOpen() {
+      this.clientLessons = null
+    },
+
+    afterOpen(item_id, defaults, options) {
+      axios.post(apiUrl(API_URL, 'client-lessons'), defaults).then(r => {
+        this.clientLessons = r.data
+      })
+    },
 
     setScore(score, categoryName) {
       this.item[categoryName + '_score'] = score

@@ -92,12 +92,12 @@ class Client extends Model implements UserInterface
         return null;
     }
 
-    public function getSubjectStatus($year, $grade_id, $subject_id)
+    /**
+     * Статус предмета
+     */
+    public function getSubjectStatus($year, $subject_id)
     {
-        $contract = $this->contracts()->active()->where([
-            ['year', $year],
-            ['grade_id', $grade_id]
-        ])->first();
+        $contract = $this->contracts()->active()->where('year', $year)->first();
 
         if ($contract !== null) {
             foreach($contract->subjects as $subject) {

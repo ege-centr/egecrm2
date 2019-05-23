@@ -10,9 +10,15 @@
             </div>
           </div>
           <div class="visits__items" v-for='client in clients' :key='client.id'>
-            <div>
-              <router-link v-if='$store.state.user.class === ROLES.ADMIN' :to="{ name: 'ClientShow', params: { id: client.id } }"><PersonName :item='client' /></router-link>
-              <PersonName v-else :item='client' />
+            <div class>
+              <router-link 
+                v-if='$store.state.user.class === ROLES.ADMIN' 
+                :to="{ name: 'ClientShow', params: { id: client.id } }"
+                :class='getSubjectStatusClass(client.subject_status)'
+              >
+                <PersonName :item='client' />
+              </router-link>
+              <PersonName :class='getSubjectStatusClass(client.subject_status)' v-else :item='client' />
             </div>
             <div v-for='(lesson, index) in group.lessons' :key='lesson.id' :class="getClass(index)">
               <SmallCircle v-if='getClientLesson(lesson, client)' 
@@ -41,6 +47,7 @@
 import SmallCircle from '@/components/UI/SmallCircle'
 import { LESSON_STATUS } from '@/components/Lesson'
 import { ROLES } from '@/config'
+import { getSubjectStatusClass } from '@/components/Contract'
 
 export default {
   props: {
@@ -60,6 +67,8 @@ export default {
   },
 
   methods: {
+    getSubjectStatusClass,
+
     // TODO: поэкспериментировать с кешированием
     getClientLesson(lesson, client) {
       return lesson.clientLessons.find(e => e.client.id === client.id)

@@ -348,7 +348,7 @@ nav {
 .two-inputs-separator {
   margin: 0 10px;
   font-size: 16px;
-  top: 14px;
+  top: 8px;
   position: relative;
 }
 
@@ -513,4 +513,35 @@ nav {
 
 .v-textarea.v-text-field--box.v-text-field--single-line .v-label, .v-textarea.v-text-field--enclosed.v-text-field--single-line .v-label {
   top: 8px !important;
+}
+
+.textarea-padding-fix textarea {
+  padding-top: 32px;
+}
+
+.absolute-credentials {
+  position: absolute;
+  bottom: 5px;
+  right: 11px;
+}
+
+.no-border-input {
+  padding: 0 12px;
+  margin-top: 14px;
+  & .v-input__slot:before {
+    content: unset !important;
+  }
+  & .v-select {
+    width: 300px !important;
+  }
+}
+
+.inline-inputs {
+    & .v-input {
+      width: 300px;
+      flex: initial !important;
+    }
+    & .v-label {
+      max-width: 100% !important;
+    }
 }

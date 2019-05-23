@@ -229,12 +229,8 @@ import {
   API_URL,
   MODEL_DEFAULTS,
   DISCOUNTS,
-  SUBJECT_STATUSES,
-  SUBJECT_STATUS_LABELS,
+  SUBJECT_STATUS,
   SUBJECT_DEFAULTS,
-  SUBJECT_STATUS_TO_BE_TERMINATED,
-  SUBJECT_STATUS_TERMINATED,
-  SUBJECT_STATUS_ACTIVE,
 } from './'
 
 import Settings from '@/other/settings'
@@ -247,8 +243,7 @@ export default {
   data() {
     return {
       DISCOUNTS,
-      SUBJECT_STATUSES,
-      SUBJECT_STATUS_LABELS,
+      SUBJECT_STATUS,
       dialog: false,
       saving: false,
       item: null,
@@ -301,8 +296,8 @@ export default {
       const subject = this.findSubject(s)
       if (subject) {
         switch(subject.status) {
-          case SUBJECT_STATUS_TERMINATED: return 'error--text'
-          case SUBJECT_STATUS_TO_BE_TERMINATED: return 'orange--text'
+          case SUBJECT_STATUS.terminated: return 'error--text'
+          case SUBJECT_STATUS.to_be_terminated: return 'orange--text'
           default: return 'success--text'
         }
       }
@@ -318,11 +313,11 @@ export default {
         }) - 1
       } else {
         const subject = this.item.subjects[index]
-        if (subject.status === SUBJECT_STATUS_ACTIVE) {
-          subject.status = SUBJECT_STATUS_TO_BE_TERMINATED
-        } else if (subject.status === SUBJECT_STATUS_TO_BE_TERMINATED) {
-          subject.status = SUBJECT_STATUS_TERMINATED
-        } else if (subject.status === SUBJECT_STATUS_TERMINATED) {
+        if (subject.status === SUBJECT_STATUS.active) {
+          subject.status = SUBJECT_STATUS.to_be_terminated
+        } else if (subject.status === SUBJECT_STATUS.to_be_terminated) {
+          subject.status = SUBJECT_STATUS.terminated
+        } else if (subject.status === SUBJECT_STATUS.terminated) {
           this.item.subjects.splice(index, 1)
         }
       }
@@ -397,7 +392,7 @@ export default {
 
     discountedSum() {
       if (this.item.discount > 0) {
-        return Math.round(this.item.sum - (this.item.sum * (this.discount / 100)))
+        return Math.round(this.item.sum - (this.item.sum * (this.item.discount / 100)))
       }
       return this.item.sum
     },

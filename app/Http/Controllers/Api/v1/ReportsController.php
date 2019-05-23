@@ -9,6 +9,7 @@ use App\Models\Report\{Report, AbstractReport};
 use App\Models\Client\Client;
 use App\Http\Resources\Report\{AbstractReportCollection, ReportResource, ReportCollection};
 use App\Http\Resources\AlgoliaResult;
+use App\Http\Resources\Lesson\ClientLessonCollection;
 
 class ReportsController extends Controller
 {
@@ -57,5 +58,12 @@ class ReportsController extends Controller
     public function destroy($id)
     {
         Report::find($id)->delete();
+    }
+
+    public function clientLessons(Request $request)
+    {
+        return ClientLessonCollection::collection(
+            AbstractReport::getClientLessons((object) $request->all())->orderBy('lessons.date')->get()
+        );
     }
 }

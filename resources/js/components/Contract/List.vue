@@ -43,8 +43,8 @@
           </td>
           <td>
             <span v-for='(subject, index) in item.subjects' :class="{
-              'error--text': subject.status == SUBJECT_STATUSES[2],
-              'orange--text': subject.status == SUBJECT_STATUSES[1]
+              'error--text': subject.status == SUBJECT_STATUS.terminated,
+              'orange--text': subject.status == SUBJECT_STATUS.to_be_terminated
             }" :key='subject.id'
               v-show='index < 4'
             >
@@ -101,7 +101,7 @@ import Dialog from './Dialog'
 import DisplayList from '@/components/UI/DisplayList'
 import Print from '@/components/Print'
 import DisplayOptions from '@/mixins/DisplayOptions'
-import { SUBJECT_STATUSES } from './'
+import { SUBJECT_STATUS } from './'
 
 export default {
   props: {
@@ -122,7 +122,7 @@ export default {
 
   data() {
     return {
-      SUBJECT_STATUSES,
+      SUBJECT_STATUS,
       Dialog,
       defaultDisplayOptions: {
         client: false,
