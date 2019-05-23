@@ -47,7 +47,9 @@
               >
                 <template slot="items" slot-scope="{ item }">
                   <td width='200'>
-                    {{ item.client ? item.client.names.short : 'ученик не указан' }}
+                    <span :class="getSubjectStatusClass(item.client.subject_status)">
+                      {{ item.client.default_name }}
+                    </span>
                   </td>
                   <td width='150'>
                     <v-switch color='red' v-model="item.is_absent" hide-details></v-switch>
@@ -140,7 +142,9 @@
                 >
                   <template slot="items" slot-scope="{ item }">
                     <td width='200'>
-                      <PersonName :item='item' />
+                      <span :class="getSubjectStatusClass(item.client.subject_status)">
+                        {{ item.client.default_name }}
+                      </span>
                     </td>
                     <td width='150'>
                       <v-switch color='red' v-model="item.is_absent" hide-details></v-switch>
@@ -205,6 +209,7 @@ import { DialogMixin } from '@/mixins'
 import { ROLES } from '@/config'
 import { LESSON_STATUS, MODEL_DEFAULTS, API_URL } from '@/components/Lesson'
 import AddClientDialog from './AddClientDialog'
+import { getSubjectStatusClass } from '@/components/Contract'
 
 export default {
   mixins: [ DialogMixin ],
@@ -226,6 +231,8 @@ export default {
   components: { AddClientDialog },
   
   methods: {
+    getSubjectStatusClass,
+    
     destroyClientLesson(lesson_id) {
       const index = this.item.clientLessons.findIndex(e => e.id === lesson_id)
       console.log('INDEX', index, this.item.clientLessons[index])

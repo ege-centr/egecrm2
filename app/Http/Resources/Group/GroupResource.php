@@ -19,16 +19,9 @@ class GroupResource extends JsonResource
             ], $this->id);
         }
 
-        $lessons = $this->lessons;
-        foreach($lessons as &$lesson) {
-            foreach($lesson->clientLessons as &$clientLesson) {
-                $clientLesson->client->subject_status = $clientLesson->client->getSubjectStatus($this->year, $this->subject_id);
-            }
-        }
-
         return array_merge(parent::toArray($request), [
             'clients' => GroupClientCollection::collection($clients),
-            'lessons' => LessonResource::collection($lessons),
+            'lessons' => LessonResource::collection($this->lessons),
             'teacher' => new TeacherResource($this->teacher),
             'schedule' => Schedule::get(['group_id' => $this->id], $this->id)
         ]);
