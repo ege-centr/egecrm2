@@ -86,7 +86,6 @@ class LessonsController extends Controller
                 ->contracts()
                 ->active()
                 ->where('year', $lesson->group->year)
-                ->where('grade_id', $lesson->group->grade_id)
                 ->first();
 
             // А что если догавар не нашелся?
