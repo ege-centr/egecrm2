@@ -25,7 +25,7 @@ class Review extends Model
 
     private static function syncSearchable($id, bool $delete = false)
     {
-        $model = AbstractReview::search()->where('review_id', $id)->first();
+        $model = AbstractReview::where('reviews.id', $id)->first();
         if ($delete) {
             $model->unsearchable();
         } else {
