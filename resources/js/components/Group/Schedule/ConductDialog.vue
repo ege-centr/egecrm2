@@ -10,7 +10,7 @@
           <v-spacer></v-spacer>
           <v-toolbar-items v-if='item !== null'>
             <v-btn dark icon @click.native="conduct" 
-              v-if="item.status === LESSON_STATUS.PLANNED"
+              v-if="item.status === LESSON_STATUS.PLANNED && (isAdmin || $store.state.user.id === item.teacher_id)"
               :loading='conducting'>
               <v-icon>assignment</v-icon>
             </v-btn>
@@ -232,7 +232,7 @@ export default {
   
   methods: {
     getSubjectStatusClass,
-    
+
     destroyClientLesson(lesson_id) {
       const index = this.item.clientLessons.findIndex(e => e.id === lesson_id)
       console.log('INDEX', index, this.item.clientLessons[index])
