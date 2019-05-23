@@ -142,8 +142,8 @@
                 >
                   <template slot="items" slot-scope="{ item }">
                     <td width='200'>
-                      <span :class="getSubjectStatusClass(item.client.subject_status)">
-                        {{ item.client.default_name }}
+                      <span :class="getSubjectStatusClass(item.subject_status)">
+                        {{ item.default_name }}
                       </span>
                     </td>
                     <td width='150'>

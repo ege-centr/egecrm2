@@ -25,7 +25,7 @@ class LessonResource extends JsonResource
             'groupClients' => ClientWithSubjectStatus::collection($groupClients),
             'createdUser' => new PersonResource($this->createdUser),
             'conductedUser' => new PersonResource($this->conductedUser),
-            'clientLessons' => ClientLessonInSchedule::collection($this->clientLessons),
+            'clientLessons' => ClientLessonInSchedule::collection($clientLessons),
             'teacher' => new TeacherCollection($this->teacher),
         ]);
     }
