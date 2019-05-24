@@ -131,7 +131,7 @@
                     year: $route.params.year,
 
                     report_id: null,
-                    lesson_date: filteredItems[filteredItems.length - 1].lesson_date,
+                    lesson_date: filteredItems[lastConductedIndex].date,
                   })'
                 >
                   добавить отчет по {{ getData('subjects', $route.params.subject_id).dative }}
