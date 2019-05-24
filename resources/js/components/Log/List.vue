@@ -70,7 +70,10 @@
     </template>
   </v-data-table>
   <NoData
-    transparent
+    text='Логи отсутствуют'
+    :height='300'
+    :class='config.elevationClass'
+    square
     v-else
   />
 </template>

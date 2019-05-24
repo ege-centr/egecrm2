@@ -142,6 +142,9 @@
         <v-tab>
           Отчёты
         </v-tab>
+        <v-tab>
+          Авторизация
+        </v-tab>
       </v-tabs>
 
       <v-tabs-items v-model="tabs">
@@ -211,6 +214,7 @@
           <DisplayData ref='GroupPage'
             :tabs='true'
             :api-url='GROUP_API_URL' 
+            :options="{client_id: $route.params.id}"
             :invisible-filters="{client_ids: $route.params.id}"
             v-show='!hideGroupPage'
           >
@@ -307,6 +311,18 @@
           </DisplayData>
         </v-tab-item>
 
+        <!-- Авторизация -->
+        <v-tab-item>
+          <DisplayData 
+            :api-url='LOG_API_URL' 
+            :invisible-filters="{client_id: $route.params.id}"
+          >
+            <template slot='items' slot-scope='{ items }'>
+              <LogList :items='items' />
+            </template>
+          </DisplayData>
+        </v-tab-item>
+
       </v-tabs-items>
     </div>
     <ClientDialog ref='ClientDialog' @updated='loadData' />
@@ -332,6 +348,10 @@ import { TestAdminClientList } from '@/components/Test'
 import { DisplayData } from '@/components/UI'
 import { API_URL as GROUP_API_URL } from '@/components/Group'
 import GroupList from '@/components/Group/List'
+
+// Логи
+import { API_URL as LOG_API_URL } from '@/components/Log'
+import LogList from '@/components/Log/List'
 
 // Contracts
 import { API_URL as CONTRACT_API_URL } from '@/components/Contract'
@@ -378,6 +398,7 @@ export default {
       REQUEST_API_URL,
       REVIEW_API_URL,
       REPORT_API_URL,
+      LOG_API_URL,
       PAYMENT_ADDITIONAL_API_URL,
       PreviewMode,
       tabs: null,
@@ -391,7 +412,7 @@ export default {
   components: { 
     RequestDialog, RequestItem, Comments, ContractList, GroupList, GroupNotAssignedList, 
     PaymentList, ClientDialog, PhoneList, BranchList, EmailShow, TestAdminClientList,
-    DisplayData, PaymentDialog, ClientSchedule, Balance, ReportList,
+    DisplayData, PaymentDialog, ClientSchedule, Balance, ReportList, LogList,
     ReviewAdminList, PaymentAdditionalList, PaymentAdditionalDialog,
   },
 

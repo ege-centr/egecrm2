@@ -108,6 +108,13 @@ export default {
       type: String,
       default: '',
     },
+
+    options: {
+      type: Object,
+      default() {
+        return {}
+      },
+    }
   },
 
   components: { AllFilter, InfiniteLoading },
@@ -135,6 +142,7 @@ export default {
       axios.get(apiUrl(this.apiUrl) + queryString({
         page: this.page,
         paginate: this.paginate || '',
+        ...this.options,
         ...this.current_filters,
         ...this.invisibleFilters,
         // ...this.getSort(),

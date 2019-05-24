@@ -45,6 +45,15 @@
               </template>
             </v-textarea>
             <v-divider></v-divider>
+            
+            <div v-if='templates !== null' class='ml-2'>
+              <v-chip 
+                v-for='template in templates' :key='template.id'  
+                @click='text = template.text'
+                class='pointer'>
+                {{ template.title }}
+              </v-chip>
+            </div>
           </v-form>
         </v-card-text>
       </v-card>
@@ -55,6 +64,7 @@
 <script>
 
 import { API_URL } from './'
+import { API_URL as TEMPLATES_API_URL } from '@/components/Sms/Template'
 
 export default {
   props: {
@@ -70,11 +80,13 @@ export default {
       sending: false,
       phone: '',
       text: '',
+      templates: null,
     }
   },
 
   methods: {
     open(phone) {
+      this.loadTemplates()
       this.phone = phone
       this.text = ''
       this.dialog = true
@@ -91,7 +103,17 @@ export default {
         this.text = ''
         this.dialog = false
       })
-    },    
+    },
+
+    loadTemplates() {
+      axios.get(apiUrl(TEMPLATES_API_URL), {
+        params: {
+          type: 'manual'
+        }
+      }).then(r => {
+        this.templates = r.data.data
+      })
+    }
   },
 
   computed: {

@@ -9,9 +9,14 @@ use App\Models\Sms\SmsTemplate;
 
 class TemplatesController extends Controller
 {
+    protected $filters = [
+        'equals' => ['type'],
+    ];
+
     public function index(Request $request)
     {
         $query = SmsTemplate::query();
+        $this->filter($request, $query);
         return $this->showAll(
             $query
         );

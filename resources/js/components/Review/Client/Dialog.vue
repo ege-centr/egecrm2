@@ -32,7 +32,8 @@
                     <div class='flex-items align-center'>
                       <span class='mr-1 subheading'>Оценка</span>
                       <v-menu>
-                        <v-btn class='v-btn_xs' small fab dark flat slot='activator' 
+                        <v-btn small fab flat slot='activator' 
+                          :dark="getComment(COMMENT_TYPE.client).rating > 0"
                           :class="getColorClass(getComment(COMMENT_TYPE.client).rating)">
                           <span v-if="getComment(COMMENT_TYPE.client).rating > 0">
                             {{ getComment(COMMENT_TYPE.client).rating }}

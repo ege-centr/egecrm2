@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\{Group\Group, Lesson};
+use App\Models\{
+    Group\Group,
+    Client\Client,
+    Lesson
+};
 use DB;
 use App\Http\Resources\Group\{GroupCollection, GroupResource};
 use App\Http\Resources\AlgoliaResult;
@@ -22,7 +26,22 @@ class GroupsController extends Controller
             'facets' => ['*']
         ]);
         $this->filter($request, $query);
-        return new AlgoliaResult($query->paginateRaw($request->paginate ?: SHOW_ALL));
+        $result = new AlgoliaResult($query->paginateRaw($request->paginate ?: SHOW_ALL));
+
+        // если передан ID ученика, подсвечиваем группы цветами в зависимости от ДОговора
+        if ($request->client_id > 0) {
+            $client = Client::find($request->client_id);
+            $result->getCollection()->transform(function ($items, $key) use ($client) {
+                if ($key === 'hits') {
+                    foreach($items as &$item) {
+                        $item['subject_status'] = $client->getSubjectStatus($item['year'], $item['subject_id']);
+                    }
+                }
+                return $items;
+            });
+        }
+
+        return $result;
     }
 
     public function store(Request $request)

@@ -52,7 +52,9 @@
                   <div class='flex-items align-center'>
                     <span class='mr-1 subheading'>Оценка</span>
                     <v-menu>
-                      <v-btn class='v-btn_xs' small fab dark flat slot='activator' :class="getColorClass(item[categoryName + '_score'])">
+                      <v-btn small fab  flat slot='activator' 
+                        :dark="item[categoryName + '_score'] > 0"
+                        :class="getColorClass(item[categoryName + '_score'])">
                         <span v-if="item[categoryName + '_score'] > 0">
                           {{ item[categoryName + '_score'] }}
                         </span>

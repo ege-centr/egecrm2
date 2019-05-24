@@ -7,7 +7,10 @@
         </v-radio-group>
       </td>
       <td width='200'>
-        <router-link :to="{ name: 'GroupShow', params: {id: item.id}}">
+        <router-link 
+          :to="{ name: 'GroupShow', params: {id: item.id}}"
+          :class="'subject_status' in item ? getSubjectStatusClass(item.subject_status) : {}"
+        >
           Группа {{ item.id }}
         </router-link>
       </td>
@@ -49,6 +52,7 @@
 
 import DisplayOptions from '@/mixins/DisplayOptions'
 import ScheduleString from '@/components/Group/ScheduleString'
+import { getSubjectStatusClass } from '@/components/Contract'
 
 export default {
   props: {
@@ -78,6 +82,8 @@ export default {
   },
 
   methods: {
+    getSubjectStatusClass,
+
     handleRowClick(item) {
       if (this.selectable) {
         this.selected_group_id = item.id

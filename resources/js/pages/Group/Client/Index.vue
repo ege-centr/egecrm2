@@ -4,7 +4,9 @@
       :tabs='true'
       :api-url='API_URL' 
       :paginate='30' 
-      :invisible-filters="{client_ids: $store.state.user.id}">
+      :options="{client_id: $store.state.user.id}"
+      :invisible-filters="{client_ids: $store.state.user.id}"
+    >
       <template slot='items' slot-scope="{ items }">
         <GroupList :items='items' />
       </template>
