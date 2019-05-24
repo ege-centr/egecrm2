@@ -111,34 +111,6 @@
                 </v-flex>
               </v-layout>
 
-
-              <v-layout wrap class='mb-4 pink lighten-5' v-if='!readOnly'>
-                <v-flex md5 style='padding-left: 28px'>    
-                  <div class='title font-weight-bold mb-2'>
-                    Прогноз баллов на экзамене 
-                    <!-- (информация доступна только администраторам) -->
-                  </div>
-                  <v-layout>
-                    <v-flex md4>
-                      <v-text-field hide-details v-model='item.expected_score_from' label='От'></v-text-field>
-                    </v-flex>
-                    <v-flex md4>
-                      <v-text-field hide-details v-model='item.expected_score_to' label='До'></v-text-field>
-                    </v-flex>
-                    <v-flex md4>
-                      <v-text-field hide-details v-model='item.expected_score_max' label='Из возможных'></v-text-field>
-                    </v-flex>
-                  </v-layout>
-                </v-flex>
-                  <v-flex offset-md1 md5>
-                  <span class='font-weight-bold red--text'>ВНИМАНИЕ:</span>
-                  информация по прогнозу баллов будет доступна только администраторам. Родитель или ученик ни в какой форме не будут иметь к ней доступа. 
-                  Укажите в этом поле наиболее вероятный балл на ЕГЭ или ОГЭ, который по вашему мнению получит этот ученик. 
-                  Нередко очень сложно давать какие-либо прогнозы, однако в данном отчете это сделать нужно обязательно.
-                </v-flex>
-              </v-layout>
-
-
               <v-layout wrap class='px-3'>
                 <v-flex md5 class='pb-0'>
                   <DatePicker v-model='item.date' label='Дата создания отчёта' />

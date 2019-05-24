@@ -33,7 +33,15 @@
             <tr v-if="withReports && isReport(item)">
               <td colspan='10' class='font-weight-medium text-sm-center'>
                 <div class='flex-items align-center justify-center'>
-                  <a @click='$refs.ReportDialog.open(item.report.id)' class='mr-2'>
+                  <a @click='$refs.ReportDialog.open(item.report.id, {
+                    client_id: clientId,
+                    teacher_id: $route.params.teacher_id,
+                    subject_id: $route.params.subject_id,
+                    year: $route.params.year,
+
+                    report_id: item.report.id,
+                    report_date: item.report.date,
+                  })' class='mr-2'>
                     отчет по {{ getData('subjects', item.subject_id).dative }} от {{ item.report.date | date }}
                   </a>
                   <ReportScoreCircles class='ml-2' :item='item.report' />
@@ -121,6 +129,9 @@
                     teacher_id: $route.params.teacher_id,
                     subject_id: $route.params.subject_id,
                     year: $route.params.year,
+
+                    report_id: null,
+                    lesson_date: filteredItems[filteredItems.length - 1].lesson_date,
                   })'
                 >
                   добавить отчет по {{ getData('subjects', $route.params.subject_id).dative }}
@@ -229,6 +240,13 @@ export default {
     // после последнего проведённого занятниия
     afterLastConducted(item) {
       return this.filteredItems.findIndex(e => e.id === item.id) === this.lastConductedIndex
+    },
+
+    getDefaultData(item) {
+      return _.pick(item, [
+        'year', 'subject_id', 'client_id', 'teacher_id', 
+        'report_date', 'report_id', 'lesson_date' // это параметры для получения 
+      ])
     }
   },
 

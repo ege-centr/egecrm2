@@ -57,16 +57,14 @@ export default class PaymentsAutofill {
         default:
             if (this.todayIsBetween('04-01', '09-15')) {
               paymentDates = []
-              const date = this.today.clone()
+              const date = moment(`${this.year + 1}-09-15`)
               _.times(this.paymentCount - 1, () => {
                 paymentDates.push(date.add(1, 'month').format(dateFormat))
               })
-            }
-            if (this.todayIsBetween(this.year + '-09-16', (this.year + 1) + '-03-31'), true) {
+            } else {
               paymentDates = []
-              const date = this.today.clone()
-              _.times(this.paymentCount - 1, () => {
-                paymentDates.push(date.add(1, 'month').endOf('month').format(dateFormat))
+              _.times(this.paymentCount - 1, (n) => {
+                paymentDates.push(this.today.clone().add(n + 1, 'month').format(dateFormat))
               })
             }
       }
@@ -98,8 +96,8 @@ export default class PaymentsAutofill {
     }
   }
 
-  todayIsBetween(start, end, yearMatters = false) {
-    const date = yearMatters ? this.today.format(dateFormat) : this.today.format('MM-DD')
+  todayIsBetween(start, end) {
+    const date = this.today.format('MM-DD')
     return (date >= start && date <= end)
   }
 }
