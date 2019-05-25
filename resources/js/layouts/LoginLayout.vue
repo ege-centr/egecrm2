@@ -124,6 +124,7 @@
             // подтверждение по смс
             case 202:
               this.sms_verification = true
+              this.loading = false
               var {login, password} = this.credentials
               Cookies.set(TMP_CREDENTIALS_KEY, {login, password} , { expires: 1 / (24 * 60) * 2, path: '/' })
               break
