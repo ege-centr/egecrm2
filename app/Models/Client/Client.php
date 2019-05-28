@@ -97,7 +97,7 @@ class Client extends Model implements UserInterface
      */
     public function getSubjectStatus($year, $subject_id)
     {
-        $contract = $this->contracts()->latest($year)->first();
+        $contract = $this->contracts()->active()->where('year', $year)->first();
 
         if ($contract !== null) {
             foreach($contract->subjects as $subject) {
