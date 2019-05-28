@@ -21,7 +21,7 @@ class Schedule
         $query = Lesson::query()
             ->selectRaw("DATE_FORMAT(lessons.date, '%w') as `weekday`, `date`, `time`, `duration`, `group_id`, count(*) as `count`")
             ->groupBy('group_id', 'weekday', 'time', 'duration')
-            ->having('count', '>', 1);
+            ->having('count1', '>', 1);
 
         // если необходимо срезать по году, то подключаем группу
         if (isset($filters['year'])) {
@@ -37,6 +37,7 @@ class Schedule
         }
 
         return array_map(function ($item) use ($currentGroupId) {
+            logger($item->group_id . ' – ' . $currentGroupId);
             return [
                 'is_current' => $item->group_id === $currentGroupId,
                 'start' => $item->time,

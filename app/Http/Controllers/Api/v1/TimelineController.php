@@ -157,7 +157,8 @@ class TimelineController extends Controller
             if ($item->status === LessonStatus::CONDUCTED) {
                 $item->overlaps = false;
             } else {
-                $data = Lesson::query()
+                $data = Lesson::notCancelled()
+                    ->where('status', '<>', LessonStatus::CONDUCTED)
                     ->where('date', $item->date)
                     ->whereRaw(sprintf("
                         (
