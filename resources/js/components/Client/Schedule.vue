@@ -131,7 +131,7 @@
                     year: $route.params.year,
 
                     report_id: null,
-                    lesson_date: filteredItems[lastConductedIndex].date,
+                    lesson_date: lastReportDate,
                   })'
                 >
                   добавить отчет по {{ getData('subjects', $route.params.subject_id).dative }}
@@ -285,6 +285,18 @@ export default {
         }
       })
       return index
+    },
+
+    // либо дата первого занятия, либо дата последнего отчета
+    // нужно для добавления отчета 
+    lastReportDate() {
+      let date = this.filteredItems[this.lastConductedIndex].date
+      this.filteredItems.forEach(item => {
+        if (this.isReport(item)) {
+          date = item.report.date
+        }
+      })
+      return date
     }
   },
 }
