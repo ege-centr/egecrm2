@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Redis;
 use Symfony\Component\Yaml\Yaml;
 use App\Http\Resources\Person\PersonWithPhotoResource;
 use App\Models\Email;
+use App\Models\Log\{Log, LogType};
 use User;
 
 class Sms
@@ -43,17 +44,30 @@ class Sms
             }
 
             // https://smsc.ru/api/http/send/smsinfo/#menu
+            $mes = $message;
             if (count($extra) > 0) {
-                $message .= "\n~~~\n" . Yaml::dump($extra);
+                $mes .= "\n~~~\n" . Yaml::dump($extra);
             }
 
 			$params = array(
                 "fmt"       => 1, // 1 – вернуть ответ в виде чисел: ID и количество SMS через запятую (1234,1)
 				"phones"	=> $number,
-                "mes"		=> $message,
+                "mes"		=> $mes,
             );
 
-			$result = self::exec('send', $params);
+            $result = self::exec('send', $params);
+
+            list($id, $count) = explode(',', $result);
+
+            Log::create([
+                'type' => LogType::SMS,
+                'data' => [
+                    'id' => $id,
+                    'phone' => $number,
+                    'message' => $message,
+                    'is_secret' => ($isSecret ? 1 : 0),
+                ],
+            ]);
 		}
     }
 

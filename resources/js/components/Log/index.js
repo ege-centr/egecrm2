@@ -8,6 +8,7 @@ export const TYPES = [
   {id: 'create', title: 'создание'},
   {id: 'url', title: 'url'},
   {id: 'auth', title: 'авторизация'},
+  {id: 'sms', title: 'sms'},
 ]
 
 export const FILTERS = [

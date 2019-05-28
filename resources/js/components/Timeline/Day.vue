@@ -152,7 +152,6 @@ export default {
     // width: 100%;
     width: $width;
     background: #cfcfcf;
-    overflow-x: hidden;
     &_fixed-width {
       width: 50px;
     }

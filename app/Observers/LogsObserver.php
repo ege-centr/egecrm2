@@ -2,22 +2,22 @@
 
 namespace App\Observers;
 
-use App\Models\Log;
+use App\Models\Log\{Log, LogType};
 
 class LogsObserver
 {
     public function created($model)
     {
-        Log::add(Log::TYPE_CREATE, $model);
+        Log::add(LogType::CREATE, $model);
     }
 
     public function updated($model)
     {
-        Log::add(Log::TYPE_UPDATE, $model);
+        Log::add(LogType::UPDATE, $model);
     }
 
     public function deleted($model)
     {
-        Log::add(Log::TYPE_DELETE, $model);
+        Log::add(LogType::DELETE, $model);
     }
 }

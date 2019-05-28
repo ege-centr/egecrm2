@@ -37,7 +37,6 @@ class Schedule
         }
 
         return array_map(function ($item) use ($currentGroupId) {
-            logger($item->group_id . ' – ' . $currentGroupId);
             return [
                 'is_current' => $item->group_id === $currentGroupId,
                 'start' => $item->time,

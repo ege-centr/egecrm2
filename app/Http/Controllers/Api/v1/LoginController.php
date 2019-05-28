@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use ReCaptcha\ReCaptcha;
-use App\Models\{User, Email, Log};
+use App\Models\{User, Email};
+use App\Models\Log\{Log, LogType};
 use App\Http\Resources\Admin\AdminResource;
 use App\Utils\{SessionService, Sms};
 use Illuminate\Support\Facades\Redis;
@@ -105,7 +106,7 @@ class LoginController extends Controller
     private static function authLog($message = '', $data = [], $type = 'fail')
     {
         Log::create([
-            'type' => Log::TYPE_AUTH,
+            'type' => LogType::AUTH,
             'data' => array_merge($data, [
                 $type => $message,
                 'user_agent' => @$_SERVER['HTTP_USER_AGENT'],

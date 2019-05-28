@@ -4,7 +4,7 @@ namespace App\Http\Controllers\api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\{Log, Client\Client, Admin\Admin, Teacher};
+use App\Models\{Log\Log, Client\Client, Admin\Admin, Teacher};
 use App\Http\Resources\Log\LogCollection;
 
 class LogsController extends Controller
