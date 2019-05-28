@@ -199,6 +199,10 @@ export default {
       axios.post(apiUrl(API_URL, 'client-lessons'), defaults).then(r => {
         this.clientLessons = r.data
       })
+      console.log(item_id)
+      if (item_id === null) {
+        this.item.date = moment().format('YYYY-MM-DD')  
+      }
     },
 
     setScore(score, categoryName) {
