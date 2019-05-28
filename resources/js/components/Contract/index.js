@@ -6,7 +6,7 @@ export const MODEL_DEFAULTS = {
   subjects: [],
   payments: [],
   grade_id: null,
-  year: null,
+  year: null
 }
 
 export const SUBJECT_STATUS = {
@@ -39,7 +39,7 @@ export const SUBJECT_DEFAULTS = {
   status: SUBJECT_STATUS.active
 }
 
-export const DISCOUNTS = [4, 6, 8, 10, 15, 20, 30, 40, 50, 70, 90]
+export const DISCOUNTS = [4, 6, 8, 10, 14, 20, 30, 40, 50, 70, 90]
 
 export const getSubjectStatusClass = function(status) {
   return {

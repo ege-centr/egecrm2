@@ -44,17 +44,20 @@
           </router-link>
         </td>
         <td>
-          <ReportScoreCircles :item='item.report' />
-        </td>
-        <td>
           <div v-if='item.report !== null'>
             {{ item.report.date | date }}
           </div>
         </td>
+        <td v-if='show.price'>
+          <span v-if='item.price > 0'>{{ item.price }} руб.</span>
+        </td>
+        <td>
+          <ReportScoreCircles :item='item.report' />
+        </td>
         <td v-if='show.is_available_for_parents'>
-          <span class='red--text' v-if='item.report !== null && !item.report.is_available_for_parents'>
-            не доступен в ЛК
-          </span>
+          <v-icon color='red' v-if='item.is_not_moderated'>remove_circle</v-icon>
+          <v-icon color='green' v-if='item.is_available_for_parents'>done_all</v-icon>
+          <v-icon color='primary' v-if='!item.is_available_for_parents && !item.is_not_moderated'>schedule</v-icon>
         </td>
         <td class='text-md-right pa-0' width='100' v-if='show.actions'>
           <v-btn small color='primary' class='btn-td' flat
@@ -104,6 +107,7 @@ export default {
       defaultDisplayOptions: {
         id: true,
         is_available_for_parents: true,
+        price: true,
         teacher: true,
         client: true,
         actions: true,

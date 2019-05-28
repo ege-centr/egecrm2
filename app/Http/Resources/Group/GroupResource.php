@@ -23,7 +23,7 @@ class GroupResource extends JsonResource
             'clients' => GroupClientCollection::collection($clients),
             'lessons' => LessonResource::collection($this->lessons),
             'teacher' => new TeacherResource($this->teacher),
-            'schedule' => Schedule::get(['group_id' => $this->id], $this->id)
+            'schedule' => $this->getSchedule(),
         ]);
     }
 }

@@ -143,7 +143,7 @@
           Отчёты
         </v-tab>
         <v-tab>
-          Авторизация
+          Логи
         </v-tab>
       </v-tabs>
 
@@ -311,7 +311,7 @@
           </DisplayData>
         </v-tab-item>
 
-        <!-- Авторизация -->
+        <!-- Логи -->
         <v-tab-item>
           <DisplayData 
             :api-url='LOG_API_URL' 

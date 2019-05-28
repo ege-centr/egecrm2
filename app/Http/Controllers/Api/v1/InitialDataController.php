@@ -15,6 +15,7 @@ use App\Models\{
 use App\Http\Resources\Admin\{AdminCollection, AdminLightResource};
 use App\Http\Resources\Teacher\TeacherCollection;
 use App\Http\Resources\Photo\PhotoResource;
+use App\Http\Resources\User\UserWithPhotoResource;
 
 /**
  * Загрузка изначальных данных,
@@ -36,7 +37,7 @@ class InitialDataController extends Controller
                 'cabinets' => Cabinet::getCached(),
                 'background' => Background::get(),
             ],
-            'user' => User::loggedIn() ? User::fromSession() : null,
+            'user' => User::loggedIn() ? new UserWithPhotoResource(User::fromSession()) : null,
         ]);
     }
 }

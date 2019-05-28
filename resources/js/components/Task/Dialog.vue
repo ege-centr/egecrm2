@@ -22,10 +22,10 @@
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
           <v-container grid-list-xl class="pa-0 ma-0" fluid v-else>
             <v-layout>
-              <v-flex md12 class='relative'>
+              <v-flex md12 class='relative pa-0 mt-2'>
                 <div class='custom-toolbar flex-items'>
                   <div class='mr-3'>
-                    <AdminSelect v-model='item.responsible_admin_id' label='Ответственный' />
+                    <AdminSelect v-model='item.responsible_admin_id' label='Ответственный' class-name='hide-bottom-border' />
                   </div>
                   <div>
                     <v-select
@@ -35,6 +35,7 @@
                       item-text='title'
                       item-value='id'
                       label="Статус"
+                      class='hide-bottom-border'
                     ></v-select>
                   </div>
                 </div>
@@ -54,8 +55,8 @@
                 загрузка {{ uploading_file_name }}...
               </span>
             </v-chip>
-            <v-btn @click='attach' :loading='uploading_file_name !== null' flat fab small class='my-0'>
-              <v-icon style='font-size: 20px'>attach_file</v-icon>
+            <v-btn @click='attach' :loading='uploading_file_name !== null' flat fab small class='v-btn_attach'>
+              <v-icon>attach_file</v-icon>
             </v-btn>
             <span v-if='uploading_error' class='error--text'>размер файла больше 20мб</span>
           </div>
@@ -131,7 +132,7 @@ export default {
   .custom-toolbar {
     position: absolute;
     right: 3px;
-    top: 4px;
+    top: -4px;
     & > div {
       margin-right: 10px;
       width: 250px;
@@ -146,6 +147,7 @@ export default {
 
   .task-attachments {
     position: absolute;
-    bottom: 0;
+    bottom: 8px;
+    left: 11px;
   }
 </style>

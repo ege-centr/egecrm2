@@ -20,7 +20,7 @@ export default {
     open(item_id = null, defaults = {}, options = {}) {
       this.options = options
       if (_.isFunction(this.beforeOpen)) {
-        this.beforeOpen()
+        this.beforeOpen(item_id, defaults, options)
       }
       this.item = null
       this.dialog = true

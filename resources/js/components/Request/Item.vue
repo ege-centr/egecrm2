@@ -5,7 +5,7 @@
           <v-flex style='width: 80%; border-right: 1px solid #9e9e9e'>
             <div class='mb-3'>
               <div class='flex-items'>
-                <Avatar :photo='item.createdUser ? item.createdUser.photo : null' :size='50' class='mr-3' />
+                <Avatar :photo='item.createdUser ? item.createdUser.photo : null' :size='35' class='mr-3' />
                 <div>
                   <div>
                     <b>{{ item.createdUser ? item.createdUser.default_name : 'System' }}</b>

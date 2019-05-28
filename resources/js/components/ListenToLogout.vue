@@ -56,6 +56,8 @@ export default {
       this.interval = setInterval(() => {
         if (this.secondsUntilLogout <= 0) {
           this.$store.dispatch('logout')
+          this.interval = null
+          this.dialog = false
         } else {
           this.secondsUntilLogout--
         }

@@ -14,7 +14,7 @@ class ReportResource extends JsonResource
             'learning_ability_score', 'knowledge_score', 'homework_comment', 'activity_comment',
             'behavior_comment', 'learning_ability_comment', 'knowledge_comment', 'is_available_for_parents',
             'date', 'expected_score_from', 'expected_score_to', 'expected_score_max', 'recommendation', 'year',
-            'created_at'
+            'created_at', 'is_not_moderated', 'price'
         ], [
             'createdUser' => new PersonResource($this->createdUser),
             'teacher' => new PersonWithPhotoResource($this->teacher),

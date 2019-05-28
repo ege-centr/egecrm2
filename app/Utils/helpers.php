@@ -147,3 +147,10 @@ function errorResponse($error, $status = 422)
 {
     return response(compact('error'), $status);
 }
+
+/**
+ * закодировать – раскодировать в JSON
+ */
+function jsonRedecode($data) {
+    return json_decode(json_encode($data));
+}

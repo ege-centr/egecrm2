@@ -6,7 +6,11 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Models\Report\Report;
+use App\Models\{
+    Report\Report,
+    Report\AbstractReport,
+    Client\Client
+};
 use App\Models\Factory\Subject;
 
 class ReportBecameAvailableEmail extends Mailable
@@ -36,6 +40,7 @@ class ReportBecameAvailableEmail extends Mailable
             ->subject('Доступен отчёт по ' . Subject::getTitle($this->report->subject_id, 'dative') . ' №' . $this->report->id)
             ->view('mail.report')->with([
                 'report' => $this->report,
+                'clientLessons' => AbstractReport::getClientLessons($this->report->abstract)->get(),
             ]);
     }
 }

@@ -5,7 +5,7 @@ namespace App\Models;
 use Shared\Model;
 use Illuminate\Database\Eloquent\Builder;
 use App\Traits\{HasName, Cacheable, Commentable};
-use App\Models\{Payment\Payment, Group\Group};
+use App\Models\{Payment\Payment, Group\Group, Email};
 use App\Utils\Phone;
 
 class Teacher extends Model
@@ -15,7 +15,12 @@ class Teacher extends Model
     protected $commaSeparated = ['subjects_ec'];
 
     protected $connection = 'egerep';
+
     protected $table = 'tutors';
+
+    protected $fillable = ['disable_bonuses'];
+
+    public $timestamps = false;
 
     public function getPhotoUrlAttribute()
     {
@@ -42,7 +47,8 @@ class Teacher extends Model
 
     public function getEmailAttribute()
     {
-        return $this->attributes['email'] ? ['email' => $this->attributes['email']] : null;
+        // return $this->attributes['email'] ? ['email' => $this->attributes['email']] : null;
+        return Email::where('entity_type', self::class)->where('entity_id', $this->id)->first();
     }
 
     public function getPhonesAttribute()

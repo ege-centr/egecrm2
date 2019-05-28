@@ -169,7 +169,9 @@
                   </template>
                   <template v-slot:footer>
                     <tr>
-                      <td colspan='3'></td>
+                      <td colspan='3'>
+                        <a @click='item.payments = paymentsAutofillData' v-show='paymentsAutofillData !== null'>заполнить автоматически</a>
+                      </td>
                       <td class='text-sm-right'>
                         <v-btn color='primary' flat icon class='ma-0' @click='addPayment'>
                           <v-icon>add</v-icon>
@@ -178,9 +180,6 @@
                     </tr>
                   </template>
                 </v-data-table>
-                <div class='text-sm-center mt-3'>
-                  <a @click='item.payments = paymentsAutofillData' v-show='paymentsAutofillData !== null'>заполнить автоматически</a>
-                </div>
               </v-flex>
               <!-- /ПЛАТЕЖИ -->
 

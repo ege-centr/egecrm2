@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\{Lesson\ClientLesson, Teacher, Email};
+use App\Models\{Lesson\ClientLesson, Client\Client, Teacher, Email};
 use App\Models\Factory\{Grade, Subject, Branch};
 use Illuminate\Database\Eloquent\Collection;
 use PersonResource;
@@ -18,7 +18,6 @@ class BalanceController extends Controller
             'status' => 'conducted',
             ($isTeacher ? 'teacher_id' : 'client_id') => $request->entity_id,
         ]);
-
 
         $items = [];
 
@@ -40,6 +39,26 @@ class BalanceController extends Controller
                     'year' => $lesson->group->year,
                     'user' => new PersonResource($lesson->createdUser),
                     'created_at' => $lesson->created_at,
+                ];
+            }
+
+            $reports = app()->call('App\Http\Controllers\Api\v1\ReportsController@index');
+            $reports = jsonRedecode($reports)->data;
+            foreach($reports as $report) {
+                $comment = sprintf(
+                    'Отчет по %s по ученику %s',
+                    Subject::getTitle($report->subject_id, 'dative'),
+                    Client::find($report->client_id)->default_name
+                );
+
+                $items[] = [
+                    'sum' => $report->price,
+                    'bonus' => 0,
+                    'comment' => $comment,
+                    'date' => $report->report_date,
+                    'year' => $report->year,
+                    'user' => new PersonResource(Email::getUser($report->created_email_id)),
+                    'created_at' => $report->created_at,
                 ];
             }
         } else {
@@ -79,7 +98,7 @@ class BalanceController extends Controller
 
 
         $payments = app()->call('App\Http\Controllers\Api\v1\PaymentsController@index');
-        $payments = json_decode(json_encode($payments))->data;
+        $payments = jsonRedecode($payments)->data;
         foreach($payments as $payment) {
             if ($payment->type === 'payment') {
                 $sum = $isTeacher ? $payment->sum * -1 : $payment->sum;

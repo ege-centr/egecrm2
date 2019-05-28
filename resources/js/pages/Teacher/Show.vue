@@ -77,6 +77,9 @@
         <v-tab>
           Комментарии
         </v-tab>
+        <v-tab>
+          Авторизация
+        </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
         <!-- ГРУППЫ -->
@@ -151,6 +154,13 @@
 
         <!-- Отчёты -->
         <v-tab-item>
+          <v-switch class='ma-0 justify-end'
+            label="ограничение по начислению бонусов"
+            color='red'
+            hide-details
+            v-model='item.disable_bonuses'
+            @change='update'
+          ></v-switch>
           <DisplayData 
             ref='ReportPage'
             :api-url='REPORT_API_URL' 
@@ -180,6 +190,19 @@
             </v-card-text>
           </v-card>
         </v-tab-item>
+
+        <!-- Логи -->
+        <v-tab-item>
+          <DisplayData 
+            :api-url='LOG_API_URL' 
+            :invisible-filters="{teacher_id: $route.params.id}"
+          >
+            <template slot='items' slot-scope='{ items }'>
+              <LogList :items='items' />
+            </template>
+          </DisplayData>
+        </v-tab-item>
+
 
       </v-tabs-items>
     </div>
@@ -223,11 +246,15 @@ import { API_URL as REVIEW_API_URL } from '@/components/Review'
 import ReportList from '@/components/Report/List'
 import { API_URL as REPORT_API_URL } from '@/components/Report'
 
+// Логи
+import { API_URL as LOG_API_URL } from '@/components/Log'
+import LogList from '@/components/Log/List'
+
 export default {
   components: { 
     GroupList, PaymentList, PaymentDialog, PaymentAdditionalList, PaymentAdditionalDialog, Balance,
     ReviewAdminList, ReportList, EmailShow, BgAvatar, PhoneList, DisplayData, TeacherFreetimeList,
-    Comments,
+    Comments, LogList,
   },
 
   data() {
@@ -238,6 +265,7 @@ export default {
       PAYMENT_ADDITIONAL_API_URL,
       REPORT_API_URL,
       REVIEW_API_URL,
+      LOG_API_URL,
       CLASS_NAME,
       PAYMENT_SORT,
       PreviewMode,
@@ -266,6 +294,10 @@ export default {
           this.loading = false
         })
       })
+    },
+
+    update(value) {
+      axios.put(apiUrl(API_URL, this.$route.params.id), {disable_bonuses: value})
     },
   }
 }

@@ -35,7 +35,7 @@
                     <div class='flex-items align-center'>
                       <span class='mr-1 subheading'>Оценка</span>
                       <v-menu>
-                        <v-btn small fab flat slot='activator' 
+                        <v-btn class='v-btn_xs' small fab flat slot='activator' 
                           :dark="getComment(COMMENT_TYPE.client).rating > 0"
                           :class="getColorClass(getComment(COMMENT_TYPE.client).rating)"
                         >
@@ -64,7 +64,7 @@
                       <v-textarea 
                         full-width
                         auto-grow
-                        single-line
+                        class='textarea-padding-fix'
                         label='Комментарий' 
                         v-model="getComment(COMMENT_TYPE.client).text"></v-textarea>
                     </div>
@@ -89,7 +89,7 @@
                     <div class='flex-items align-center'>
                       <span class='mr-1 subheading'>Оценка</span>
                       <v-menu>
-                        <v-btn small fab flat slot='activator' 
+                        <v-btn class='v-btn_xs' small fab flat slot='activator' 
                           :dark="getComment(COMMENT_TYPE.admin).rating > 0"
                           :class="getColorClass(getComment(COMMENT_TYPE.admin).rating)">
                           <span v-if="getComment(COMMENT_TYPE.admin).rating > 0">
@@ -121,7 +121,7 @@
                       <v-textarea 
                         full-width
                         auto-grow
-                        single-line
+                        class='textarea-padding-fix'
                         label='Комментарий' 
                         v-model="getComment(COMMENT_TYPE.admin).text"></v-textarea>
                     </div>
@@ -145,7 +145,7 @@
                     <div class='flex-items align-center'>
                       <span class='mr-1 subheading'>Оценка</span>
                       <v-menu>
-                        <v-btn small fab flat slot='activator' 
+                        <v-btn class='v-btn_xs' small fab flat slot='activator' 
                           :dark="getComment(COMMENT_TYPE.final).rating > 0"
                           :class="getColorClass(getComment(COMMENT_TYPE.final).rating)">
                           <span v-if="getComment(COMMENT_TYPE.final).rating > 0">
@@ -232,40 +232,6 @@
                   </v-flex>
                 </v-layout>
               </v-flex>
-              <!-- <v-flex md6 offset-md1>
-                <v-layout wrap>
-                  <v-flex md12>
-                    <v-textarea label='Экспрессивный заголовок' hide-details auto-grow v-model='item.expressive_title'></v-textarea>
-                  </v-flex>
-                  <v-flex md12>
-                    <v-text-field hide-details v-model='item.signature' label='Подпись'></v-text-field>
-                  </v-flex>
-                  <v-flex md12>
-                    <div class='flex-items align-center'>
-                      <v-text-field hide-details v-model='item.score' label='Балл' />
-                      <span class='grey--text two-inputs-separator'>/</span>
-                      <v-text-field hide-details v-model='item.max_score' label='Максимальный' />
-                    </div>
-                  </v-flex>
-                  <v-flex md12>
-                    <AdminSelect v-model='item.reviewer_admin_id' label='Ответственный' />
-                  </v-flex>
-                  <v-flex md12>
-                     <v-switch class='ma-0'
-                      label="Опубликован"
-                      hide-details
-                      v-model='item.is_published'
-                      ></v-switch>
-                  </v-flex>
-                  <v-flex md12>
-                     <v-switch class='ma-0'
-                      label="Подтвержден"
-                      hide-details
-                      v-model='item.is_approved'
-                      ></v-switch>
-                  </v-flex>
-                </v-layout>
-              </v-flex> -->
             </v-layout>
           </v-container>
         </v-card-text>

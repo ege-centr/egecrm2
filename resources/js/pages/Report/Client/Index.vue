@@ -14,6 +14,7 @@
           :display-options="{
             id: false,
             is_available_for_parents: false,
+            price: false,
             client: false,
             actions: false,
           }" 

@@ -2,7 +2,7 @@
   <div>
     <!-- <v-slide-y-transition :group='true'> -->
       <div class='flex-items align-flex-start mb-3' v-for='(comment, index) in comments' :key='comment.id'>
-        <Avatar :photo='comment.createdUser.photo' :size='50' class='mr-3' />
+        <Avatar :photo='comment.createdUser.photo' :size='35' class='mr-3' />
         <div>
           <div>
             <b>{{ comment.createdUser.default_name }}</b>
@@ -52,7 +52,7 @@
     <a v-show='!commenting' class='grey--text' @click='startCommenting'>комментировать</a>
     <div class='flex-items align-center' v-show='commenting'>
       <div>
-        <Avatar :photo='$store.state.user.photo' :size='50' class='mr-3' />
+        <Avatar :photo='$store.state.user.photo' :size='35' class='mr-3' />
       </div>
       <div style='flex: 1'>
         <b style='position: absolute'>{{ $store.state.user.first_name }} {{ $store.state.user.last_name }}</b>

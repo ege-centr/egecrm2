@@ -18,11 +18,21 @@
             </v-btn>
           </v-toolbar-items>
         </v-toolbar>
-        <v-card-text>
+        <v-card-text class='px-0'>
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
-          <div v-else class='relative'>
-            <v-textarea label='Тема занятия' auto-grow v-model='item.topic' maxlength='1000' counter />
-          </div>
+          <v-layout v-else wrap>
+            <v-flex md12 class='pa-0'>
+              <v-text-field 
+                full-width
+                auto-grow
+                counter 
+                label='Тема занятия' 
+                maxlength="1000"
+                v-model='item.topic'>
+              </v-text-field>
+              <hr class="v-divider theme--light">
+            </v-flex>
+          </v-layout>
         </v-card-text>
       </v-card>
     </v-dialog>

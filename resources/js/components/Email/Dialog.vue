@@ -78,8 +78,8 @@
           <hr class="v-divider theme--light">
           <div class='px-2 mt-2' style='padding-left: 12px !important'>
             <LoadingChip v-for="(file, index) in $upload.files('file').all" :key='file.$id' :file='file' @remove='removeFile(index)' />
-            <v-btn @click='attach' flat fab small style='height: 32px; width: 32px; margin: 4px 0' v-if="$upload.files('file').all.length < maxFiles">
-              <v-icon style='font-size: 20px'>attach_file</v-icon>
+            <v-btn @click='attach' flat fab small v-if="$upload.files('file').all.length < maxFiles" class='v-btn_attach'>
+              <v-icon>attach_file</v-icon>
             </v-btn>
           </div>
         </v-card-text>

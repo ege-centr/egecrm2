@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Utils\Schedule;
 use App\Models\Lesson\{Lesson, LessonStatus};
-use App\Models\{Cabinet, Group\GroupClient};
-use DateTime;
+use App\Models\{Cabinet, Group\GroupClient, Teacher, Client\Client};
+use DateTime, DB;
 
 class TimelineController extends Controller
 {
@@ -157,34 +157,58 @@ class TimelineController extends Controller
             if ($item->status === LessonStatus::CONDUCTED) {
                 $item->overlaps = false;
             } else {
-                $item->overlaps = Lesson::query()
+                $data = Lesson::query()
                     ->where('date', $item->date)
                     ->whereRaw(sprintf("
                         (
                             TIME('%s') <= TIME(CONCAT(`date`, ' ', `time`) + INTERVAL `duration` MINUTE) AND
                             TIME('%s') >= `time`
                         )
-                        AND
-                        (
-                            teacher_id = %d OR
-                            cabinet_id = %d %s
-                        )
                     ",
                         $item->start,
-                        $item->end,
+                        $item->end
+                    ))
+                    ->addSelect(DB::raw(sprintf("
+                        (IF(teacher_id = %d, 1, 0)) as overlaps_teacher,
+                        (IF(cabinet_id = %d, 1, 0)) as overlaps_cabinet,
+                        (%s) as overlaps_client_id
+                    ",
                         $item->teacher_id,
                         $item->cabinet_id,
-                        $item->client_ids ? "OR
-                            EXISTS (
-                                SELECT 1 FROM group_clients
+                        $item->client_ids ? "
+                            (
+                                SELECT client_id FROM group_clients
                                 WHERE group_id = lessons.group_id
                                 AND client_id IN ({$item->client_ids})
-                            )" : ''
-                    ))
+                            )" : '0'
+                    )))
                     ->when($item->id, function ($query, $id) {
                         return $query->where('id', '<>', $id);
                     })
-                    ->exists();
+                    ->havingRaw("(overlaps_teacher OR overlaps_cabinet OR overlaps_client_id)")
+                    ->first();
+
+                if ($data !== null) {
+                    $item->overlaps = true;
+                    if ($data->overlaps_teacher) {
+                        $item->overlap_hint = sprintf(
+                            "Пересечение у преподавателя %s",
+                            Teacher::whereId($item->teacher_id)->first()->default_name
+                        );
+                    } else if ($data->overlaps_cabinet) {
+                        $item->overlap_hint = sprintf(
+                            "Пересечение в кабинете %s",
+                            Cabinet::whereId($item->cabinet_id)->first()->title
+                        );
+                    } else {
+                        $item->overlap_hint = sprintf(
+                            "Пересечение у ученика %s",
+                            Client::whereId($data->overlaps_client_id)->first()->default_name
+                        );
+                    }
+                } else {
+                    $item->overlaps = false;
+                }
             }
         }
 
@@ -199,6 +223,9 @@ class TimelineController extends Controller
                 'status' => $item->status,
                 'overlaps' => $item->overlaps,
             ];
+            if ($item->overlaps) {
+                $data['overlap_hint'] = $item->overlap_hint;
+            }
             if ($groupByCabinet) {
                 // Группировка
                 // cabinet_id =>

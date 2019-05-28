@@ -25,8 +25,21 @@
             <DivBlocker v-if='readOnly' />
             <Loader block v-if='clientLessons === null' />
             <v-layout wrap class='mb-4 px-3' v-else>
-              <v-flex md12 class='pb-0'>
-                <div class='title font-weight-bold mb-3'>Занятия</div>
+              <v-flex md12 class='pb-0 subheading'>
+                <div class='title font-weight-bold mb-3'>Данные для отчета</div>
+                <div>
+                  Составитель отчета: 
+                  {{ teacher.names.full }},
+                  преподаватель по 
+                  {{ teacher.subjects_ec.map(subject_id => getData('subjects', subject_id).dative).join(' и ') }}
+                </div>
+                <div>
+                  Ученик: 
+                  <span v-if='client !== null'>{{ client.names.short }}</span>
+                </div>
+                <div class='mb-3'>
+                  Предмет: {{ getData('subjects', defaults.subject_id).name }}
+                </div>
                 <div v-for='clientLesson in clientLessons'>
                   {{ clientLesson.lesson.date | date }} – 
                   <span v-if='clientLesson.is_absent' class='red--text'>
@@ -35,6 +48,9 @@
                   <span v-else>
                     <span v-if='clientLessons.late > 0'>опоздал на {{ clientLesson.late }} мин.</span>
                     <span v-else>был</span>
+                  </span>
+                  <span v-show='clientLesson.lesson.topic'>
+                    ({{ clientLesson.lesson.topic }})
                   </span>
                 </div>
               </v-flex>
@@ -52,7 +68,7 @@
                   <div class='flex-items align-center'>
                     <span class='mr-1 subheading'>Оценка</span>
                     <v-menu>
-                      <v-btn small fab  flat slot='activator' 
+                      <v-btn class='v-btn_xs' small fab  flat slot='activator' 
                         :dark="item[categoryName + '_score'] > 0"
                         :class="getColorClass(item[categoryName + '_score'])">
                         <span v-if="item[categoryName + '_score'] > 0">
@@ -79,9 +95,9 @@
               <v-flex md12 class='pa-0'>
                 <div>
                   <v-textarea 
+                    class='textarea-padding-fix'
                     full-width
                     auto-grow
-                    single-line
                     counter 
                     label='Комментарий' 
                     maxlength="1000"
@@ -101,9 +117,9 @@
                  <v-flex md12 class='pa-0'>
                   <div>
                     <v-textarea 
+                      class='textarea-padding-fix'
                       full-width
                       auto-grow
-                      single-line
                       maxlength="1000"
                       counter 
                       label='Комментарий' 
@@ -114,11 +130,21 @@
               </v-layout>
 
               <v-layout wrap class='px-3'>
-                <v-flex md5 class='pb-0'>
-                  <DatePicker v-model='item.date' label='Дата создания отчёта' />
+                <v-flex md3 class='pb-0' v-if='$store.state.user.class === ROLES.ADMIN'>
+                  <v-switch color='red' v-model="item.is_not_moderated" label="модерация не пройдена"></v-switch>
                 </v-flex>
-                  <v-flex offset-md1 md5 class='pb-0' v-if='$store.state.user.class === ROLES.ADMIN'>
+                <v-flex md3 class='pb-0' v-if='$store.state.user.class === ROLES.ADMIN'>
                   <v-switch color='green' v-model="item.is_available_for_parents" label="сделать отчет доступным для родителя"></v-switch>
+                </v-flex>
+                <v-flex md3 v-if='$store.state.user.class === ROLES.ADMIN'>
+                  <v-text-field
+                    hide-details
+                    label='Цена'
+                    v-model='item.price'
+                  />
+                </v-flex>
+                <v-flex md3 class='pb-0'>
+                  <DatePicker v-model='item.date' label='Дата создания отчёта' />
                 </v-flex>
               </v-layout>
 
@@ -134,6 +160,7 @@
 import { API_URL, MODEL_DEFAULTS, CATEGORY, getCategoryTitle, getCategoryDescription, getColorClass } from './'
 import { DialogMixin } from '@/mixins'
 import { DatePicker } from '@/components/UI'
+import { API_URL as CLIENT_API_URL } from '@/components/Client'
 import { ROLES } from '@/config'
 
 export default {
@@ -144,10 +171,12 @@ export default {
   data() {
     return {
       API_URL,
+      CLIENT_API_URL,
       MODEL_DEFAULTS,
       CATEGORY,
       ROLES,
-
+      defaults: null,
+      client: null,
       clientLessons: null,
     }
   },
@@ -157,8 +186,13 @@ export default {
     getCategoryDescription,
     getColorClass,
 
-    beforeOpen() {
+    beforeOpen(item_id, defaults, options) {
       this.clientLessons = null
+      this.client = null
+      this.defaults = defaults
+      axios.get(apiUrl(CLIENT_API_URL, defaults.client_id)).then(r => {
+        this.client = r.data
+      })
     },
 
     afterOpen(item_id, defaults, options) {
@@ -175,7 +209,11 @@ export default {
   computed: {
     readOnly() {
       return 'readOnly' in this.options
-    }
+    },
+
+    teacher() {
+      return this.getData('teachers', this.edit_mode ? this.item.teacher.id : this.defaults.teacher_id)
+    },
   },
 }
 </script>

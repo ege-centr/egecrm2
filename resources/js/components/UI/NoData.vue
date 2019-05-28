@@ -4,14 +4,13 @@
       'no-data_transparent': transparent === '',
       'no-data_square': square === '',
     }"
-    :style='{ height: `${ height }px` }'>
-    <div class='headline font-weight-bold'>
-      {{ title }}
+  >
+    <v-btn icon flat color='primary' v-if='add' @click.native='add'>
+      <v-icon>add</v-icon>
+    </v-btn>
+    <div v-else class='no-data__text'>
+      нет данных
     </div>
-    <div class='no-data__text' :class="{'pb-0': add === undefined}">
-      {{ text }}
-    </div>
-    <AddBtn v-if='add' @click.native='add' />
   </div>
 </template>
 
@@ -19,28 +18,10 @@
 
 export default {
   props: {
-    title: {
-      type: String,
-      default: 'Нет данных',
-      required: false,
-    },
-
-    text: {
-      type: String,
-      default: 'Данные отсутствуют. Вы можете добавить их',
-      required: false,
-    },
-
     add: {
       type: Function,
       required: false,
     },
-
-    height: {
-      type: Number,
-      default: 700,
-    },
-
     transparent: {
       type: String,
       required: false,
@@ -71,17 +52,19 @@ export default {
   background: #f6f7f8;
   width: 100%;
   border-radius: 4px;
+  height: 200px;
   &_square {
     background: white;
     border-radius: 0;
-    height: 300px !important;
+    height: 200px !important;
   }
   &_transparent {
     background: transparent;
+    height: 800px;
   }
   &__text {
-    padding: 10px 0 24px;
     max-width: 400px;
+    font-weight: 500;
   }
 }
 </style>

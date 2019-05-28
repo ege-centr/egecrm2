@@ -84,7 +84,7 @@
         this.loadBackground()
       } else {
         $('body').css({
-          background: '#337ab7'
+          backgroundImage: null
         })
       }
 
@@ -97,7 +97,7 @@
     },
 
     destroyed() {
-      $('body').css({'background': ''})
+      $('body').css({'background-image': ''})
     },
 
     methods: {
@@ -175,7 +175,7 @@
         let img = new Image
         img.addEventListener('load', () => {
           $('body').css({
-            background: this.background.url
+            backgroundImage: this.background.url
           })
           this.backgroundLoading = false
         })
@@ -191,6 +191,6 @@
   }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import "~sass/login";
 </style>

@@ -17,7 +17,7 @@
       v-else
       square
       :add='add'
-      :height='300'
+      :height='200'
       :class='config.elevationClass'
     />
   </div>

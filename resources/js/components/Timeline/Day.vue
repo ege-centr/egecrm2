@@ -16,17 +16,20 @@
               [currentClass]: item.is_current,
               [color]: color !== null,
               [`timeline__day__interval_${item.status}`]: item.status,
-              'timeline__day__interval_overlaps': overlaps(item, index),
+              'timeline__day__interval_overlaps': item.overlaps,
             }"
             :style="getGetStyle(item)"
           >
           </div>
         </template>
         <span>
-          <div v-if="showDate" class='text-sm-center font-weight-medium'>
+          <div v-if="showDate" class='font-weight-bold'>
             {{ item.date | date }}
           </div>
           {{ item.start }}–{{ item.end }}
+          <div v-if='item.overlaps' class='orange--text'>
+            {{ item.overlap_hint }}
+          </div>
         </span>
       </v-tooltip>
     </div>
@@ -116,9 +119,7 @@ export default {
     },
 
     // время пересекается с другим
-    overlaps(item, index) {
-      return item.overlaps === true
-      // Полагаемся только на бэкэнд
+    // overlaps(item, index) {
       // const range = this.getRange(item)
       // let overlaps = false
       // this.items.forEach((item2, index2) => {
@@ -127,7 +128,7 @@ export default {
       //   }
       // })
       // return overlaps
-    },
+    // },
   },
   
   computed: {

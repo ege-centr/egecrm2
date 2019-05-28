@@ -1,6 +1,7 @@
 <template>
   <v-select hide-details ref='select'
     :value="value"
+    :class='className'
     @input="admin_id => $emit('input', admin_id)"
     :items="$store.state.data.admins"
     :label="label"
@@ -29,6 +30,10 @@ export default {
     value: {
       required: true
     },
+    className: {
+      type: String,
+      default: '',
+    }
   },
 
   methods: {

@@ -109,7 +109,7 @@
       <div class='mb-4 mt-5 flex-items align-center' style='justify-content: space-between'>
         <div class='headline'>Праздники и экзамены</div>
         <div v-if='currentYearItems.length > 0'>
-          <AddBtn animated @click.native='add' />
+          <AddBtn @click.native='add' />
         </div>
       </div>
       
@@ -143,7 +143,7 @@
                 <NoData
                   v-else
                   transparent
-                  :height='300'
+                  :height='200'
                   :add='add'
                 />
               </v-flex>

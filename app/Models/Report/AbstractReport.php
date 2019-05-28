@@ -63,7 +63,8 @@ class AbstractReport extends Model
             ->where('client_lessons.client_id', $abstractReport->client_id)
             ->where('lessons.teacher_id', $abstractReport->teacher_id)
             ->where('groups.subject_id', $abstractReport->subject_id)
-            ->where('groups.year', $abstractReport->year);
+            ->where('groups.year', $abstractReport->year)
+            ->orderBy('lessons.date');
 
         if ($abstractReport->report_id === null) {
             return $query->where('lessons.date', '>=', $abstractReport->lesson_date);
@@ -107,9 +108,9 @@ class AbstractReport extends Model
                         ->on('reports.date', '>=', 'lessons.date');
                 })
                 ->selectRaw('
-                    reports.id as report_id, groups.year, groups.subject_id, lessons.teacher_id,
-                    client_lessons.grade_id, client_lessons.client_id, reports.is_available_for_parents,
-                    min(lessons.date) as lesson_date, reports.date as report_date
+                    reports.id as report_id, groups.year, groups.subject_id, lessons.teacher_id, reports.created_email_id,
+                    client_lessons.grade_id, client_lessons.client_id, reports.is_available_for_parents, reports.created_at,
+                    min(lessons.date) as lesson_date, reports.date as report_date, reports.price, reports.is_not_moderated
                 ')
                 ->groupBy('reports.id', 'client_lessons.client_id', 'lessons.teacher_id', 'groups.subject_id', 'groups.year');
         });

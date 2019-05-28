@@ -551,3 +551,34 @@ nav {
     justify-content: center !important;
   }
 }
+
+.v-alert {
+  & .v-icon {
+    align-self: flex-start !important;
+  }
+}
+
+.list_dashed {
+  list-style-type: none;
+  padding: 0;
+  & > li:before {
+    content: '– ';
+  }
+}
+
+.hide-bottom-border {
+  & .v-input__slot {
+    &::before {
+      content: none !important;
+    }
+  }
+}
+
+.v-btn_attach {
+  height: 32px !important; 
+  width: 32px !important; 
+  margin: 4px 0;
+  & .v-icon {
+    font-size: 20px !important;
+  }
+}

@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Http\Resources\User\UserWithPhotoResource;
 use App\Models\{Admin\Admin, Client\Client, Teacher, Email};
 use App\Utils\SessionService;
 
@@ -50,7 +49,7 @@ class User extends Model
             $user->class = trimModelClass($class);
             $user->entity_type = $class;
             $user->class_basename = class_basename($class);
-            return new UserWithPhotoResource($user);
+            return $user;
         }
         return null;
     }

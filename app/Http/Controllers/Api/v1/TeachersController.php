@@ -25,7 +25,7 @@ class TeachersController extends Controller
 
     public function store(Request $request)
     {
-        //
+
     }
 
     public function show($id)
@@ -35,7 +35,7 @@ class TeachersController extends Controller
 
     public function update(Request $request, $id)
     {
-        //
+        Teacher::findOrFail($id)->update($request->all());
     }
 
     public function destroy($id)

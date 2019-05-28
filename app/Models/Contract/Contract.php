@@ -77,6 +77,15 @@ class Contract extends Model
         return $query->whereRaw('id = (select max(c2.id) from contracts c2 where c2.number = contracts.number)');
     }
 
+    /**
+     * Получить последнюю цепь договора в рамках года
+     *
+     */
+    public function latest($query, $year)
+    {
+        return $query->where("number = (select max(c2.number) from contracts c2 where c2.client_id = contracts.client_id and c2.year = {$year})");
+    }
+
     public static function boot()
     {
         parent::boot();

@@ -148,7 +148,6 @@ export default {
         // ...this.getSort(),
       })).then(response => {
         this.loading = false
-        console.log(response)
         this.facets = 'facets' in response.data ? response.data.facets : null
         if (this.page === 1 || this.paginate === null) {
           this.data = response.data.data
@@ -256,10 +255,8 @@ export default {
 
     tabsWithData() {
       if (this.tabs) {
-        console.log(this.tabs, this.data)
         return tabsWithData(this.data)
       } else if (this.customTabs !== null) { 
-        console.log(this.customTabs, this.data)
         return _.omitBy(this.customTabs.data, (label, key) => {
           return this.data.findIndex(e => e[this.customTabs.field] === key) === -1
         })

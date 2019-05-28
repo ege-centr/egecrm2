@@ -35,8 +35,20 @@
               type="info"
               outline
               class='mx-3 mb-4'
+              style='width: fit-content'
             >
-              При проводке занятия отправляются СМС родителям отсутствующих и опоздавших учеников, а также начисляется оплата и бонусы
+              В момент проводки занятия автоматически происходит:
+              <ul class='list_dashed mt-3'>
+                <li>
+                  отправка СМС об опоздании или отсутствии ученика родителям
+                </li>
+                <li>
+                  отправка СМС с вашими комментариями родителям
+                </li>
+                <li>
+                  начисление оплаты и бонусов за проведенное занятие
+                </li>
+              </ul>
             </v-alert>
             <!-- ЗАНЯТИЕ ПРОВЕДЕНО -->
             <div wrap v-if="item.status === LESSON_STATUS.CONDUCTED">
@@ -250,8 +262,8 @@ export default {
         topic: this.item.topic,
         clients: this.item.groupClients
       }).then(r => {
-        this.conducting = false
-        this.item = r.data
+        // this.item = r.data
+        this.dialog = false
         this.$emit('updated')
       })
     },

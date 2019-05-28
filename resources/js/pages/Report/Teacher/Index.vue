@@ -9,6 +9,7 @@
         <ReportList 
           :display-options="{
             teacher: false, 
+            price: false,
             client: false,
             dimension: true,
             is_available_for_parents: false,

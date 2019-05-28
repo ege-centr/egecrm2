@@ -6,10 +6,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\Report\{Report, AbstractReport};
-use App\Models\Client\Client;
+use App\Models\{Client\Client, Teacher};
 use App\Http\Resources\Report\{AbstractReportCollection, ReportResource, ReportCollection};
 use App\Http\Resources\AlgoliaResult;
 use App\Http\Resources\Lesson\ClientLessonCollection;
+use User;
 
 class ReportsController extends Controller
 {
@@ -51,6 +52,9 @@ class ReportsController extends Controller
     public function update($id, Request $request)
     {
         $item = Report::find($id);
+        if (User::isTeacher() && $item->is_not_moderated) {
+            $request->merge(['is_not_moderated' => 0]);
+        }
         $item->update($request->all());
         return new ReportResource($item);
     }

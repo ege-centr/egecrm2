@@ -10,6 +10,9 @@
             <v-btn dark icon v-if='edit_mode' @click.native="destroy" :loading='destroying' class='mr-5'>
               <v-icon>delete</v-icon>
             </v-btn>
+            <v-btn dark icon v-if='edit_mode' @click.native='showSchedule = !showSchedule'>
+              <v-icon>view_week</v-icon>
+            </v-btn>
             <v-btn dark icon @click.native="storeOrUpdate" :loading='saving'>
               <v-icon>save_alt</v-icon>
             </v-btn>
@@ -58,11 +61,6 @@
                         </v-list-tile-title>
                       </v-list-tile>
                     </v-select>
-                    <div class='mt-1'>
-                      <a @click='showSchedule = !showSchedule'>
-                        {{ showSchedule ? 'cкрыть' : ' показать' }} расписание
-                      </a>
-                    </div>
                   </div>
                   <div class='vertical-inputs__input'>
                     <TeacherSelect v-model="item.teacher_id" only-active />

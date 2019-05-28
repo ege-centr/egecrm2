@@ -24,7 +24,7 @@ class Report extends Model
         'learning_ability_score', 'knowledge_score', 'homework_comment', 'activity_comment',
         'behavior_comment', 'learning_ability_comment', 'knowledge_comment', 'is_available_for_parents',
         'date', 'expected_score_from', 'expected_score_to', 'expected_score_max', 'recommendation',
-        'client_id', 'teacher_id', 'year'
+        'client_id', 'teacher_id', 'year', 'is_not_moderated', 'price'
     ];
 
     public function teacher()
@@ -35,6 +35,18 @@ class Report extends Model
     public function client()
     {
         return $this->belongsTo(Client::class);
+    }
+
+    public function getAbstractAttribute()
+    {
+        return (object)[
+            'client_id' => $this->client_id,
+            'subject_id' => $this->subject_id,
+            'teacher_id' => $this->teacher_id,
+            'year' => $this->year,
+            'report_id' => $this->id,
+            'report_date' => $this->date,
+        ];
     }
 
     private static function syncSearchable($id, bool $delete = false)
