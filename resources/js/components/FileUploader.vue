@@ -1,6 +1,6 @@
 <template>
   <div class='file-uploader'>
-    <LoadingChip v-for='(file, index) in init' :key='file.id' :file='file' @remove='removeFile(index)' />
+    <LoadingChip v-for="(file, index) in serverFiles" :key='file.id' :file='file' @remove='removeFile(index, true)' />
     <LoadingChip v-for="(file, index) in $upload.files('file').all" :key='file.$id' :file='file' @remove='removeFile(index)' />
     <v-btn @click='attach' flat fab small v-if="$upload.files('file').all.length < maxFiles" class='v-btn_attach'>
       <v-icon>attach_file</v-icon>
@@ -19,9 +19,7 @@ export default {
   props: {
     init: {
       type: Array,
-      default() {
-        return []
-      },
+      default: null,
     }
   },
 
@@ -33,6 +31,9 @@ export default {
   },
   
   created() {
+    if (this.init !== null) {
+      this.files = this.init
+    }
     this.$upload.on('file', {
       extensions: false,
       multiple: true,
@@ -71,7 +72,10 @@ export default {
       this.$upload.select('file')
     },
 
-    removeFile(index) {
+    removeFile(index, serverFile = false) {
+      if (!serverFile) {
+        index += this.serverFiles.length
+      }
       this.files.splice(index, 1)
       this.$emit('update:files', this.files)
     },
@@ -79,6 +83,12 @@ export default {
     cancelUpload() {
       this.$upload.reset('file')
     },
+  },
+
+  computed: {
+    serverFiles() {
+      return this.files.filter(e => e.id > 0)
+    }
   }
 }
 </script>

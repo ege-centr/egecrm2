@@ -93,7 +93,8 @@ export default {
       {
         icon: 'how_to_reg',
         route: 'VisitIndex',
-        label: 'Посещаемость'
+        label: 'Посещаемость',
+        counter: 'lessons'
       },
       {
         icon: 'chat',

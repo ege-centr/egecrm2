@@ -8,7 +8,7 @@
       </v-chip>
     </div>
     <v-chip close class='loading-chip__real' :class="{'loading-chip__real_loading': loading}" @input="close">
-      <span>{{ file.name | truncate(25) }}</span>
+      <span>{{ (file.original_name || file.name) | truncate(25) }}</span>
     </v-chip>
   </div>
 </template>
@@ -45,8 +45,6 @@ export default {
 
   computed: {
     loading() {
-      // return this.dev.loading
-      // return this.file.sending
       return ['progress', 'queue'].indexOf(this.file.state) !== -1
     }
   },

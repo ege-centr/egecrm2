@@ -45,7 +45,7 @@
           </v-container>
         </v-card-text>
 
-          <div v-if='!loading' class='flex-items align-center mt-3 task-attachments'>
+          <div v-if='!loading' class='flex-items align-center task-attachments'>
             <FileUploader v-if='dialog' :files.sync='item.files' :init='item.files' />
           </div>
       </v-card>
@@ -120,14 +120,15 @@ export default {
   }
 
   .task-text-editor {
-    & .quillWrapper {
-      height: 82vh !important;
+    & .quillWrapper  {
+      height: initial !important;
+    }
+    & .ql-container {
+        border-bottom: 1px solid #ccc !important;     
     }
   }
 
   .task-attachments {
-    position: absolute;
-    bottom: 8px;
-    left: 11px;
+    padding: 0 8px 20px;
   }
 </style>

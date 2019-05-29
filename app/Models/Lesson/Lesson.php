@@ -90,6 +90,13 @@ class Lesson extends Model
         return $query->where('status', '<>', LessonStatus::CANCELLED);
     }
 
+    public function scopeNotRegistered($query)
+    {
+        return $query
+            ->where('date', '<=', now()->format(DATE_FORMAT))
+            ->where('status', LessonStatus::PLANNED);
+    }
+
     /**
      * Высчитать бонус
      *

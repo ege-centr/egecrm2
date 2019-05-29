@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Database\Eloquent\Builder;
 use App\Models\{
     Request as ClientRequest,
+    Lesson\Lesson,
     Group\Group,
     Client\Client
 };
@@ -20,6 +21,7 @@ class CountersController extends Controller
             ClientRequest::class,
             Group::class,
             Client::class,
+            Lesson::class,
         ] as $class) {
             $table = (new $class)->getTable();
             $query = $class::query();
@@ -42,5 +44,10 @@ class CountersController extends Controller
     private function clients(Builder &$query)
     {
         return $query;
+    }
+
+    private function lessons(Builder &$query)
+    {
+        return $query->notRegistered();
     }
 }

@@ -30,12 +30,9 @@ export default {
         }
       },
       toolbar: [
-        [{ 'size': [false, 'large', 'huge'] }],  // custom dropdown
         ['bold', 'italic', 'underline'],
         [{ 'color': [] }, { 'background': [] }],
         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-        ['link', 'image'],
-        // ['image', 'code-block']
       ],
     }
   },

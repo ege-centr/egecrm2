@@ -23,12 +23,12 @@ class TasksController extends Controller
 
     public function store(Request $request)
     {
-        $model = Task::create($request->all());
+        $item = Task::create($request->all());
         foreach($request->input('files') as $file) {
-            $model->files()->create($file);
+            $item->files()->create($file);
         }
-        $model->save();
-        return $model;
+        $item->save();
+        return $item;
     }
 
     public function show($id)
@@ -38,7 +38,13 @@ class TasksController extends Controller
 
     public function update(Request $request, $id)
     {
-        Task::find($id)->update($request->all());
+        $item = Task::find($id);
+        $item->files()->delete();
+        foreach($request->input('files') as $file) {
+            $item->files()->create($file);
+        }
+        $item->update($request->all());
+        return $item;
     }
 
     public function destroy($id)
