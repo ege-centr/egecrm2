@@ -45,21 +45,23 @@ class BalanceController extends Controller
             $reports = app()->call('App\Http\Controllers\Api\v1\ReportsController@index');
             $reports = jsonRedecode($reports)->data;
             foreach($reports as $report) {
-                $comment = sprintf(
-                    'Отчет по %s по ученику %s',
-                    Subject::getTitle($report->subject_id, 'dative'),
-                    Client::find($report->client_id)->default_name
-                );
+                if ($report->price > 0) {
+                    $comment = sprintf(
+                        'Отчет по %s по ученику %s',
+                        Subject::getTitle($report->subject_id, 'dative'),
+                        Client::find($report->client_id)->default_name
+                    );
 
-                $items[] = [
-                    'sum' => $report->price,
-                    'bonus' => 0,
-                    'comment' => $comment,
-                    'date' => $report->report_date,
-                    'year' => $report->year,
-                    'user' => new PersonResource(Email::getUser($report->created_email_id)),
-                    'created_at' => $report->created_at,
-                ];
+                    $items[] = [
+                        'sum' => $report->price,
+                        'bonus' => 0,
+                        'comment' => $comment,
+                        'date' => $report->report_date,
+                        'year' => $report->year,
+                        'user' => $report->created_email_id ? new PersonResource(Email::getUser($report->created_email_id)) : null,
+                        'created_at' => $report->created_at,
+                    ];
+                }
             }
         } else {
             $clientLessons = app()->call('App\Http\Controllers\Api\v1\ClientLessonsController@index');
