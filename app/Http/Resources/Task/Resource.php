@@ -9,7 +9,7 @@ class Resource extends JsonResource
     public function toArray($request)
     {
         return array_merge(parent::toArray($request), [
-            'attachments' => $this->attachments ?? [],
+            'files' => $this->files,
             'createdUser' => new \PersonResource($this->createdUser)
         ]);
     }

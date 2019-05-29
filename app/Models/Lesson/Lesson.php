@@ -73,7 +73,6 @@ class Lesson extends Model
     public function getIsNotRegisteredAttribute()
     {
         return $this->date < now()->format(DATE_FORMAT)
-            && $this->date > now()->sub(new \DateInterval('P10D'))
             && $this->status !== LessonStatus::CANCELLED
             && $this->status !== LessonStatus::CONDUCTED;
     }

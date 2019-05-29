@@ -57,7 +57,7 @@
         <td v-if='show.is_available_for_parents'>
           <v-icon color='red' v-if='item.is_not_moderated'>remove_circle</v-icon>
           <v-icon color='green' v-if='item.is_available_for_parents'>done_all</v-icon>
-          <v-icon color='primary' v-if='!item.is_available_for_parents && !item.is_not_moderated'>schedule</v-icon>
+          <v-icon color='primary' v-if='item.report !== null && !item.is_available_for_parents && !item.is_not_moderated'>schedule</v-icon>
         </td>
         <td class='text-md-right pa-0' width='100' v-if='show.actions'>
           <v-btn small color='primary' class='btn-td' flat

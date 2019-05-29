@@ -12,7 +12,7 @@ export const STATUSES = [
 
 export const MODEL_DEFAULTS = {
   text: '',
-  attachments: [],
+  files: [],
   status: STATUSES[0].value
 }
 

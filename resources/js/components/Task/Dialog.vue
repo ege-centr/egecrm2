@@ -46,19 +46,7 @@
         </v-card-text>
 
           <div v-if='!loading' class='flex-items align-center mt-3 task-attachments'>
-            <v-chip close v-for='(attachment, index) in item.attachments' :key='index' @input='remove(index)'>
-              <span v-if="typeof(attachment) === 'object'">{{ attachment.original_name }}</span>
-              <span v-else>{{ attachment }}</span>
-            </v-chip>
-            <v-chip v-if='uploading_file_name !== null'>
-              <span class='grey--text darken-5'>
-                загрузка {{ uploading_file_name }}...
-              </span>
-            </v-chip>
-            <v-btn @click='attach' :loading='uploading_file_name !== null' flat fab small class='v-btn_attach'>
-              <v-icon>attach_file</v-icon>
-            </v-btn>
-            <span v-if='uploading_error' class='error--text'>размер файла больше 20мб</span>
+            <FileUploader v-if='dialog' :files.sync='item.files' :init='item.files' />
           </div>
       </v-card>
     </v-dialog>
@@ -70,12 +58,13 @@
 import { API_URL, STATUSES, MODEL_DEFAULTS } from './'
 import { DialogMixin } from '@/mixins'
 import { AdminSelect, TextEditor } from '@/components/UI'
+import FileUploader from '@/components/FileUploader'
 
 
 export default {
   mixins: [ DialogMixin ],
 
-  components: { AdminSelect, TextEditor },
+  components: { AdminSelect, TextEditor, FileUploader },
 
   data() {
     return {
@@ -84,6 +73,7 @@ export default {
       STATUSES,
       uploading_file_name: null,
       uploading_error: false,
+      maxFiles: 30,
     }
   },
 
@@ -115,16 +105,6 @@ export default {
       }
     },
   },
-
-  methods: {
-    attach() {
-      this.$upload.select('file')
-    },
-
-    remove(index) {
-      this.item.attachments.splice(index, 1)
-    },
-  }
 }
 </script>
 

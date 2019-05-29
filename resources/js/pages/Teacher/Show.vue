@@ -78,7 +78,7 @@
           Комментарии
         </v-tab>
         <v-tab>
-          Авторизация
+          Логи
         </v-tab>
       </v-tabs>
       <v-tabs-items v-model="tabs">
@@ -154,7 +154,7 @@
 
         <!-- Отчёты -->
         <v-tab-item>
-          <v-switch class='ma-0 justify-end'
+          <v-switch class='ma-0 justify-end' style='position: absolute; right: 6px; padding-top: 9px'
             label="ограничение по начислению бонусов"
             color='red'
             hide-details

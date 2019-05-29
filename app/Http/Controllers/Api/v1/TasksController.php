@@ -24,9 +24,9 @@ class TasksController extends Controller
     public function store(Request $request)
     {
         $model = Task::create($request->all());
-        $model->attachments = array_map(function($e) {
-            return $e['filename'];
-        }, $request->attachments);
+        foreach($request->input('files') as $file) {
+            $model->files()->create($file);
+        }
         $model->save();
         return $model;
     }
