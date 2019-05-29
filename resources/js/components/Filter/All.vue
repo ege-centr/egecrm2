@@ -5,7 +5,8 @@
       origin="center center"
       transition="scale-transition"
       :close-on-content-click='false'
-      v-model="used_filter_menu[filter.item.field]"
+      v-model="usedFilterMenu[filter.item.field]"
+      @click.native="$emit('usedFilterClick', filter.item.field)"
     >
       <v-chip slot='activator'>
         {{ filter.item.label }}: {{ getSelectedLabel(filter) }}
@@ -23,7 +24,8 @@
         :is="getTypeComponentName(filter.item)" 
         :item='filter.item' 
         :filter-value='filter.value' 
-        v-if='used_filter_menu[filter.item.field]' 
+        v-if='usedFilterMenu[filter.item.field]' 
+        :facet='usedFilterFacets'
       />
       <!-- <SelectFilterDialog 
         :item='filter.item' 
@@ -113,6 +115,11 @@ export default {
       default: null
     },
 
+    usedFilterFacets: {
+      type: Object,
+      default: null,
+    },
+
     // sort: {
     //   type: Object,
     //   required: false,
@@ -143,17 +150,9 @@ export default {
       item: null,
       value: null,
       menu: false,
-      used_filter_menu: {},
+      usedFilterMenu: {},
     }
   },
-
-  // watch: {
-  //   menu(newVal, oldVal) {
-  //     if (newVal === false && oldVal === true) {
-  //       setTimeout(() => this.back(), 500)
-  //     }
-  //   }
-  // },
 
   methods: {
     // 1 стадия выбора фильтра
@@ -172,7 +171,7 @@ export default {
       }
       this.emit()
       this.menu = false
-      this.used_filter_menu = {}
+      this.usedFilterMenu = {}
     },
 
     close(index) {

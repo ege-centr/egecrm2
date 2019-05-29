@@ -19,7 +19,9 @@
         :pre-installed='preInstalledFilters' 
         :sort='sort' 
         :facets='facets'
+        :used-filter-facets='usedFilterFacets'
         @updated='filtersUpdated'
+        @usedFilterClick='(filter) => loadData(null, filter)'
       />
       <v-spacer></v-spacer>
       <slot name='buttons' v-if='items.length > 0'></slot>
@@ -128,6 +130,7 @@ export default {
       data: [],
       selectedTab: null,
       facets: null,
+      usedFilterFacets: null,
     }
   },
 
@@ -138,53 +141,65 @@ export default {
   },
 
   methods: {
-    loadData(state) {
+    // usedFilter если установлен, то перезагружать данные не надо,
+    // а только recount фасетов сделать без учета этого фильтрас
+    loadData(state, usedFilter = null) {
+      let filters = this.current_filters
+      if (usedFilter !== null) {
+        this.usedFilterFacets = null
+        filters = _.omitBy(filters, (e, key) => key === usedFilter)
+      }
       axios.get(apiUrl(this.apiUrl) + queryString({
         page: this.page,
         paginate: this.paginate || '',
         ...this.options,
-        ...this.current_filters,
+        ...filters,
         ...this.invisibleFilters,
         // ...this.getSort(),
       })).then(response => {
         this.loading = false
-        this.facets = 'facets' in response.data ? response.data.facets : null
-        if (this.page === 1 || this.paginate === null) {
-          this.data = response.data.data
-          if (this.tabs && this.tabsWithData.length > 0) {
-            this.selectedTab = this.tabsWithData.slice(-1)[0].id
-          }
-          if (this.customTabs !== null && Object.keys(this.tabsWithData).length > 0) {
-            this.selectedTab = Object.keys(this.tabsWithData)[0]
-          }
+        const facets = 'facets' in response.data ? response.data.facets : null
+        if (usedFilter !== null) {
+          this.usedFilterFacets = facets[usedFilter]
         } else {
-          this.data.push(...response.data.data)
-        }
-        if (this.paginate !== null) {
-          if (response.data.meta.current_page === response.data.meta.last_page) {
-            colorLog('COMPLETE', 'Turquoise')
-            state.complete()
+          this.facets = facets
+          if (this.page === 1 || this.paginate === null) {
+            this.data = response.data.data
+            if (this.tabs && this.tabsWithData.length > 0) {
+              this.selectedTab = this.tabsWithData.slice(-1)[0].id
+            }
+            if (this.customTabs !== null && Object.keys(this.tabsWithData).length > 0) {
+              this.selectedTab = Object.keys(this.tabsWithData)[0]
+            }
           } else {
-            colorLog('LOADED', 'PaleVioletRed')
-            state.loaded()
+            this.data.push(...response.data.data)
           }
-          this.page++
+          if (this.paginate !== null) {
+            if (response.data.meta.current_page === response.data.meta.last_page) {
+              colorLog('COMPLETE', 'Turquoise')
+              state.complete()
+            } else {
+              colorLog('LOADED', 'PaleVioletRed')
+              state.loaded()
+            }
+            this.page++
+          }
+          // } else {
+          //   colorLog('COMPLETE2', 'Turquoise')
+          //   state.complete()
+          // }
+          // if (this.paginate !== null) {
+          //   if (response.data.meta.current_page >= response.data.meta.last_page) {
+          //     colorLog('COMPLETE', 'Turquoise')
+          //     this.$refs.InfiniteLoading.stateChanger.complete()
+          //   } else {
+          //     colorLog('LOADED', 'PaleVioletRed')
+          //     this.$refs.InfiniteLoading.stateChanger.loaded()
+          //   }
+          //   this.page++
+          // }
+          this.loading = false
         }
-        // } else {
-        //   colorLog('COMPLETE2', 'Turquoise')
-        //   state.complete()
-        // }
-        // if (this.paginate !== null) {
-        //   if (response.data.meta.current_page >= response.data.meta.last_page) {
-        //     colorLog('COMPLETE', 'Turquoise')
-        //     this.$refs.InfiniteLoading.stateChanger.complete()
-        //   } else {
-        //     colorLog('LOADED', 'PaleVioletRed')
-        //     this.$refs.InfiniteLoading.stateChanger.loaded()
-        //   }
-        //   this.page++
-        // }
-        this.loading = false
       })
     },
 

@@ -46,9 +46,9 @@ class GroupsController extends Controller
 
     public function store(Request $request)
     {
-        return new GroupResource(
-            Group::create($request->input())
-        );
+        $item = Group::create($request->input());
+        usleep(250000);
+        return new GroupResource($item);
     }
 
     public function show($id)
@@ -58,14 +58,15 @@ class GroupsController extends Controller
 
     public function update(Request $request, $id)
     {
-        $model = Group::find($id);
-        $model->update($request->all());
-
-        return new GroupResource($model);
+        $item = Group::find($id);
+        $item->update($request->all());
+        usleep(250000);
+        return new GroupResource($item);
     }
 
     public function destroy($id)
     {
-        //
+        Group::find($id)->delete();
+        usleep(250000);
     }
 }

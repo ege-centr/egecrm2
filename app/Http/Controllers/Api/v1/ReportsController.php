@@ -46,6 +46,7 @@ class ReportsController extends Controller
     public function store(Request $request)
     {
         $item = Report::create($request->all());
+        usleep(250000);
         return new ReportResource($item);
     }
 
@@ -56,12 +57,14 @@ class ReportsController extends Controller
             $request->merge(['is_not_moderated' => 0]);
         }
         $item->update($request->all());
+        usleep(250000);
         return new ReportResource($item);
     }
 
     public function destroy($id)
     {
         Report::find($id)->delete();
+        usleep(250000);
     }
 
     public function clientLessons(Request $request)
