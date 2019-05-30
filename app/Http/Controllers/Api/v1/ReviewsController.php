@@ -42,7 +42,6 @@ class ReviewsController extends Controller
         foreach($request->comments as $comment) {
             $review->comments()->create($comment);
         }
-        usleep(250000);
         return new ReviewResource($review->fresh());
     }
 
@@ -67,13 +66,11 @@ class ReviewsController extends Controller
             Client::find($review->client_id)->update(['reviewer_admin_id' => $request->reviewer_admin_id]);
         }
 
-        usleep(250000);
         return new ReviewResource($review);
     }
 
     public function destroy($id)
     {
         Review::find($id)->delete();
-        usleep(250000);
     }
 }

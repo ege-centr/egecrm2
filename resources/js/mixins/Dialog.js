@@ -48,7 +48,7 @@ export default {
     destroy() {
       this.destroying = true
       axios.delete(apiUrl(this.API_URL, this.item.id)).then(r => {
-        this.$emit('updated')
+        this.emitUpdated()
         this.dialog = false
         this.waitForDialogClose(() => this.destroying = false)
       })
@@ -61,10 +61,18 @@ export default {
       } else {
         await axios.post(apiUrl(this.API_URL), this.item).then(r => this.item = r.data)
       }
-      this.$emit('updated', this.item)
-      colorLog("Emitting updated", 'Turquoise')
+      this.emitUpdated(this.item)
       this.dialog = false
       this.waitForDialogClose(() => this.saving = false)
+    },
+
+    // надо передавать с небольшой задержкой, 
+    // потому что иногда подтягиваются старые данные
+    // (наблюдается диссинхрон: обновление сущносить -> reload -> отдаются старые данные)
+    emitUpdated(item = null) {
+      setTimeout(() => {
+        this.$emit('updated', item)
+      }, 200);
     }
   }
 }
