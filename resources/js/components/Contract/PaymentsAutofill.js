@@ -2,13 +2,10 @@ const today = moment()
 const dateFormat = 'YYYY-MM-DD'
 
 export default class PaymentsAutofill {
-  constructor(paymentCount, lessonCount, discountedSum, today) {
-    // удалить это после дебага
-    // и заменить this.today на today
-    this.today = moment(today)
+  constructor(paymentCount, lessonCount, discountedSum) {
     this.paymentCount = paymentCount
     this.lessonCount = lessonCount
-    this.year = Number(this.today.format('YYYY'))
+    this.year = Number(today.format('YYYY'))
     
     this.pricePerLesson = Math.round(discountedSum / lessonCount)
     this.lessonsPerPayment = Math.floor(lessonCount / paymentCount)
@@ -29,7 +26,7 @@ export default class PaymentsAutofill {
           break
   
         case 2:
-          switch(Number(this.today.format('M'))) {
+          switch(Number(today.format('M'))) {
             case 12: 
               paymentDates = [`${this.year + 1}-03-14`]
               break
@@ -64,14 +61,14 @@ export default class PaymentsAutofill {
             } else {
               paymentDates = []
               _.times(this.paymentCount - 1, (n) => {
-                paymentDates.push(this.today.clone().add(n + 1, 'month').format(dateFormat))
+                paymentDates.push(today.clone().add(n + 1, 'month').format(dateFormat))
               })
             }
       }
   
       if (paymentDates !== null) {
         // добавляем нынчашнюю дату. первый платеж всегда нынче
-        paymentDates.unshift(this.today.format(dateFormat))
+        paymentDates.unshift(today.format(dateFormat))
   
         return paymentDates.map((date, index) => {
           return {
@@ -97,7 +94,7 @@ export default class PaymentsAutofill {
   }
 
   todayIsBetween(start, end) {
-    const date = this.today.format('MM-DD')
+    const date = today.format('MM-DD')
     return (date >= start && date <= end)
   }
 }

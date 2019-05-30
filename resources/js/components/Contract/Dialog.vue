@@ -88,7 +88,6 @@
 
               <!-- ПЛАТЕЖИ -->
               <v-flex md4>
-                <DatePicker class='mb-5' label="Сегодняшняя дата (для дебага)" v-model='todayDate' />
                 <v-data-table
                   class='relative-table'
                   :headers="[
@@ -235,23 +234,20 @@ import {
 import Settings from '@/other/settings'
 import { DatePicker, DataSelect } from '@/components/UI'
 import PaymentsAutofill from './PaymentsAutofill'
+import { DialogMixin } from '@/mixins'
 
 export default {
+  mixins: [ DialogMixin ],
+
   components: { DataSelect, DatePicker },
 
   data() {
     return {
+      API_URL,
+      MODEL_DEFAULTS,
       DISCOUNTS,
       SUBJECT_STATUS,
-      dialog: false,
-      saving: false,
-      item: null,
-      edit_mode: false,
-      loading: true,
-      edit_mode: true,
-      destroying: false,
       recommendedPrices: null,
-      todayDate: moment().format('YYYY-MM-DD'),
     }
   },
 
@@ -260,18 +256,6 @@ export default {
   },
 
   methods: {
-    open(item_id = null, defaults = {}) {
-      this.dialog = true
-      if (item_id !== null) {
-        this.edit_mode = true
-        this.loadData(item_id)
-      } else {
-        this.edit_mode = false
-        this.item = {...MODEL_DEFAULTS, ...defaults }
-        this.loading = false
-      }
-    },
-
     async addVersion(item_id) {
       this.dialog = true
       this.edit_mode = false
@@ -338,40 +322,6 @@ export default {
         }
       }
     },
-
-    async loadData(item_id) {
-      this.loading = true
-      axios.get(apiUrl(API_URL, item_id)).then(r => {
-        this.item = r.data
-        this.loading = false
-      })
-    },
-
-    destroy() {
-      this.destroying = true
-      axios.delete(apiUrl(API_URL, this.item.id)).then(r => {
-        this.$emit('updated')
-        this.dialog = false
-        this.waitForDialogClose(() => this.destroying = false)
-      })
-    },
-
-    async storeOrUpdate() {
-      this.saving = true
-      if (this.item.id) {
-        await axios.put(apiUrl(API_URL, this.item.id), this.item).then(r => {
-          this.item = r.data
-          this.$emit('updated', this.item)
-        })
-      } else {
-        await axios.post(apiUrl(API_URL), this.item).then(r => {
-          this.item = r.data
-          this.$emit('updated', this.item)
-        })
-      }
-      this.dialog = false
-      this.waitForDialogClose(() => this.saving = false)
-    },
   },
 
   computed: {
@@ -400,8 +350,7 @@ export default {
       const paymentsAutofill = new PaymentsAutofill(
         this.item.payments.length, 
         this.lessonCount,
-        this.discountedSum,
-        this.todayDate
+        this.discountedSum
       )
       return paymentsAutofill.getPayments()
     }
@@ -410,16 +359,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  $vertical-input-width: 500px;
-
-  // .vertical-inputs__input {
-  //   width: $vertical-input-width;
-  //    & .v-input {
-  //     width: $vertical-input-width;
-  //    }
-  // }
-
   .contract-payment {
-    width: $vertical-input-width;
+    width: 500px;
   }
 </style>
