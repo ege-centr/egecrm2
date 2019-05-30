@@ -41,7 +41,7 @@ class PaymentsController extends Controller
         ]);
 
         $this->filter($request, $query);
-        $result = new AlgoliaResult($query->paginateRaw($request->paginate));
+        $result = new AlgoliaResult($query->paginateRaw($request->paginate ?: SHOW_ALL));
         $result->getCollection()->transform(function ($items, $key) {
             if ($key === 'hits') {
                 foreach($items as &$item) {

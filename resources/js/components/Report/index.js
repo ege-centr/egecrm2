@@ -2,10 +2,6 @@ import store from '@/store'
 
 export const API_URL = 'reports'
 
-export const MODEL_DEFAULTS = {
-
-}
-
 export const FILTERS = [
   {label: 'Год', field: 'year', type: 'multiple', options: store.state.data.years},
   {label: 'Преподаватель', field: 'teacher_id', type: 'multiple', options: store.state.data.teachers, textField: 'names.abbreviation'},
@@ -25,6 +21,12 @@ export const CATEGORY = {
   learningAbility: 'learning_ability',
   knowledge: 'knowledge',
 }
+
+
+let modelDefaults = {}
+Object.values(CATEGORY).forEach(value => modelDefaults[value + '_score'] = 0)
+
+export const MODEL_DEFAULTS = modelDefaults
 
 export const getCategoryTitle = function(category) {
   switch(category) {

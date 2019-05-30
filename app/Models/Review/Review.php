@@ -4,9 +4,12 @@ namespace App\Models\Review;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Client\Client;
+use App\Traits\HasAbstract;
 
 class Review extends Model
 {
+    use HasAbstract;
+
     protected $fillable = [
         'teacher_id', 'client_id', 'subject_id', 'grade_id',
         'signature', 'expressive_title', 'score', 'max_score',
@@ -21,42 +24,5 @@ class Review extends Model
     public function client()
     {
         return $this->belongsTo(Client::class);
-    }
-
-    private static function syncSearchable($id, bool $delete = false)
-    {
-        $model = AbstractReview::where('reviews.id', $id)->first();
-        if ($delete) {
-            $model->unsearchable();
-        } else {
-            $model->searchable();
-        }
-    }
-
-    public static function boot()
-    {
-        parent::boot();
-
-        static::saved(function ($model) {
-            self::syncSearchable($model->id);
-        });
-
-        static::created(function ($model) {
-            // TODO: не находится по
-            // App\Models\Review\AbstractReview::search()->where('client_id', 35019)->get();
-            // а через paginateRaw находится
-            // AbstractReview::search()
-            //     ->where('client_id', $model->client_id)
-            //     ->where('teacher_id', $model->teacher_id)
-            //     ->where('subject_id', $model->subject_id)
-            //     ->where('year', $model->year)
-            //     ->first()
-            //     ->unsearchable();
-            self::syncSearchable($model->id);
-        });
-
-        static::deleting(function ($model) {
-            self::syncSearchable($model->id, true);
-        });
     }
 }

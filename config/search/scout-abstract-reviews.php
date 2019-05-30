@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'searchableAttributes' => ['client_id'],
+    'searchableAttributes' => ['id'],
 
     'attributesForFaceting' => [
         'teacher_id',
@@ -10,6 +10,7 @@ return [
         'client_rating',
         'admin_rating',
         'final_rating',
-        'filterOnly(client_id)'
+        'filterOnly(client_id)',
+        'filterOnly(objectID)',
     ]
 ];

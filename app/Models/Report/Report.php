@@ -4,12 +4,12 @@ namespace App\Models\Report;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\{ Teacher, Client\Client };
-use App\Traits\HasCreatedEmail;
+use App\Traits\HasAbstract;
 use User;
 
 class Report extends Model
 {
-    use HasCreatedEmail;
+    use HasAbstract;
 
     const CATEGORIES = [
         'homework' => 'Выполнение домашнего задания',
@@ -47,32 +47,5 @@ class Report extends Model
             'report_id' => $this->id,
             'report_date' => $this->date,
         ];
-    }
-
-    private static function syncSearchable($id, bool $delete = false)
-    {
-        $model = AbstractReport::search()->where('report_id', $id)->first();
-        if ($delete) {
-            $model->unsearchable();
-        } else {
-            $model->searchable();
-        }
-    }
-
-    public static function boot()
-    {
-        parent::boot();
-
-        static::saved(function ($model) {
-            self::syncSearchable($model->id);
-        });
-
-        static::created(function ($model) {
-            self::syncSearchable($model->id);
-        });
-
-        static::deleting(function ($model) {
-            self::syncSearchable($model->id, true);
-        });
     }
 }
