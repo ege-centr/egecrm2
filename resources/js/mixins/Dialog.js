@@ -72,7 +72,7 @@ export default {
     emitUpdated(item = null) {
       setTimeout(() => {
         this.$emit('updated', item)
-      }, 200);
+      }, 300);
     }
   }
 }
