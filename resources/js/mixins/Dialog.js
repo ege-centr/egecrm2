@@ -70,9 +70,7 @@ export default {
     // потому что иногда подтягиваются старые данные
     // (наблюдается диссинхрон: обновление сущносить -> reload -> отдаются старые данные)
     emitUpdated(item = null) {
-      setTimeout(() => {
-        this.$emit('updated', item)
-      }, 300);
+      this.$emit('updated', item)
     }
   }
 }
