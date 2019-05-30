@@ -11,6 +11,10 @@ class Payment extends Model
 {
     use HasCreatedEmail, Searchable;
 
+    protected $casts = [
+        'entity_id' => 'integer',
+    ];
+
     protected $fillable = [
         'category', 'type', 'method', 'date', 'sum', 'year', 'entity_type', 'entity_id', 'card_number', 'is_confirmed', 'bill_number'
     ];

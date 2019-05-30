@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\{Group\Group, Cabinet, Teacher, Admin\Admin, Email};
 use App\Traits\HasCreatedEmail;
 use App\Models\Factory\Grade;
+use App\Events\CountersUpdated;
+use User;
 
 class Lesson extends Model
 {
@@ -169,5 +171,29 @@ class Lesson extends Model
          * То есть в данном случае он просто = 0
          */
         return $bonus < 0 ? 0 : $bonus;
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        static::creating(function($model) {
+            if (User::loggedIn()) {
+                $model->created_email_id = User::emailId();
+            }
+        });
+
+        static::created(function ($model) {
+            event(new CountersUpdated());
+        });
+
+        static::updated(function ($model) {
+            event(new CountersUpdated());
+            logger('updated');
+        });
+
+        static::deleted(function ($model) {
+            event(new CountersUpdated());
+        });
     }
 }

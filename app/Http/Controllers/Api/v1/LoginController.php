@@ -35,7 +35,7 @@ class LoginController extends Controller
         # проверка пароля
         $query->where('password', Email::toPassword($credentials->password));
         if (! $query->exists()) {
-            self::authLog('неверный пароль');
+            self::authLog('неверный пароль', ['email' => $credentials->login]);
             return self::errorResponse('неверный пароль');
         }
 

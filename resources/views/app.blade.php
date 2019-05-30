@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="{{ app()->environment('local') ? mix('css/app.css') : config('app.spaces-url') . 'css/app.css' }}">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="icon" type="image/png" href="/favicon.png">
-    <script src="https://js.pusher.com/4.3/pusher.min.js"></script>
+    <script src="https://js.pusher.com/4.4/pusher.min.js"></script>
 </head>
 <body>
     <div id="app">

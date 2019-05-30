@@ -11,7 +11,7 @@
       <slot :item='item' :index='index'></slot>
     </template>
     <template slot='no-data'>
-      <NoData transparent :height='200' />
+      <NoData square :height='200' />
     </template>
     <template slot='footer' v-if='$slots.footer'>
       <slot name='footer'></slot>

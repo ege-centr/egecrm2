@@ -11,6 +11,5 @@ return [
         'admin_rating',
         'final_rating',
         'filterOnly(client_id)',
-        'filterOnly(objectID)',
     ]
 ];

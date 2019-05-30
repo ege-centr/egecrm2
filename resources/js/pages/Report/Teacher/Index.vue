@@ -6,17 +6,11 @@
       :api-url='API_URL' 
     >
       <template slot='items' slot-scope='{ items }'>
-        <ReportList 
-          :display-options="{
-            teacher: false, 
-            price: false,
-            client: false,
-            dimension: true,
-            is_available_for_parents: false,
-          }" 
-          :items='items' 
-          v-if='items.length > 0'
-        />
+         <ReportList 
+            v-if='items.length > 0' 
+            :items='items'
+            @updated='$refs.DisplayData.reloadData()'
+          />
         <NoData
           v-else
           transparent

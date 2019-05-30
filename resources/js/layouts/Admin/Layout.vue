@@ -29,9 +29,24 @@ export default {
   components: { Menu, SearchBar, ToggleDrawer },
 
   created() {
-    axios.get(apiUrl('counters')).then(r => {
-      this.$store.commit('setCounters', r.data)
-    })
+    this.updateCounters()
+    this.initPusher()
   },
+
+  methods: {
+    updateCounters() {
+      axios.get(apiUrl('counters')).then(r => {
+        this.$store.commit('setCounters', r.data)
+      })
+    },
+
+    initPusher() {
+      const pusher = new Pusher(process.env.MIX_PUSHER_APP_KEY, {
+        cluster: 'eu'
+      })
+      const channel = pusher.subscribe('app')
+      channel.bind("App\\Events\\CountersUpdated", () => this.updateCounters())
+    }
+  }
 }
 </script>
