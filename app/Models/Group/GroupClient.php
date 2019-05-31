@@ -8,7 +8,8 @@ class GroupClient extends Model
 {
     const DISABLE_LOGS = true;
 
-    protected $touches = ['group'];
+    // не работает с удалением
+    // protected $touches = ['group'];
 
     public $timestamps = false;
     protected $fillable = ['group_id', 'client_id'];

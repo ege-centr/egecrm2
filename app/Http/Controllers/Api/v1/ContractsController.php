@@ -77,6 +77,6 @@ class ContractsController extends Controller
 
     public function destroy($id)
     {
-        Contract::destroy($id);
+        Contract::find($id)->delete();
     }
 }
