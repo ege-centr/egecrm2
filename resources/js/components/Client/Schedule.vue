@@ -90,13 +90,19 @@
               <td>
                 <v-tooltip bottom v-if='item.status === LESSON_STATUS.CONDUCTED && item.clientLesson && item.clientLesson.comment'>
                   <v-icon class='cursor-default' slot='activator'>comment</v-icon>
-                  <span>{{ item.clientLesson.comment }}</span>
+                  <span>
+                    <h4>Комментарий</h4>
+                    {{ item.clientLesson.comment }}
+                  </span>
                 </v-tooltip>
               </td>
               <td>
                 <v-tooltip bottom v-if='item.status === LESSON_STATUS.CONDUCTED && item.topic'>
                   <v-icon class='cursor-default' slot='activator'>chrome_reader_mode</v-icon>
-                  <span>{{ item.topic }}</span>
+                  <span>
+                    <h4>Тема занятия</h4>
+                    {{ item.topic }}
+                  </span>
                 </v-tooltip>
               </td>
               <td>
@@ -296,7 +302,7 @@ export default {
           date = item.report.date
         }
       })
-      return date
+      return moment(date).add(1, 'day').format('YYYY-MM-DD')
     }
   },
 }

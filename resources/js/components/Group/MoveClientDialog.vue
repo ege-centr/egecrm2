@@ -20,7 +20,11 @@
           <v-container v-else grid-list-xl class="pa-0 ma-0 mt-3" fluid>
             <v-layout wrap>
               <v-flex md12>
-                <GroupList :items='groups' :selectable='true' :selected_group_id.sync='selected_group_id' />
+                <GroupList 
+                  :items='groups' 
+                  :selectable='true' 
+                  :selected_group_id.sync='selected_group_id' 
+                />
               </v-flex>
             </v-layout>
           </v-container>
@@ -77,7 +81,8 @@ export default {
         filters.group_id = this.group_id
       }
       axios.get(apiUrl(API_URL) + queryString(filters)).then(r => {
-        this.groups = r.data.data
+        // исключаем из ответа сервера группы, в которых ученик уже присутствует
+        this.groups = r.data.data.filter(e => !e.client_ids.includes(this.clientId))
         this.loading = false
       })
     },

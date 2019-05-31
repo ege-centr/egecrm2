@@ -130,21 +130,25 @@
               </v-layout>
 
               <v-layout wrap class='px-3'>
-                <v-flex md3 class='pb-0' v-if='$store.state.user.class === ROLES.ADMIN'>
-                  <v-switch color='red' v-model="item.is_not_moderated" label="модерация не пройдена"></v-switch>
-                </v-flex>
-                <v-flex md3 class='pb-0' v-if='$store.state.user.class === ROLES.ADMIN'>
-                  <v-switch color='green' v-model="item.is_available_for_parents" label="сделать отчет доступным для родителя"></v-switch>
-                </v-flex>
-                <v-flex md3 v-if='$store.state.user.class === ROLES.ADMIN'>
-                  <v-text-field
-                    hide-details
-                    label='Цена'
-                    v-model='item.price'
-                  />
-                </v-flex>
-                <v-flex md3 class='pb-0'>
-                  <DatePicker v-model='item.date' label='Дата создания отчёта' />
+                <v-flex md12>
+                  <div class='vertical-inputs'>
+                    <div class='vertical-inputs__input' v-if='$store.state.user.class === ROLES.ADMIN'>
+                      <v-switch color='red' v-model="item.is_not_moderated" hide-details label="модерация не пройдена"></v-switch>
+                    </div>
+                    <div class='vertical-inputs__input' v-if='$store.state.user.class === ROLES.ADMIN'>
+                      <v-switch color='green' v-model="item.is_available_for_parents" hide-details label="сделать отчет доступным для родителя"></v-switch>
+                    </div>
+                    <div class='vertical-inputs__input' v-if='$store.state.user.class === ROLES.ADMIN'>
+                      <v-text-field
+                        hide-details
+                        label='Цена'
+                        v-model='item.price'
+                      />
+                    </div>
+                    <div class='vertical-inputs__input'>
+                      <DatePicker v-model='item.date' label='Дата создания отчёта' />
+                    </div>
+                  </div>
                 </v-flex>
               </v-layout>
 

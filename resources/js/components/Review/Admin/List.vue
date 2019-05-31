@@ -26,29 +26,20 @@
         <td>
           {{ item.lesson_count }} занятий
         </td>
-        <td width='40' class='td-border px-1 text-md-center'>
-          <span v-if='item.review !== null && item.client_rating !== null'>
-            {{ item.client_rating }}
-          </span>
-        </td>
-        <td width='40' class='td-border px-1 text-md-center'>
-          <span v-if='item.review !== null && item.admin_rating !== null'>
-            <span class='grey--text' v-if='item.admin_rating === -1'>
-              –
-            </span>
-            <span v-else>
-              {{ item.admin_rating }}
-            </span>
-          </span>
-        </td>
-        <td width='40' class='td-border px-1 text-md-center'>
-          <span v-if='item.review !== null && item.final_rating !== null'>
-            <span class='grey--text' v-if='item.final_rating === -1'>
-              –
-            </span>
-            <span v-else>
-              {{ item.final_rating }}
-            </span>
+        <td>
+          <span v-if='item.review !== null'>
+            <v-tooltip bottom v-if='item.client_rating !== null'>
+              <ScoreCircle slot='activator' :score='item.client_rating' />
+              <span>оценка ученика</span>
+            </v-tooltip>
+            <v-tooltip bottom v-if='item.admin_rating !== null'>
+              <ScoreCircle slot='activator' :score='item.admin_rating' />
+              <span>предварительная оценка</span>
+            </v-tooltip>
+            <v-tooltip bottom v-if='item.final_rating !== null'>
+              <ScoreCircle slot='activator' :score='item.final_rating' />
+              <span>финальная оценка</span>
+            </v-tooltip>
           </span>
         </td>
         <td>
@@ -92,6 +83,7 @@
 import Dialog from './Dialog'
 import { COMMENT_TYPE } from '@/components/Review'
 import DisplayOptions from '@/mixins/DisplayOptions'
+import ScoreCircle from '@/components/UI/ScoreCircle'
 
 export default {
   props: {
@@ -103,7 +95,7 @@ export default {
 
   mixins: [ DisplayOptions ],
 
-  components: { Dialog },
+  components: { Dialog, ScoreCircle },
 
   data() {
     return {

@@ -23,6 +23,7 @@
           </div>
         </template>
         <span>
+          <h4>Временной интервал</h4>
           <div v-if="showDate" class='font-weight-bold'>
             {{ item.date | date }}
           </div>

@@ -15,14 +15,6 @@
             <v-data-table hide-actions hide-headers :items='items' class='mt-3 v-table_no-overflow' v-if='items.length > 0'>
               <template slot='items' slot-scope="{ index, item }">
                 <td width='24' class='px-2 relative'>
-                  <v-fade-transition>
-                    <v-checkbox 
-                      v-if="selectedMassSelectMode !== null"
-                      :disabled='selectedMassSelectMode === massSelectMode.clone && !isClonable(item)'
-                      class='td-checkbox'
-                      v-model="selectedLessonIds" 
-                      :value='item.id'></v-checkbox>
-                  </v-fade-transition>
                   <LessonStatusCircles :item='item'  />
                 </td>
                 <td width='10' class='px-0'>
@@ -43,7 +35,10 @@
                 <td>
                   <v-tooltip bottom v-if='item.topic'>
                     <v-icon class='cursor-default' slot='activator'>chrome_reader_mode</v-icon>
-                    <span>{{ item.topic }}</span>
+                    <span>
+                      <h4>Тема занятия</h4>
+                      {{ item.topic }}
+                    </span>
                   </v-tooltip>
                 </td>
                 <td>
@@ -55,43 +50,52 @@
                     руб.
                   </span>
                 </td>
-                <td class='text-md-right'>
-                  <!-- меню отображается только в случае, если админ || либо если препод работает со своими занятиями -->
-                  <v-menu v-if='isAdmin() || $store.state.user.id === item.teacher_id'>
-                    <v-btn slot='activator' flat icon color="black" class='ma-0'>
-                      <v-icon>more_horiz</v-icon>
-                    </v-btn>
-                    <v-list dense>
-                      <v-list-tile @click='$refs.LessonDialog.open(item.id)' v-if='isAdmin()'>
-                          <v-list-tile-action>
-                            <v-icon>edit</v-icon>
-                          </v-list-tile-action>
-                          <v-list-tile-content>
-                            <v-list-tile-title>Редактировать</v-list-tile-title>
-                          </v-list-tile-content>
-                      </v-list-tile>
-                      <v-list-tile @click='$refs.TopicDialog.open(item.id)' v-if='item.status !== LESSON_STATUS.CANCELLED'>
-                          <v-list-tile-action>
-                            <v-icon>chrome_reader_mode</v-icon>
-                          </v-list-tile-action>
-                          <v-list-tile-content>
-                            <v-list-tile-title>Установить тему</v-list-tile-title>
-                          </v-list-tile-content>
-                      </v-list-tile>
-                      <v-list-tile @click='$refs.ConductDialog.open(item.id)'>
-                          <v-list-tile-action>
-                            <v-icon>assignment_turned_in</v-icon>
-                          </v-list-tile-action>
-                          <v-list-tile-content>
-                            <v-list-tile-title>Провести</v-list-tile-title>
-                          </v-list-tile-content>
-                      </v-list-tile>
+                <td class='text-md-right' width='100'>
+                  <v-checkbox 
+                    class='td-checkbox'
+                    v-if="selectedMassSelectMode !== null"
+                    hide-details
+                    :disabled='selectedMassSelectMode === massSelectMode.clone && !isClonable(item)'
+                    v-model="selectedLessonIds" 
+                    :value='item.id'></v-checkbox>
+                  <div v-else>
+                    <!-- меню отображается только в случае, если админ || либо если препод работает со своими занятиями -->
+                    <v-menu v-if='isAdmin() || $store.state.user.id === item.teacher_id'>
+                      <v-btn slot='activator' flat icon color="black" class='ma-0'>
+                        <v-icon>more_horiz</v-icon>
+                      </v-btn>
+                      <v-list dense>
+                        <v-list-tile @click='$refs.LessonDialog.open(item.id)' v-if='isAdmin()'>
+                            <v-list-tile-action>
+                              <v-icon>edit</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                              <v-list-tile-title>Редактировать</v-list-tile-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-list-tile @click='$refs.TopicDialog.open(item.id)' v-if='item.status !== LESSON_STATUS.CANCELLED'>
+                            <v-list-tile-action>
+                              <v-icon>chrome_reader_mode</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                              <v-list-tile-title>Установить тему</v-list-tile-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
+                        <v-list-tile @click='$refs.ConductDialog.open(item.id)'>
+                            <v-list-tile-action>
+                              <v-icon>assignment_turned_in</v-icon>
+                            </v-list-tile-action>
+                            <v-list-tile-content>
+                              <v-list-tile-title>Провести</v-list-tile-title>
+                            </v-list-tile-content>
+                        </v-list-tile>
                     </v-list>
-                  </v-menu>
-                  <!-- если препод видит чужие занятия, то кнопка сразу переводящая в диалог проводки/просмотра проведенного -->
-                   <v-btn v-else flat icon color="black" class='ma-0' @click='$refs.ConductDialog.open(item.id)'>
+                    </v-menu>
+                    <!-- если препод видит чужие занятия, то кнопка сразу переводящая в диалог проводки/просмотра проведенного -->
+                    <v-btn v-else flat icon color="black" class='ma-0' @click='$refs.ConductDialog.open(item.id)'>
                       <v-icon>more_horiz</v-icon>
                     </v-btn>
+                  </div>
                 </td>
               </template>
               <template slot='footer' v-if='isAdmin() && items.length > 0'>

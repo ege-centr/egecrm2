@@ -27,7 +27,10 @@
                           }">
                             {{ item.status == 1 ? 'done_all' : ((item.status < -1 || item.status > 2) ? 'error' : 'done') }}
                           </v-icon>
-                          <span>{{ item.status_name }}</span>
+                          <span>
+                            <h4>Статус</h4>
+                            {{ item.status_name }}
+                          </span>
                         </v-tooltip>
                       </div>
                       <div>

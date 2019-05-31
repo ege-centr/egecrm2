@@ -483,10 +483,17 @@ nav {
   }
 }
 
-.td-checkbox {
+.td-checkbox-absolute {
   position: absolute;
   left: -30px;
   top: 11px;
+}
+
+.td-checkbox {
+  justify-content: flex-end;
+  & .v-input--selection-controls__input {
+    margin-right: 6px !important;
+  }
 }
 
 .group-not-assigned-list {
@@ -580,5 +587,18 @@ nav {
   margin: 4px 0;
   & .v-icon {
     font-size: 20px !important;
+  }
+}
+
+.v-tooltip__content {
+  background: white !important;
+  color: black !important;
+  max-width: 400px;
+  font-size: 14px;
+  padding: 10px 14px;
+  box-shadow: 0 0 6px 1px rgba(black, .2) !important;
+  opacity: 1 !important;
+  & h4 {
+    margin-bottom: 20px;
   }
 }

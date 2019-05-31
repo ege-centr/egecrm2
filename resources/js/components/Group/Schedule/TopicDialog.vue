@@ -22,14 +22,17 @@
           <Loader v-if='loading' class='loader-wrapper_fullscreen-dialog' />
           <v-layout v-else wrap>
             <v-flex md12 class='pa-0'>
-              <v-text-field 
+              <v-textarea 
+                class='textarea-padding-fix'
                 full-width
                 auto-grow
                 counter 
                 label='Тема занятия' 
                 maxlength="1000"
+                rows='15'
+                @keydown.enter='(event) => event.preventDefault()'
                 v-model='item.topic'>
-              </v-text-field>
+              </v-textarea>
               <hr class="v-divider theme--light">
             </v-flex>
           </v-layout>
