@@ -15,7 +15,7 @@ class GroupResource extends JsonResource
         foreach($clients as &$client) {
             $client->subject_status = $client->getSubjectStatus($this->year, $this->subject_id);
             $client->schedule = Schedule::get([
-                'group_id' => $client->groups()->pluck('id')->all()
+                'group_id' => $client->groups()->pluck('groups.id')->all()
             ], $this->id);
         }
 
