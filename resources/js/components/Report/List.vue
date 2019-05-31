@@ -40,7 +40,7 @@
               client_id: item.client.id,
               teacher_id: item.teacher_id,
             }}">
-            <PersonName :item='item.client' />
+            {{ item.client.default_name }}
           </router-link>
         </td>
         <td>

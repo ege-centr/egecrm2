@@ -13,16 +13,14 @@ class Report extends Model
 
     const CATEGORIES = [
         'homework' => 'Выполнение домашнего задания',
-        'activity' => 'Работоспособность и активность на уроках',
-        'behavior' => 'Поведение на уроках',
         'learning_ability' => 'Способность усваивать новый материал',
         'knowledge' => 'Выполнение контрольных работ, текущий уровень знаний',
     ];
 
     protected $fillable = [
-        'subject_id', 'homework_score', 'activity_score', 'behavior_score',
-        'learning_ability_score', 'knowledge_score', 'homework_comment', 'activity_comment',
-        'behavior_comment', 'learning_ability_comment', 'knowledge_comment', 'is_available_for_parents',
+        'subject_id', 'homework_score',
+        'learning_ability_score', 'knowledge_score', 'homework_comment',
+        'learning_ability_comment', 'knowledge_comment', 'is_available_for_parents',
         'date', 'expected_score_from', 'expected_score_to', 'expected_score_max', 'recommendation',
         'client_id', 'teacher_id', 'year', 'is_not_moderated', 'price'
     ];

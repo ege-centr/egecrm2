@@ -5,14 +5,6 @@
       <span>{{ getCategoryTitle(CATEGORY.homework) }}</span>
     </v-tooltip>
     <v-tooltip bottom>
-      <ScoreCircle slot='activator' :score='item.activity_score' />
-      <span>{{ getCategoryTitle(CATEGORY.activity) }}</span>
-    </v-tooltip>
-    <v-tooltip bottom>
-      <ScoreCircle slot='activator' :score='item.behavior_score' />
-      <span>{{ getCategoryTitle(CATEGORY.behavior) }}</span>
-    </v-tooltip>
-    <v-tooltip bottom>
       <ScoreCircle slot='activator' :score='item.learning_ability_score' />
       <span>{{ getCategoryTitle(CATEGORY.learningAbility) }}</span>
     </v-tooltip>

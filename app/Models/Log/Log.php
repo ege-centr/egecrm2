@@ -76,6 +76,7 @@ class Log extends Model
                     $model->created_email_id = User::fromSession()->email->id;
                 }
             }
+            $model->ip = $_SERVER['HTTP_X_REAL_IP'] ?? null;
         });
     }
 }

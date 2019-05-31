@@ -10,6 +10,9 @@
           <div v-if='item.responsible_admin_id' class='caption mr-3'>
             Ответственный: {{ getData('admins', item.responsible_admin_id).default_name }}
           </div>
+          <div v-if='item.createdUser' class='caption mr-3'>
+            Автор: {{ item.createdUser.default_name }}
+          </div>
           <div class='text-md-right f-1'>
             <v-btn flat icon color="black" class='ma-0' @click="$emit('edit', item.id)">
               <v-icon>more_horiz</v-icon>

@@ -15,7 +15,7 @@ class AdminCollection extends JsonResource
      */
     public function toArray($request)
     {
-        $name = trim(implode(' ', [$this->last_name, $this->first_name]));
+        $name = trim(implode(' ', [$this->first_name, $this->last_name]));
         return [
             'id' => $this->id,
             'default_name' => $name ?: $this->nickname,

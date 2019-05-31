@@ -1,6 +1,7 @@
 <template>
   <div>
     <DisplayData 
+      ref='DisplayData'
       :invisible-filters="{'teacher_id': $store.state.user.id}"
       :tabs='true'
       :api-url='API_URL' 
@@ -9,6 +10,11 @@
          <ReportList 
             v-if='items.length > 0' 
             :items='items'
+            :display-options="{
+              teacher: false, 
+              client: false,
+              dimension: true,
+            }" 
             @updated='$refs.DisplayData.reloadData()'
           />
         <NoData

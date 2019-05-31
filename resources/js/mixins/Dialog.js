@@ -37,9 +37,9 @@ export default {
       }
     },
 
-    loadData(item_id) {
+    async loadData(item_id) {
       this.loading = true
-      axios.get(apiUrl(this.API_URL, item_id)).then(r => {
+      await axios.get(apiUrl(this.API_URL, item_id)).then(r => {
         this.item = r.data
         this.loading = false
       })

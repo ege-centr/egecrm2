@@ -10,7 +10,7 @@ class ReportCollection extends Resource
     public function toArray($request)
     {
         return extractFields($this, [
-            'id', 'homework_score', 'activity_score', 'behavior_score',
+            'id', 'homework_score',
             'learning_ability_score', 'knowledge_score', 'date', 'is_available_for_parents'
         ]);
     }

@@ -12,6 +12,7 @@ class Collection extends JsonResource
         return array_merge(parent::toArray($request), [
             'files' => $this->files,
             'comments' => CommentResource::collection($this->comments),
+            'createdUser' => new \PersonResource($this->createdUser),
         ]);
     }
 }
