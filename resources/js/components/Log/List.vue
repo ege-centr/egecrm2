@@ -63,6 +63,9 @@
             </tr>
           </table>
         </td>
+        <td>
+          {{ item.ip }}
+        </td>
         <td class='text-md-right grey--text'>
           {{ item.created_at | date-time }}
         </td>
