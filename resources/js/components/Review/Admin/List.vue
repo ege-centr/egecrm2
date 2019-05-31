@@ -30,15 +30,24 @@
           <span v-if='item.review !== null'>
             <v-tooltip bottom v-if='item.client_rating !== null'>
               <ScoreCircle slot='activator' :score='item.client_rating' />
-              <span>оценка ученика</span>
+              <span>
+                <h4>Оценка</h4>
+                оценка ученика
+              </span>
             </v-tooltip>
             <v-tooltip bottom v-if='item.admin_rating !== null'>
               <ScoreCircle slot='activator' :score='item.admin_rating' />
-              <span>предварительная оценка</span>
+              <span>
+                <h4>Оценка</h4>
+                предварительная оценка
+              </span>
             </v-tooltip>
             <v-tooltip bottom v-if='item.final_rating !== null'>
               <ScoreCircle slot='activator' :score='item.final_rating' />
-              <span>финальная оценка</span>
+              <span>
+                <h4>Оценка</h4>
+                финальная оценка
+              </span>
             </v-tooltip>
           </span>
         </td>
