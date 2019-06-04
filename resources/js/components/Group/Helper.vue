@@ -165,19 +165,19 @@ export default {
     dates() {
       const now = moment()
       const result = []
-      let unit
+      let times
       switch(this.selectedMode) {
         case 'week':
-          unit = 7
+          times = 14
           break
         case 'month':
-          unit = 30
+          times = 4
           break
         default:
-          unit = 1
+          times = 90
       }
 
-      _.times(Math.round(90 / unit), () => {
+      _.times(times, () => {
         result.push(now.format('YYYY-MM-DD'))
         now.subtract(1, this.selectedMode).endOf(this.selectedMode)
       })
