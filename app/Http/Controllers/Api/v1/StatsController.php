@@ -185,7 +185,7 @@ class StatsController extends Controller
                 );
                 $addedSubjectIds = array_diff(
                     $contract->subjects->where('status', '<>', SubjectStatus::TERMINATED)->pluck('subject_id')->all(),
-                    $contract->previous->where('status', '<>', SubjectStatus::TERMINATED)->subjects->pluck('subject_id')->all()
+                    $contract->previous->subjects->where('status', '<>', SubjectStatus::TERMINATED)->pluck('subject_id')->all()
                 );
                 $result['subjects_added'] += count($addedSubjectIds);
                 $result['subjects_removed'] += count($removedSubjectIds);
