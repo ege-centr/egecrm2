@@ -104,6 +104,7 @@ export default {
     // Предустановленные фильтры
     // Использование: this.pre_installed_filters.push({item: this.filters[3], value: [group.grade_id]})
     // TODO: сделать удобнеее {filter_index: value}
+    // ВРОДЕ СДЕЛАНО
     preInstalled: {
       type: Object,
       default: null,
@@ -120,6 +121,11 @@ export default {
       default: null,
     },
 
+    disablePin: {
+      type: Boolean,
+      default: false,
+    },
+
     // sort: {
     //   type: Object,
     //   required: false,
@@ -131,10 +137,12 @@ export default {
 
   created() {
     if (this.preInstalled === null) {
-      if (LOCAL_STORAGE_KEY in localStorage) {
-        const filters = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
-        if (filters.hasOwnProperty(this.$route.name) && Object.keys(filters[this.$route.name]).length > 0) {
-          this.setPreInstalled(filters[this.$route.name])
+      if (! this.disablePin) {
+        if (LOCAL_STORAGE_KEY in localStorage) {
+          const filters = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY))
+          if (filters.hasOwnProperty(this.$route.name) && Object.keys(filters[this.$route.name]).length > 0) {
+            this.setPreInstalled(filters[this.$route.name])
+          }
         }
       }
     } else {

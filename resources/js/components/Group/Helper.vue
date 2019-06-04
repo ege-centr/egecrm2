@@ -22,7 +22,7 @@
               <v-layout wrap class='mb-4 px-3'>
                 <v-flex md12 class='pb-0'>
                   <div class='flex-items align-center'>
-                    <AllFilter :items='filters' @updated='(filters) => selectedFilters = filters' />
+                    <AllFilter :items='filters' :disable-pin='true' @updated='(filters) => selectedFilters = filters' />
                     <v-spacer></v-spacer>
                     <v-chip v-for="(label, id) in mode" class='pointer ml-0 mr-3'
                       :class="{'primary white--text': id === selectedMode}"
