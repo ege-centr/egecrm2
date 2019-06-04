@@ -95,7 +95,7 @@ class StatsController extends Controller
     {
         $query = \App\Models\Request::query();
         if ($dateStart !== null) {
-            $query->whereRaw("DATE(created_at) BETWEEN '{$dateStart}' AND '{$date}'");
+            $query->whereRaw("DATE(created_at) > '{$dateStart}' AND DATE(created_at) <= '{$date}'");
         } else {
             $query->whereRaw("DATE(created_at) = '{$date}'");
         }
@@ -112,7 +112,9 @@ class StatsController extends Controller
         $query = Payment::where('entity_type', $request->entity_type);
         if ($dateStart !== null) {
             if ($year === null) {
-                $query->whereBetween('date', [$dateStart, $date]);
+                $query
+                    ->where('date', '>', $dateStart)
+                    ->where('date', '<=', $date);
             } else {
                 $query->where('year', $year);
             }
@@ -150,7 +152,9 @@ class StatsController extends Controller
         $query = Contract::query();
         if ($dateStart !== null) {
             if ($year === null) {
-                $query->whereBetween('date', [$dateStart, $date]);
+                $query
+                    ->where('date', '>', $dateStart)
+                    ->where('date', '<=', $date);
             } else {
                 $query->where('year', $year);
             }
