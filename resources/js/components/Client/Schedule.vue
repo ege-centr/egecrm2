@@ -296,7 +296,7 @@ export default {
     // либо дата первого занятия, либо дата последнего отчета
     // нужно для добавления отчета 
     lastReportDate() {
-      let date = this.filteredItems[this.lastConductedIndex].date
+      let date = this.filteredItems[0].date
       this.filteredItems.forEach(item => {
         if (this.isReport(item)) {
           date = item.report.date

@@ -17,6 +17,7 @@ class StatsController extends Controller
 {
     public function index(Request $request)
     {
+        // TODO: поумнее с пагинацией. Конкретно с $lastPage
         switch($request->mode) {
             case 'week': {
                 $paginate = 30;
