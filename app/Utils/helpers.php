@@ -133,12 +133,12 @@ function extractFields($object, $fields, $merge = [])
 /**
  * если указан $page, то имитируем до этой страницы
  */
-function imitatePagination($items, $page = null) {
+function imitatePagination($items, $page = null, $lastPage = null) {
     return [
         'data' => $items,
         'meta' => [
             'current_page' => $page ? intval($page) : 1,
-            'last_page' => $page ? 50 : 1,
+            'last_page' => $lastPage ? intval($lastPage) : ($page ? 50 : 1),
         ],
     ];
 }
@@ -153,4 +153,9 @@ function errorResponse($error, $status = 422)
  */
 function jsonRedecode($data) {
     return json_decode(json_encode($data));
+}
+
+function cloneObject($q) {
+    $clone = clone $q;
+    return $clone;
 }

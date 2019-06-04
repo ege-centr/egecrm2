@@ -89,7 +89,7 @@ export default {
       required: false,
     },
     preInstalledFilters: {
-      type: Array,
+      type: Object,
       required: false,
     },
     sort: {

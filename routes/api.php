@@ -60,6 +60,11 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         Route::post('reports/client-lessons', 'ReportsController@clientLessons');
         Route::post('groups/helper', 'GroupsController@helper');
 
+        Route::prefix('stats')->group(function () {
+            $controller = 'StatsController@';
+            Route::get('/', $controller . 'Index');
+        });
+
         Route::apiResources([
             'teacher/freetime' => 'TeacherFreetimeController',
             'admins' => 'AdminsController',

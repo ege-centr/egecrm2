@@ -28,6 +28,14 @@ class Contract extends Model
         return $this->belongsTo(Client::class);
     }
 
+    /**
+     * Предыдущая версия договора
+     */
+    public function previous()
+    {
+        return $this->belongsTo(self::class, 'number', 'number')->where('version', $this->version - 1);
+    }
+
     public function getGradeAttribute()
     {
         return Grade::find($this->grade_id);

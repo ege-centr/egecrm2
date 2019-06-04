@@ -109,6 +109,16 @@ export default {
     ],
     admin_menu: [
       {
+        icon: 'insert_chart',
+        route: 'StatIndex',
+        label: 'Итоги'
+      },
+      {
+        icon: 'attach_money',
+        route: 'StatPaymentIndex',
+        label: 'Итоги по платежам'
+      },
+      {
         icon: 'event',
         route: 'DatesAndPrices',
         label: 'Экзамены и цены'
