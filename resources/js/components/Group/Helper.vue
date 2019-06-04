@@ -141,9 +141,10 @@ export default {
             .filter(e => moment(e.date).format('M') === moment(d).format('M'))
             .sumBy('sum')
         case 'week':
-          const dateStart = moment(d).subtract(1, 'week').endOf('week').format('MM-DD')
+          const monthDateFormat = 'MM-DD'
+          const dateStart = moment(d).subtract(1, 'week').endOf('week').format(monthDateFormat)
           return _.chain(yearData)
-            .filter(e => e.date <= moment(d).format('MM-DD') && e.date > dateStart)
+            .filter(e => moment(e.date).format(monthDateFormat) <= moment(d).format(monthDateFormat) && moment(e.date).format(monthDateFormat) > dateStart)
             .sumBy('sum')
         default: 
           return _.get(yearData.find(e => e.date === d), 'sum')
