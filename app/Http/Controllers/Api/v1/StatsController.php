@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\{
     Contract\Contract,
+    Contract\SubjectStatus,
     Payment\Payment,
     Payment\PaymentType
 };
@@ -179,12 +180,12 @@ class StatsController extends Controller
                 $result['contracts_sum'] += $contract->discounted_sum;
             } else {
                 $removedSubjectIds = array_diff(
-                    $contract->previous->subjects->pluck('subject_id')->all(),
-                    $contract->subjects->pluck('subject_id')->all()
+                    $contract->previous->subjects->where('status', '<>', SubjectStatus::TERMINATED)->pluck('subject_id')->all(),
+                    $contract->subjects->where('status', '<>', SubjectStatus::TERMINATED)->pluck('subject_id')->all()
                 );
                 $addedSubjectIds = array_diff(
-                    $contract->subjects->pluck('subject_id')->all(),
-                    $contract->previous->subjects->pluck('subject_id')->all()
+                    $contract->subjects->where('status', '<>', SubjectStatus::TERMINATED)->pluck('subject_id')->all(),
+                    $contract->previous->where('status', '<>', SubjectStatus::TERMINATED)->subjects->pluck('subject_id')->all()
                 );
                 $result['subjects_added'] += count($addedSubjectIds);
                 $result['subjects_removed'] += count($removedSubjectIds);
