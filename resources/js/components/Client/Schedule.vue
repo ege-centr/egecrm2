@@ -296,13 +296,13 @@ export default {
     // либо дата первого занятия, либо дата последнего отчета
     // нужно для добавления отчета 
     lastReportDate() {
-      let date = this.filteredItems[0].date
+      let date = null
       this.filteredItems.forEach(item => {
         if (this.isReport(item)) {
           date = item.report.date
         }
       })
-      return moment(date).add(1, 'day').format('YYYY-MM-DD')
+      return date === null ? this.filteredItems[0].date : moment(date).add(1, 'day').format('YYYY-MM-DD')
     }
   },
 }
