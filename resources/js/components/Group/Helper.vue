@@ -169,7 +169,7 @@ export default {
       let times
       switch(this.selectedMode) {
         case 'week':
-          times = 15
+          times = 14
           break
         case 'month':
           times = 4
