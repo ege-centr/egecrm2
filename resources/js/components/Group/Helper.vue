@@ -106,7 +106,7 @@ export default {
       },
       selectedMode: 'day',
       selectedFilters: {},
-      data: null,
+      data: null
     }
   },
   
@@ -142,9 +142,9 @@ export default {
             .sumBy('sum')
         case 'week':
           const monthDateFormat = 'MM-DD'
-          const dateStart = moment(d).subtract(1, 'week').endOf('week').format(monthDateFormat)
+          const dateStart = moment(date).subtract(1, 'week').endOf('week').format(monthDateFormat)
           return _.chain(yearData)
-            .filter(e => moment(e.date).format(monthDateFormat) <= moment(d).format(monthDateFormat) && moment(e.date).format(monthDateFormat) > dateStart)
+            .filter(e => moment(e.date).format(monthDateFormat) <= moment(date).format(monthDateFormat) && moment(e.date).format(monthDateFormat) > dateStart)
             .sumBy('sum')
         default: 
           return _.get(yearData.find(e => e.date === d), 'sum')
