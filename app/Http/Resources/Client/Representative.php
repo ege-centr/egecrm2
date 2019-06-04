@@ -14,7 +14,7 @@ class Representative extends JsonResource
             'names' => $this->names,
             'default_name' => $this->default_name,
             'phones' => PhoneResource::collection($this->phones),
-            'email' => $this->email ?? new Email,
+            'email' => $this->email,
         ]);
     }
 }

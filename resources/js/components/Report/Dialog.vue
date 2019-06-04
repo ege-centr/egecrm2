@@ -136,7 +136,9 @@
                       <v-switch color='red' v-model="item.is_not_moderated" hide-details label="модерация не пройдена"></v-switch>
                     </div>
                     <div class='vertical-inputs__input' v-if='$store.state.user.class === ROLES.ADMIN'>
-                      <v-switch color='green' v-model="item.is_available_for_parents" hide-details label="сделать отчет доступным для родителя"></v-switch>
+                      <v-switch color='green' v-model="item.is_available_for_parents" hide-details 
+                        :disabled='client === null || client.representative.email === null'
+                        label="сделать отчет доступным для родителя"></v-switch>
                     </div>
                     <div class='vertical-inputs__input' v-if='$store.state.user.class === ROLES.ADMIN'>
                       <v-text-field
