@@ -11,7 +11,7 @@
             {{ item.title }}
         </v-chip>
       </div>
-      <div v-if='!withReports'>
+      <div v-if='!withReports && subjectTabs.length > 1'>
         <v-chip v-for="item in subjectTabs" class='pointer mr-0 ml-3'
             :class="{'primary white--text': item.id == selected_subject_tab}"
             @click='selected_subject_tab = selected_subject_tab === item.id ? null : item.id'

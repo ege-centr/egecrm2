@@ -35,7 +35,8 @@
             </v-menu>
           </div>
           <div v-if='editing_comment_index === index'>
-            <v-text-field hide-details class='pa-0 ma-0' ref='comments'
+            <v-text-field hide-details class='pa-0 ma-0 body-1' 
+              ref='comments'
               v-model='editing_comment_text'
               @blur='editing_comment_index = null'
               @keydown.esc='editing_comment_index = null'
@@ -49,16 +50,15 @@
         </div>
       </div>
     <!-- </v-slide-y-transition> -->
-    <a v-show='!commenting' class='grey--text' @click='startCommenting'>комментировать</a>
-    <div class='flex-items align-center' v-show='commenting'>
+    <div class='flex-items align-center'>
       <div>
         <Avatar :photo='$store.state.user.photo' :size='35' class='mr-3' />
       </div>
       <div style='flex: 1'>
         <b style='position: absolute'>{{ $store.state.user.first_name }} {{ $store.state.user.last_name }}</b>
-        <v-text-field ref='comment' v-model="text" hide-details placeholder='введите комментарий...'
-          @blur='endCommenting'
-          @keydown.esc='endCommenting'
+        <v-text-field 
+          class='hide-bottom-border body-1'
+          ref='comment' v-model="text" hide-details placeholder='введите комментарий...'
           @keydown.enter='saveComment'
           :loading='adding'
         ></v-text-field>
@@ -93,7 +93,6 @@
     data() {
       return {
         adding: false,
-        commenting: false,
         text: '',
         editing_saving: false,
         editing_comment_text: '',
@@ -110,16 +109,9 @@
     },
     components: { Avatar },
     methods: {
-      startCommenting() {
-        this.commenting = true
-        Vue.nextTick(() => {
-          this.$refs.comment.focus()
-        })
-      },
-
       endCommenting() {
-        this.commenting = false
         this.text = ''
+        this.$refs.comment.blur()
       },
 
       saveComment() {

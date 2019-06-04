@@ -92,6 +92,11 @@ class Lesson extends Model
         return $query->where('status', '<>', LessonStatus::CANCELLED);
     }
 
+    public function scopeNotUnplanned($query)
+    {
+        return $query->where('is_unplanned', 0);
+    }
+
     public function scopeNotRegistered($query)
     {
         return $query

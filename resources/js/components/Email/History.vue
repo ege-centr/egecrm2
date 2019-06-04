@@ -14,7 +14,7 @@
             <div v-else>
               <div v-if='items.length > 0'>
                 <div v-for='item in items' :key='item.id' class="mb-3 display-flex">
-                  <Avatar :photo='item.createdUser ? item.createdUser.photo : null' :size='50' class='mr-3' />
+                  <BgAvatar :photo='item.createdUser ? item.createdUser.photo : null' :size='50' class='mr-3' />
                   <v-card class='email-messages__item elevation-0 mb-4'>
                     <v-card-text class='py-0 px-3'>
                       <div class='display-flex align-center'>

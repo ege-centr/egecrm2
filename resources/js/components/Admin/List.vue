@@ -1,6 +1,6 @@
 <template>
   <div>
-    <AdminDialog ref='AdminDialog' />
+    <AdminDialog ref='AdminDialog' @updated="$emit('updated')" />
     <v-data-table 
       v-if='items.length > 0'
       :items='items' 

@@ -27,8 +27,10 @@ class EmailMessagesController extends Controller
             $emailMessage = new EmailMessage($request->all());
             $emailMessage->email = $email;
             $emailMessage->save();
-            foreach($request->input('files') as $file) {
-                $emailMessage->files()->create($file);
+            if ($request->input('files') !== null) {
+                foreach($request->input('files') as $file) {
+                    $emailMessage->files()->create($file);
+                }
             }
             $emailMessage = $emailMessage->fresh();
             $emailMessage->send();

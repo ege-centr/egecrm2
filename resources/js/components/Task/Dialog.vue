@@ -124,6 +124,7 @@ export default {
       height: initial !important;
     }
     & .ql-container {
+        min-height: 500px !important;
         border-bottom: 1px solid #ccc !important;     
     }
   }

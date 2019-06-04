@@ -1,5 +1,6 @@
 import Loader from '@/components/UI/Loader'
 import Avatar from '@/components/UI/Avatar'
+import BgAvatar from '@/components/UI/BgAvatar'
 import AddBtn from '@/components/UI/AddBtn'
 import AddBtnAnimated from '@/components/UI/AddBtnAnimated'
 import NoData from '@/components/UI/NoData'
@@ -52,6 +53,7 @@ export const GlobalPlugin = {
     Vue.component('Loader', Loader)
     Vue.component('Avatar', Avatar)
     Vue.component('AddBtn', AddBtn)
+    Vue.component('BgAvatar', BgAvatar)
     Vue.component('ClearableSelect', ClearableSelect)
     Vue.component('NoData', NoData)
     Vue.component('PersonName', PersonName)

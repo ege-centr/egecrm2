@@ -9,4 +9,7 @@ export default {
   dateFormat(value, format) {
     return moment(value).format(format)
   },
+  hideZero(value) {
+    return value == 0 ? '' : value
+  },
 }

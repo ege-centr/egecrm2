@@ -58,6 +58,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         });
 
         Route::post('reports/client-lessons', 'ReportsController@clientLessons');
+        Route::post('groups/helper', 'GroupsController@helper');
 
         Route::apiResources([
             'teacher/freetime' => 'TeacherFreetimeController',

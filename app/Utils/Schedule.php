@@ -19,6 +19,8 @@ class Schedule
     public static function get(array $filters, int $currentGroupId = null) : array
     {
         $query = Lesson::query()
+            ->notCancelled()
+            ->notUnplanned()
             ->selectRaw("DATE_FORMAT(lessons.date, '%w') as `weekday`, `date`, `time`, `duration`, `group_id`, count(*) as `count`")
             ->groupBy('group_id', 'weekday', 'time', 'duration')
             ->having('count', '>', 1);
