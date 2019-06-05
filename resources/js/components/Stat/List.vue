@@ -3,20 +3,20 @@
     :items='items'
     :class='config.elevationClass'
     :headers="[
-      {text: '', sortable: false, width: 200},
+      {text: '', sortable: false},
       {text: 'заявок', sortable: false, width: 200},
       {text: 'новых договоров', sortable: false, width: 200},
       {text: 'новых услуг', sortable: false, width: 200},
       {text: 'сумма новых услуг', sortable: false, width: 200},
       {text: 'увеличение услуг', sortable: false, width: 200},
       {text: 'уменьшение услуг', sortable: false, width: 200},
-      {text: 'изменение суммы услуг', sortable: false, width: 200},
+      {text: 'изменение суммы услуг', sortable: false},
     ]"
     hide-actions
   >
     <template v-slot:items='{ item, index }'>
       <tr>
-        <td>
+        <td style='white-space: nowrap'>
           {{ formatDate(item.date, index) }}
         </td>
         <td v-for="field in ['requests', 'contracts', 'subjects', 'contracts_sum', 'subjects_added', 'subjects_removed', 'contracts_sum_change']" :key='field'>

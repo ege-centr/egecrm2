@@ -79,7 +79,7 @@ export default {
   computed: {
     items() {
       const items = []
-      const active_contracts = this.contracts.filter(e => e.is_active)
+      const active_contracts = this.contracts.filter(e => e.is_active && e.year === this.year)
       // console.log(active_contracts)
       // получить человеко-предметы
       active_contracts.forEach(contract => {

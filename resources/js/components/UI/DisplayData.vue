@@ -49,8 +49,14 @@
 
           <slot name='items' :items='items'></slot>
 
-          <infinite-loading v-if='paginate && infinite_loading'
-            @infinite='loadData' ref='InfiniteLoading' :distance='2000' spinner='spiral' class='mt-3'>
+          <infinite-loading 
+            ref='InfiniteLoading' 
+            v-if='paginate && infiniteLoadingComponent'
+            @infinite='loadData' 
+            :distance='600' 
+            spinner='spiral' 
+            class='mt-3'
+          >
             <div slot='no-more'></div>
             <div slot='no-results'></div>
           </infinite-loading>
@@ -126,11 +132,12 @@ export default {
       page: 1,
       loading: true,
       // для пересоздания компонента
-      infinite_loading: true,
+      infiniteLoadingComponent: true,
       data: [],
       selectedTab: null,
       facets: null,
       usedFilterFacets: null,
+      currentFilters: {},
     }
   },
 
@@ -144,7 +151,7 @@ export default {
     // usedFilter если установлен, то перезагружать данные не надо,
     // а только recount фасетов сделать без учета этого фильтрас
     loadData(state, usedFilter = null) {
-      let filters = this.current_filters
+      let filters = this.currentFilters
       if (usedFilter !== null) {
         this.usedFilterFacets = null
         filters = _.omitBy(filters, (e, key) => key === usedFilter)
@@ -211,8 +218,8 @@ export default {
       if (this.paginate === null) {
         this.loadData()
       } else {
-        this.infinite_loading = false
-        Vue.nextTick(() => this.infinite_loading = true)
+        this.infiniteLoadingComponent = false
+        Vue.nextTick(() => this.infiniteLoadingComponent = true)
       }
       // this.loadData()
       // this.$refs.InfiniteLoading.$emit('infinite', this.$refs.InfiniteLoading.stateChanger)
@@ -245,7 +252,8 @@ export default {
     },
 
     filtersUpdated(filters, initial_set) {
-      this.current_filters = filters
+      this.currentFilters = filters
+      this.$emit('update:current-filters', filters)
       if (!initial_set) {
         this.reloadData()
       }

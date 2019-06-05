@@ -13,6 +13,13 @@
     components: { AppLayout, LoginLayout },
     
     created() {
+      // global error handler
+      axios.interceptors.response.use(
+        (response) => response, 
+        // (error) => this.$store.commit('message', {text: error.response.data.message})
+        (error) => this.$store.commit('message', {text: 'ошибка загрузки'})
+      )
+
       // типа Drawer сохраняется в LocalStorage
       if (localStorage.hasOwnProperty('drawer')) {
         this.$store.commit('toggleDrawer', localStorage.getItem('drawer') === 'true')

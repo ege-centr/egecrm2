@@ -74,7 +74,7 @@ class GroupsController extends Controller
         $result = [];
         foreach(range(academicYear(), academicYear() - 3) as $i => $academicYear) {
             $dateEnd = (date('Y') - $i) . $dateMonth;
-            $dateStart = (new DateTime($dateEnd))->modify('-90 days')->format(DATE_FORMAT);
+            $dateStart = (new DateTime($dateEnd))->modify('-200 days')->format(DATE_FORMAT);
             $data[$academicYear] = DB::select("
                 select y.min_date as `date`, sum(y.cnt) as `sum` from (
                     select min_date, count(*) as cnt from (

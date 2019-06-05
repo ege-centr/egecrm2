@@ -12,7 +12,11 @@ export default {
       type: Object,
       required: false,
       default: null,
-    }
+    },
+    disablePin: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {

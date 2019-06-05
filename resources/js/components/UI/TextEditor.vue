@@ -31,7 +31,7 @@ export default {
       },
       toolbar: [
         ['bold', 'italic', 'underline'],
-        [{ 'color': [] }, { 'background': [] }],
+        // [{ 'color': [] }, { 'background': [] }],
         [{ 'list': 'ordered'}, { 'list': 'bullet' }],
       ],
     }

@@ -593,7 +593,8 @@ nav {
 .v-tooltip__content {
   background: white !important;
   color: black !important;
-  max-width: 400px;
+  width: 300px !important;
+  min-height: 200px;
   font-size: 14px;
   padding: 10px 14px;
   box-shadow: 0 0 6px 1px rgba(black, .2) !important;

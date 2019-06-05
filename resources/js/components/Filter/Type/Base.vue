@@ -27,10 +27,16 @@ export default {
       type: Boolean,
       default: true,
     },
+
     applyEnabled: {
       type: Boolean,
       default: false,
-    }
+    },
+
+    disablePin: {
+      type: Boolean,
+      default: false,
+    },
   },
 
   data() {

@@ -8,15 +8,8 @@
       v-model="usedFilterMenu[filter.item.field]"
       @click.native="$emit('usedFilterClick', filter.item.field)"
     >
-      <v-chip slot='activator'>
+      <v-chip slot='activator' close @input='close(index)'>
         {{ filter.item.label }}: {{ getSelectedLabel(filter) }}
-        <v-avatar class='ma-0 close-button'>
-          <v-hover>
-            <v-icon slot-scope="{ hover }" class='pointer'
-              @click='close(index)'
-              :class="hover ? 'black--text': 'grey--text text--darken-1'">cancel</v-icon>
-          </v-hover>
-        </v-avatar>
       </v-chip>
 
       <component 
@@ -26,6 +19,7 @@
         :filter-value='filter.value' 
         v-if='usedFilterMenu[filter.item.field]' 
         :facet='usedFilterFacets'
+        :disable-pin='disablePin'
       />
       <!-- <SelectFilterDialog 
         :item='filter.item' 
@@ -292,6 +286,18 @@ export default {
         this.filters = items
       }
     },
+  },
+
+  watch: {
+    menu(isOpen) {
+      // если при открытии меню всего 1 фильтр,
+      // автоматически его выбираем
+      if (isOpen) {
+        if (this.availableFilters.length === 1) {
+          this.select(this.availableFilters[0])
+        }
+      }
+    }
   },
 
   computed: {

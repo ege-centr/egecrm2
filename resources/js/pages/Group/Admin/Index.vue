@@ -1,9 +1,9 @@
 <template>
   <div>
     <GroupDialog ref='GroupDialog' />
-    <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='50'>
+    <DisplayData :current-filters.sync='groupFilters' :api-url='API_URL' :filters='FILTERS' :paginate='50'>
       <template slot='buttons'>
-        <GroupHelper />
+        <GroupHelper :group-filters="groupFilters" />
         <AddBtn @click.native='$refs.GroupDialog.open(null)' animated label='добавить группу' />
       </template>
       <template slot='items' slot-scope="{ items }">
@@ -32,6 +32,7 @@ export default {
     return {
       API_URL,
       FILTERS,
+      groupFilters: null,
     }
   },
 }

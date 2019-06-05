@@ -1,5 +1,5 @@
 <template>
-  <FilterTypeBase :apply-button='false'>
+  <FilterTypeBase :apply-button='false' :disable-pin='disablePin'>
     <v-list dense style='min-width: 220px'>
       <v-list-tile @click='select(option)' v-for='(option, index) in availableOptions' :key='index'>
         <v-list-tile-title>

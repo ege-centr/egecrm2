@@ -25,7 +25,7 @@ class StatsController extends Controller
                 break;
             }
             case 'month': {
-                $paginate = 20;
+                $paginate = 30;
                 $lastPage = 3;
                 break;
             }

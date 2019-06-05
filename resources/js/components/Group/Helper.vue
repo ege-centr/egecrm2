@@ -22,7 +22,12 @@
               <v-layout wrap class='mb-4 px-3'>
                 <v-flex md12 class='pb-0'>
                   <div class='flex-items align-center'>
-                    <AllFilter :items='filters' :disable-pin='true' @updated='(filters) => selectedFilters = filters' />
+                    <AllFilter 
+                      :items='filters' 
+                      :disable-pin='true' 
+                      :pre-installed='preInstalledFilters'
+                      @updated='(filters) => selectedFilters = filters' 
+                    />
                     <v-spacer></v-spacer>
                     <v-chip v-for="(label, id) in mode" class='pointer ml-0 mr-3'
                       :class="{'primary white--text': id === selectedMode}"
@@ -89,6 +94,13 @@ import { API_URL } from './'
 import { AllFilter } from '@/components/Filter'
 
 export default {
+  props: {
+    groupFilters: {
+      type: Object,
+      default: null,
+    }
+  },
+
   components: { AllFilter },
   
   data() {
@@ -184,6 +196,16 @@ export default {
       })
      
       return result
+    },
+
+    preInstalledFilters() {
+      if (this.groupFilters !== null) {
+        return _.chain(this.groupFilters)
+          .pick(['grade_id', 'subject_id'])
+          .mapValues(value => parseInt(value))
+          .value()
+      }
+      return null
     }
   },
 }

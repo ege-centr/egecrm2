@@ -29,6 +29,8 @@ export const GlobalPlugin = {
       elevationClass: 'elevation-3',
     }
 
+    Vue.prototype._ = window._
+
     Vue.prototype.waitForDialogClose = (f) => {
       Vue.nextTick(() => f(), 200)
     }
