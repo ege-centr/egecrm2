@@ -75,7 +75,7 @@
               </template>
             </v-data-table>
           </v-flex>
-          <NoData :height='160' class='mt-3' v-else />
+          <NoData :height='160' box class='mt-3' v-else />
         </v-layout>
       </v-card-text>
     </v-card>

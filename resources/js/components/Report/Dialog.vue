@@ -135,9 +135,9 @@
                     <div class='vertical-inputs__input' v-if='$store.state.user.class === ROLES.ADMIN'>
                       <v-switch color='red' v-model="item.is_not_moderated" hide-details label="модерация не пройдена"></v-switch>
                     </div>
-                    <div class='vertical-inputs__input' v-if='$store.state.user.class === ROLES.ADMIN'>
-                      <v-switch color='green' v-model="item.is_available_for_parents" hide-details 
-                        :disabled='client === null || client.representative.email === null'
+                    <div class='vertical-inputs__input' style='white-space: nowrap' v-if='$store.state.user.class === ROLES.ADMIN'>
+                      <v-switch color='green' 
+                        v-model="item.is_available_for_parents" hide-details 
                         label="сделать отчет доступным для родителя"></v-switch>
                     </div>
                     <div class='vertical-inputs__input' v-if='$store.state.user.class === ROLES.ADMIN'>
@@ -214,6 +214,17 @@ export default {
     setScore(score, categoryName) {
       this.item[categoryName + '_score'] = score
     },
+  },
+
+  watch: {
+      'item.is_available_for_parents'(newVal) {
+        if (newVal) {
+          setTimeout(() => {
+            this.item.is_available_for_parents = false
+            this.$store.commit('message', {text: 'email родителя не установлен'})
+          }, 150);
+        }
+      }
   },
 
   computed: {

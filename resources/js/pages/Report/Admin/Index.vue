@@ -9,7 +9,7 @@
         />
         <NoData
           v-else
-          transparent
+          box
         />
       </template>
     </DisplayData>

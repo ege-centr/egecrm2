@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Admin;
 use App\Http\Resources\Admin\{Resource, AdminCollection};
+use App\Utils\Phone;
 
 class AdminsController extends Controller
 {
@@ -34,6 +35,15 @@ class AdminsController extends Controller
     {
         $model = Admin::find($id);
         $model->update($request->all());
+
+        $model->phones()->delete();
+        $model->phones()->createMany(Phone::filter($request->phones));
+
+        $model->ips()->delete();
+        $model->ips()->createMany($request->ips);
+
+        $model->email->update($request->email);
+
         return $model;
     }
 

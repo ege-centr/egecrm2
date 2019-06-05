@@ -51,6 +51,11 @@ class Teacher extends Model
         return Email::where('entity_type', self::class)->where('entity_id', $this->id)->first();
     }
 
+    public function getEmailStringAttribute(Type $var = null)
+    {
+        return optional($this->email)->email;
+    }
+
     public function getPhonesAttribute()
     {
         $phones = [];

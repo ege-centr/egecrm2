@@ -33,7 +33,7 @@
     </v-data-table>
     <NoData
       v-else
-      transparent
+      box
     />
   </div>
 </template>

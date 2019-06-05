@@ -12,7 +12,7 @@ class PersonWithEmailResource extends JsonResource
             'id' => $this->id,
             'names' => $this->names,
             'default_name' => $this->default_name,
-            'email' => $this->email,
+            'email' => $this->email_string,
         ]);
     }
 }

@@ -8,7 +8,7 @@
       v-model="usedFilterMenu[filter.item.field]"
       @click.native="$emit('usedFilterClick', filter.item.field)"
     >
-      <v-chip slot='activator' close @input='close(index)'>
+      <v-chip slot='activator' close @input='close(index)' class='ml-0 mr-2'>
         {{ filter.item.label }}: {{ getSelectedLabel(filter) }}
       </v-chip>
 
@@ -35,7 +35,7 @@
       :close-on-content-click='false'
       v-model="menu"
     >
-      <v-chip slot='activator' class='pointer white--text' color='primary' @click='item = null'>
+      <v-chip slot='activator' class='pointer white--text ml-0' color='primary' @click='item = null'>
         <v-avatar class='pl-2 mr-0'>
           <v-icon>add</v-icon>
         </v-avatar>

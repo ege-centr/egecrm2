@@ -1,8 +1,11 @@
 <template>
-  <div class='no-data grey--text darken-3' 
+  <div 
+    class='no-data grey--text darken-3' 
+    :style='{height: heightValue}'
     :class="{
       'no-data_transparent': transparent === '',
       'no-data_square': square === '',
+      'no-data_box': box,
     }"
   >
     <v-btn icon flat color='primary' v-if='add' @click.native='add'>
@@ -32,10 +35,31 @@ export default {
       required: false,
     },
 
+    box: {
+      type: Boolean,
+    },
+
     color: {
       type: String,
       default: 'red',
       required: false,
+    },
+
+    height: {
+      type: Number,
+      default: null,
+    },
+  },
+
+  computed: {
+    heightValue() {
+      if (this.height !== null && this.box) {
+        return this.height + 'px';
+      } 
+      if (this.height === null && this.box) {
+        return '85vh';
+      }
+      return this.height === null ? '200px' : this.height + 'px';
     }
   }
 }
@@ -56,7 +80,6 @@ export default {
   &_square {
     background: white;
     border-radius: 0;
-    height: 200px !important;
   }
   &_transparent {
     background: transparent;
@@ -65,6 +88,12 @@ export default {
   &__text {
     max-width: 400px;
     font-weight: 500;
+  }
+  &_box {
+    background: #e0e0e0;
+    border-radius: 28px;
+    width: calc(100% - 8px);
+    margin: 0 auto;
   }
 }
 </style>

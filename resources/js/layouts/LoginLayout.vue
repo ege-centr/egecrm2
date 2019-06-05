@@ -79,7 +79,7 @@
     created() {
       if (LAST_LOGGED_USER_KEY in localStorage) {
         this.lastLoggedUser = JSON.parse(localStorage.getItem(LAST_LOGGED_USER_KEY))
-        this.credentials.login = this.lastLoggedUser.email.email
+        this.credentials.login = this.lastLoggedUser.email
         this.backgroundAllowed = true
         this.loadBackground()
       } else {

@@ -11,8 +11,9 @@ class TeacherResource extends JsonResource
     public function toArray($request)
     {
         return extractFields($this, [
-            'id', 'names', 'email', 'subjects_ec', 'default_name', 'in_egecentr', 'disable_bonuses'
+            'id', 'names', 'subjects_ec', 'default_name', 'in_egecentr', 'disable_bonuses'
         ], [
+            'email' => $this->email_string,
             'phones' => $this->phones,
             'photo' => $this->photo,
             'is_banned' => $this->isBanned(),

@@ -4,21 +4,24 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\{Contract\Contract, Group\Group, Client\Client};
+use App\Models\{Contract\Contract, Contract\SubjectStatus, Group\Group, Client\Client};
 use App\Http\Resources\Person\PersonResource;
 
 
 class AbstractGroupsController extends Controller
 {
+    protected $filters = [
+        'equals' => ['client_id'],
+        'multiple' => ['year'],
+    ];
+
     public function index(Request $request)
     {
         $abstract_groups = [];
 
         $query = Contract::active();
 
-        if (isset($request->year) && $request->year) {
-            $this->filterMultiple('year', $request->year, $query);
-        }
+        $this->filter($request, $query);
 
         if (isset($request->subject_id) && $request->subject_id) {
             $subject_ids = explode(',', $request->subject_id);
@@ -29,7 +32,7 @@ class AbstractGroupsController extends Controller
                 if (isset($subject_ids) && ! in_array($subject->subject_id, $subject_ids)) {
                     continue;
                 }
-                if ($subject->status !== 'terminated') {
+                if ($subject->status !== SubjectStatus::TERMINATED) {
                     // проверяем, находится ли ученик в группе по этому предмету в этом договоре
                     $exists = Group::whereExists(function ($query) use ($contract, $subject) {
                         $query->selectRaw(1)->from('group_clients')
@@ -52,8 +55,12 @@ class AbstractGroupsController extends Controller
 
         $data = collect([]);
         foreach ($abstract_groups as $key => $clients_count) {
-            list($year, $subject_id) = explode('-', $key);
-            $data->push(compact('year', 'subject_id', 'clients_count'));
+            [$year, $subject_id] = explode('-', $key);
+            $data->push([
+                'year' => (int) $year,
+                'subject_id' => (int) $subject_id,
+                'clients_count' => $clients_count,
+            ]);
         }
 
         // $abstract_groups = array_values($abstract_groups);
@@ -77,7 +84,7 @@ class AbstractGroupsController extends Controller
 
         foreach($contracts as $contract) {
             foreach($contract->subjects as $subject) {
-                if ($subject->status !== 'terminated' && $subject->subject_id == $subject_id) {
+                if ($subject->status !== SubjectStatus::TERMINATED && $subject->subject_id == $subject_id) {
                     // проверяем, находится ли ученик в группе по этому предмету в этом договоре
                     $exists = Group::whereExists(function ($query) use ($contract, $subject) {
                         $query->selectRaw(1)->from('group_clients')

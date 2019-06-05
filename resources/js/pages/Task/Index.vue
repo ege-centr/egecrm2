@@ -14,7 +14,7 @@
         />
         <NoData 
           v-else
-          transparent
+          box
           :add='() => $refs.TaskDialog.open(null)'
         />
       </template>

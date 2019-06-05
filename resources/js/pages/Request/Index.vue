@@ -12,7 +12,7 @@
           <NoData
             :add='() => $refs.RequestDialog.open(null)'
             v-if='items.length === 0'
-            transparent  
+            box
           />
         </v-layout>
       </template>

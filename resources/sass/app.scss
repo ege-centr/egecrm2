@@ -496,19 +496,6 @@ nav {
   }
 }
 
-.group-not-assigned-list {
-  position: relative; 
-  top: -24px;
-  & > div:first-child {
-    clip-path: inset(0px -10px -10px -10px);
-  }
-  & .v-table {
-    & tbody tr:first-child {
-      border-top: 1px solid #e0e0e0;
-    }
-  }
-}
-
 .elevation-debug {
   box-shadow: 0 0 6px 1px limegreen !important;
 }

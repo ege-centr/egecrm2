@@ -9,4 +9,9 @@ trait HasEmail
     {
         return $this->morphOne(Email::class, 'entity');
     }
+
+    public function getEmailStringAttribute()
+    {
+        return optional($this->email)->email;
+    }
 }

@@ -15,7 +15,7 @@ class GroupCollection extends JsonResource
             'default_name' => $this->default_name,
             'bars' => $this->getBars(),
             'branches' => $this->branches,
-            'email' => $this->email,
+            'email' => $this->email_string,
             'subject_status' => $this->subject_status,
             'representative' => new PersonWithEmailResource($this->representative),
         ];

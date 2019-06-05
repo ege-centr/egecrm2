@@ -36,19 +36,19 @@
                   30%
                 </td>
                 <td width='300' class='relative'>
-                  <div class='flex-items align-center' v-if='props.item.email.email'>
+                  <div class='flex-items align-center' v-if='props.item.email'>
                     <v-checkbox class='checkbox-in-table' 
-                      :value='emails.includes(props.item.email.email)' 
-                      @change='selectEmail(props.item.email.email)' hide-details></v-checkbox>
+                      :value='emails.includes(props.item.email)' 
+                      @change='selectEmail(props.item.email)' hide-details></v-checkbox>
                     <EmailShow :item='props.item.email' />
                   </div>
                 </td>
                 <td>
                   <div class='flex-items align-center' 
-                    v-if='props.item.representative.email && props.item.representative.email.email'>
+                    v-if='props.item.representative.email && props.item.representative.email'>
                     <v-checkbox class='checkbox-in-table' 
-                      :value='emails.includes(props.item.representative.email.email)' 
-                      @change='selectEmail(props.item.representative.email.email)' hide-details></v-checkbox>
+                      :value='emails.includes(props.item.representative.email)' 
+                      @change='selectEmail(props.item.representative.email)' hide-details></v-checkbox>
                     <EmailShow :item='props.item.representative.email' />
                   </div>
                 </td>
@@ -153,10 +153,6 @@ export default {
     removeClientFromGroup(client) {
       this.item.clients.splice(this.item.clients.findIndex(e => e.id === client.id), 1)
       axios.delete(apiUrl(GROUP_CLIENTS_API_URL + `?group_id=${this.item.id}&client_id=${client.id}`))
-    },
-
-    moveClient(client) {
-      this.$refs.MoveClientDialog.open(this.item, client)
     },
 
     selectEmail(email) {

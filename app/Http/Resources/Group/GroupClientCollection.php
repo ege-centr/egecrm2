@@ -14,7 +14,7 @@ class GroupClientCollection extends JsonResource
             'names' => $this->names,
             'default_name' => $this->default_name,
             'branches' => $this->branches,
-            'email' => $this->email,
+            'email' => $this->email_string,
             'subject_status' => $this->subject_status,
             'schedule' => $this->schedule,
             'representative' => new PersonWithEmailResource($this->representative),

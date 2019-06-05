@@ -1,6 +1,28 @@
 <template lang="html">
   <div>
-    <Loader v-if='loading' />
+    <Loader v-if='loading && !loadingNew' />
+
+    <v-dialog
+      v-if='loadingNew'
+      v-model="loading"
+      hide-overlay
+      persistent
+      width="300"
+    >
+      <v-card
+        color="primary"
+        dark
+      >
+        <v-card-text class='text-sm-center'>
+          загрузка
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
 
     <div class='flex-items align-center'>
       <YearTabs v-if='tabs' :items='tabsWithData' :selected-year.sync='selectedTab' />
@@ -76,6 +98,11 @@ import InfiniteLoading from 'vue-infinite-loading'
 
 export default {
   props: {
+    loadingNew: {
+      type: Boolean,
+      default: false,
+    },
+    
     apiUrl: {
       type: String,
       required: true,

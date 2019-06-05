@@ -21,7 +21,7 @@ class AdminResource extends JsonResource
             'default_name' => $name ?: $this->nickname,
             'phones' => PhoneResource::collection($this->phones),
             'photo' => new PhotoResource($this->photo),
-            'email' => $this->email,
+            'email' => $this->email_string,
             'ips' => $this->ips
         ]);
     }

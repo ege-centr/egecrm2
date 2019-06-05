@@ -8,7 +8,7 @@
           :display-options="{entity: true, addBtn: false}" />
         <NoData
           v-else
-          transparent
+          box
         />
       </template>
     </DisplayData>

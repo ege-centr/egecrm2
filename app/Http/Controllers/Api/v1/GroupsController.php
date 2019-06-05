@@ -41,7 +41,14 @@ class GroupsController extends Controller
             });
         }
 
-        return $result;
+        // включить в результаты абстрактные группы
+        if (isset($request->abstract)) {
+            $abstractGroups = jsonRedecode(app()->call('App\Http\Controllers\Api\v1\AbstractGroupsController@index'))->data;
+            $result = jsonRedecode($result);
+            $result->data = array_merge($result->data, $abstractGroups);
+        }
+
+        return response()->json($result);
     }
 
     public function store(Request $request)

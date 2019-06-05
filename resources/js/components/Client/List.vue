@@ -16,7 +16,7 @@
     </v-data-table>
     <NoData 
       :add='() => $refs.ClientDialog.open(null)'
-      transparent
+      box
       v-else />
     <ClientDialog ref='ClientDialog' />
   </div>

@@ -201,7 +201,7 @@
 
         <!-- Расписание -->
         <v-tab-item>
-          <ClientSchedule :client-id='$route.params.id' />
+          <!-- <ClientSchedule :client-id='$route.params.id' /> -->
         </v-tab-item>
         
         <!-- Баланс -->
@@ -215,24 +215,12 @@
             :tabs='true'
             :api-url='GROUP_API_URL' 
             :options="{client_id: $route.params.id}"
-            :invisible-filters="{client_ids: $route.params.id}"
-            v-show='!hideGroupPage'
+            :invisible-filters="{client_ids: $route.params.id, abstract: 1}"
           >
             <template slot='items' slot-scope='{ items }'>
-              <GroupList :items='items' />
+              <GroupList :items='items' :abstract='true' @updated='() => $refs.GroupPage.reloadData()' />
             </template>
           </DisplayData>
-          <GroupNotAssignedList 
-            ref='GroupNotAssignedList'
-            :class="{'group-not-assigned-list': !hideGroupPage}" 
-            v-if='$refs.GroupPage && $refs.ContractPage'
-            :year="getGroupPageSelectedTab()"
-            :contracts='$refs.ContractPage.data'
-            :groups='$refs.GroupPage.data'
-            :client-id='client.id'
-            @moved='$refs.GroupPage.loadData' 
-            @updated='recalcHideGroupPage = recalcHideGroupPage + 1'
-          />
         </v-tab-item>
 
         <!-- Платежи -->
@@ -358,7 +346,6 @@ import { API_URL as CONTRACT_API_URL } from '@/components/Contract'
 import ContractList from '@/components/Contract/List'
 
 import ClientDialog from '@/components/Client/Dialog'
-import GroupNotAssignedList from '@/components/Client/GroupNotAssignedList'
 import { API_URL, CLASS_NAME } from '@/components/Client'
 import { 
   RequestItem,
@@ -404,13 +391,11 @@ export default {
       tabs: null,
       loading: true,
       client: null,
-      // TODO: жесткий костыль
-      recalcHideGroupPage: 1,
     }
   },
 
   components: { 
-    RequestDialog, RequestItem, Comments, ContractList, GroupList, GroupNotAssignedList, 
+    RequestDialog, RequestItem, Comments, ContractList, GroupList, 
     PaymentList, ClientDialog, PhoneList, BranchList, EmailShow, TestAdminClientList,
     DisplayData, PaymentDialog, ClientSchedule, Balance, ReportList, LogList,
     ReviewAdminList, PaymentAdditionalList, PaymentAdditionalDialog,
@@ -436,27 +421,6 @@ export default {
         })
       })
     },
-
-    // TODO: надо придумать что-то покрасивее с компонентами, которые сразу не доступны в $refs
-    // https://forum.vuejs.org/t/solved-this-refs-key-returns-undefined-when-it-really-is/1226
-    getGroupPageSelectedTab() {
-      if (this.$refs.GroupPage) {
-        return this.$refs.GroupPage.selected_tab
-      }
-      return null
-    },
   },
-
-  computed: {
-    // скрыть компонент групп в случае если нет групп, но есть болота
-    // чтобы в компоненте групп не отображалось "нет данных"
-    hideGroupPage() {
-      this.recalcHideGroupPage++
-      if (this.$refs.GroupPage === undefined || this.$refs.GroupNotAssignedList === undefined) {
-        return false
-      }
-      return this.$refs.GroupPage.data.length === 0 && this.$refs.GroupNotAssignedList.items.length > 0
-    }
-  }
 }
 </script>

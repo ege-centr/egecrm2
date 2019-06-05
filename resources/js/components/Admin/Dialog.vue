@@ -156,6 +156,7 @@
                   :label="rights.all[right]"
                   color="success"
                   hide-details
+                  @change='toggleRight(right)'
                   :input-value='item.rights.indexOf(right) !== -1'
                 ></v-switch>
                 </div>
@@ -167,6 +168,7 @@
                   :label="rights.all[right]"
                   color="success"
                   hide-details
+                  @change='toggleRight(right)'
                   :input-value='item.rights.indexOf(right) !== -1'
                 ></v-switch>
                 </div>

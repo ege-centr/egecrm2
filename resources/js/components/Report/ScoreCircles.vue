@@ -3,21 +3,22 @@
     <v-tooltip bottom>
       <ScoreCircle slot='activator' :score='item.homework_score' />
       <span>
-        <h4>Оценка</h4>
-        {{ getCategoryTitle(CATEGORY.homework) }}</span>
+        <h4>{{ getCategoryTitle(CATEGORY.homework) }}</h4>
+        {{ item.homework_comment }}
+      </span>
     </v-tooltip>
     <v-tooltip bottom>
       <ScoreCircle slot='activator' :score='item.learning_ability_score' />
       <span>
-        <h4>Оценка</h4>
-        {{ getCategoryTitle(CATEGORY.learningAbility) }}
+        <h4>{{ getCategoryTitle(CATEGORY.learningAbility) }}</h4>
+        {{ item.learning_ability_comment }}
       </span>
     </v-tooltip>
     <v-tooltip bottom>
       <ScoreCircle slot='activator' :score='item.knowledge_score' />
       <span>
-        <h4>Оценка</h4>
-        {{ getCategoryTitle(CATEGORY.knowledge) }}
+        <h4>{{ getCategoryTitle(CATEGORY.knowledge) }}</h4>
+        {{ item.knowledge_comment }}
       </span>
     </v-tooltip>
   </div>

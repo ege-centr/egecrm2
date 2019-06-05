@@ -62,12 +62,18 @@
                         ></v-select>
                       </div>
 
-                       <div class='vertical-inputs__input'>
+                      <div class='vertical-inputs__input'>
                         <DatePicker v-model='item.birthdate' label="Дата рождения" />
                       </div>
 
-                      <EmailField class='vertical-inputs__input' :entity='item' label='Email (используется в качестве логина)' />
-
+                      <div class='vertical-inputs__input'>
+                        <v-text-field 
+                          hide-details
+                          label='Email (используется в качестве логина)' 
+                          v-model='item.email'
+                        />
+                      </div>
+                      
                       <div>
                         <PhoneEdit :item='item' />
                       </div>
@@ -113,7 +119,13 @@
                       <div class='vertical-inputs__input vertical-inputs__input_wide'>
                         <v-text-field v-model="item.representative.address" label="Адрес" hide-details></v-text-field>
                       </div>
-                      <EmailField class='vertical-inputs__input' :entity='item.representative' label='Email (используется в качестве логина)' />
+                       <div class='vertical-inputs__input'>
+                        <v-text-field 
+                          hide-details
+                          label='Email (используется в качестве логина)' 
+                          v-model='item.representative.email'
+                        />
+                      </div>
                         <!-- <div class='vertical-inputs__input__message blue--text accent-1'>данный email используется в качестве логина</div> -->
                       <div>
                         <PhoneEdit :item='item.representative' />
@@ -135,7 +147,6 @@
 import ClientMap from '@/components/Client/Map'
 import PhoneEdit from '@/components/Phone/Edit'
 import { MODEL_DEFAULTS, CLASS_NAME, API_URL } from '@/components/Client'
-import EmailField from '@/components/Email/Field'
 import GradeAndYear from '@/components/GradeAndYear'
 import AvatarLoader from '@/components/AvatarLoader'
 import DatePicker from '@/components/UI/DatePicker'
@@ -152,6 +163,6 @@ export default {
     }
   },
 
-  components: {  AvatarLoader, PhoneEdit, EmailField, GradeAndYear, DatePicker },
+  components: {  AvatarLoader, PhoneEdit, GradeAndYear, DatePicker },
 }
 </script>

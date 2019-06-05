@@ -70,7 +70,7 @@
                               <v-icon>edit</v-icon>
                             </v-list-tile-action>
                             <v-list-tile-content>
-                              <v-list-tile-title>Редактировать</v-list-tile-title>
+                              <v-list-tile-title>Параметры</v-list-tile-title>
                             </v-list-tile-content>
                         </v-list-tile>
                         <v-list-tile @click='$refs.TopicDialog.open(item.id)' v-if='item.status !== LESSON_STATUS.CANCELLED'>
@@ -78,7 +78,7 @@
                               <v-icon>chrome_reader_mode</v-icon>
                             </v-list-tile-action>
                             <v-list-tile-content>
-                              <v-list-tile-title>Установить тему</v-list-tile-title>
+                              <v-list-tile-title>Тема занятия</v-list-tile-title>
                             </v-list-tile-content>
                         </v-list-tile>
                         <v-list-tile @click='$refs.ConductDialog.open(item.id)'>
@@ -86,7 +86,9 @@
                               <v-icon>assignment_turned_in</v-icon>
                             </v-list-tile-action>
                             <v-list-tile-content>
-                              <v-list-tile-title>Провести</v-list-tile-title>
+                              <v-list-tile-title>
+                                {{ item.status === LESSON_STATUS.CONDUCTED ? 'Редактировать' : 'Провести' }}
+                              </v-list-tile-title>
                             </v-list-tile-content>
                         </v-list-tile>
                     </v-list>
@@ -160,10 +162,11 @@
                 </tr>
               </template>
             </v-data-table>
-            <NoData v-else
-                  title='Место для расписания'
-                  text='В выборке отсутствуют элементы. Вы можете добавить их, чтобы изменить ситуацию'
-                  :add='isAdmin() ? addLesson : undefined' />
+            <NoData 
+              v-else 
+              :height='500'
+              box
+              :add='isAdmin() ? addLesson : undefined' />
           </v-flex>
         </v-layout>
       </v-container>

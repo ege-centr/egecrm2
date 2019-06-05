@@ -31,6 +31,19 @@
           <div v-else-if='item.topic' class='relative'>
             <DivBlocker v-if='cantEdit' />
             <v-alert
+              v-if='item.status === LESSON_STATUS.CONDUCTED'
+              :value="true"
+              type="success"
+              outline
+              class='mx-3 mb-4'
+              style='width: fit-content'
+            >
+              Это занятие уже проведено. При редактировании данных не <br>
+              отправляются СМС, комментарии, не производится начисление <br>
+              оплаты и бонусов
+            </v-alert>
+            <v-alert
+              v-else
               :value="true"
               type="info"
               outline
@@ -265,6 +278,7 @@ export default {
         // this.item = r.data
         this.dialog = false
         this.$emit('updated')
+        this.$store.commit('message', {text: 'занятие проведено', color: 'green'})
       })
     },
   },

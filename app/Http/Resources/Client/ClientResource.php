@@ -23,7 +23,7 @@ class ClientResource extends JsonResource
             'contracts' => ContractResource::collection($this->contracts),
             'representative' => new Representative($this->representative),
             'tests' => ClientTest::collection($this->tests),
-            'email' => $this->email,
+            'email' => $this->email_string,
             'photo' => new PhotoResource($this->photo),
             'headTeacher' => $this->getHeadTeacher(),
             'createdUser' => new \PersonResource($this->createdUser),

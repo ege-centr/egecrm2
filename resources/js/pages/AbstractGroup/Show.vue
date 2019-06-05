@@ -32,7 +32,7 @@
               <template slot='items' slot-scope="props">
                 <td width='200'>
                   <router-link :to="{name: 'ClientShow', params: { id: props.item.id }}">
-                    <PersonName :item='props.item' field='names.abbreviation' />
+                    {{ props.item.default_name }}
                   </router-link>
                 </td>
                 <td width='200'>
@@ -45,11 +45,11 @@
                   ТУР
                 </td>
                 <td class='text-md-right' style='padding-right: 16px'>
-                  <v-menu>
-                    <v-btn @click='moveClient(props.item)' slot='activator' flat icon color="black" class='ma-0'>
+                    <v-btn 
+                      @click='() => $refs.MoveClientDialog.open(abstractGroup, props.item.id)' 
+                      flat icon color="black" class='ma-0'>
                       <v-icon>more_horiz</v-icon>
                     </v-btn>
-                  </v-menu>
                 </td>
               </template>
             </v-data-table>
@@ -95,10 +95,6 @@ export default {
 
     removeClientFromGroup(client) {
       this.clients.splice(this.clients.findIndex(e => e.id === client.id), 1)
-    },
-
-    moveClient(client) {
-      this.$refs.MoveClientDialog.open(this.abstractGroup, client.id)
     },
   },
 

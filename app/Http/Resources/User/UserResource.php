@@ -13,7 +13,7 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'type' => get_class($this->resource),
             'photo' => new PhotoResource($this->photo),
-            'email' => $this->email,
+            'email' => $this->email_string,
             'name' => $this->default_name,
         ];
     }

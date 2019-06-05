@@ -40,7 +40,9 @@ class ReviewsController extends Controller
     {
         $review = Review::create($request->all());
         foreach($request->comments as $comment) {
-            $review->comments()->create($comment);
+            if ($comment['rating'] || $comment['text']) {
+                $review->comments()->create($comment);
+            }
         }
         return new ReviewResource($review->fresh());
     }

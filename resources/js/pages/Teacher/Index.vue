@@ -5,7 +5,7 @@
         <TeacherList :items='items' v-if='items.length > 0' />
         <NoData
           v-else
-          transparent
+          box
         />
       </template>
     </DisplayData>

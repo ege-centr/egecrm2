@@ -59,6 +59,8 @@ export default {
   },
 
   methods: {
+    // clientId – ID текущего клиента нужен для исключения групп из подборки, 
+    // в которых клиент уже находится
     open(group, clientId) {
       this.pre_installed_filters = {}
       this.groups = null
@@ -71,7 +73,6 @@ export default {
           this.pre_installed_filters[field] = [group[field]]
         }
       })
-      console.log(this.pre_installed_filters)
       this.dialog = true
     },
 
