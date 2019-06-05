@@ -16,6 +16,8 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
 
     Route::middleware('login')->group(function () {
 
+        Route::post('phones/check-duplicate', 'PhonesController@checkDuplicate');
+
         // пустой action для продолжения сессии
         Route::get('continue-session', function () { });
 
