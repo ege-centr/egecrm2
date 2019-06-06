@@ -18,8 +18,11 @@
         (response) => response, 
         // (error) => this.$store.commit('message', {text: error.response.data.message})
         (error) => {
-          console.log('error', error)
-          this.$store.commit('message', {text: 'ошибка сервера'})
+          if (error.response.status === 401) {
+            this.$store.commit('setUser', null)
+          } else {
+            this.$store.commit('message', {text: 'ошибка сервера'})
+          }
         }
       )
 
