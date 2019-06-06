@@ -6,12 +6,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\{Client\Client, Request as ClientRequest};
 use App\Http\Resources\Request\{RequestResource, RequestCollection};
+use App\Http\Resources\AlgoliaResult;
 
 class RequestsController extends Controller
 {
     protected $filters = [
-        'multiple' => ['status', 'grade_id', 'responsible_admin_id', 'created_email_id'],
-        'interval' => ['created_at'],
+        'multiple' => ['grade_id', 'responsible_admin_id', 'created_email_id'],
+        'timestamp' => ['date_timestamp'],
     ];
 
     public function index(Request $request)
@@ -21,9 +22,36 @@ class RequestsController extends Controller
                 $this->showAll(Client::find($request->client_id)->requests())
             );
         }
-        $query = ClientRequest::with(['responsibleAdmin', 'createdEmail'])->orderBy('id', 'desc');
+
+        $filters = [];
+        foreach(['status'] as $field) {
+            if ($request->input($field)) {
+                $values = explode(',', $request->input($field));
+                $filters[] = implode(' OR ', array_map(function ($value) use ($field) {
+                    return $field . ':' . $value;
+                }, $values));
+            }
+        }
+
+        $query = ClientRequest::search()->with([
+            'facets' => ['*'],
+            'filters' => implode(' AND ', $filters)
+        ]);
+
         $this->filter($request, $query);
-        return RequestCollection::collection($this->showBy($request, $query));
+
+        $result = new AlgoliaResult(
+            $query->paginateRaw($request->paginate ?: SHOW_ALL)
+        );
+        $result = jsonRedecode($result);
+        $ids = collect($result->data)->pluck('id');
+
+        $items = ClientRequest::whereIn('id', $ids)->with(['responsibleAdmin', 'createdEmail'])->orderBy('id', 'desc')->get();
+        $result->data = RequestCollection::collection($items);
+        if (is_array($result->facets) && empty($result->facets)) {
+            $result->facets = (object) [];
+        }
+        return response()->json($result);
     }
 
     public function store(Request $request)

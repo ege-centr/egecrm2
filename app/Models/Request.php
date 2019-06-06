@@ -5,10 +5,11 @@ namespace App\Models;
 use Shared\Model;
 use App\Traits\{Enumable, HasPhones, HasCreatedEmail, Commentable};
 use App\Models\Client\Client;
+use Laravel\Scout\Searchable;
 
 class Request extends Model
 {
-    use Enumable, HasPhones, HasCreatedEmail, Commentable;
+    use Enumable, HasPhones, HasCreatedEmail, Commentable, Searchable;
 
     protected $fillable = [
         'name', 'grade_id', 'comment', 'responsible_admin_id',
@@ -22,6 +23,15 @@ class Request extends Model
     public function responsibleAdmin()
     {
         return $this->belongsTo(Admin\Admin::class, 'responsible_admin_id');
+    }
+
+    public function toSearchableArray()
+    {
+        return extractFields($this, [
+            'id', 'status', 'grade_id', 'responsible_admin_id', 'created_email_id'
+        ], [
+            'created_at_timestamp' => strtotime($this->created_at)
+        ]);
     }
 
     public function getClientIds()
