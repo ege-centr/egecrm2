@@ -157,7 +157,10 @@ export default {
   data() {
     return {
       page: 1,
+      // изначальная загрузка (спиннер на весь экран + блокировка)
       loading: true,
+      // загрузка страницы (infinite-scroll внизу)
+      pageLoading: true,
       // для пересоздания компонента
       infiniteLoadingComponent: true,
       data: [],
@@ -178,6 +181,7 @@ export default {
     // usedFilter если установлен, то перезагружать данные не надо,
     // а только recount фасетов сделать без учета этого фильтрас
     loadData(state, usedFilter = null) {
+      this.pageLoading = true
       let filters = this.currentFilters
       if (usedFilter !== null) {
         this.usedFilterFacets = null
@@ -191,6 +195,7 @@ export default {
         ...this.invisibleFilters,
         // ...this.getSort(),
       })).then(response => {
+        this.pageLoading = false
         this.loading = false
         const facets = 'facets' in response.data ? response.data.facets : null
         if (usedFilter !== null) {
@@ -232,7 +237,6 @@ export default {
           //   }
           //   this.page++
           // }
-          this.loading = false
         }
       })
     },

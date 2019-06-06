@@ -7,7 +7,7 @@
   >
     <template v-slot:items='{ item, index }'>
       <tr>
-        <td>
+        <td style='white-space: nowrap'>
           {{ formatDate(item.date, index) }}
         </td>
         <td v-for="field in fields" :key='field'>

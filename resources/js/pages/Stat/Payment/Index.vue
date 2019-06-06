@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class='flex-items align-center'>
+    <div class='flex-items align-center relative'>
+      <DivBlocker v-if="_.get($refs, 'DisplayData.pageLoading')" />
       <v-chip v-for="(label, id) in entityModes" class='pointer ml-0 mr-3'
         :class="{'primary white--text': id === selectedEntityMode}"
         @click='selectedEntityMode = id'

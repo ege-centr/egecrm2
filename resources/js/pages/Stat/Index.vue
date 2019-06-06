@@ -8,13 +8,14 @@
         :paginate='50'
     >
       <template slot='buttons'>
-         <v-chip v-for="(label, id) in TIME_MODE" class='pointer ml-0 mr-3'
+        <DivBlocker v-if="_.get($refs, 'DisplayData.pageLoading')" />
+        <v-chip v-for="(label, id) in TIME_MODE" class='pointer ml-0 mr-3'
             :class="{'primary white--text': id === selectedMode}"
             @click='selectedMode = id'
             :key='id'
           >
             {{ label }}
-          </v-chip>
+        </v-chip>
       </template>
       <template slot='items' slot-scope="{ items }">
         <StatList :items='items' :selected-mode='selectedMode' />
