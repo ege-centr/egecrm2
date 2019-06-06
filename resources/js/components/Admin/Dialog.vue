@@ -42,7 +42,7 @@
                         <v-text-field hide-details v-model="item.last_name" label="Фамилия"></v-text-field>
                       </div>
                       <div class='vertical-inputs__input'>
-                        <v-text-field hide-details v-model="item.first_name" label="Отчество"></v-text-field>
+                        <v-text-field hide-details v-model="item.middle_name" label="Отчество"></v-text-field>
                       </div>
                     </div>
                   </v-flex>
