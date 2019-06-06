@@ -119,9 +119,15 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         });
 
         Route::get('rights', function() {
+            $groups = \Shared\Rights::$groups;
+            // убиваем права:
+            // разработчик
+            // управление IP адресами
+            // после переноса изменить сам Shared\Rights
+            $groups['COMMON'] = array_diff($groups['COMMON'], [12, 61]);
             return response()->json([
                 'all' => \Shared\Rights::$all,
-                'groups' => \Shared\Rights::$groups
+                'groups' => $groups
             ]);
         });
     });
