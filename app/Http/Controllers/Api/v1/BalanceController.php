@@ -37,7 +37,7 @@ class BalanceController extends Controller
                     'comment' => $comment,
                     'date' => $lesson->date,
                     'year' => $lesson->group->year,
-                    'user' => new PersonResource($lesson->createdUser),
+                    'user' => $lesson->created_email_id ? new PersonResource($lesson->createdUser) : null,
                     'created_at' => $lesson->created_at,
                 ];
             }
@@ -78,7 +78,7 @@ class BalanceController extends Controller
                     'comment' => $comment,
                     'date' => $clientLesson->lesson->date,
                     'year' => $clientLesson->lesson->group->year,
-                    'user' => new PersonResource($clientLesson->lesson->createdUser),
+                    'user' => $clientLesson->lesson->created_email_id ? new PersonResource($clientLesson->lesson->createdUser) : null,
                     'created_at' => $clientLesson->lesson->created_at,
                     'bonus' => 0,
                 ];
@@ -92,7 +92,7 @@ class BalanceController extends Controller
                 'comment' => $additionalPayment->purpose,
                 'date' => $additionalPayment->date,
                 'year' => $additionalPayment->year,
-                'user' => new PersonResource($additionalPayment->createdUser),
+                'user' => $additionalPayment->created_email_id ? new PersonResource($additionalPayment->createdUser) : null,
                 'created_at' => $additionalPayment->created_at,
                 'bonus' => 0,
             ];
@@ -114,7 +114,7 @@ class BalanceController extends Controller
                 'comment' => $comment,
                 'date' => $payment->date,
                 'year' => $payment->year,
-                'user' => new PersonResource(Email::getUser($payment->created_email_id)),
+                'user' => $payment->created_email_id ? new PersonResource(Email::getUser($payment->created_email_id)) : null,
                 'created_at' => $payment->created_at,
                 'bonus' => 0,
             ];
