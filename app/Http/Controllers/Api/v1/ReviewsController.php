@@ -31,6 +31,9 @@ class ReviewsController extends Controller
                     $item['review'] = $item['review_id'] > 0 ? new ReviewCollection(Review::find($item['review_id'])) : null;
                 }
             }
+            if ($key === 'facets' && count($items) === 0) {
+                return null;
+            }
             return $items;
         });
         return $result;

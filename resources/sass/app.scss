@@ -590,3 +590,12 @@ nav {
     margin-bottom: 20px;
   }
 }
+
+.v-overlay:before {
+  background-color: initial;
+}
+
+.v-overlay--active:before {
+  opacity: .9 !important;
+  background-color: white !important;
+}

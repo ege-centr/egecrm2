@@ -2,28 +2,6 @@
   <div>
     <Loader v-if='loading && !loadingNew' />
 
-    <v-dialog
-      v-if='loadingNew'
-      v-model="loading"
-      hide-overlay
-      persistent
-      width="300"
-    >
-      <v-card
-        color="primary"
-        dark
-      >
-        <v-card-text class='text-sm-center'>
-          загрузка
-          <v-progress-linear
-            indeterminate
-            color="white"
-            class="mb-0"
-          ></v-progress-linear>
-        </v-card-text>
-      </v-card>
-    </v-dialog>
-
     <div class='flex-items align-center'>
       <YearTabs v-if='tabs' :items='tabsWithData' :selected-year.sync='selectedTab' />
       <div v-else-if='customTabs !== null'>
@@ -172,6 +150,7 @@ export default {
   },
 
   created() {
+    this.setLoading(true)
     if (this.paginate === null) {
       this.loadData()
     }
@@ -196,7 +175,7 @@ export default {
         // ...this.getSort(),
       })).then(response => {
         this.pageLoading = false
-        this.loading = false
+        this.setLoading(false)
         const facets = 'facets' in response.data ? response.data.facets : null
         if (usedFilter !== null) {
           this.usedFilterFacets = facets[usedFilter]
@@ -243,7 +222,7 @@ export default {
 
     reloadData() {
       colorLog('Reloading data', 'Turquoise')
-      this.loading = true
+      this.setLoading(true)
       this.page = 1
       this.data = []
       if (this.paginate === null) {
@@ -270,13 +249,13 @@ export default {
     },
 
     toggleSortType() {
-      this.loading = true
+      this.setLoading(true)
       this.selectedSort.type = this.selectedSort.type === 'asc' ? 'desc' : 'asc'
       this.reloadData()
     },
 
     setSort(index) {
-      this.loading = true
+      this.setLoading(true)
       this.selectedSort.selected = false
       this.sort[index].selected = true
       this.reloadData()
@@ -287,6 +266,13 @@ export default {
       this.$emit('update:current-filters', filters)
       if (!initial_set) {
         this.reloadData()
+      }
+    },
+
+    setLoading(value) {
+      this.loading = value
+      if (this.loadingNew) {
+        this.$store.commit('loading', value)
       }
     },
   },

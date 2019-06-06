@@ -31,6 +31,9 @@ export default {
         this.edit_mode = false
         this.item = {...this.MODEL_DEFAULTS, ...defaults }
         this.loading = false
+        if (_.isFunction(this.afterLoad)) {
+          this.afterLoad()
+        }
       }
       if (_.isFunction(this.afterOpen)) {
         this.afterOpen(item_id, defaults, options)
@@ -42,6 +45,9 @@ export default {
       await axios.get(apiUrl(this.API_URL, item_id)).then(r => {
         this.item = r.data
         this.loading = false
+        if (_.isFunction(this.afterLoad)) {
+          this.afterLoad()
+        }
       })
     },
 

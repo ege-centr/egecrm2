@@ -11,7 +11,7 @@ const store = new Vuex.Store({
     drawer: true,
     user: null,
     data: null,
-    loading: false, // depricated?
+    loading: false,
     counters: {},
     snackBar: {
       show: false,

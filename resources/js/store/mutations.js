@@ -44,7 +44,6 @@ export default {
     localStorage.setItem('drawer', state.drawer)
   },
 
-  // depricated?
   loading(state, value) {
     state.loading = value
   }

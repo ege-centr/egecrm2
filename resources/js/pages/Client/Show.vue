@@ -194,14 +194,14 @@
             :invisible-filters="{client_id: client.id}"
           >
             <template slot='items' slot-scope='{ items }'>
-              <ContractList :items='items' :client-id='client.id' @updated='() => $refs.ContractPage.loadData()' />
+              <ContractList :items='items' :client-id='client.id' @updated='contractsUpdated' />
             </template>
           </DisplayData>
         </v-tab-item>
 
         <!-- Расписание -->
         <v-tab-item>
-          <!-- <ClientSchedule :client-id='$route.params.id' /> -->
+          <ClientSchedule :client-id='$route.params.id' />
         </v-tab-item>
         
         <!-- Баланс -->
@@ -420,6 +420,11 @@ export default {
           this.loading = false
         })
       })
+    },
+
+    contractsUpdated() {
+      this.$refs.ContractPage.loadData()
+      this.$refs.GroupPage.reloadData()
     },
   },
 }

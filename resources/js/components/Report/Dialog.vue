@@ -184,6 +184,10 @@ export default {
       defaults: null,
       client: null,
       clientLessons: null,
+      // отчет был доступен родителям на момент открытия
+      // для избежания ситуации, когда отчет уже сохранен со значением "доступен для родителя"
+      // но email родителя на самом деле нет
+      wasAvailableForParents: null,
     }
   },
 
@@ -195,6 +199,7 @@ export default {
     beforeOpen(item_id, defaults, options) {
       this.clientLessons = null
       this.client = null
+      this.wasAvailableForParents = null
       this.defaults = defaults
       axios.get(apiUrl(CLIENT_API_URL, defaults.client_id)).then(r => {
         this.client = r.data
@@ -205,10 +210,10 @@ export default {
       axios.post(apiUrl(API_URL, 'client-lessons'), defaults).then(r => {
         this.clientLessons = r.data
       })
-      console.log(item_id)
-      if (item_id === null) {
-        this.item.date = moment().format('YYYY-MM-DD')  
-      }
+    },
+
+    afterLoad() {
+      this.wasAvailableForParents = this.item.is_available_for_parents
     },
 
     setScore(score, categoryName) {
@@ -217,8 +222,12 @@ export default {
   },
 
   watch: {
-      'item.is_available_for_parents'(newVal) {
-        if (newVal) {
+      'item.is_available_for_parents'(newVal, oldVal) {
+        if (newVal && !this.wasAvailableForParents) {
+          console.log('WATCH', {
+            newVal,
+            wasAvailableForParents: this.wasAvailableForParents,
+          })
           setTimeout(() => {
             this.item.is_available_for_parents = false
             this.$store.commit('message', {text: 'email родителя не установлен'})

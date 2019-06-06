@@ -11,6 +11,25 @@
         <SearchResults v-show='$store.state.search.results !== null' />
       </v-container>
     </v-content>
+    <v-dialog
+      v-model="$store.state.loading"
+      persistent
+      width="300"
+    >
+      <v-card
+        color="primary"
+        dark
+      >
+        <v-card-text class='text-sm-center'>
+          Загрузка
+          <v-progress-linear
+            indeterminate
+            color="white"
+            class="mb-0"
+          ></v-progress-linear>
+        </v-card-text>
+      </v-card>
+    </v-dialog>
     <v-snackbar v-model="$store.state.snackBar.show"
       :bottom="true"
       :timeout="6000"
