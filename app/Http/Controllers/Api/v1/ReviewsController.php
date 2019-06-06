@@ -57,10 +57,12 @@ class ReviewsController extends Controller
         $review = Review::find($id);
         $review->update($request->all());
         foreach($request->comments as $comment) {
-            if (isset($comment['id'])) {
-                ReviewComment::find($comment['id'])->update($comment);
-            } else {
-                $review->comments()->create($comment);
+            if ($comment['rating'] || $comment['text']) {
+                if (isset($comment['id'])) {
+                    ReviewComment::find($comment['id'])->update($comment);
+                } else {
+                    $review->comments()->create($comment);
+                }
             }
         }
 
