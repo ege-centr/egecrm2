@@ -42,7 +42,9 @@ class AdminsController extends Controller
         $model->ips()->delete();
         $model->ips()->createMany($request->ips);
 
-        $model->email->update($request->email);
+        if (isset($request->email) && $request->email) {
+            $model->email->update(['email' => $request->email]);
+        }
 
         return $model;
     }

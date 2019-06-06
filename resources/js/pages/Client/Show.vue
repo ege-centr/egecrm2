@@ -91,7 +91,7 @@
                       <v-list-tile-title>Редактировать</v-list-tile-title>
                     </v-list-tile-content>
                   </v-list-tile>
-                  <v-list-tile @click="loading = true; PreviewMode.login(client.id, CLASS_NAME)">
+                  <v-list-tile v-if='client.email' @click="loading = true; PreviewMode.login(client.id, CLASS_NAME)">
                     <v-list-tile-action>
                       <v-icon>visibility</v-icon>
                     </v-list-tile-action>

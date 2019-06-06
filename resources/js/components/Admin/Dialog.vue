@@ -33,17 +33,32 @@
 
               <v-flex d-flex md8>
                 <v-layout row wrap>
-                  <v-flex md3>
-                    <v-text-field v-model="item.first_name" label="Имя"></v-text-field>
+                  <v-flex md12 class='pb-0'>
+                    <div class='vertical-inputs flex-items'>
+                      <div class='vertical-inputs__input mr-3'>
+                        <v-text-field hide-details v-model="item.first_name" label="Имя"></v-text-field>
+                      </div>
+                      <div class='vertical-inputs__input mr-3'>
+                        <v-text-field hide-details v-model="item.last_name" label="Фамилия"></v-text-field>
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <v-text-field hide-details v-model="item.first_name" label="Отчество"></v-text-field>
+                      </div>
+                    </div>
                   </v-flex>
-                  <v-flex md3>
-                    <v-text-field v-model="item.last_name" label="Фамилия"></v-text-field>
-                  </v-flex>
-                  <v-flex md3>
-                    <v-text-field v-model="item.first_name" label="Отчество"></v-text-field>
-                  </v-flex>
-                  <v-flex md3>
-                    <v-text-field v-model="item.nickname" label="Никнейм"></v-text-field>
+                  <v-flex md12>
+                    <div class='vertical-inputs'>
+                      <div class='vertical-inputs__input'>
+                        <v-text-field hide-details v-model="item.nickname" label="Никнейм"></v-text-field>
+                      </div>
+                      <div class='vertical-inputs__input'>
+                        <v-text-field hide-details 
+                          hide-details
+                          label='Email (используется в качестве логина)' 
+                          v-model='item.email'
+                        />
+                      </div>
+                    </div>
                   </v-flex>
                   <v-flex md12 class='py-0'>
                     <PhoneEdit :item='item' :max='1' />
