@@ -20,7 +20,7 @@ class AdminCollection extends JsonResource
             'id' => $this->id,
             'default_name' => $name ?: $this->nickname,
             'is_banned' => $this->isBanned(),
-            'email_id' => $this->email->id,
+            'email_id' => optional($this->email)->id,
             'photo' => new PhotoResource($this->photo),
         ];
     }

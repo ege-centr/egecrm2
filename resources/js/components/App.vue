@@ -17,7 +17,10 @@
       axios.interceptors.response.use(
         (response) => response, 
         // (error) => this.$store.commit('message', {text: error.response.data.message})
-        (error) => this.$store.commit('message', {text: 'ошибка сервера'})
+        (error) => {
+          console.log('error', error)
+          this.$store.commit('message', {text: 'ошибка сервера'})
+        }
       )
 
       // типа Drawer сохраняется в LocalStorage
