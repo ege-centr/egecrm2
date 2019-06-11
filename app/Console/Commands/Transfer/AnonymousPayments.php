@@ -60,6 +60,10 @@ class AnonymousPayments extends TransferCommand
                 'updated_at' => $payment->first_save_date,
             ]);
 
+            DB::table('representatives')->insert([
+                'client_id' => $clientId,
+            ]);
+
             if (isset($extra->email) && $extra->email) {
                 $this->insertEmail($extra->email, $clientId, Client::class);
             }
