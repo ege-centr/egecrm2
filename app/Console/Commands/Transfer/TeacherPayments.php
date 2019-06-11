@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\Teacher;
 use DB;
 
-class TeacherPayments extends Command
+class TeacherPayments extends TransferCommand
 {
     /**
      * The name and signature of the console command.
@@ -40,7 +40,7 @@ class TeacherPayments extends Command
     public function handle()
     {
         $take = $this->argument('take');
-        DB::table('payments')->where('entity_type', Teacher::class)->delete();
+        $this->truncateByEntity('payments', Teacher::class);
 
         $teacher_ids = Teacher::pluck('id');
 
@@ -67,8 +67,7 @@ class TeacherPayments extends Command
                     'bill_number' => $payment->document_number ?: null,
                     'created_at' => $payment->first_save_date,
                     'updated_at' => $payment->first_save_date,
-                    'created_admin_id' => $this->getAdminId($payment->id_user),
-                    'entity_type' => Teacher::class,
+                    'created_email_id' => $this->getCreatedEmailId($payment->id_user),
                     'entity_id' => $teacher_id,
                 ]);
             }
@@ -100,14 +99,5 @@ class TeacherPayments extends Command
             case 2: return 'career_guidance';
             case 3: return 'ege_trial';
         }
-    }
-
-    public function getAdminId($value)
-    {
-        // TODO: проверить связи
-        if (\App\Models\Admin\Admin::whereId($value)->exists()) {
-            return $value;
-        }
-        return 69;
     }
 }

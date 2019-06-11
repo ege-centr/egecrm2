@@ -2,25 +2,21 @@
 
 namespace App\Console\Commands\Transfer;
 
-use Illuminate\Console\Command;
-use App\Models\{Admin\Admin, Admin\AdminIp, Email, Phone};
-use DB;
-
-class AdminNicknames extends Command
+class Init extends TransferCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'transfer:admin-nicknames';
+    protected $signature = 'transfer:init';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Clear all tables before transfer';
 
     /**
      * Create a new command instance.
@@ -39,14 +35,16 @@ class AdminNicknames extends Command
      */
     public function handle()
     {
-        $admins = Admin::all();
-        $bar = $this->output->createProgressBar(count($admins));
+        $skip = ['migrations', 'settings', 'sms_templates'];
+        $tables = array_map('reset', \DB::select('SHOW TABLES'));
 
-        foreach ($admins as $admin) {
-            Admin::whereId($admin->id)->update([
-                'nickname' => dbEgecrm('admins')->whereId($admin->id)->value('login')
-            ]);
+        $bar = $this->output->createProgressBar(count($tables));
+        foreach($tables as $table) {
             $bar->advance();
+            if (in_array($table, $skip)) {
+                continue;
+            }
+            $this->truncate($table);
         }
         $bar->finish();
     }

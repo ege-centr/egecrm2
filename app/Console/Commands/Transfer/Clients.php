@@ -3,10 +3,10 @@
 namespace App\Console\Commands\Transfer;
 
 use Illuminate\Console\Command;
-use App\Models\{Client\Client, Email, Phone};
+use App\Models\{Client\Client, Client\Representative, Email, Phone};
 use DB;
 
-class Clients extends Command
+class Clients extends TransferCommand
 {
     /**
      * The name and signature of the console command.
@@ -20,7 +20,7 @@ class Clients extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Transfer clients';
 
     /**
      * Create a new command instance.
@@ -40,19 +40,19 @@ class Clients extends Command
     public function handle()
     {
         $take = $this->argument('take');
-        DB::table('clients')->delete();
-        DB::table('representatives')->delete();
-        DB::table('contracts')->delete();
-        DB::table('contract_payments')->delete();
-        DB::table('contract_subjects')->delete();
-        DB::table('phones')->where('entity_type', Client::class)->delete();
-        DB::table('emails')->where('entity_type', Client::class)->delete();
-        DB::table('comments')->where('entity_type', Client::class)->delete();
-
-        $contract_number = 1;
+        $this->truncate('clients');
+        $this->truncate('representatives');
+        $this->truncate('contracts');
+        $this->truncate('contract_payments');
+        $this->truncate('contract_subjects');
+        $this->truncateByEntity('phones', Client::class);
+        $this->truncateByEntity('emails', Client::class);
+        $this->truncateByEntity('emails', Representative::class);
+        $this->truncateByEntity('comments', Client::class);
+        $this->truncateByEntity('payments', Client::class);
 
         $egecrm_items = dbEgecrm('students')
-            ->whereNotNull('first_name')
+            ->where('id_representative', '>', 0)
             ->when($take != 'all', function ($query) use ($take) {
                 return $query->take($take)->orderBy('id', 'desc');
             })
@@ -75,17 +75,26 @@ class Clients extends Command
                 'updated_at' => getCurrentTime()
             ]);
 
+            // берём birthdate из паспорта клиента
+            $passport = dbEgecrm('passports')->whereId($item->id_passport)->first();
+            if ($passport) {
+                DB::table('clients')->whereId($id)->update([
+                    'birthdate' => $passport->date_birthday
+                ]);
+            }
+
             // representative & passport
             $representative = dbEgecrm('representatives')->whereId($item->id_representative)->first();
-            $passport_exists = false;
             if ($representative) {
+                $representativeId = DB::table('representatives')->insertGetId([
+                    'first_name' => $representative->first_name,
+                    'last_name' => $representative->last_name,
+                    'middle_name' => $representative->middle_name,
+                    'client_id' => $id,
+                ]);
                 $passport = dbEgecrm('passports')->whereId($representative->id_passport)->first();
                 if ($passport) {
-                    $passport_exists = true;
-                    DB::table('representatives')->insert([
-                        'first_name' => $representative->first_name,
-                        'last_name' => $representative->last_name,
-                        'middle_name' => $representative->middle_name,
+                    DB::table('representatives')->whereId($representativeId)->update([
                         'series' => $passport->series,
                         'number' => $passport->number,
                         'code' => $passport->code,
@@ -93,12 +102,10 @@ class Clients extends Command
                         'issued_date' => $passport->date_issued,
                         'issued_by' => $passport->issued_by,
                         'address' => $passport->address,
-                        'client_id' => $id,
                     ]);
                 }
-            }
-            // Добавляем пустой паспорт при отсутствии
-            if (! $passport_exists) {
+            } else {
+                // Добавляем пустого представителя при отсутствии
                 DB::table('representatives')->insert([
                     'client_id' => $id,
                 ]);
@@ -106,27 +113,12 @@ class Clients extends Command
 
             // Email
             if ($item->email) {
-                DB::table('emails')->insert([
-                    'entity_id' => $id,
-                    'entity_type' => Client::class,
-                    'email' => $item->email
-                ]);
-            } else {
-                DB::table('emails')->insert([
-                    'entity_id' => $id,
-                    'entity_type' => Client::class,
-                    'email' => 'empty@email.ru'
-                ]);
+                $this->insertEmail($item->email, $id, Client::class);
             }
 
-            // TODO: multiple emails?
-            // if ($representative && $representative->email) {
-            //     DB::table('emails')->insert([
-            //         'entity_id' => $id,
-            //         'entity_type' => Client::class,
-            //         'email' => $representative->email
-            //     ]);
-            // }
+            if ($representative && $representative->email) {
+                $this->insertEmail($representative->email, $representativeId, Representative::class);
+            }
 
             // Phones
             foreach(['phone', 'phone2', 'phone3'] as $field) {
@@ -144,8 +136,8 @@ class Clients extends Command
                         DB::table('phones')->insert([
                             'phone' => \App\Utils\Phone::clean($phone),
                             'comment' => $representative->status,
-                            'entity_type' => Client::class,
-                            'entity_id' => $id
+                            'entity_type' => Representative::class,
+                            'entity_id' => $representativeId
                         ]);
                     }
                 }
@@ -171,7 +163,7 @@ class Clients extends Command
                     'bill_number' => $payment->document_number ?: null,
                     'created_at' => $payment->first_save_date,
                     'updated_at' => $payment->first_save_date,
-                    'created_admin_id' => $this->getAdminId($payment->id_user),
+                    'created_email_id' => $this->getCreatedEmailId($payment->id_user),
                     'entity_type' => Client::class,
                     'entity_id' => $id,
                 ]);
@@ -185,13 +177,12 @@ class Clients extends Command
                 foreach($versions as $index => $version) {
                     $contract_id = DB::table('contracts')->insertGetId([
                         'client_id' => $id,
-                        'created_admin_id' => $this->getAdminId($version->id_user),
+                        'created_email_id' => $this->getCreatedEmailId($version->id_user),
                         'year' => $contract->year,
                         'grade_id' => $contract->grade,
                         'sum' => $version->sum,
                         'date' => $version->date,
                         'discount' => $version->discount,
-                        'version' => ($index + 1),
                         'number' => $contract->id_contract,
                         'created_at' => $version->date_changed,
                         'updated_at' => $version->date_changed,
@@ -216,7 +207,7 @@ class Clients extends Command
                             'contract_id' => $contract_id,
                             'lessons' => $cp->lesson_count ?: 0,
                             'sum' => $cp->sum,
-                            'date' => $cp->date
+                            'date' => $cp->date ?: null,
                         ]);
                     }
                 }
@@ -225,7 +216,7 @@ class Clients extends Command
                 $comments = dbEgecrm('comments')->where('place', 'STUDENT')->where('id_place', $item->id)->get();
                 foreach($comments as $comment) {
                     DB::table('comments')->insert([
-                        'created_admin_id' => $this->getAdminId($comment->id_user),
+                        'created_email_id' => $this->getCreatedEmailId($comment->id_user),
                         'text' => $comment->comment,
                         'entity_type' => Client::class,
                         'entity_id' => $id,
@@ -239,30 +230,6 @@ class Clients extends Command
         $bar->finish();
     }
 
-    public function getPaymentMethod($id)
-    {
-		// const PAID_CARD		= 1;
-		// const PAID_CASH		= 2;
-		// const PAID_BILL		= 4;
-		// const CARD_ONLINE	= 5;
-		// const MUTUAL_DEBTS	= 6;
-        switch($id) {
-            case 1: return 'card';
-            case 2: return 'cash';
-            case 4: return 'bill';
-            case 5: return 'card_online';
-        }
-    }
-
-    public function getPaymentCategory($id)
-    {
-        switch($id) {
-            case 1: return 'study';
-            case 2: return 'career_guidance';
-            case 3: return 'ege_trial';
-        }
-    }
-
     public function getSubjectStatus($id)
     {
         switch($id) {
@@ -270,14 +237,5 @@ class Clients extends Command
             case 2: return 'to_be_terminated';
             case 3: return 'active';
         }
-    }
-
-    public function getAdminId($value)
-    {
-        // TODO: проверить связи
-        if (\App\Models\Admin\Admin::whereId($value)->exists()) {
-            return $value;
-        }
-        return 69;
     }
 }

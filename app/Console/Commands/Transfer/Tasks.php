@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\{Task};
 use DB;
 
-class Tasks extends Command
+class Tasks extends TransferCommand
 {
     /**
      * The name and signature of the console command.
@@ -40,8 +40,8 @@ class Tasks extends Command
     public function handle()
     {
         $take = $this->argument('take');
-        DB::table('tasks')->delete();
-        DB::table('comments')->where('entity_type', Task::class)->delete();
+        $this->truncate('tasks');
+        $this->truncateByEntity('comments', Task::class);
 
         $egecrm_items = dbEgecrm('tasks')
             ->whereNotNull('html')
@@ -57,8 +57,8 @@ class Tasks extends Command
             $id = DB::table('tasks')->insertGetId([
                 'text' => $item->html,
                 'status' => $this->getStatus($item->id_status),
-                'created_admin_id' => $item->id_user,
-                'responsible_admin_id' => $item->id_user_responsible ?: null,
+                'created_email_id' => $this->getCreatedEmailId($item->id_user),
+                'responsible_admin_id' => $this->getAdminId($item->id_user_responsible),
                 'created_at' => $item->date_created,
                 'updated_at' => $item->date_created,
             ]);
@@ -67,7 +67,7 @@ class Tasks extends Command
             $comments = dbEgecrm('comments')->where('place', 'TASK')->where('id_place', $item->id)->get();
             foreach($comments as $comment) {
                 DB::table('comments')->insert([
-                    'created_admin_id' => $comment->id_user,
+                    'created_email_id' => $this->getCreatedEmailId($comment->id_user),
                     'text' => $comment->comment,
                     'entity_type' => Task::class,
                     'entity_id' => $id,

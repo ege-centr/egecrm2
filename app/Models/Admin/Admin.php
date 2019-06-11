@@ -14,8 +14,9 @@ class Admin extends Model implements UserInterface
     protected $commaSeparated = ['rights'];
 
     public $fillable = [
-        // 'id', // только на время переноса
-        'first_name', 'last_name', 'middle_name', 'salary', 'rights', 'nickname'
+        // только на время переноса
+        'old_id',
+        'first_name', 'last_name', 'middle_name', 'rights', 'nickname'
     ];
 
     public function ips()

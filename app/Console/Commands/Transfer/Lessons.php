@@ -3,10 +3,10 @@
 namespace App\Console\Commands\Transfer;
 
 use Illuminate\Console\Command;
-use App\Models\{Teacher, Client\Client};
+use App\Models\{Teacher, Client\Client, Admin\Admin, Email};
 use DB;
 
-class Lessons extends Command
+class Lessons extends TransferCommand
 {
     /**
      * The name and signature of the console command.
@@ -40,8 +40,8 @@ class Lessons extends Command
     public function handle()
     {
         $take = $this->argument('take');
-        DB::table('lessons')->delete();
-        DB::table('client_lessons')->delete();
+        $this->truncate('lessons');
+        $this->truncate('client_lessons');
 
         $egecrm_items = dbEgecrm('visit_journal')
             ->where('type_entity', '<>', 'STUDENT')
@@ -64,8 +64,9 @@ class Lessons extends Command
                     'cabinet_id' => $item->cabinet,
                     'status' => $status,
                     'is_unplanned' => false,
-                    'conducted_email_id' => 69,
-                    'conducted_at' => ($item->cancelled ? null : $item->date),
+                    'duration' => $item->duration,
+                    'conducted_email_id' => ($status === 'conducted' ? $this->getConductedEmailId($item->id_user_saved) : null),
+                    'conducted_at' => ($status === 'conducted' ? $item->date : null),
                     'created_at' => $item->type_entity ? $item->date : now()->format(DATE_FORMAT),
                     'updated_at' => $item->type_entity ? $item->date : now()->format(DATE_FORMAT),
                 ]);
@@ -99,30 +100,21 @@ class Lessons extends Command
             $bar->advance();
         }
         $bar->finish();
-        // $this->info("Setting entry_id...");
-        // $this->setEntryId();
     }
 
-    // public function setEntryId()
-    // {
-    //       // проставить entry_id
-    //       $lessons = DB::table('lessons')->where('entity_type', Teacher::class)->get();
-    //       foreach ($lessons as $lesson) {
-    //           $entry_id = uniqid();
-    //           DB::table('lessons')->whereId($lesson->id)->update(compact('entry_id'));
-    //           DB::table('lessons')->where([
-    //               ['entity_type', Client::class],
-    //               ['date', $lesson->date],
-    //               ['time', $lesson->time],
-    //               ['group_id', $lesson->group_id],
-    //           ])->update(compact('entry_id'));
-    //       }
-
-    //       // проставить entry_id в запланированных
-    //       $lessons = DB::table('lessons')->whereNull('entity_type')->get();
-    //       foreach ($lessons as $lesson) {
-    //           $entry_id = uniqid();
-    //           DB::table('lessons')->whereId($lesson->id)->update(compact('entry_id'));
-    //       }
-    // }
+    private function getConductedEmailId($idUserSaved)
+    {
+        $user = dbEgecrm('users')->whereId($idUserSaved)->first();
+        if ($user === null) {
+            return null;
+        }
+        if ($user->type === 'ADMIN') {
+            $entityType = Admin::class;
+            $entityId = $this->getAdminId($user->id_entity);
+        } else {
+            $entityType = Teacher::class;
+            $entityId = $user->id_entity;
+        }
+        return Email::where('entity_type', $entityType)->where('entity_id', $entityId)->first()->id;
+    }
 }

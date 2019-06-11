@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\{Admin\Admin, Admin\AdminIp, Email, Phone};
 use DB;
 
-class Admins extends Command
+class Admins extends TransferCommand
 {
     /**
      * The name and signature of the console command.
@@ -20,7 +20,7 @@ class Admins extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'Transfer admins';
 
     /**
      * Create a new command instance.
@@ -39,16 +39,20 @@ class Admins extends Command
      */
     public function handle()
     {
-        DB::table('admins')->delete();
-        DB::table('admin_ips')->delete();
+        $this->truncate('admins');
+        $this->truncate('admin_ips');
         Email::where('entity_type', Admin::class)->delete();
         Phone::where('entity_type', Admin::class)->delete();
 
-        $egecrm_admins = dbEgecrm('admins')->get();
+        $egecrmAdmins = dbEgecrm('admins')->get();
 
-        $bar = $this->output->createProgressBar(count($egecrm_admins));
-        foreach($egecrm_admins as $admin) {
-            $new_admin = Admin::create((array)$admin);
+        $bar = $this->output->createProgressBar(count($egecrmAdmins));
+        foreach($egecrmAdmins as $admin) {
+            $admin->nickname = $admin->login;
+            $admin->old_id = $admin->id;
+            unset($admin->salary);
+            unset($admin->rights);
+            $newAdmin = Admin::create((array) $admin);
 
             // переносим email
             $user = dbEgecrm('users')
@@ -57,23 +61,23 @@ class Admins extends Command
                 ->first();
 
             if ($user && $user->email) {
-                $email = $new_admin->email()->create(['email' => $user->email]);
+                $email = $newAdmin->email()->create(['email' => $user->email]);
                 DB::table('emails')->whereId($email->id)->update(['password' => $user->password]);
             } else {
-                $new_admin->email()->create(['email' => 'empty@email.ru']);
+                $newAdmin->email()->create(['email' => 'admin–' . $admin->id . '@empty.ru']);
             }
 
             // переносим admin ips
             $admin_ips = dbEgecrm('admin_ips')->where('id_admin', $admin->id)->get();
             if (count($admin_ips)) {
-                $new_admin->ips()->createMany($admin_ips->map(function($e) {
-                    return (array)$e;
+                $newAdmin->ips()->createMany($admin_ips->map(function($e) {
+                    return (array) $e;
                 })->all());
             }
 
             // переносим челефон
             if ($admin->phone) {
-                $new_admin->phones()->create(['phone' => $admin->phone]);
+                $newAdmin->phones()->create(['phone' => $admin->phone]);
             }
 
             $bar->advance();

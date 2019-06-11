@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\{Group\Group, Group\GroupClient, Phone};
 use DB;
 
-class Groups extends Command
+class Groups extends TransferCommand
 {
     /**
      * The name and signature of the console command.
@@ -40,9 +40,9 @@ class Groups extends Command
     public function handle()
     {
         $take = $this->argument('take');
-        DB::table('groups')->delete();
-        DB::table('group_clients')->delete();
-        DB::table('comments')->where('entity_type', Group::class)->delete();
+        $this->truncate('groups');
+        $this->truncate('group_clients');
+        $this->truncateByEntity('comments', Group::class);
 
         $egecrm_items = dbEgecrm('groups')
             ->when($take != 'all', function ($query) use ($take) {
@@ -58,13 +58,12 @@ class Groups extends Command
                 'head_teacher_id' => $item->id_head_teacher,
                 'subject_id' => $item->id_subject,
                 'grade_id' => $item->grade,
-                'teacher_price' => $item->teacher_price,
-                'duration' => $item->duration,
                 'year' => $item->year,
                 'is_archived' => $item->ended,
                 'is_ready_to_start' => $item->ready_to_start,
                 'level' => $this->getLevel($item->level),
                 'old_group_id' => $item->id,
+                'is_contract_signed' => $item->contract_signed,
             ]);
 
             $students = explode(',', $item->students);
@@ -83,7 +82,7 @@ class Groups extends Command
             $comments = dbEgecrm('comments')->where('place', 'GROUP')->where('id_place', $item->id)->get();
             foreach($comments as $comment) {
                 DB::table('comments')->insert([
-                    'created_admin_id' => $this->getAdminId($comment->id_user),
+                    'created_email_id' => $this->getCreatedEmailId($comment->id_user),
                     'text' => $comment->comment,
                     'entity_type' => Group::class,
                     'entity_id' => $id,

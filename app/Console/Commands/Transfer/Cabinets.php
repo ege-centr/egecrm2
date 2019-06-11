@@ -5,7 +5,7 @@ namespace App\Console\Commands\Transfer;
 use Illuminate\Console\Command;
 use DB;
 
-class Cabinets extends Command
+class Cabinets extends TransferCommand
 {
     /**
      * The name and signature of the console command.
@@ -38,7 +38,7 @@ class Cabinets extends Command
      */
     public function handle()
     {
-        DB::table('cabinets')->delete();
+        $this->truncate('cabinets');
 
         $egecrm_items = dbEgecrm('cabinets')->get();
 

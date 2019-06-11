@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\Teacher;
 use DB;
 
-class TeacherEmail extends Command
+class TeacherEmail extends TransferCommand
 {
     /**
      * The name and signature of the console command.
@@ -39,17 +39,18 @@ class TeacherEmail extends Command
      */
     public function handle()
     {
-        DB::table('emails')->where('entity_type', Teacher::class)->delete();
+        $this->truncateByEntity('emails', Teacher::class);
 
-        $egecrm_items = dbEgerep('tutors')
+        $egecrm_items = Teacher::query()
             ->select('id', 'email')
-            ->where('email', '<>', '')
+            // TODO: по-хорошему у всех преподов должны быть emails
+            // ->where('email', '<>', '')
             ->get();
 
         $bar = $this->output->createProgressBar(count($egecrm_items));
         foreach($egecrm_items as $item) {
             DB::table('emails')->insert([
-                'email' => $item->email,
+                'email' => $item->email ? $item->email : "teacher-{$item->id}@empty.ru",
                 'entity_type' => Teacher::class,
                 'entity_id' => $item->id,
             ]);

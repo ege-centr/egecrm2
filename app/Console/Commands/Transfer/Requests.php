@@ -6,7 +6,7 @@ use Illuminate\Console\Command;
 use App\Models\{Request, Phone};
 use DB;
 
-class Requests extends Command
+class Requests extends TransferCommand
 {
     /**
      * The name and signature of the console command.
@@ -40,11 +40,13 @@ class Requests extends Command
     public function handle()
     {
         $take = $this->argument('take');
+        $this->truncate('requests');
         DB::table('requests')->delete();
-        DB::table('phones')->where('entity_type', Request::class)->delete();
-        DB::table('comments')->where('entity_type', Request::class)->delete();
+        $this->truncateByEntity('phones', Request::class);
+        $this->truncateByEntity('comments', Request::class);
 
         $egecrm_items = dbEgecrm('requests')
+            // спам не переносим
             ->where('id_status', '<>', 4)
             ->when($take != 'all', function ($query) use ($take) {
                 return $query->take($take)->orderBy('id', 'desc');
@@ -57,7 +59,7 @@ class Requests extends Command
             $id = DB::table('requests')->insertGetId([
                 'status' => $this->getStatus($item->id_status),
                 'responsible_admin_id' => $item->id_user ? $this->getAdminId($item->id_user) : null,
-                'created_admin_id' => $item->id_user_created ? $this->getAdminId($item->id_user_created) : null,
+                'created_email_id' => $item->id_user_created ? $this->getCreatedEmailId($item->id_user_created) : null,
                 'google_id' => $item->id_google,
                 'name' => $item->name ?: '',
                 'branches' => $item->branches ?: '',
@@ -83,7 +85,7 @@ class Requests extends Command
             $comments = dbEgecrm('comments')->where('place', 'REQUEST')->where('id_place', $item->id)->get();
             foreach($comments as $comment) {
                 DB::table('comments')->insert([
-                    'created_admin_id' => $this->getAdminId($comment->id_user),
+                    'created_email_id' => $this->getCreatedEmailId($comment->id_user),
                     'text' => $comment->comment,
                     'entity_type' => Request::class,
                     'entity_id' => $id,
@@ -112,14 +114,5 @@ class Requests extends Command
             case 2: case 7: case 5: return 'finished';
             default: return 'new';
         }
-    }
-
-    public function getAdminId($value)
-    {
-        // TODO: проверить связи
-        if (\App\Models\Admin\Admin::whereId($value)->exists()) {
-            return $value;
-        }
-        return 69;
     }
 }
