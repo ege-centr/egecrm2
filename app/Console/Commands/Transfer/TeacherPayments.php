@@ -68,6 +68,7 @@ class TeacherPayments extends TransferCommand
                     'created_at' => $payment->first_save_date,
                     'updated_at' => $payment->first_save_date,
                     'created_email_id' => $this->getCreatedEmailId($payment->id_user),
+                    'entity_type' => Teacher::class,
                     'entity_id' => $teacher_id,
                 ]);
             }
