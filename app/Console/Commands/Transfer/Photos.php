@@ -53,7 +53,7 @@ class Photos extends TransferCommand
             ]);
             try {
                 file_put_contents(
-                    storage_path('app/public' . Photo::UPLOAD_PATH) . $photo->id . '.jpg',
+                    storage_path('app/public' . Photo::UPLOAD_PATH) . $photo->id . '_original.jpg',
                     fopen("https://lk.ege-centr.ru/img/students/{$item->id}_original.{$item->photo_extension}", 'r')
                 );
             } catch (\Exception $e) {
@@ -75,7 +75,7 @@ class Photos extends TransferCommand
             ]);
             try {
                 file_put_contents(
-                    storage_path('app/public' . Photo::UPLOAD_PATH) . $photo->id . '.jpg',
+                    storage_path('app/public' . Photo::UPLOAD_PATH) . $photo->id . '_original.jpg',
                     fopen("https://lk.ege-centr.ru/img/users/{$item->id}_original.{$item->photo_extension}", 'r')
                 );
             } catch (\Exception $e) {
