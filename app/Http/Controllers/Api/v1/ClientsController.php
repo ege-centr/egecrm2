@@ -26,6 +26,10 @@ class ClientsController extends Controller
 
         $this->filter($request, $query);
 
+        if (isset($request->photos) && $request->photos) {
+            $query->has('photo');
+        }
+
         if (isset($request->current_grade_id) && $request->current_grade_id) {
             $query->whereRaw("grade_id + (" . academicYear() .  " - `year`) IN ({$request->current_grade_id})");
         }

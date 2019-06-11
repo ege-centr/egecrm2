@@ -37,6 +37,8 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
 
         Route::get('balance', 'BalanceController@index');
 
+        Route::get('clients/photos', 'ClientsController@photos');
+
         Route::get('schedule/client/{id}', 'ScheduleController@client');
 
         Route::post('lessons/mass-clone', 'LessonsController@massClone');
