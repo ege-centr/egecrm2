@@ -57,7 +57,7 @@ class Lessons extends TransferCommand
                 $status = ($item->cancelled ? 'cancelled' : ($item->type_entity ? 'conducted' : 'planned'));
                 $lessonId = DB::table('lessons')->insertGetId([
                     'teacher_id' => $item->id_teacher,
-                    'price' => $item->price,
+                    'price' => $item->price ?: 0,
                     'group_id' => $group_id,
                     'date' => $item->lesson_date,
                     'time' => $item->lesson_time,
