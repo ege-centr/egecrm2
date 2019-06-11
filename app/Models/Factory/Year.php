@@ -7,7 +7,7 @@ namespace App\Models\Factory;
 class Year
 {
     const DISABLE_LOGS = true;
-    const ALL = [2015, 2016, 2017, 2018];
+    const ALL = [2015, 2016, 2017, 2018, 2019];
 
     public static function all()
     {
