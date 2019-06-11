@@ -115,6 +115,6 @@ class Lessons extends TransferCommand
             $entityType = Teacher::class;
             $entityId = $user->id_entity;
         }
-        return Email::where('entity_type', $entityType)->where('entity_id', $entityId)->first()->id;
+        return optional(Email::where('entity_type', $entityType)->where('entity_id', $entityId)->first())->id;
     }
 }
