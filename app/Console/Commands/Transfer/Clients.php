@@ -106,7 +106,7 @@ class Clients extends TransferCommand
                 }
             } else {
                 // Добавляем пустого представителя при отсутствии
-                DB::table('representatives')->insert([
+                $representativeId = DB::table('representatives')->insertGetId([
                     'client_id' => $id,
                 ]);
             }
