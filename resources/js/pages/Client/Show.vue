@@ -268,11 +268,7 @@
 
         <!-- Тесты -->
         <v-tab-item>
-          <v-card :class='config.elevationClass'>
-            <v-card-text>
-              <TestAdminClientList :client='client' />
-            </v-card-text>
-          </v-card>
+          <TestAdminClientList :client='client' />
         </v-tab-item>
 
         <!-- Отзывы -->

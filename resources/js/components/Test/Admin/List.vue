@@ -32,6 +32,7 @@
         </template>
       </v-data-table>
       <NoData 
+        class='mt-3'
         :add='() => $refs.TestDialog.open(null)'
         box
         v-else />

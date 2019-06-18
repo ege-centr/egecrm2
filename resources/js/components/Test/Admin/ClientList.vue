@@ -13,7 +13,7 @@
             {{ item.title }}
           </v-chip>
       </div>
-      <v-data-table v-if='data.length > 0' hide-headers hide-actions :items='data' class='mt-3'>
+      <v-data-table v-if='data.length > 0' hide-headers hide-actions :items='data' class='mt-3' :class='config.elevationClass'>
         <template slot='items' slot-scope="{ item }">
           <td width='200'>
             {{ item.title }}
@@ -60,7 +60,7 @@
           </td>
         </template>
       </v-data-table>
-      <NoData v-else transparent />
+      <NoData v-else square :class='config.elevationClass' />
     </div>
 
     <ResultsDialog :item='testPageOptions' />
