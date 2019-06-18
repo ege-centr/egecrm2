@@ -77,8 +77,8 @@ class Groups extends TransferCommand
                         'date' => $lesson->lesson_date,
                         'year' => $lesson->year,
                         'created_email_id' => $this->getCreatedEmailId($lesson->id_user_saved),
-                        'created_at' => $payment->date,
-                        'updated_at' => $payment->date,
+                        'created_at' => $lesson->date,
+                        'updated_at' => $lesson->date,
                     ]);
                 }
             } else {

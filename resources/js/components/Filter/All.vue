@@ -35,14 +35,9 @@
       :close-on-content-click='false'
       v-model="menu"
     >
-      <v-chip slot='activator' class='pointer white--text ml-0' color='primary' @click='item = null'>
-        <v-avatar class='pl-2 mr-0'>
-          <v-icon>add</v-icon>
-        </v-avatar>
-        <span style='position: relative; top: -1px'>
-          фильтр
-        </span>
-      </v-chip>
+      <v-btn icon flat color='primary' slot='activator' @click='item = null'>
+          <v-icon dark>add_circle_outline</v-icon>
+      </v-btn>
 
       <v-list dense v-if='item === null'>
         <v-list-tile v-for='(item, index) in availableFilters' @click='select(item)' :key='index' :class="{'sort-tile': item.type === 'sort'}">
