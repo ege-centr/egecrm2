@@ -3,6 +3,7 @@
     :dialog-component='Dialog'
     :items='items'
     :model-defaults='modelDefaults'
+    :add-btn='show.edit'
     add-btn-label='добавить услугу'
     ref='DisplayList'
     @updated="$emit('updated')"
@@ -17,7 +18,7 @@
       <td>
         {{ item.date | date }}
       </td>
-      <td class='text-md-right'>
+      <td class='text-md-right' v-if='show.edit'>
         <v-btn @click='$refs.DisplayList.edit(item.id)' slot='activator' flat icon color="black" class='ma-0'>
           <v-icon>more_horiz</v-icon>
         </v-btn>
@@ -31,6 +32,7 @@
 <script>
 import Dialog from './Dialog'
 import DisplayList from '@/components/UI/DisplayList'
+import DisplayOptions from '@/mixins/DisplayOptions'
 
 export default {
   props: {
@@ -43,14 +45,19 @@ export default {
       type: Object,
       required: false,
       default: () => {}
-    }
+    },
   },
 
   components: { DisplayList },
 
+  mixins: [ DisplayOptions ],
+
   data() {
     return {
       Dialog,
+      defaultDisplayOptions: {
+        edit: true,
+      }
     }
   },
 }

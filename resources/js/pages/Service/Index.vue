@@ -8,6 +8,7 @@
       <template slot='items' slot-scope='{ items }'>
         <PaymentAdditionalList 
           :items='items' 
+          :display-options='{edit: false}'
         />
       </template>
     </DisplayData>
