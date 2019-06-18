@@ -59,11 +59,11 @@
         <td>
           <span v-if='item.review !== null'>
             <v-tooltip bottom v-if='item.review.is_approved'>
-              <v-icon small color='green'>done_all</v-icon>
+              <v-icon slot='activator' small color='green'>done_all</v-icon>
               проверено
             </v-tooltip>
-             <v-tooltip bottom v-if='item.review.is_published'>
-              <v-icon small color='primary'>public</v-icon>
+            <v-tooltip bottom v-if='item.review.is_published'>
+              <v-icon slot='activator' small color='primary'>public</v-icon>
               опубликован
             </v-tooltip>
           </span>
