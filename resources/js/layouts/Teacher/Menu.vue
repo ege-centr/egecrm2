@@ -47,8 +47,8 @@ export default {
         label: 'Баланс'
       },
       {
-        icon: 'attach_money',
-        route: 'BalanceIndex',
+        icon: 'library_add',
+        route: 'ServiceIndex',
         label: 'Допуслуги'
       },
       {
