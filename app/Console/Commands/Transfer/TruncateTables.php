@@ -1,15 +1,16 @@
 <?php
 
 namespace App\Console\Commands\Transfer;
+use Artisan;
 
-class Init extends TransferCommand
+class TruncateTables extends TransferCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'transfer:init';
+    protected $signature = 'transfer:truncate-tables';
 
     /**
      * The console command description.
@@ -35,6 +36,7 @@ class Init extends TransferCommand
      */
     public function handle()
     {
+        $this->info("Cleaning tables...");
         $skip = ['migrations', 'settings', 'sms_templates'];
         $tables = array_map('reset', \DB::select('SHOW TABLES'));
 

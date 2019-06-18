@@ -13,7 +13,7 @@
             {{ item.title }}
           </v-chip>
       </div>
-      <v-data-table hide-headers hide-actions :items='data' class='mt-3' :class='config.elevationClass'>
+      <v-data-table v-if='data.length > 0' hide-headers hide-actions :items='data' class='mt-3'>
         <template slot='items' slot-scope="{ item }">
           <td width='200'>
             {{ item.title }}
@@ -60,6 +60,7 @@
           </td>
         </template>
       </v-data-table>
+      <NoData v-else transparent />
     </div>
 
     <ResultsDialog :item='testPageOptions' />
@@ -104,7 +105,9 @@ export default {
       this.loading = true
       axios.get(apiUrl(API_URL)).then(r => {
         this.items = r.data
-        this.selected_tab = this.tabsWithData.slice(-1)[0].id
+        if (this.tabsWithData.length > 0) {
+          this.selected_tab = this.tabsWithData.slice(-1)[0].id
+        }
         this.loading = false
       })
       // axios.get(apiUrl(CLIENT_TESTS_API_URL) + queryString({client_id: this.client.id}))

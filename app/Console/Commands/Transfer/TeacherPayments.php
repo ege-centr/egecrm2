@@ -13,7 +13,7 @@ class TeacherPayments extends TransferCommand
      *
      * @var string
      */
-    protected $signature = 'transfer:teacher-payments {take}';
+    protected $signature = 'transfer:teacher-payments';
 
     /**
      * The console command description.
@@ -39,7 +39,7 @@ class TeacherPayments extends TransferCommand
      */
     public function handle()
     {
-        $take = $this->argument('take');
+        $this->info("\n\nTransfering teacher payments...");
         $this->truncateByEntity('payments', Teacher::class);
 
         $teacher_ids = Teacher::pluck('id');
@@ -61,8 +61,7 @@ class TeacherPayments extends TransferCommand
                     'method' => $this->getPaymentMethod($payment->id_status),
                     'type' => $payment->id_type == 1 ? 'payment' : 'return',
                     'category' => $this->getPaymentCategory($payment->category),
-                    'card_last_digits' => $payment->card_number ?: '',
-                    'card_first_digit' => $payment->card_first_number ?: '',
+                    'card_number' => $this->getCardNumber($payment),
                     'is_confirmed' => $payment->confirmed,
                     'bill_number' => $payment->document_number ?: null,
                     'created_at' => $payment->first_save_date,
@@ -71,34 +70,12 @@ class TeacherPayments extends TransferCommand
                     'entity_type' => Teacher::class,
                     'entity_id' => $teacher_id,
                 ]);
+
+                $this->createAdditionalPaymentIfNeeded($payment, Teacher::class, $teacher_id);
             }
 
             $bar->advance();
         }
         $bar->finish();
-    }
-
-    public function getPaymentMethod($id)
-    {
-		// const PAID_CARD		= 1;
-		// const PAID_CASH		= 2;
-		// const PAID_BILL		= 4;
-		// const CARD_ONLINE	= 5;
-		// const MUTUAL_DEBTS	= 6;
-        switch($id) {
-            case 1: return 'card';
-            case 2: return 'cash';
-            case 4: return 'bill';
-            case 5: return 'card_online';
-        }
-    }
-
-    public function getPaymentCategory($id)
-    {
-        switch($id) {
-            case 1: return 'study';
-            case 2: return 'career_guidance';
-            case 3: return 'ege_trial';
-        }
     }
 }

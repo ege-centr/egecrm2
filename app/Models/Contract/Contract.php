@@ -36,6 +36,15 @@ class Contract extends Model
         return $this->belongsTo(self::class, 'number', 'number')->where('version', $this->version - 1);
     }
 
+    public function getIsFirstInYearAttribute()
+    {
+        return $this->id === self::query()
+            ->where('client_id', $this->client_id)
+            ->where('year', $this->year)
+            ->where('version', 1)
+            ->min('id');
+    }
+
     public function getGradeAttribute()
     {
         return Grade::find($this->grade_id);

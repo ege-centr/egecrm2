@@ -8,7 +8,8 @@ export const ENUMS = {
     {title: 'карта', id: 'card'},
     {title: 'наличные', id: 'cash'},
     {title: 'счет', id: 'bill'},
-    {title: 'карта онлайн', id: 'card_online'}
+    {title: 'карта онлайн', id: 'card_online'},
+    {title: 'взаимозачет', id: 'mutual'}
   ],
   types: [
     {title: 'платеж', id: 'payment'},

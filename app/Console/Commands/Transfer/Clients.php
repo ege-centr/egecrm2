@@ -13,7 +13,7 @@ class Clients extends TransferCommand
      *
      * @var string
      */
-    protected $signature = 'transfer:clients {take}';
+    protected $signature = 'transfer:clients';
 
     /**
      * The console command description.
@@ -39,7 +39,7 @@ class Clients extends TransferCommand
      */
     public function handle()
     {
-        $take = $this->argument('take');
+        $this->info("\n\nTransfering clients...");
         $this->truncate('clients');
         $this->truncate('representatives');
         $this->truncate('contracts');
@@ -53,9 +53,6 @@ class Clients extends TransferCommand
 
         $egecrm_items = dbEgecrm('students')
             ->where('id_representative', '>', 0)
-            ->when($take != 'all', function ($query) use ($take) {
-                return $query->take($take)->orderBy('id', 'desc');
-            })
             ->get();
 
         $bar = $this->output->createProgressBar(count($egecrm_items));
@@ -157,8 +154,7 @@ class Clients extends TransferCommand
                     'method' => $this->getPaymentMethod($payment->id_status),
                     'type' => $payment->id_type == 1 ? 'payment' : 'return',
                     'category' => $this->getPaymentCategory($payment->category),
-                    'card_last_digits' => $payment->card_number ?: '',
-                    'card_first_digit' => $payment->card_first_number ?: '',
+                    'card_number' => $this->getCardNumber($payment),
                     'is_confirmed' => $payment->confirmed,
                     'bill_number' => $payment->document_number ?: null,
                     'created_at' => $payment->first_save_date,
@@ -167,15 +163,17 @@ class Clients extends TransferCommand
                     'entity_type' => Client::class,
                     'entity_id' => $id,
                 ]);
+
+                $this->createAdditionalPaymentIfNeeded($payment, Client::class, $id);
             }
 
             // Contracts
             $contracts = dbEgecrm('contract_info')->where('id_student', $item->id)->get();
 
             foreach($contracts as $contract) {
-                $versions = dbEgecrm('contracts')->where('id_contract', $contract->id_contract)->get();
+                $versions = dbEgecrm('contracts')->where('id_contract', $contract->id_contract)->orderBy('date', 'asc')->get();
                 foreach($versions as $index => $version) {
-                    $contract_id = DB::table('contracts')->insertGetId([
+                    $contractId = DB::table('contracts')->insertGetId([
                         'client_id' => $id,
                         'created_email_id' => $this->getCreatedEmailId($version->id_user),
                         'year' => $contract->year,
@@ -186,13 +184,14 @@ class Clients extends TransferCommand
                         'number' => $contract->id_contract,
                         'created_at' => $version->date_changed,
                         'updated_at' => $version->date_changed,
+                        'version' => $index + 1,
                     ]);
 
                     // Contract subjects
                     $contract_subjects = dbEgecrm('contract_subjects')->where('id_contract', $version->id)->get();
                     foreach($contract_subjects as $cs) {
                         DB::table('contract_subjects')->insert([
-                            'contract_id' => $contract_id,
+                            'contract_id' => $contractId,
                             'subject_id' => $cs->id_subject,
                             'lessons' => $cs->count ?: 0,
                             'lessons_planned' => $cs->count_program ?: 0,
@@ -201,15 +200,15 @@ class Clients extends TransferCommand
                     }
 
                     // Contract payments
-                    $contract_payments = dbEgecrm('contract_payments')->where('id_contract', $version->id)->get();
-                    foreach($contract_payments as $cp) {
-                        DB::table('contract_payments')->insert([
-                            'contract_id' => $contract_id,
-                            'lessons' => $cp->lesson_count ?: 0,
-                            'sum' => $cp->sum,
-                            'date' => $cp->date ?: null,
-                        ]);
-                    }
+                    // $contract_payments = dbEgecrm('contract_payments')->where('id_contract', $version->id)->get();
+                    // foreach($contract_payments as $cp) {
+                    //     DB::table('contract_payments')->insert([
+                    //         'contract_id' => $contractId,
+                    //         'lessons' => $cp->lesson_count ?: 0,
+                    //         'sum' => $cp->sum,
+                    //         'date' => $cp->date ?: null,
+                    //     ]);
+                    // }
                 }
 
                 // Comments

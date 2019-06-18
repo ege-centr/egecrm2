@@ -39,6 +39,7 @@ class TeacherEmail extends TransferCommand
      */
     public function handle()
     {
+        $this->info("\n\nTransfering teacher emails...");
         $this->truncateByEntity('emails', Teacher::class);
 
         $egecrm_items = Teacher::query()

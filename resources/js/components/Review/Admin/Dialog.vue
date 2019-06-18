@@ -218,7 +218,7 @@
                   </v-flex>
                   <v-flex md12>
                      <v-switch class='ma-0'
-                      label="Подтвержден"
+                      label="Проверено"
                       hide-details
                       v-model='item.is_approved'
                       ></v-switch>

@@ -39,6 +39,7 @@ class Photos extends TransferCommand
      */
     public function handle()
     {
+        $this->info("\n\nTransfering photos...");
         $this->truncate('photos');
 
         $this->info("Client photos...");

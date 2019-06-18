@@ -47,6 +47,11 @@ export default {
         label: 'Баланс'
       },
       {
+        icon: 'attach_money',
+        route: 'BalanceIndex',
+        label: 'Допуслуги'
+      },
+      {
         icon: 'rate_review',
         route: 'ReportIndex',
         label: 'Отчёты'

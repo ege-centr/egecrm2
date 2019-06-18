@@ -39,6 +39,7 @@ class AdditionalPayments extends TransferCommand
      */
     public function handle()
     {
+        $this->info("\n\nTransfering additional payments...");
         $tables = [
             (object)[
                 'table' => 'teacher_additional_payments',

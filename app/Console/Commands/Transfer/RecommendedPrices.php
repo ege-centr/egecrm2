@@ -38,7 +38,8 @@ class RecommendedPrices extends Command
      */
     public function handle()
     {
-        $years = [2015, 2016, 2017, 2018];
+        $this->info("\n\nTransfering recommended prices...");
+        $years = [2015, 2016, 2017, 2018, 2019];
         $grades = [9, 10, 11, 14];
 
         $items = [];

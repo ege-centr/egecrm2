@@ -13,7 +13,7 @@ class Requests extends TransferCommand
      *
      * @var string
      */
-    protected $signature = 'transfer:requests {take}';
+    protected $signature = 'transfer:requests';
 
     /**
      * The console command description.
@@ -39,18 +39,14 @@ class Requests extends TransferCommand
      */
     public function handle()
     {
-        $take = $this->argument('take');
+        $this->info("\n\nTransfering requests...");
         $this->truncate('requests');
         DB::table('requests')->delete();
         $this->truncateByEntity('phones', Request::class);
         $this->truncateByEntity('comments', Request::class);
 
         $egecrm_items = dbEgecrm('requests')
-            // спам не переносим
-            ->where('id_status', '<>', 4)
-            ->when($take != 'all', function ($query) use ($take) {
-                return $query->take($take)->orderBy('id', 'desc');
-            })
+            ->where('adding', '<>', 1)
             ->get();
 
         $bar = $this->output->createProgressBar(count($egecrm_items));
@@ -111,8 +107,12 @@ class Requests extends TransferCommand
 		// const ALL 			= 8;
         switch($old_status) {
             case 3: case 9: return 'awaiting';
-            case 2: case 7: case 5: return 'finished';
+            case 2: case 7: case 5: case 4: return 'finished';
             default: return 'new';
         }
+
+        // новые остаются новыми
+        // ожидающие и поздние курсы - awaiting
+        //
     }
 }

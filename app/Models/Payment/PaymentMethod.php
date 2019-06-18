@@ -12,4 +12,5 @@ class PaymentMethod extends Enum
     const CASH = 'cash';
     const BILL = 'bill';
     const CARD_ONLINE = 'card_online';
+    const MUTUAL = 'mutual';
 }

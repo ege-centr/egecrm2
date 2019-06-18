@@ -38,6 +38,7 @@ class Cabinets extends TransferCommand
      */
     public function handle()
     {
+        $this->info("\n\nTransfering cabinets...");
         $this->truncate('cabinets');
 
         $egecrm_items = dbEgecrm('cabinets')->get();

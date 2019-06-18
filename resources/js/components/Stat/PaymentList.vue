@@ -46,10 +46,10 @@ export default {
       fields.push(method.id)
     })
       
-    fields.push('payment_sum')
-    fields.push('return_sum')
-    headers.push({text: 'итого платежи', sortable: false, width: 200})
-    headers.push({text: 'итого возвраты', sortable: false})
+    fields.push('total')
+    // fields.push('return_sum')
+    headers.push({text: 'итого', sortable: false, width: 200})
+    // headers.push({text: 'итого возвраты', sortable: false})
     return {
       ENUMS,
       headers,

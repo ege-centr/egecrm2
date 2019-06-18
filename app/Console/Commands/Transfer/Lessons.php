@@ -13,7 +13,7 @@ class Lessons extends TransferCommand
      *
      * @var string
      */
-    protected $signature = 'transfer:lessons {take}';
+    protected $signature = 'transfer:lessons';
 
     /**
      * The console command description.
@@ -39,20 +39,19 @@ class Lessons extends TransferCommand
      */
     public function handle()
     {
-        $take = $this->argument('take');
+        $this->info("\n\nTransfering lessons...");
         $this->truncate('lessons');
         $this->truncate('client_lessons');
 
         $egecrm_items = dbEgecrm('visit_journal')
             ->where('type_entity', '<>', 'STUDENT')
-            ->when($take != 'all', function ($query) use ($take) {
-                return $query->take($take)->orderBy('id', 'desc');
-            })
             ->get();
 
         $bar = $this->output->createProgressBar(count($egecrm_items));
         foreach($egecrm_items as $item) {
             $group_id = DB::table('groups')->where('old_group_id', $item->id_group)->value('id');
+            // в том числе в новой системы группы не создаются для доп. занятий
+            // и они на этом шаге будут пропускаться - что правильно
             if ($group_id) {
                 $status = ($item->cancelled ? 'cancelled' : ($item->type_entity ? 'conducted' : 'planned'));
                 $lessonId = DB::table('lessons')->insertGetId([
@@ -91,7 +90,8 @@ class Lessons extends TransferCommand
                                 'late' =>  $clientLesson->late,
                                 'comment' => $clientLesson->comment ?: '',
                                 'is_absent' => $clientLesson->presence == 1 ? false : true,
-                                'price' => $clientLesson->price,
+                                // "не переноси стоимость занятия для учеников - мы эту стоимость выставим на живую после переноса в новой системе"
+                                // 'price' => $clientLesson->price,
                             ]);
                         }
                     }

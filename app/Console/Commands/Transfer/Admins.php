@@ -39,6 +39,7 @@ class Admins extends TransferCommand
      */
     public function handle()
     {
+        $this->info("\n\nTransfering admins...");
         $this->truncate('admins');
         $this->truncate('admin_ips');
         Email::where('entity_type', Admin::class)->delete();

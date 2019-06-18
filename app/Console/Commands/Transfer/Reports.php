@@ -13,7 +13,7 @@ class Reports extends TransferCommand
      *
      * @var string
      */
-    protected $signature = 'transfer:reports {take}';
+    protected $signature = 'transfer:reports';
 
     /**
      * The console command description.
@@ -39,14 +39,10 @@ class Reports extends TransferCommand
      */
     public function handle()
     {
-        $take = $this->argument('take');
+        $this->info("\n\nTransfering reports...");
         $this->truncate('reports');
 
-        $egecrm_items = dbEgecrm('reports')
-            ->when($take != 'all', function ($query) use ($take) {
-                return $query->take($take)->orderBy('id', 'desc');
-            })
-            ->get();
+        $egecrm_items = dbEgecrm('reports')->get();
 
         $bar = $this->output->createProgressBar(count($egecrm_items));
 

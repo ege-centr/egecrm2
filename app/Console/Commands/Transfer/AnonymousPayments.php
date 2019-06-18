@@ -40,7 +40,7 @@ class AnonymousPayments extends TransferCommand
      */
     public function handle()
     {
-
+        $this->info("\n\nTransfering anonymous payments...");
         $egecrm_items = dbEgecrm('payments')
             ->whereRaw('(entity_id is null or entity_id = 0)')
             ->get();
@@ -83,8 +83,7 @@ class AnonymousPayments extends TransferCommand
                 'method' => $this->getPaymentMethod($payment->id_status),
                 'type' => $payment->id_type == 1 ? 'payment' : 'return',
                 'category' => $this->getPaymentCategory($payment->category),
-                'card_last_digits' => $payment->card_number ?: '',
-                'card_first_digit' => $payment->card_first_number ?: '',
+                'card_number' => $this->getCardNumber($payment),
                 'is_confirmed' => $payment->confirmed,
                 'bill_number' => $payment->document_number ?: null,
                 'created_at' => $payment->first_save_date,
@@ -94,6 +93,7 @@ class AnonymousPayments extends TransferCommand
                 'entity_id' => $clientId,
             ]);
 
+            $this->createAdditionalPaymentIfNeeded($payment, Client::class, $clientId);
 
             $bar->advance();
         }

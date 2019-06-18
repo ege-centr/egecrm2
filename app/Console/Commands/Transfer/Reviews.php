@@ -12,7 +12,7 @@ class Reviews extends TransferCommand
      *
      * @var string
      */
-    protected $signature = 'transfer:reviews {take}';
+    protected $signature = 'transfer:reviews';
 
     /**
      * The console command description.
@@ -38,14 +38,10 @@ class Reviews extends TransferCommand
      */
     public function handle()
     {
-        $take = $this->argument('take');
+        $this->info("\n\nTransfering reviews...");
         DB::table('reviews')->delete();
 
-        $egecrm_items = dbEgecrm('teacher_reviews')
-            ->when($take != 'all', function ($query) use ($take) {
-                return $query->take($take)->orderBy('id', 'desc');
-            })
-            ->get();
+        $egecrm_items = dbEgecrm('teacher_reviews')->get();
 
         $bar = $this->output->createProgressBar(count($egecrm_items));
         foreach($egecrm_items as $item) {

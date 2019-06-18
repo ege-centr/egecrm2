@@ -129,8 +129,7 @@ class StatsController extends Controller
             ->get();
 
         $result = [
-            'payment_sum' => 0,
-            'return_sum' => 0,
+            'total' => 0,
         ];
 
         foreach($payments as $payment) {
@@ -139,10 +138,10 @@ class StatsController extends Controller
             }
             if ($payment->type === PaymentType::PAYMENT) {
                 $result[$payment->method] += $payment->sum;
-                $result['payment_sum'] += $payment->sum;
+                $result['total'] += $payment->sum;
             } else {
                 $result[$payment->method] -= $payment->sum;
-                $result['return_sum'] += $payment->sum;
+                $result['total'] -= $payment->sum;
             }
         }
         return $result;
@@ -179,22 +178,29 @@ class StatsController extends Controller
         ];
 
         foreach($contracts as $contract) {
-            if ($contract->version === 1) {
+            // самый первый договор году
+            if ($contract->is_first_in_year) {
                 $result['contracts']++;
                 $result['subjects'] += $contract->subjects->count();
                 $result['contracts_sum'] += $contract->discounted_sum;
             } else {
-                $removedSubjectIds = array_diff(
-                    $contract->previous->subjects->where('status', '<>', SubjectStatus::TERMINATED)->pluck('subject_id')->all(),
-                    $contract->subjects->where('status', '<>', SubjectStatus::TERMINATED)->pluck('subject_id')->all()
-                );
-                $addedSubjectIds = array_diff(
-                    $contract->subjects->where('status', '<>', SubjectStatus::TERMINATED)->pluck('subject_id')->all(),
-                    $contract->previous->subjects->where('status', '<>', SubjectStatus::TERMINATED)->pluck('subject_id')->all()
-                );
-                $result['subjects_added'] += count($addedSubjectIds);
-                $result['subjects_removed'] += count($removedSubjectIds);
-                $result['contracts_sum_change'] += ($contract->discounted_sum - $contract->previous->discounted_sum);
+                // договор первый в новой цепи, но не первый в году
+                if ($contract->version === 1) {
+                    $result['subjects_added'] += $contract->subjects->count();
+                    $result['contracts_sum_change'] += $contract->discounted_sum;
+                } else {
+                    $removedSubjectIds = array_diff(
+                        $contract->previous->subjects->where('status', '<>', SubjectStatus::TERMINATED)->pluck('subject_id')->all(),
+                        $contract->subjects->where('status', '<>', SubjectStatus::TERMINATED)->pluck('subject_id')->all()
+                    );
+                    $addedSubjectIds = array_diff(
+                        $contract->subjects->where('status', '<>', SubjectStatus::TERMINATED)->pluck('subject_id')->all(),
+                        $contract->previous->subjects->where('status', '<>', SubjectStatus::TERMINATED)->pluck('subject_id')->all()
+                    );
+                    $result['subjects_added'] += count($addedSubjectIds);
+                    $result['subjects_removed'] += count($removedSubjectIds);
+                    $result['contracts_sum_change'] += ($contract->discounted_sum - $contract->previous->discounted_sum);
+                }
             }
         }
 

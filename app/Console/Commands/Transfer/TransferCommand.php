@@ -4,7 +4,7 @@ namespace App\Console\Commands\Transfer;
 
 use Illuminate\Console\Command;
 use DB, Schema;
-use App\Models\Email;
+use App\Models\{Email, Payment\PaymentAdditional};
 
 class TransferCommand extends Command
 {
@@ -80,6 +80,7 @@ class TransferCommand extends Command
             case 2: return 'cash';
             case 4: return 'bill';
             case 5: return 'card_online';
+            case 6: return 'mutual';
         }
     }
 
@@ -89,6 +90,37 @@ class TransferCommand extends Command
             case 1: return 'study';
             case 2: return 'career_guidance';
             case 3: return 'ege_trial';
+        }
+    }
+
+    protected function getCardNumber($payment)
+    {
+        if (isset($payment->card_number) && !empty($payment->card_number)) {
+            if (isset($payment->card_first_number) && !empty($payment->card_first_number)) {
+                return $payment->card_first_number . $payment->card_number;
+            } else {
+                return '0' . $payment->card_number;
+            }
+        }
+        return null;
+    }
+
+    protected function createAdditionalPaymentIfNeeded($payment, $entityType, $entityId)
+    {
+        $category = $this->getPaymentCategory($payment->category);
+        if (in_array($category, ['career_guidance', 'ege_trial'])) {
+            PaymentAdditional::create([
+                // 'entity_type' => $payment->entity_type == 'TEACHER' ? Teacher::class : Client::class,
+                'entity_type' => $entityType,
+                'entity_id' => $entityId,
+                'sum' => $payment->sum,
+                'purpose' => ($category === 'ege_trial' ? 'Пробный ЕГЭ' : 'Профориентация'),
+                'date' => $payment->date,
+                'year' => $payment->year,
+                'created_email_id' => $this->getCreatedEmailId($payment->id_user),
+                'created_at' => $payment->first_save_date,
+                'updated_at' => $payment->first_save_date,
+            ]);
         }
     }
 }

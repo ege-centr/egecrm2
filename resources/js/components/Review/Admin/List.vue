@@ -57,24 +57,10 @@
           </span>
         </td>
         <td>
-          <span v-if='item.review !== null'>
-            <span class='green--text' v-if='item.review.is_approved'>
-              проверено
-            </span>
-            <span v-else class='red--text'>
-              не проверено
-            </span>
-          </span>
+          <v-icon small v-if='item.review !== null && item.review.is_approved'>done_all</v-icon>
         </td>
         <td>
-          <span v-if='item.review !== null'>
-            <span class='green--text' v-if='item.review.is_published'>
-              опубликовано
-            </span>
-            <span v-else class='red--text'>
-              не опубликовано
-            </span>
-          </span>
+          <v-icon small v-if='item.review !== null && item.review.is_published'>public</v-icon>
         </td>
         <td class='text-md-right'>
           <v-btn flat icon color="black" class='ma-0' 

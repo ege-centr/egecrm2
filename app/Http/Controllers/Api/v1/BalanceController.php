@@ -143,6 +143,7 @@ class BalanceController extends Controller
             case 'cash': return 'наличные';
             case 'bill': return 'счет';
             case 'card_online': return 'карта онлайн';
+            case 'mutual': return 'взаимозачет';
         }
     }
 }

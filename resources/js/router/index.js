@@ -38,6 +38,7 @@ const router = new Router({
     ...require('./logs').default,
     ...require('./sms').templates,
     ...require('./stats').default,
+    ...require('./services').default,
   ]
 })
 

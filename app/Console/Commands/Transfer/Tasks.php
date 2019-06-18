@@ -13,7 +13,7 @@ class Tasks extends TransferCommand
      *
      * @var string
      */
-    protected $signature = 'transfer:tasks {take}';
+    protected $signature = 'transfer:tasks';
 
     /**
      * The console command description.
@@ -39,16 +39,13 @@ class Tasks extends TransferCommand
      */
     public function handle()
     {
-        $take = $this->argument('take');
+        $this->info("\n\nTransfering tasks...");
         $this->truncate('tasks');
         $this->truncateByEntity('comments', Task::class);
 
         $egecrm_items = dbEgecrm('tasks')
             ->whereNotNull('html')
             ->where('html', '<>', '')
-            ->when($take != 'all', function ($query) use ($take) {
-                return $query->take($take)->orderBy('id', 'desc');
-            })
             ->get();
 
         $bar = $this->output->createProgressBar(count($egecrm_items));
