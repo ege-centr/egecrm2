@@ -58,8 +58,14 @@
         </td>
         <td>
           <span v-if='item.review !== null'>
-            <v-icon color='green' v-if='item.review.is_approved'>done_all</v-icon>
-            <v-icon color='primary' v-if='item.review.is_published'>public</v-icon>
+            <v-tooltip bottom v-if='item.review.is_approved'>
+              <v-icon small color='green'>done_all</v-icon>
+              проверено
+            </v-tooltip>
+             <v-tooltip bottom v-if='item.review.is_published'>
+              <v-icon small color='primary'>public</v-icon>
+              опубликован
+            </v-tooltip>
           </span>
         </td>
         <td class='text-md-right'>
