@@ -57,10 +57,10 @@
           </span>
         </td>
         <td>
-          <v-icon small v-if='item.review !== null && item.review.is_approved'>done_all</v-icon>
-        </td>
-        <td>
-          <v-icon small v-if='item.review !== null && item.review.is_published'>public</v-icon>
+          <span v-if='item.review !== null'>
+            <v-icon color='green' v-if='item.review.is_approved'>done_all</v-icon>
+            <v-icon color='primary' v-if='item.review.is_published'>public</v-icon>
+          </span>
         </td>
         <td class='text-md-right'>
           <v-btn flat icon color="black" class='ma-0' 
