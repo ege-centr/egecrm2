@@ -10,6 +10,7 @@ class Resource extends JsonResource
     {
         return array_merge(parent::toArray($request), [
             'problems' => $this->problems,
+            'has_clients' => $this->clients()->exists(),
         ]);
     }
 }

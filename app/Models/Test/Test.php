@@ -3,6 +3,7 @@
 namespace App\Models\Test;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Client\Client;
 
 class Test extends Model
 {
@@ -11,6 +12,11 @@ class Test extends Model
     public function problems()
     {
         return $this->hasMany(TestProblem::class);
+    }
+
+    public function clients()
+    {
+        return $this->hasMany(Client::class);
     }
 
     public function getMaxScore()

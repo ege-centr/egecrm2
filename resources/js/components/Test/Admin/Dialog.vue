@@ -6,10 +6,10 @@
           <v-toolbar-title>{{ true ? 'Редактирование' : 'Добавление' }} теста</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark icon v-if='edit_mode' @click.native="destroy" :loading='destroying' class='mr-5'>
+            <v-btn dark icon v-if='edit_mode' @click.native="destroy" :loading='destroying' class='mr-5' v-show='item.has_clients !== true'>
               <v-icon>delete</v-icon>
             </v-btn>
-            <v-btn dark icon @click.native="storeOrUpdate" :loading='saving'>
+            <v-btn dark icon @click.native="storeOrUpdate" :loading='saving' v-show='item.has_clients !== true'>
               <v-icon>save_alt</v-icon>
             </v-btn>
             <v-btn icon dark @click.native="dialog = false">
@@ -35,11 +35,11 @@
               </v-flex>
               
               <v-flex md12 style='margin-top: 100px'>
-                <div class='headline mb-1'>
-                  Вопросы
-                </div>
                 <v-stepper v-model="step" non-linear>
                   <v-stepper-header>
+                    <div class='headline mb-1'>
+                      Вопросы
+                    </div>
                     <template v-for='(problem, index) in item.problems'>
                       <v-stepper-step editable :step="(index + 1)">
                       </v-stepper-step>
@@ -54,9 +54,12 @@
                       <div class='relative'>
                         <TextEditor v-model='problem.text' />
                         <div class='custom-toolbar'>
-                          <v-btn small 
+                          <div
+                            class='pointer'
                             @click='removeProblem'
-                            :disabled='step === 1 && item.problems.length <= 1'>удалить вопрос</v-btn>
+                            v-show='!(step === 1 && item.problems.length <= 1)'>
+                            <v-icon color='red'>remove_circle_outline</v-icon>
+                          </div>
                         </div>
                       </div>
                     </v-stepper-content>
@@ -65,11 +68,11 @@
               </v-flex>
 
               <v-flex md12 v-if='step > 0 && show_answers' class='mt-5'>
-                <div class='headline mb-1'>
-                  Ответы
-                </div>
                 <v-stepper v-model="answer_step" non-linear>
                   <v-stepper-header>
+                    <div class='headline mb-1'>
+                      Ответы
+                    </div>
                     <template v-for='(answer, index) in currentProblem.answers' :step="(index + 1)">
                       <v-stepper-step editable :step="(index + 1)">
                       </v-stepper-step>
@@ -83,16 +86,17 @@
                     <v-stepper-content v-for='(answer, index) in currentProblem.answers' :step="(index + 1)" :key='index'>
                       <div class='relative'>
                         <TextEditor v-model='answer.text' />
-                        <div class='custom-toolbar flex-items align-center'>
-                          <v-btn small 
+                        <div class='custom-toolbar'>
+                          <div
+                            class='pointer'
                             @click='removeAnswer'
-                            :disabled='answer_step === 1 && currentProblem.answers.length <= 1'>удалить ответ</v-btn>
+                            v-show='!(answer_step === 1 && currentProblem.answers.length <= 1)'>
+                            <v-icon color='red'>remove_circle_outline</v-icon>
+                          </div>
                         </div>
-                      </div>
-                      <div class='vertical-inputs mt-3'>
-                        <div class='vertical-inputs__input'>
-                          <v-text-field style='width: 100px' v-mask="'###'" hide-details v-model='answer.score' label='Балл'></v-text-field>
-                        </div>
+                        <v-text-field style='width: 100px; position: absolute;top: -3px;right: 20px' 
+                          class='hide-bottom-border'
+                          v-mask="'###'" hide-details v-model='answer.score' label='Балл'></v-text-field>
                       </div>
                     </v-stepper-content>
                   </v-stepper-items>
@@ -239,6 +243,7 @@ export default {
     & .v-stepper, .v-stepper__header {
       box-shadow: none;
       justify-content: flex-start;
+      align-items: center;
     }
 
     & .v-stepper__step__step {
@@ -273,8 +278,8 @@ export default {
     }
     .custom-toolbar {
       position: absolute;
-      right: 8px;
-      top: -5px;
+      left: 184px;
+      top: 10px;
       & > div {
         margin-right: 10px;
         width: 250px;
