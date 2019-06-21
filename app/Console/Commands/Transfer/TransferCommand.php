@@ -109,7 +109,7 @@ class TransferCommand extends Command
     {
         $category = $this->getPaymentCategory($payment->category);
         if (in_array($category, ['career_guidance', 'ege_trial'])) {
-            PaymentAdditional::create([
+            DB::table('payment_additionals')->insert([
                 // 'entity_type' => $payment->entity_type == 'TEACHER' ? Teacher::class : Client::class,
                 'entity_type' => $entityType,
                 'entity_id' => $entityId,

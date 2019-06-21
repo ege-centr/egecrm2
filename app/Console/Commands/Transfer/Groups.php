@@ -68,7 +68,7 @@ class Groups extends TransferCommand
                         $entityType = Client::class;
                         $entityId = DB::table('clients')->where('old_student_id', $lesson->id_entity)->value('id');
                     }
-                    PaymentAdditional::create([
+                    DB::table('payment_additionals')->insert([
                         'entity_type' => $entityType,
                         'entity_id' => $entityId,
                         'sum' => $lesson->price,

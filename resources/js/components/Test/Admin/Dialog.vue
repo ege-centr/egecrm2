@@ -238,6 +238,7 @@ export default {
   .test-dialog {
     & .v-stepper, .v-stepper__header {
       box-shadow: none;
+      justify-content: flex-start;
     }
 
     & .v-stepper__step__step {
@@ -250,6 +251,11 @@ export default {
       //   display: none;
       // }
     }
+    
+    & .v-divider {
+      max-width: 50px !important;
+    }
+
     & .v-stepper__content {
       padding-left: 0;
       padding-right: 0;
