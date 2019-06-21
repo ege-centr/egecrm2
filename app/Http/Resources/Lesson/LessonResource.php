@@ -13,6 +13,7 @@ class LessonResource extends JsonResource
     {
         $clientLessons = $this->clientLessons;
         foreach($clientLessons as &$clientLesson) {
+            logger(json_encode($clientLesson, JSON_PRETTY_PRINT));
             $clientLesson->client->subject_status = $clientLesson->client->getSubjectStatus($this->group->year, $this->group->subject_id);
         }
 

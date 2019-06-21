@@ -28,11 +28,12 @@
               <v-flex md12 class='flex-items'>
                 <div class='vertical-inputs' style='width: 400px'>
                   <div class='vertical-inputs__input'>
-                    <DatePicker v-if='dialog' label="Дата занятия" v-model='item.date' />
+                    <DatePicker v-if='dialog' label="Дата занятия" v-model='item.date' :error-messages='errorMessages.date' />
                   </div>
                   <div class='vertical-inputs__input'>
                     <v-text-field 
-                      hide-details 
+                      :error-messages='errorMessages.time'
+                      :hide-details='errorMessages.time === undefined'
                       v-model='item.time' 
                       label='Время занятия' 
                       v-mask="'##:##'"
@@ -40,7 +41,9 @@
                     ></v-text-field>
                   </div>
                   <div class='vertical-inputs__input' style='display: inline-block'>
-                    <v-select hide-details ref='select'
+                    <v-select ref='select'
+                      :error-messages='errorMessages.cabinet_id'
+                      :hide-details='errorMessages.cabinet_id === undefined'
                       :loading='cabinetsLoading'
                       v-model='item.cabinet_id'
                       :items="$store.state.data.cabinets"
@@ -63,18 +66,22 @@
                     </v-select>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <TeacherSelect v-model="item.teacher_id" only-active />
+                    <TeacherSelect v-model="item.teacher_id" :error-messages='errorMessages.teacher_id' only-active />
                   </div>
                   <div class='vertical-inputs__input'>
                     <v-text-field 
                       @blur='reloadPreview'
-                      hide-details 
+                      :error-messages='errorMessages.duration'
+                      :hide-details='errorMessages.duration === undefined'
                       v-model="item.duration" 
                       label="Длительность занятия, мин."></v-text-field>
                   </div>
-                  <div class='vertical-inputs__input relative' v-if='item.id'>
+                  <div class='vertical-inputs__input relative'>
                     <!-- <DivBlocker v-if="item.status === LESSON_STATUS.PLANNED" /> -->
-                    <v-text-field v-model='item.price' label='Цена' hide-details></v-text-field>
+                    <v-text-field v-model='item.price' label='Цена' 
+                      :error-messages='errorMessages.price'
+                      :hide-details='errorMessages.price === undefined'
+                    ></v-text-field>
                   </div>
                   <div class='vertical-inputs__input relative' v-if='item.id'>
                     <!-- <DivBlocker v-if="item.status === LESSON_STATUS.PLANNED" /> -->

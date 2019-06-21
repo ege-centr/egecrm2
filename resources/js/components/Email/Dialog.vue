@@ -23,7 +23,8 @@
               chips
               box
               multiple
-              hide-details
+              :error-messages='errorMessages.emails'
+              :hide-details="!errorMessages.hasOwnProperty('emails')"
               readonly
             >
               <template slot="selection" slot-scope="data">
@@ -50,7 +51,8 @@
               label="Тема"
               single-line
               full-width
-              hide-details
+              :error-messages='errorMessages.subject'
+              :hide-details="!errorMessages.hasOwnProperty('subject')"
               maxlength='100'
               v-model='subject'
             ></v-text-field>
@@ -62,6 +64,7 @@
               full-width
               auto-grow
               single-line
+              :error-messages='errorMessages.message'
               @keydown.enter='handleCmdEnter($event)'
               ref='textarea'
               :rows='10'
@@ -96,6 +99,8 @@ export default {
       message: '',
       subject: '',
       emails: [],
+      files: [],
+      errorMessages: {},
     }
   },
 
@@ -110,12 +115,14 @@ export default {
 
     send() {
       this.sending = true
+      this.errorMessages = {}
       axios.post(apiUrl(API_URL), {
         subject: this.subject,
         message: this.message,
         emails: this.emails,
         files: this.files,
-      }).then(r => {
+      })
+      .then(r => {
         this.message = ''
         this.subject = ''
         this.files = []
@@ -123,12 +130,15 @@ export default {
         this.dialog = false
         this.emails = []
         this.waitForDialogClose(() => {
-          this.sending = false
           this.$store.commit('message', {
             text: 'сообщение отправлено',
             color: 'green'
           })
         })
+      })
+      .catch(e => this.errorMessages = e.response.data.errors)
+      .then(() => {
+        this.sending = false
       })
     },
 

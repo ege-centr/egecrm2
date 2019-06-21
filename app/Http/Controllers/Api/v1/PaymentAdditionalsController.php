@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Payment\PaymentAdditional;
 use App\Http\Resources\PaymentAdditional\PaymentAdditionalResource;
+use App\Http\Requests\PaymentAdditional\StoreOrUpdateRequest;
 
 class PaymentAdditionalsController extends Controller
 {
@@ -22,14 +23,14 @@ class PaymentAdditionalsController extends Controller
         return $this->showAll($query);
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreOrUpdateRequest $request, $id)
     {
         $item = PaymentAdditional::find($id);
         $item->update($request->input());
         return $item;
     }
 
-    public function store(Request $request)
+    public function store(StoreOrUpdateRequest $request)
     {
         return PaymentAdditional::create($request->all());
     }

@@ -31,13 +31,13 @@
                     <TeacherSelect v-model='item.head_teacher_id' label="Классный руководитель" only-active />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <DataSelect type='years' v-model="item.year" />
+                    <DataSelect type='years' v-model="item.year" :error-messages='errorMessages.year' />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <DataSelect type='grades' v-model="item.grade_id" />
+                    <DataSelect type='grades' v-model="item.grade_id" :error-messages='errorMessages.grade_id' />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <DataSelect v-model='item.subject_id' type='subjects' />
+                    <DataSelect v-model='item.subject_id' type='subjects' :error-messages='errorMessages.subject_id' />
                   </div>
                   <div class='vertical-inputs__input' v-if='lessons.length > 0'>
                     <ClearableSelect label='Критическая дата старта' v-model="item.latest_start_lesson_id" 
@@ -81,72 +81,31 @@
 <script>
 import { MODEL_DEFAULTS, API_URL } from '@/components/Group'
 import { TeacherSelect, DataSelect } from '@/components/UI'
+import { DialogMixin } from '@/mixins'
 
 export default {
   components: { DataSelect, TeacherSelect },
 
+  mixins: [ DialogMixin ],
+
   data() {
     return {
-      loading: true,
-      saving: false,
-      item: null,
-      dialog: false,
-      edit_mode: true,
-
-      item: MODEL_DEFAULTS,
-      teachers: [],
+      API_URL,
+      MODEL_DEFAULTS,
       lessons: [],
-      saving: false,
-
-      // TODO: перевести на Dialog компонент 
-      destroying: false,
+      redirectAfterStore: 'GroupShow',
+      redirectAfterDestroy: 'GroupIndex',
     }
   },
   
   methods: {
-    async open(item_id = null) {
-      this.dialog = true
-      this.loading = true
+    beforeOpen(item_id) {
       if (item_id !== null) {
-        await axios.get(apiUrl('lessons') + queryString({group_id: item_id})).then(r => {
+        axios.get(apiUrl('lessons') + queryString({group_id: item_id})).then(r => {
           this.lessons = r.data
         })
-        this.edit_mode = true
-        this.loadData(item_id)
-      } else {
-        this.edit_mode = false
-        this.item = MODEL_DEFAULTS
-        this.loading = false
       }
     },
-
-    async loadData(item_id) {
-      axios.get(apiUrl(API_URL, item_id)).then(r => {
-        this.item = r.data
-        this.loading = false
-      })
-    },
-
-    async storeOrUpdate() {
-      this.saving = true
-      if (this.item.id) {
-        await axios.put(apiUrl(API_URL, this.item.id), this.item).then(r => {
-          this.item = r.data
-        })
-      } else {
-        await axios.post(apiUrl(API_URL), this.item).then(r => {
-          this.$router.push({ name: 'GroupShow', params: { id: r.data.id }})
-        })
-      }
-      this.dialog = false
-      this.$emit('updated', this.item)
-      this.waitForDialogClose(() => this.saving = false)
-    },
-
-    // TODO: перевести на удаление
-    destroy() {
-
-    }
   },
 }
 </script>

@@ -81,7 +81,7 @@
                               <v-list-tile-title>Тема занятия</v-list-tile-title>
                             </v-list-tile-content>
                         </v-list-tile>
-                        <v-list-tile @click='$refs.ConductDialog.open(item.id)'>
+                        <v-list-tile @click='$refs.ConductDialog.open(item.id)' v-show='item.topic'>
                             <v-list-tile-action>
                               <v-icon>assignment_turned_in</v-icon>
                             </v-list-tile-action>

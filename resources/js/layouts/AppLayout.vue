@@ -36,7 +36,7 @@
       :color='$store.state.snackBar.color'
       class='v-snack_global'
     >
-      {{ $store.state.snackBar.text }}
+      <span v-html='$store.state.snackBar.text'></span>
     </v-snackbar>
     <ListenToLogout />
   </v-app>

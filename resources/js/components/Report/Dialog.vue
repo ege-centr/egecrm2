@@ -101,6 +101,8 @@
                     counter 
                     label='Комментарий' 
                     maxlength="1000"
+                    :error-messages="errorMessages[categoryName + '_comment']"
+                    :hide-details="errorMessages[categoryName + '_comment'] === undefined"
                     v-model="item[categoryName + '_comment']"></v-textarea>
                 </div>
                 <hr class="v-divider theme--light">
@@ -123,7 +125,10 @@
                       maxlength="1000"
                       counter 
                       label='Комментарий' 
-                      v-model="item.recommendation"></v-textarea>
+                      v-model="item.recommendation"
+                      :error-messages='errorMessages.recommendation'
+                      :hide-details="errorMessages.recommendation === undefined"
+                    ></v-textarea>
                   </div>
                   <hr class="v-divider theme--light">
                 </v-flex>
@@ -148,7 +153,7 @@
                       />
                     </div>
                     <div class='vertical-inputs__input'>
-                      <DatePicker v-model='item.date' label='Дата создания отчёта' />
+                      <DatePicker v-model='item.date' label='Дата создания отчёта' :error-messages='errorMessages.date' />
                     </div>
                   </div>
                 </v-flex>

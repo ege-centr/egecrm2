@@ -8,6 +8,7 @@ use App\Models\Contract\{Contract, ContractPayment, ContractSubject};
 use App\Http\Resources\Contract\{ContractResource, ContractCollection};
 use App\Http\Resources\AlgoliaResult;
 use App\Models\Client\Client;
+use App\Http\Requests\Contract\StoreOrUpdateRequest;
 
 class ContractsController extends Controller
 {
@@ -56,7 +57,7 @@ class ContractsController extends Controller
         return new ContractResource(Contract::find($id));
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreOrUpdateRequest $request, $id)
     {
         $item = Contract::find($id);
         $item->update($request->all());
@@ -67,7 +68,7 @@ class ContractsController extends Controller
         return new ContractResource($item);
     }
 
-    public function store(Request $request)
+    public function store(StoreOrUpdateRequest $request)
     {
         $item = Contract::create($request->all());
         $item->subjects()->createMany($request->subjects);

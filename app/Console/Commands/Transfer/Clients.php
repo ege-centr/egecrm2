@@ -163,8 +163,6 @@ class Clients extends TransferCommand
                     'entity_type' => Client::class,
                     'entity_id' => $id,
                 ]);
-
-                $this->createAdditionalPaymentIfNeeded($payment, Client::class, $id);
             }
 
             // Contracts

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\{EmailMessage, File};
 use App\Http\Resources\EmailMessage\EmailMessageResource;
+use App\Http\Requests\EmailMessage\StoreRequest;
 use User;
 
 class EmailMessagesController extends Controller
@@ -21,7 +22,7 @@ class EmailMessagesController extends Controller
         return EmailMessageResource::collection($query->get());
     }
 
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         foreach($request->emails as $email) {
             $emailMessage = new EmailMessage($request->all());

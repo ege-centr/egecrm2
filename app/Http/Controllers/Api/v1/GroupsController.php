@@ -12,6 +12,7 @@ use App\Models\{
 use DB, DateTime;
 use App\Http\Resources\Group\{GroupCollection, GroupResource};
 use App\Http\Resources\AlgoliaResult;
+use App\Http\Requests\Group\StoreOrUpdateRequest;
 
 class GroupsController extends Controller
 {
@@ -51,7 +52,7 @@ class GroupsController extends Controller
         return response()->json($result);
     }
 
-    public function store(Request $request)
+    public function store(StoreOrUpdateRequest $request)
     {
         $item = Group::create($request->input());
         return new GroupResource($item);
@@ -62,7 +63,7 @@ class GroupsController extends Controller
         return new GroupResource(Group::find($id));
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreOrUpdateRequest $request, $id)
     {
         $item = Group::find($id);
         $item->update($request->all());

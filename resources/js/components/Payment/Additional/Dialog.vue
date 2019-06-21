@@ -27,16 +27,23 @@
                   <div class='vertical-inputs__input'>
                     <ClearableSelect v-model="item.year"
                       :items='$store.state.data.years'
+                      :error-messages='errorMessages.year'
                       label="Год" />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-text-field hide-details v-model='item.sum' label='Сумма' v-mask="'######'"></v-text-field>
+                    <v-text-field 
+                      :error-messages="errorMessages.sum"
+                      :hide-details="errorMessages.sum === undefined"
+                      v-model='item.sum' label='Сумма' v-mask="'######'"></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-text-field hide-details v-model='item.purpose' label='Назначение'></v-text-field>
+                    <v-text-field
+                      :error-messages="errorMessages.purpose"
+                      :hide-details="errorMessages.purpose === undefined"
+                      v-model='item.purpose' label='Назначение'></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <DatePicker label="Дата" v-model="item.date"  />
+                    <DatePicker label="Дата" v-model="item.date" :error-messages='errorMessages.date' />
                   </div>
                 </div>
               </v-flex>

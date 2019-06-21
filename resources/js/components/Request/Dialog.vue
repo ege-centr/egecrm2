@@ -64,7 +64,7 @@
                     <v-text-field hide-details v-model="item.comment" label="Комментарий"></v-text-field>
                   </div>
                   <div>
-                    <PhoneEdit :item='item' />
+                    <PhoneEdit :item='item' :error-messages='errorMessages' />
                   </div>
                 </div>
               </v-flex>

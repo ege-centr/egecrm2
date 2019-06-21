@@ -37,7 +37,10 @@
                         />
                       </div>
                       <div class='vertical-inputs__input'>
-                        <v-text-field v-model="item.first_name" label="Имя" hide-details></v-text-field>
+                        <v-text-field v-model="item.first_name" label="Имя" 
+                          :error-messages="errorMessages.first_name"
+                          :hide-details="errorMessages.first_name === undefined"
+                        ></v-text-field>
                         <!-- <div class='vertical-inputs__input__message'>123</div> -->
                       </div>
                       <div class='vertical-inputs__input'>
@@ -50,7 +53,7 @@
                         <v-text-field v-model="item.school" label="Школа" hide-details></v-text-field>
                       </div>
                       <div class='vertical-inputs__input'>
-                        <GradeAndYear :item='item' />
+                        <GradeAndYear :item='item' :error-messages='errorMessages' />
                       </div>
                       <div class='vertical-inputs__input'>
                         <v-select multiple hide-details
@@ -68,14 +71,15 @@
 
                       <div class='vertical-inputs__input'>
                         <v-text-field 
-                          hide-details
                           label='Email (используется в качестве логина)' 
                           v-model='item.email'
+                          :hide-details="errorMessages.email === undefined"
+                          :error-messages="errorMessages.email"
                         />
                       </div>
                       
                       <div>
-                        <PhoneEdit :item='item' />
+                        <PhoneEdit :item='item' :error-messages='errorMessages' />
                       </div>
                     </div>
                   </v-flex>
@@ -90,7 +94,12 @@
                   <v-flex md12>
                     <div class='vertical-inputs'>
                       <div class='vertical-inputs__input'>
-                        <v-text-field v-model="item.representative.first_name" label="Имя" hide-details></v-text-field>
+                        <v-text-field 
+                          v-model="item.representative.first_name" 
+                          label="Имя"
+                          :error-messages="representativeErrorMessages.first_name"
+                          :hide-details="representativeErrorMessages.first_name === undefined"
+                        ></v-text-field>
                       </div>
                       <div class='vertical-inputs__input'>
                         <v-text-field v-model="item.representative.last_name" label="Фамилия" hide-details></v-text-field>
@@ -121,14 +130,15 @@
                       </div>
                        <div class='vertical-inputs__input'>
                         <v-text-field 
-                          hide-details
+                          :hide-details="representativeErrorMessages.email === undefined"
+                          :error-messages='representativeErrorMessages.email'
                           label='Email (используется в качестве логина)' 
                           v-model='item.representative.email'
                         />
                       </div>
                         <!-- <div class='vertical-inputs__input__message blue--text accent-1'>данный email используется в качестве логина</div> -->
                       <div>
-                        <PhoneEdit :item='item.representative' />
+                        <PhoneEdit :item='item.representative' :error-messages='representativeErrorMessages' />
                       </div>
                     </div>
                   </v-flex>
@@ -160,6 +170,20 @@ export default {
       API_URL,
       MODEL_DEFAULTS,
       CLASS_NAME,
+      redirectAfterStore: 'ClientShow',
+      redirectAfterDestroy: 'ClientIndex',
+    }
+  },
+
+  computed: {
+    representativeErrorMessages() {
+      let representativeErrorMessages = {}
+      Object.entries(this.errorMessages).forEach(entry => {
+        if (entry[0].indexOf('representative') === 0) {
+          representativeErrorMessages[entry[0].split('.').splice(1).join('.')] = entry[1]
+        }
+      })
+      return representativeErrorMessages
     }
   },
 

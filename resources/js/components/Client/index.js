@@ -12,10 +12,10 @@ export const FILTERS = [
 export const MODEL_DEFAULTS = {
   contracts: [],
   representative: {
-    email: {},
+    email: '',
     phones: [{phone: '', comment: ''}] 
   },
-  email: {},
+  email: '',
   photo: null,
   phones: [{phone: '', comment: ''}]
 }

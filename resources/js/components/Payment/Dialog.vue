@@ -26,6 +26,7 @@
                 <div class='vertical-inputs'>
                   <div class='vertical-inputs__input'>
                     <ClearableSelect v-model="item.method"
+                      :error-messages='errorMessages.method'
                       :items='ENUMS.methods'
                       label="Cпособ оплаты" />
                     <div class='vertical-inputs__input__message' style='top: 0'>
@@ -50,24 +51,30 @@
                   </div>
                   <div class='vertical-inputs__input'>
                     <ClearableSelect v-model="item.type"
+                      :error-messages='errorMessages.type'
                       :items='ENUMS.types'
                       label="Тип" />
                   </div>
                   <div class='vertical-inputs__input'>
                     <ClearableSelect v-model="item.category"
+                      :error-messages='errorMessages.category'
                       :items='ENUMS.categories'
                       label="Категория" />
                   </div>
                   <div class='vertical-inputs__input'>
                     <ClearableSelect v-model="item.year"
+                      :error-messages='errorMessages.year'
                       :items='$store.state.data.years'
                       label="Год" />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-text-field hide-details v-model='item.sum' label='Сумма'></v-text-field>
+                    <v-text-field 
+                      :hide-details='errorMessages.sum === undefined'
+                      :error-messages='errorMessages.sum'
+                      v-model='item.sum' label='Сумма'></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <DatePicker label="Дата" v-model="item.date"  />
+                    <DatePicker label="Дата" v-model="item.date" :error-messages="errorMessages.date"  />
                   </div>
                   <div class='vertical-inputs__input'>
                     <v-switch color='green' v-model="item.is_confirmed" label="подтвержден"></v-switch>
@@ -86,70 +93,22 @@
 
 import { API_URL, ENUMS, MODEL_DEFAULTS } from './'
 import { DatePicker } from '@/components/UI'
+import { DialogMixin } from '@/mixins'
 
 export default {
   components: { DatePicker },
 
+  mixins: [ DialogMixin ],
+
   data() {
     return {
       ENUMS,
-      dialog: false,
-      saving: false,
-      item: null,
-      edit_mode: true,
-      loading: true,
-      destroying: false,
+      API_URL,
+      MODEL_DEFAULTS,
     }
   },
 
   methods: {
-    open(item_id = null, defaults = {}) {
-      this.dialog = true
-      if (item_id !== null) {
-        this.edit_mode = true
-        this.loadData(item_id)
-      } else {
-        this.edit_mode = false
-        this.item = {...MODEL_DEFAULTS, ...defaults }
-        this.loading = false
-      }
-    },
-
-    loadData(item_id) {
-      this.loading = true
-      axios.get(apiUrl(API_URL, item_id)).then(r => {
-        this.item = r.data
-        this.loading = false
-      })
-    },
-
-    destroy() {
-      this.destroying = true
-      axios.delete(apiUrl(API_URL, this.item.id)).then(r => {
-        this.$emit('updated')
-        this.dialog = false
-        this.waitForDialogClose(() => this.destroying = false)
-      })
-    },
-
-    async storeOrUpdate() {
-      this.saving = true
-      if (this.item.id) {
-        await axios.put(apiUrl(`${API_URL}/${this.item.id}`), this.item).then(r => {
-          this.$emit('updated')
-          // this.item = r.data
-          // this.$emit('updated', this.item)
-        })
-      } else {
-        await axios.post(apiUrl(API_URL), this.item).then(r => {
-          this.$emit('updated')
-          // this.item = r.data
-          // this.$emit('stored', this.item)
-        })
-      }
-      this.dialog = false
-      this.waitForDialogClose(() => this.saving = false)
-    },
   },
 
   computed: {

@@ -1,11 +1,13 @@
 <template>
-  <v-select hide-details ref='select'
+  <v-select ref='select'
     :value='value'
     @input="value => $emit('input', value)"
     :items="items"
     :label="label"
     item-value='id'
     :item-text='itemText'
+    :error-messages='errorMessages'
+    :hide-details='errorMessages === undefined'
     :readonly="readonly"
   >
     <v-list-tile slot='prepend-item' @click='clear'>
@@ -38,6 +40,9 @@ export default {
       type: Boolean,
       default: false,
       required: false,
+    },
+    errorMessages: {
+      default: undefined,
     },
   },
 

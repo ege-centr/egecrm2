@@ -7,7 +7,7 @@
           <v-toolbar-title>Отправка смс</v-toolbar-title>
             <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn icon dark  :loading='sending' @click='send' :disabled="phone.length !== 18 || text.length === 0">
+            <v-btn icon dark  :loading='sending' @click='send'>
               <v-icon>send</v-icon>
             </v-btn>
             <v-btn icon dark @click.native="dialog = false">
@@ -17,12 +17,14 @@
         </v-toolbar>
         <v-card-text class='px-0' style='padding-top: 70px'>
           <v-form class='sms-message-form'>
-            <v-text-field hide-details
+            <v-text-field 
               :readonly='!customInput'
               v-mask="'+7 (###) ###-##-##'"
               single-line
               full-width
               v-model="phone"
+              :error-messages='errorMessages.phone'
+              :hide-details="!errorMessages.hasOwnProperty('phone')"
               label='Телефон'
             >
             </v-text-field>
@@ -31,7 +33,8 @@
               label="Сообщение"
               full-width
               auto-grow
-              hide-details
+              :error-messages='errorMessages.text'
+              :hide-details="!errorMessages.hasOwnProperty('text')"
               single-line
               ref='textarea'
               v-model='text' 
@@ -77,6 +80,7 @@ export default {
   data() {
     return {
       dialog: false,
+      errorMessages: {},
       sending: false,
       phone: '',
       text: '',
@@ -95,14 +99,19 @@ export default {
 
     send() {
       this.sending = true
+      this.errorMessages = {}
       axios.post(apiUrl(API_URL, 'send'), {
         text: this.text,
         phone: this.phone
-      }).then(r => {
-        this.sending = false
+      })
+      .then(r => {
         this.text = ''
         this.dialog = false
       })
+      .catch(e => {
+        this.errorMessages = e.response.data.errors
+      })
+      .then(() => this.sending = false)
     },
 
     loadTemplates() {

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Group\GroupAct;
 use App\Http\Resources\Group\ActResource;
+use App\Http\Requests\GroupAct\StoreOrUpdateRequest;
 
 class GroupActsController extends Controller
 {
@@ -22,7 +23,7 @@ class GroupActsController extends Controller
         );
     }
 
-    public function store(Request $request)
+    public function store(StoreOrUpdateRequest $request)
     {
         $model = GroupAct::create($request->input());
         return $model;
@@ -33,7 +34,7 @@ class GroupActsController extends Controller
         return GroupAct::find($id);
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreOrUpdateRequest $request, $id)
     {
         GroupAct::find($id)->update($request->all());
     }

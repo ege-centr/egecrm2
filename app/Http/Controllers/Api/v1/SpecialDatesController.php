@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\SpecialDate;
+use App\Http\Requests\SpecialDate\StoreOrUpdateRequest;
 
 class SpecialDatesController extends Controller
 {
@@ -32,12 +33,12 @@ class SpecialDatesController extends Controller
         return $query->get();
     }
 
-    public function store(Request $request)
+    public function store(StoreOrUpdateRequest $request)
     {
         return SpecialDate::create($request->all());
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreOrUpdateRequest $request, $id)
     {
         SpecialDate::find($id)->update($request->all());
     }

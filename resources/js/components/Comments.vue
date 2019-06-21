@@ -123,8 +123,11 @@
         }).then(r => {
           this.comments.push(r.data)
           this.endCommenting()
-          this.adding = false
         })
+        .catch(e => {
+          this.$store.commit('message', {text: 'пустой комментарий'})
+        })
+        .then(() => this.adding = false)
       },
 
       edit(index) {

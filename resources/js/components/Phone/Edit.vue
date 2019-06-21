@@ -4,16 +4,17 @@
       <div v-for="(phone, index) in item.phones" :key='index' class='flex-items align-flex-start' style='width: 100%'>
         <div class='mr-3 vertical-input'>
           <v-text-field 
-            :hide-details='getErrorMessage(phone) === null'
-            :error-messages='getErrorMessage(phone)'
+            :hide-details='_.get(errorMessages, `phones.${index}.phone`) === undefined'
+            :error-messages='_.get(errorMessages, `phones.${index}.phone`)'
             :disabled='!editable'
             :loading='phone.loading'
             placeholder='Телефон'
             v-mask="'+7 (###) ###-##-##'"
             v-model="phone.phone"
-            @keyup="checkDuplicate(phone)"
+            
           >
           </v-text-field>
+          <!-- @keyup="checkDuplicate(phone)" -->
         </div>
         <div class='mr-3 vertical-input'>
           <v-text-field v-model="phone.comment" hide-details
@@ -49,7 +50,11 @@ export default {
       type: Number,
       default: 10,
       required: false,
-    }
+    },
+    errorMessages: {
+      type: Object,
+      default: {},
+    },
   },
 
   data() {
@@ -63,7 +68,7 @@ export default {
     if (this.item.phones.length === 0) {
       this.add()
     } else {
-      this.item.phones.forEach(phone => this.checkDuplicate(phone))
+      // this.item.phones.forEach(phone => this.checkDuplicate(phone))
     }
   },
 
@@ -72,25 +77,25 @@ export default {
       this.item.phones.push(_.clone(MODEL_DEFAULTS))
     },
 
-    getErrorMessage(phone) {
-      if (phone.phone.length === 18 && phone.error) {
-        return [ ENTITY_TYPE_TITLE[phone.error.entity_type] + ' №' + phone.error.entity_id ]
-      }
-      return null
-    },
+    // getErrorMessage(phone) {
+    //   if (phone.phone.length === 18 && phone.error) {
+    //     return [ ENTITY_TYPE_TITLE[phone.error.entity_type] + ' №' + phone.error.entity_id ]
+    //   }
+    //   return null
+    // },
 
-    checkDuplicate(phone) {
-      if (phone.phone.length === 18) {
-        phone.error = null
-        phone.loading = true
-        this.$forceUpdate()
-        axios.post(apiUrl('phones/check-duplicate'), phone).then(r => {
-          phone.error = r.data.data
-          phone.loading = false
-          this.$forceUpdate()
-        })
-      }
-    },
+    // checkDuplicate(phone) {
+    //   if (phone.phone.length === 18) {
+    //     phone.error = null
+    //     phone.loading = true
+    //     this.$forceUpdate()
+    //     axios.post(apiUrl('phones/check-duplicate'), phone).then(r => {
+    //       phone.error = r.data.data
+    //       phone.loading = false
+    //       this.$forceUpdate()
+    //     })
+    //   }
+    // },
   },
 }
 </script>

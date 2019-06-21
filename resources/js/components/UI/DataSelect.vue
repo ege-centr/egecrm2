@@ -6,6 +6,7 @@
     :items="item.items"
     :item-text='item.text'
     :label="item.label"
+    :error-messages='errorMessages'
   />
 </template>
 
@@ -18,6 +19,9 @@ export default {
     },
     value: {
       required: true
+    },
+    errorMessages: {
+      default: undefined,
     },
     readonly: {
       type: Boolean,

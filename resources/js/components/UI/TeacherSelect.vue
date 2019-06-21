@@ -1,5 +1,7 @@
 <template>
-  <v-select hide-details ref='select'
+  <v-select ref='select'
+    :error-messages='errorMessages'
+    :hide-details='errorMessages === undefined'
     :value='value'
     @input="value => $emit('input', value)"
     :items="items"
@@ -37,6 +39,10 @@ export default {
     },
 
     onlyActive: Boolean,
+
+    errorMessages: {
+      default: undefined,
+    },
   },
 
   methods: {

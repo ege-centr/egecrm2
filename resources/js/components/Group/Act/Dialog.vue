@@ -25,22 +25,28 @@
               <v-flex md12>
                 <div class='vertical-inputs'>
                   <div class='vertical-inputs__input'>
-                    <TeacherSelect v-model="item.teacher_id" />
+                    <TeacherSelect v-model="item.teacher_id" :error-messages='errorMessages.teacher_id' />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-text-field v-model='item.lesson_count' label='Количество занятий' hide-details v-mask="'####'"></v-text-field>
+                    <v-text-field v-model='item.lesson_count' label='Количество занятий' 
+                      :error-messages="errorMessages.lesson_count"
+                      :hide-details="errorMessages.lesson_count === undefined"
+                     v-mask="'####'"></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <v-text-field v-model='item.sum' label='Сумма' hide-details v-mask="'######'"></v-text-field>
+                    <v-text-field v-model='item.sum' label='Сумма' 
+                      :error-messages="errorMessages.sum"
+                      :hide-details="errorMessages.sum === undefined"
+                    v-mask="'######'"></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>
-                    <DatePicker label="Дата в акте" v-model='item.date' />
+                    <DatePicker label="Дата в акте" v-model='item.date' :error-messages='errorMessages.date' />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <DatePicker label="Дата от" v-model='item.date_from' />
+                    <DatePicker label="Дата от" v-model='item.date_from' :error-messages='errorMessages.date_from' />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <DatePicker label="Дата до" v-model='item.date_to' />
+                    <DatePicker label="Дата до" v-model='item.date_to' :error-messages='errorMessages.teacher_id' />
                   </div>
                 </div>
               </v-flex>

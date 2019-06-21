@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\{Payment\Payment, Client\Client, Contract\Contract, Photo};
 use App\Http\Resources\Client\{ClientResource, ClientCollection};
 use App\Utils\Phone;
+use App\Http\Requests\Client\StoreOrUpdateRequest;
 
 class ClientsController extends Controller
 {
@@ -37,7 +38,7 @@ class ClientsController extends Controller
         return ClientCollection::collection($this->showBy($request, $query));
     }
 
-    public function store(Request $request)
+    public function store(StoreOrUpdateRequest $request)
     {
         $new_model = Client::create($request->input());
         $new_model->phones()->createMany(Phone::filter($request->phones));
@@ -65,7 +66,7 @@ class ClientsController extends Controller
         return new ClientResource(Client::find($id));
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreOrUpdateRequest $request, $id)
     {
         $model = Client::find($id);
         $model->update($request->input());

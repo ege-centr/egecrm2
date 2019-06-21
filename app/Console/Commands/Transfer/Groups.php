@@ -56,12 +56,11 @@ class Groups extends TransferCommand
                     ->where('id_group', $item->id)
                     ->get();
                 foreach($lessons as $lesson) {
-                    $purpose = "дополнительное занятие "
-                        . date("d.m.y", strtotime($lesson->lesson_date))
-                        . " в {$lesson->lesson_time} ("
-                        . Subject::getTitle($lesson->id_subject, 'three_letters')
-                        . "-" . Grade::getTitle($lesson->grade, 'short') . "), кабинет "
-                        . optional(Cabinet::whereId($lesson->cabinet)->first())->title;
+                    $purpose = sprintf(
+                        "дополнительное занятие (%s, %s)",
+                        Subject::getTitle($lesson->id_subject, 'three_letters') . "-" . Grade::getTitle($lesson->grade, 'short'),
+                        substr($lesson->lesson_time, 0, 5)
+                    );
                     if ($lesson->type_entity == 'TEACHER') {
                         $entityType = Teacher::class;
                         $entityId = $lesson->id_teacher;

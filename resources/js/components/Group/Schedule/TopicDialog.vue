@@ -30,6 +30,7 @@
                 label='Тема занятия' 
                 maxlength="1000"
                 rows='15'
+                :error-messages='errorMessages.topic'
                 @keydown.enter='(event) => event.preventDefault()'
                 v-model='item.topic'>
               </v-textarea>

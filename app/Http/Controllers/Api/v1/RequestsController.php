@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\{Client\Client, Request as ClientRequest};
 use App\Http\Resources\Request\{RequestResource, RequestCollection};
 use App\Http\Resources\AlgoliaResult;
+use App\Http\Requests\Request\StoreOrUpdateRequest;
 
 class RequestsController extends Controller
 {
@@ -54,7 +55,7 @@ class RequestsController extends Controller
         return response()->json($result);
     }
 
-    public function store(Request $request)
+    public function store(StoreOrUpdateRequest $request)
     {
         $new_model = ClientRequest::create($request->input());
         // dd($request->phones);
@@ -67,7 +68,7 @@ class RequestsController extends Controller
         return new RequestResource(ClientRequest::find($id));
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreOrUpdateRequest $request, $id)
     {
         $model = ClientRequest::find($id);
         $model->update($request->input());

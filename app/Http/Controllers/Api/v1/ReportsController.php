@@ -11,6 +11,7 @@ use App\Http\Resources\Report\{AbstractReportCollection, ReportResource, ReportC
 use App\Http\Resources\AlgoliaResult;
 use App\Http\Resources\Lesson\ClientLessonCollection;
 use User;
+use App\Http\Requests\Report\StoreOrUpdateRequest;
 
 class ReportsController extends Controller
 {
@@ -46,13 +47,13 @@ class ReportsController extends Controller
         return new ReportResource(Report::find($id));
     }
 
-    public function store(Request $request)
+    public function store(StoreOrUpdateRequest $request)
     {
         $item = Report::create($request->all());
         return new ReportResource($item);
     }
 
-    public function update($id, Request $request)
+    public function update($id, StoreOrUpdateRequest $request)
     {
         $item = Report::find($id);
         if (User::isTeacher() && $item->is_not_moderated) {

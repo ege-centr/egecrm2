@@ -188,15 +188,17 @@
               <v-flex md3>
                 <div class='vertical-inputs mb-5'>
                   <div class='vertical-inputs__input'>
-                    <DataSelect type='years' v-model="item.year" />
+                    <DataSelect type='years' v-model="item.year" :error-messages='errorMessages.year' />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <DataSelect type='grades' v-model="item.grade_id" />
+                    <DataSelect type='grades' v-model="item.grade_id" :error-messages='errorMessages.grade_id' />
                   </div>
                   <div class='vertical-inputs__input'>
                     <v-text-field v-model="item.sum" label="Cумма" 
                       :persistent-hint='true'
-                      :hide-details="!recommendedPrice"
+                      :hide-details="!recommendedPrice && errorMessages.sum === undefined"
+                      :error-messages="errorMessages.sum"
+                      :error='errorMessages.sum !== undefined || (recommendedPrice > 0 && recommendedPrice != discountedSum)'
                       :hint="recommendedPrice ? `рекомендуемая сумма: ${recommendedPrice}` : '' "></v-text-field>
                   </div>
                   <div class='vertical-inputs__input'>
@@ -207,7 +209,7 @@
                       />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <DatePicker label="Дата" v-model='item.date' />
+                    <DatePicker label="Дата" v-model='item.date'  :error-messages='errorMessages.date' />
                   </div>
                 </div>
               </v-flex>
@@ -322,6 +324,26 @@ export default {
         }
       }
     },
+  },
+
+  watch: {
+    errorMessages(errorMessages) {
+      const result = []
+      Object.entries(errorMessages).forEach(entry => {
+        if (entry[0].indexOf('payments') === 0) {
+          result.push('Дата платежа ' + (Number(entry[0].split('.')[1]) + 1) + ' не установлена')
+        }
+        if (entry[0] === 'alert') {
+          entry[1].forEach(message => result.push(message))
+        }
+      })
+      if (result.length > 0) {
+        console.log('result', result)
+        this.$store.commit('message', {
+          text: result.slice(0, 2).join('<br/>')
+        })
+      }
+    }
   },
 
   computed: {

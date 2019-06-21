@@ -9,6 +9,8 @@ use App\Observers\{LogsObserver, ReportsObserver, PaymentsObserver};
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Validator;
+use App\Utils\Phone;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -27,6 +29,11 @@ class AppServiceProvider extends ServiceProvider
 
         Report::observe(ReportsObserver::class);
         Payment::observe(PaymentsObserver::class);
+
+        Validator::extend('phone', function($attribute, $value, $parameters, $validator) {
+            $phone = Phone::clean($value);
+            return strlen($phone) == 11 && in_array($phone[1], [9, 4]);
+        });
 
         // Bind logs watcher to all models
         $path = realpath(app_path() . '/Models');

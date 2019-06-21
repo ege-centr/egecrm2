@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1\Sms;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Utils\{Sms, Phone};
+use App\Http\Requests\Sms\SendRequest;
 
 class MessagesController extends Controller
 {
@@ -16,9 +17,9 @@ class MessagesController extends Controller
         ]);
     }
 
-    public function send(Request $request)
+    public function send(SendRequest $request)
     {
-        $sms = Sms::send($request->phone, $request->text);
+        // $sms = Sms::send($request->phone, $request->text);
         // return Sms::get($request->phone, 1)[0];
     }
 }

@@ -36,7 +36,7 @@
       v-model="menu"
     >
       <v-btn icon flat color='primary' slot='activator' @click='item = null'>
-          <v-icon dark>chevron_right</v-icon>
+          <v-icon dark>sort</v-icon>
       </v-btn>
 
       <v-list dense v-if='item === null'>

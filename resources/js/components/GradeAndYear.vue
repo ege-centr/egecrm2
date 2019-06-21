@@ -1,7 +1,10 @@
 <template>
   <v-menu transition="slide-y-transition" v-model="menu" :close-on-content-click="false">
     <div slot='activator' style='pointer-events: none'>
-      <v-select hide-details label='Класс и год' :items='[null, true]' :value='(item.grade_id > 0 || item.year > 0)'>
+      <v-select 
+        :hide-details="errorMessagesCombined.length === 0"
+        :error-messages="errorMessagesCombined"
+        label='Класс и год' :items='[null, true]' :value='(item.grade_id > 0 || item.year > 0)'>
         <template slot="selection" slot-scope="{ item }">
           <span>{{ label }}</span>
         </template>
@@ -42,7 +45,13 @@ export default {
     labelType: {
       type: String,
       default: LABEL_TYPES.CALCULATED_GRADE,
-    }
+    },
+    errorMessages: {
+      type: Object,
+      default() {
+        return {}
+      }
+    },
   },
 
   data() {
@@ -102,5 +111,18 @@ export default {
       this.$forceUpdate()
     },
   },
+
+  computed: {
+    errorMessagesCombined() {
+      let errorMessages = []
+      if (this.errorMessages.year !== undefined) {
+        errorMessages = this.errorMessages.year
+      }
+      if (this.errorMessages.grade_id !== undefined) {
+        errorMessages = errorMessages.concat(this.errorMessages.grade_id)
+      }
+      return errorMessages
+    }
+  }
 }
 </script>

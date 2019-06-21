@@ -9,7 +9,9 @@
     full-width
     min-width="290px"
   >
-    <v-text-field hide-details
+    <v-text-field 
+      :error-messages='errorMessages'
+      :hide-details='errorMessages === undefined'
       slot="activator"
       v-model='dateFormatted'
       :readonly="readonly"
@@ -34,6 +36,9 @@ export default {
       type: Boolean,
       default: false,
       required: false,
+    },
+    errorMessages: {
+      default: undefined,
     },
   },
 

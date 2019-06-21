@@ -16,20 +16,22 @@
                   <v-flex md12>
                     <div class='vertical-inputs'>
                       <div class='vertical-inputs__input'>
-                        <v-select hide-details
+                        <v-select 
+                          :hide-details='errorMessages.type === undefined'
+                          :error-messages='errorMessages.type'
                           v-model="dialog_item.type"
                           :items="types"
                           label="Тип"
                         ></v-select>
                       </div>
                       <div class='vertical-inputs__input'>
-                        <DatePicker label="Дата" v-model="dialog_item.date" />
+                        <DatePicker label="Дата" v-model="dialog_item.date" :error-messages='errorMessages.date' />
                       </div>
                       <div class='vertical-inputs__input' v-show='dialog_item.type === TYPE_EXAM'>
-                        <DataSelect v-model='dialog_item.subject_id' type='subjects' />
+                        <DataSelect v-model='dialog_item.subject_id' type='subjects' :error-messages='errorMessages.subject_id' />
                       </div>
                       <div class='vertical-inputs__input' v-show='dialog_item.type === TYPE_EXAM'>
-                        <DataSelect v-model='dialog_item.grade_id' type='grades' />
+                        <DataSelect v-model='dialog_item.grade_id' :error-messages='errorMessages.grade_id' type='grades' />
                       </div>
                     </div>
                   </v-flex>
@@ -197,6 +199,7 @@ export default {
       dialog_item: null,
       recommendedPriceDialogItem: null,
       recommendedPrices: null,
+      errorMessages: {},
       sortingOptions: {
         rowsPerPage: -1,
         sortBy: 'date'
@@ -247,21 +250,29 @@ export default {
       })
     },
 
-    storeOrUpdate() {
+    async storeOrUpdate() {
       this.saving = true
+      this.errorMessages = {}
       if (this.dialog_item.hasOwnProperty('id')) {
-        axios.put(apiUrl(API_URL, this.dialog_item.id), this.dialog_item).then(r => {
+        await axios.put(apiUrl(API_URL, this.dialog_item.id), this.dialog_item)
+        .then(r => {
           this.loadData()
           this.dialog = false
-          this.saving = false
+        })
+        .catch(e => {
+          this.errorMessages = e.response.data.errors
         })
       } else {
-        axios.post(apiUrl(API_URL), this.dialog_item).then(r => {
+        await axios.post(apiUrl(API_URL), this.dialog_item)
+        .then(r => {
           this.items.push(r.data)
           this.dialog = false
-          this.saving = false
+        })
+        .catch(e => {
+          this.errorMessages = e.response.data.errors
         })
       }
+      this.saving = false
     },
 
     async storeOrUpdateRecommendedPrice() {

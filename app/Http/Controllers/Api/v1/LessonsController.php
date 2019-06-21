@@ -14,6 +14,7 @@ use App\Models\{
 };
 use App\Http\Resources\Lesson\{LessonResource, LessonCollection};
 use User, DateTime;
+use App\Http\Requests\Lesson\StoreOrUpdateRequest;
 
 class LessonsController extends Controller
 {
@@ -28,7 +29,7 @@ class LessonsController extends Controller
         return LessonCollection::collection($query->get());
     }
 
-    public function store(Request $request)
+    public function store(StoreOrUpdateRequest $request)
     {
         $item = new Lesson($request->all());
         $item->save();
@@ -40,7 +41,7 @@ class LessonsController extends Controller
         return new LessonResource(Lesson::find($id));
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreOrUpdateRequest $request, $id)
     {
         $model = Lesson::find($id);
         $model->update($request->all());

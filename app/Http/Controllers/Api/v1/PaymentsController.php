@@ -8,6 +8,7 @@ use App\Models\Payment\Payment;
 use App\Http\Resources\Payment\{PaymentCollection, PaymentResource};
 use App\Http\Resources\AlgoliaResult;
 use PersonResource;
+use App\Http\Requests\Payment\StoreOrUpdateRequest;
 
 class PaymentsController extends Controller
 {
@@ -57,14 +58,14 @@ class PaymentsController extends Controller
         return $result;
     }
 
-    public function update(Request $request, $id)
+    public function update(StoreOrUpdateRequest $request, $id)
     {
         $item = Payment::find($id);
         $item->update($request->input());
         return $item;
     }
 
-    public function store(Request $request)
+    public function store(StoreOrUpdateRequest $request)
     {
         return Payment::create($request->all());
     }

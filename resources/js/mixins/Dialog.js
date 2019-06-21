@@ -9,10 +9,19 @@ export default {
       edit_mode: true,
       destroying: false,
 
+      // если указан, то вместо обновления списка
+      // произойдет редирект на страницу новосозданной сущности
+      redirectAfterStore: null,
+
+      redirectAfterDestroy: null,
+
       // дополнительные параметры диалога
       // используются, например, чтобы открыть диалог в режиме просмотра 
       // для отчетов из ЛК ученика
       options: {},
+
+      // Ошибки валидации
+      errorMessages: {},
     }
   },
 
@@ -54,22 +63,40 @@ export default {
     destroy() {
       this.destroying = true
       axios.delete(apiUrl(this.API_URL, this.item.id)).then(r => {
-        this.emitUpdated()
-        this.dialog = false
-        this.waitForDialogClose(() => this.destroying = false)
+        if (this.redirectAfterDestroy !== null) {
+          this.$router.push({ name: this.redirectAfterDestroy })
+        } else {
+          this.emitUpdated()
+          this.dialog = false
+          this.waitForDialogClose(() => this.destroying = false)
+        }
       })
     },
 
     async storeOrUpdate() {
       this.saving = true
+      this.errorMessages = {}
       if (this.item.id) {
-        await axios.put(apiUrl(this.API_URL, this.item.id), this.item).then(r => this.item = r.data)
+        await axios.put(apiUrl(this.API_URL, this.item.id), this.item)
+          .then(r => this.item = r.data)
+          .catch(e => this.errorMessages = e.response.data.errors)
       } else {
-        await axios.post(apiUrl(this.API_URL), this.item).then(r => this.item = r.data)
+        await axios.post(apiUrl(this.API_URL), this.item)
+          .then(r => {
+            if (this.redirectAfterStore !== null) {
+              return this.$router.push({ name: this.redirectAfterStore, params: { id: r.data.id }})
+            }
+            this.item = r.data
+          })
+          .catch(e => this.errorMessages = e.response.data.errors)
       }
-      this.emitUpdated(this.item)
-      this.dialog = false
-      this.waitForDialogClose(() => this.saving = false)
+      if (this.noErrors) {
+        this.emitUpdated(this.item)
+        this.dialog = false
+        this.waitForDialogClose(() => this.saving = false)
+      } else {
+        this.saving = false
+      }
     },
 
     // надо передавать с небольшой задержкой, 
@@ -77,6 +104,12 @@ export default {
     // (наблюдается диссинхрон: обновление сущносить -> reload -> отдаются старые данные)
     emitUpdated(item = null) {
       this.$emit('updated', item)
-    }
+    },
+  },
+
+  computed: {
+    noErrors() {
+      return Object.keys(this.errorMessages).length === 0
+    },
   }
 }

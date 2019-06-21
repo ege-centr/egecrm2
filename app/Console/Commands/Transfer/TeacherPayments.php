@@ -70,8 +70,6 @@ class TeacherPayments extends TransferCommand
                     'entity_type' => Teacher::class,
                     'entity_id' => $teacher_id,
                 ]);
-
-                $this->createAdditionalPaymentIfNeeded($payment, Teacher::class, $teacher_id);
             }
 
             $bar->advance();
