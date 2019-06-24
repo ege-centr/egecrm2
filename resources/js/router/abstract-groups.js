@@ -8,7 +8,7 @@ export default [
     component: AbstractGroupIndex
   },
   {
-    path: '/abstract-groups/:year/:subject_id',
+    path: '/abstract-groups/:year/:grade_id/:subject_id',
     name: 'AbstractGroupShow',
     component: AbstractGroupShow
   },
