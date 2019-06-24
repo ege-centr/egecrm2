@@ -166,8 +166,10 @@ export default {
       this.dialog = true
       this.step = null
       if (id !== null) {
+        this.edit_mode = true
         this.loadData(id)
       } else {
+        this.edit_mode = false
         this.item = MODEL_DEFAULTS
         this.step = 1
         this.loading = false
