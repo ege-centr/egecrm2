@@ -32,7 +32,7 @@ class TransferCommand extends Command
             return $admin->email->id;
         } else {
             // не нашелся админ – пытаемся найти по учителю
-            $teacher = dbEgecrm('users')->where('id_entity', $userId)->where('type', 'TEACHER')->first();
+            $teacher = dbEgecrm('users')->whereId('id', $userId)->where('type', 'TEACHER')->first();
             if ($teacher) {
                 return optional(Teacher::find($teacher->id_entity)->email)->id;
             }

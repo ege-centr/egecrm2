@@ -65,16 +65,18 @@ class Reviews extends TransferCommand
             ]);
 
 
-            DB::table('review_comments')->insert([
-                'text' => $item->comment,
-                'rating' => $this->getRating($item->rating),
-                'created_at' => $item->date,
-                'updated_at' => $item->date,
-                'type' => 'client',
-                'review_id' => $id,
-            ]);
+            if (! empty(trim($item->comment))) {
+                DB::table('review_comments')->insert([
+                    'text' => $item->comment,
+                    'rating' => $this->getRating($item->rating),
+                    'created_at' => $item->date,
+                    'updated_at' => $item->date,
+                    'type' => 'client',
+                    'review_id' => $id,
+                ]);
+            }
 
-            if ($item->admin_comment || $item->admin_comment_final) {
+            if (! empty(trim($item->admin_comment))) {
                 DB::table('review_comments')->insert([
                     'text' => $item->admin_comment,
                     'rating' => $this->getRating($item->admin_rating),
@@ -83,6 +85,9 @@ class Reviews extends TransferCommand
                     'updated_at' => $item->date,
                     'review_id' => $id,
                 ]);
+            }
+
+            if (! empty(trim($item->admin_comment_final))) {
                 DB::table('review_comments')->insert([
                     'text' => $item->admin_comment_final,
                     'rating' => $this->getRating($item->admin_rating_final),

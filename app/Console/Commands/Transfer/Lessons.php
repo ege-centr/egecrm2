@@ -64,7 +64,7 @@ class Lessons extends TransferCommand
                     'status' => $status,
                     'is_unplanned' => false,
                     'duration' => $item->duration,
-                    'conducted_email_id' => ($status === 'conducted' ? $this->getConductedEmailId($item->id_user_saved) : null),
+                    'conducted_email_id' => ($status === 'conducted' ? $this->getCreatedEmailId($item->id_user_saved) : null),
                     'conducted_at' => ($status === 'conducted' ? $item->date : null),
                     'created_at' => $item->type_entity ? $item->date : now()->format(DATE_FORMAT),
                     'updated_at' => $item->type_entity ? $item->date : now()->format(DATE_FORMAT),
@@ -100,21 +100,5 @@ class Lessons extends TransferCommand
             $bar->advance();
         }
         $bar->finish();
-    }
-
-    private function getConductedEmailId($idUserSaved)
-    {
-        $user = dbEgecrm('users')->whereId($idUserSaved)->first();
-        if ($user === null) {
-            return null;
-        }
-        if ($user->type === 'ADMIN') {
-            $entityType = Admin::class;
-            $entityId = $this->getAdminId($user->id_entity);
-        } else {
-            $entityType = Teacher::class;
-            $entityId = $user->id_entity;
-        }
-        return optional(Email::where('entity_type', $entityType)->where('entity_id', $entityId)->first())->id;
     }
 }

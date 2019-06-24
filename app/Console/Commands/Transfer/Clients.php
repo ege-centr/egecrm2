@@ -3,7 +3,7 @@
 namespace App\Console\Commands\Transfer;
 
 use Illuminate\Console\Command;
-use App\Models\{Client\Client, Client\Representative, Email, Phone};
+use App\Models\{Client\Client, Client\Representative, Admin\Admin, Email, Phone};
 use DB;
 
 class Clients extends TransferCommand
@@ -173,7 +173,10 @@ class Clients extends TransferCommand
                 foreach($versions as $index => $version) {
                     $contractId = DB::table('contracts')->insertGetId([
                         'client_id' => $id,
-                        'created_email_id' => $this->getCreatedEmailId($version->id_user),
+                        // вставляем maxflex в местах, где нет id_user
+                        // потомчу что когда-то я автоматически закрыл 700 договоров
+                        // у них нет id_user
+                        'created_email_id' => ($version->id_user ? $this->getCreatedEmailId($version->id_user) : Admin::where('nickname', 'maxflex')->value('id')),
                         'year' => $contract->year,
                         'grade_id' => $contract->grade,
                         'sum' => $version->sum,
