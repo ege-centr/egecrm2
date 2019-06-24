@@ -5,7 +5,7 @@ namespace App\Http\Requests\Lesson;
 use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Lesson\{Lesson, LessonStatus};
 
-class MessDestroyRequest extends FormRequest
+class MassDestroyRequest extends FormRequest
 {
     public function authorize()
     {
