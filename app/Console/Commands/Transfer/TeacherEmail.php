@@ -42,7 +42,8 @@ class TeacherEmail extends TransferCommand
         $this->info("\n\nTransfering teacher emails...");
         $this->truncateByEntity('emails', Teacher::class);
 
-        $egecrm_items = Teacher::query()
+        $egecrm_items = dbEgerep('tutors')
+            ->where('in_egecentr', '>', 0)
             ->select('id', 'email')
             // TODO: по-хорошему у всех преподов должны быть emails
             // ->where('email', '<>', '')
@@ -50,8 +51,13 @@ class TeacherEmail extends TransferCommand
 
         $bar = $this->output->createProgressBar(count($egecrm_items));
         foreach($egecrm_items as $item) {
+            if ($item->email && !DB::table('emails')->where('email', $item->email)->exists()) {
+                $email = $item->email;
+            } else {
+                $email = "teacher-{$item->id}@empty.ru";
+            }
             DB::table('emails')->insert([
-                'email' => $item->email ? $item->email : "teacher-{$item->id}@empty.ru",
+                'email' => $email,
                 'entity_type' => Teacher::class,
                 'entity_id' => $item->id,
             ]);

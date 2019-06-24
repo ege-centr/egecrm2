@@ -54,6 +54,17 @@ class Lessons extends TransferCommand
             // и они на этом шаге будут пропускаться - что правильно
             if ($group_id) {
                 $status = ($item->cancelled ? 'cancelled' : ($item->type_entity ? 'conducted' : 'planned'));
+                $conductedEmailId = null;
+                if ($status === 'conducted') {
+                    $conductedEmailId = DB::table('emails')
+                        ->where('entity_type', Teacher::class)
+                        ->where('entity_id', $item->id_teacher)
+                        ->value('id');
+                    if (! $conductedEmailId) {
+                        $this->error('No created_email_id for id_user_saved=' . $item->id_user_saved);
+                        exit;
+                    }
+                }
                 $lessonId = DB::table('lessons')->insertGetId([
                     'teacher_id' => $item->id_teacher,
                     'price' => $item->price ?: 0,
@@ -64,7 +75,7 @@ class Lessons extends TransferCommand
                     'status' => $status,
                     'is_unplanned' => false,
                     'duration' => $item->duration,
-                    'conducted_email_id' => ($status === 'conducted' ? $this->getCreatedEmailId($item->id_user_saved) : null),
+                    'conducted_email_id' => $conductedEmailId,
                     'conducted_at' => ($status === 'conducted' ? $item->date : null),
                     'created_at' => $item->type_entity ? $item->date : now()->format(DATE_FORMAT),
                     'updated_at' => $item->type_entity ? $item->date : now()->format(DATE_FORMAT),
