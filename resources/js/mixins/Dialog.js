@@ -4,7 +4,6 @@ export default {
       dialog: false,
       saving: false,
       item: null,
-      edit_mode: false,
       loading: true,
       edit_mode: true,
       destroying: false,
