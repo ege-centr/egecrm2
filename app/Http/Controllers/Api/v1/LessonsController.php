@@ -14,7 +14,11 @@ use App\Models\{
 };
 use App\Http\Resources\Lesson\{LessonResource, LessonCollection};
 use User, DateTime;
-use App\Http\Requests\Lesson\{StoreOrUpdateRequest, DestroyRequest};
+use App\Http\Requests\Lesson\{
+    StoreOrUpdateRequest,
+    DestroyRequest,
+    MessDestroyRequest
+};
 
 class LessonsController extends Controller
 {
@@ -155,7 +159,7 @@ class LessonsController extends Controller
      *
      * @param array $ids ID занятий для удаления
      */
-    public function massDestroy(Request $request)
+    public function massDestroy(MessDestroyRequest $request)
     {
         foreach(Lesson::whereIn('id', $request->ids)->get() as $lesson) {
             $lesson->delete();
