@@ -6,13 +6,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\{
     Group\Group,
-    Client\Client,
-    Lesson
+    Client\Client
 };
 use DB, DateTime;
 use App\Http\Resources\Group\{GroupCollection, GroupResource};
 use App\Http\Resources\AlgoliaResult;
-use App\Http\Requests\Group\StoreOrUpdateRequest;
+use App\Http\Requests\Group\{StoreOrUpdateRequest, DestroyRequest};
 
 class GroupsController extends Controller
 {
@@ -70,9 +69,9 @@ class GroupsController extends Controller
         return new GroupResource($item);
     }
 
-    public function destroy($id)
+    public function destroy(DestroyRequest $request, Group $group)
     {
-        Group::find($id)->delete();
+        $group->delete();
     }
 
     public function helper(Request $request)

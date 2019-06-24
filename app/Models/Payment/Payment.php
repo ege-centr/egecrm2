@@ -3,13 +3,13 @@
 namespace App\Models\Payment;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Traits\HasCreatedEmail;
-use App\Models\User;
+use App\Traits\{HasCreatedEmail, HasEntity};
+use App\Models\{User, Client\Client};
 use Laravel\Scout\Searchable;
 
 class Payment extends Model
 {
-    use HasCreatedEmail, Searchable;
+    use HasCreatedEmail, Searchable, HasEntity;
 
     protected $casts = [
         'entity_id' => 'integer',
@@ -18,11 +18,6 @@ class Payment extends Model
     protected $fillable = [
         'category', 'type', 'method', 'date', 'sum', 'year', 'entity_type', 'entity_id', 'card_number', 'is_confirmed', 'bill_number'
     ];
-
-    public function entity()
-    {
-        return $this->morphTo();
-    }
 
     public function toSearchableArray()
     {

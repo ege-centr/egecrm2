@@ -338,7 +338,6 @@ export default {
         }
       })
       if (result.length > 0) {
-        console.log('result', result)
         this.$store.commit('message', {
           text: result.slice(0, 2).join('<br/>')
         })

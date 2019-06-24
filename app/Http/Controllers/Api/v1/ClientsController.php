@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\{Payment\Payment, Client\Client, Contract\Contract, Photo};
 use App\Http\Resources\Client\{ClientResource, ClientCollection};
 use App\Utils\Phone;
-use App\Http\Requests\Client\StoreOrUpdateRequest;
+use App\Http\Requests\Client\{StoreOrUpdateRequest, DestroyRequest};
 
 class ClientsController extends Controller
 {
@@ -97,8 +97,8 @@ class ClientsController extends Controller
         return new ClientResource($model);
     }
 
-    public function destroy($id)
+    public function destroy(DestroyRequest $request, Client $client)
     {
-        //
+        // $client->delete();
     }
 }

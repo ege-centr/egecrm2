@@ -14,7 +14,7 @@ use App\Models\{
 };
 use App\Http\Resources\Lesson\{LessonResource, LessonCollection};
 use User, DateTime;
-use App\Http\Requests\Lesson\StoreOrUpdateRequest;
+use App\Http\Requests\Lesson\{StoreOrUpdateRequest, DestroyRequest};
 
 class LessonsController extends Controller
 {
@@ -60,9 +60,9 @@ class LessonsController extends Controller
         return new LessonResource($model);
     }
 
-    public function destroy($id)
+    public function destroy(DestroyRequest $request, Lesson $lesson)
     {
-        Lesson::find($id)->delete();
+        $lesson->delete();
     }
 
     /**

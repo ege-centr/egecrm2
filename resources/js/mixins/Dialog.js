@@ -25,6 +25,22 @@ export default {
     }
   },
 
+  watch: {
+    errorMessages(errorMessages) {
+      const result = []
+      Object.entries(errorMessages).forEach(entry => {
+        if (entry[0] === 'alert') {
+          entry[1].forEach(message => result.push(message))
+        }
+      })
+      if (result.length > 0) {
+        this.$store.commit('message', {
+          text: result.slice(0, 2).join('<br/>')
+        })
+      }
+    }
+  },
+  
   methods: {
     open(item_id = null, defaults = {}, options = {}) {
       this.options = options
@@ -62,7 +78,8 @@ export default {
 
     destroy() {
       this.destroying = true
-      axios.delete(apiUrl(this.API_URL, this.item.id)).then(r => {
+      axios.delete(apiUrl(this.API_URL, this.item.id))
+      .then(r => {
         if (this.redirectAfterDestroy !== null) {
           this.$router.push({ name: this.redirectAfterDestroy })
         } else {
@@ -71,6 +88,8 @@ export default {
           this.waitForDialogClose(() => this.destroying = false)
         }
       })
+      .catch(e => this.errorMessages = e.response.data.errors)
+      .then(() => this.destroying = false)
     },
 
     async storeOrUpdate() {

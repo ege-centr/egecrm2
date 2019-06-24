@@ -269,6 +269,11 @@ export default {
       this.loading = true
       this.quitMassSelectMode()
       await axios.post(apiUrl(API_URL, action), { ids })
+        .catch(e => {
+          this.$store.commit('message', {
+            text: e.response.data.errors.ids.join('<br />')
+          })
+        })
       await this.loadData()
     },
   },

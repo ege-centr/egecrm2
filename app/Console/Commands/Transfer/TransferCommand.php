@@ -4,7 +4,7 @@ namespace App\Console\Commands\Transfer;
 
 use Illuminate\Console\Command;
 use DB, Schema;
-use App\Models\{Email, Payment\PaymentAdditional};
+use App\Models\{Email, Teacher, Payment\PaymentAdditional};
 
 class TransferCommand extends Command
 {
@@ -25,11 +25,17 @@ class TransferCommand extends Command
         DB::table($table)->where('entity_type', $entity)->delete();
     }
 
-    protected function getCreatedEmailId($oldAdminId)
+    protected function getCreatedEmailId($userId)
     {
-        $admin = \App\Models\Admin\Admin::where('old_id', $oldAdminId)->first();
+        $admin = \App\Models\Admin\Admin::where('old_id', $userId)->first();
         if ($admin) {
             return $admin->email->id;
+        } else {
+            // не нашелся админ – пытаемся найти по учителю
+            $teacher = dbEgecrm('users')->where('id_entity', $userId)->where('type', 'TEACHER')->first();
+            if ($teacher) {
+                return optional(Teacher::find($teacher->id_entity)->email)->id;
+            }
         }
         return null;
     }
