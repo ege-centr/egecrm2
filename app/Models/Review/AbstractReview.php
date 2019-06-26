@@ -48,7 +48,7 @@ class AbstractReview extends Model
             $ratings[$type . '_rating'] = $comment === null ? null : $comment->rating;
         }
 
-        $ratings['reviewer_admin_id'] = Client::whereId($this->review->client_id)->value('reviewer_admin_id');
+        $ratings['reviewer_admin_id'] = Client::whereId($this->client_id)->value('reviewer_admin_id');
 
         return extractFields($this, [
             'review_id', 'year', 'subject_id', 'teacher_id',
