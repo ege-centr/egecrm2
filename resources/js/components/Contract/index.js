@@ -6,7 +6,8 @@ export const MODEL_DEFAULTS = {
   subjects: [],
   payments: [],
   grade_id: null,
-  year: null
+  year: null,
+  date: null,
 }
 
 export const SUBJECT_STATUS = {
