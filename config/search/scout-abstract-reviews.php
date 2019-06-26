@@ -10,6 +10,7 @@ return [
         'client_rating',
         'admin_rating',
         'final_rating',
+        'reviewer_admin_id',
         'filterOnly(client_id)',
     ]
 ];
