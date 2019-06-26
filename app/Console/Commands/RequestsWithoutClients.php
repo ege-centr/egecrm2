@@ -3,8 +3,8 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use GuzzleHttp\Client;
-use App\Models\Request;
+use App\Models\{Request, Phone};
+use App\Models\Client\{Client, Representative};
 
 class RequestsWithoutClients extends Command
 {
@@ -40,11 +40,22 @@ class RequestsWithoutClients extends Command
     public function handle()
     {
         $items = Request::all();
-        $this->info("Analyzing " . count($items) . "requests...");
+        $ids = [];
+        $this->info("Analyzing " . count($items) . " requests...");
         foreach($items as $item) {
-            if (count($item->getClientIds()) <= 0) {
-                $this->error($item->id);
+            $error = false;
+            foreach($item->phones as $phone) {
+                foreach([Client::class, Representative::class] as $class) {
+                    $ids = Phone::where('entity_type', $class)->where('phone', $phone->phone_clean)->pluck('entity_id')->all();
+                    if (count($ids) === 0) {
+                        $error = true;
+                    }
+                }
+            }
+            if ($error) {
+                $ids[] = $item->id;
             }
         }
+        file_put_contents('test.txt', implode(', ', $ids));
     }
 }
