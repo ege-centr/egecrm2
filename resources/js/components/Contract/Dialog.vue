@@ -209,7 +209,7 @@
                       />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <DatePicker label="Дата" v-model='item.date'  :error-messages='errorMessages.date' />
+                    <DatePicker v-if='dialog' label="Дата" v-model='item.date' :error-messages='errorMessages.date' />
                   </div>
                 </div>
               </v-flex>
