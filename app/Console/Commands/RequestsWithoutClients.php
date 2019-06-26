@@ -45,7 +45,7 @@ class RequestsWithoutClients extends Command
         foreach($items as $item) {
             $error = true;
             foreach($item->phones as $phone) {
-                if ($error) {
+                if (! $error) {
                     continue;
                 }
                 foreach([Client::class, Representative::class] as $class) {
