@@ -68,6 +68,16 @@ class Groups extends TransferCommand
                         $entityType = Client::class;
                         $entityId = DB::table('clients')->where('old_student_id', $lesson->id_entity)->value('id');
                     }
+
+                    $createdEmailId = DB::table('emails')
+                        ->where('entity_type', Teacher::class)
+                        ->where('entity_id', $lesson->id_teacher)
+                        ->value('id');
+                    if (! $createdEmailId) {
+                        $this->error('No created_email_id for teacher=' . $lesson->id_teacher);
+                        exit;
+                    }
+
                     DB::table('payment_additionals')->insert([
                         'entity_type' => $entityType,
                         'entity_id' => $entityId,
@@ -75,7 +85,7 @@ class Groups extends TransferCommand
                         'purpose' => $purpose,
                         'date' => $lesson->lesson_date,
                         'year' => $lesson->year,
-                        'created_email_id' => $this->getCreatedEmailId($lesson->id_user_saved),
+                        'created_email_id' => $createdEmailId,
                         'created_at' => $lesson->date,
                         'updated_at' => $lesson->date,
                     ]);
