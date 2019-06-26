@@ -43,20 +43,19 @@ class RequestsWithoutClients extends Command
         $ids = [];
         $this->info("Analyzing " . count($items) . " requests...");
         foreach($items as $item) {
-            $error = true;
+            $requestHasNumber = false;
             foreach($item->phones as $phone) {
-                if (! $error) {
-                    continue;
+                if ($requestHasNumber) {
+                    break;
                 }
                 foreach([Client::class, Representative::class] as $class) {
-                    $exists = Phone::where('entity_type', $class)->where('phone', $phone->phone_clean)->exists();
-                    if ($exists) {
-                        $error = false;
-                        continue;
+                    if (Phone::where('entity_type', $class)->where('phone', $phone->phone_clean)->exists()) {
+                        $requestHasNumber = true;
+                        break;
                     }
                 }
             }
-            if ($error) {
+            if (! $requestHasNumber) {
                 $ids[] = $item->id;
             }
         }
