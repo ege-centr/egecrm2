@@ -45,10 +45,14 @@ class RequestsWithoutClients extends Command
         foreach($items as $item) {
             $error = true;
             foreach($item->phones as $phone) {
+                if ($error) {
+                    continue;
+                }
                 foreach([Client::class, Representative::class] as $class) {
                     $exists = Phone::where('entity_type', $class)->where('phone', $phone->phone_clean)->exists();
                     if ($exists) {
                         $error = false;
+                        continue;
                     }
                 }
             }
