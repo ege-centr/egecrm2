@@ -26,7 +26,7 @@ class Admin extends Model implements UserInterface
 
     public function isBanned()
     {
-        return !$this->allowed(Rights::LK2_HAS_ACCESS);
+        return $this->allowed(Rights::LK2_BANNED);
     }
 
     public function allowed($right)
@@ -71,7 +71,7 @@ class Admin extends Model implements UserInterface
 
         static::addGlobalScope('defaultOrder', function(Builder $builder) {
             $builder
-                ->orderByRaw("IF(FIND_IN_SET(" . Rights::LK2_HAS_ACCESS . ", rights) > 0, 1, 0) desc")
+                ->orderByRaw("IF(FIND_IN_SET(" . Rights::LK2_BANNED . ", rights) > 0, 0, 1) desc")
                 ->orderBy('id', 'asc');
         });
     }

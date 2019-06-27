@@ -9,7 +9,7 @@
 
     <div class='menu-separator'></div>
 
-    <MenuItem v-for='m in admin_menu' :key='m.route' :item='m' />
+    <MenuItem v-for='m in allowedAdminMenu' :key='m.route' :item='m' />
 
     <v-list-tile @click="$refs.SmsMessageDialog.open('')">
       <v-list-tile-action>
@@ -107,16 +107,18 @@ export default {
         label: 'Отчёты'
       },
     ],
-    admin_menu: [
+    adminMenu: [
       {
         icon: 'insert_chart',
         route: 'StatIndex',
-        label: 'Итоги'
+        label: 'Итоги',
+        needsAccess: true,
       },
       {
         icon: 'attach_money',
         route: 'StatPaymentIndex',
-        label: 'Итоги по платежам'
+        label: 'Итоги по платежам',
+        needsAccess: true,
       },
       {
         icon: 'event',
@@ -131,7 +133,8 @@ export default {
       {
         icon: 'history',
         route: 'LogIndex',
-        label: 'Логи'
+        label: 'Логи',
+        needsAccess: true,
       },
       {
         icon: 'print',
@@ -141,14 +144,41 @@ export default {
       {
         icon: 'people',
         route: 'AdminIndex',
-        label: 'Пользователи'
+        label: 'Пользователи',
+        needsAccess: true,
+      },
+      {
+        icon: 'photo_camera',
+        route: 'AdminPhotos',
+        label: 'Фото админов',
+      },
+      {
+        icon: 'photo_camera',
+        route: 'ClientPhotos',
+        label: 'Фото клиентов',
       },
       {
         icon: 'assignment_turned_in',
         route: 'TaskIndex',
-        label: 'Задачи'
+        label: 'Задачи',
+        needsAccess: true,
       },
     ],
   }),
+
+  computed: {
+    allowedAdminMenu() {
+      return this.adminMenu.filter(e => {
+        if (e.needsAccess) {
+          return this.hasAccess
+        }
+        return true
+      })
+    },
+
+    hasAccess() {
+      return this.$store.state.user.rights.indexOf(101) !== -1
+    },
+  }
 }
 </script>

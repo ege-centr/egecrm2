@@ -56,7 +56,12 @@ router.beforeEach((to, from, next) => {
   }
   Vue.nextTick(() => {
     if (store.state.user) {
-      if (to.hasOwnProperty('meta') && to.meta.hasOwnProperty('roles')) {
+      if (to.hasOwnProperty('meta') && to.meta.hasOwnProperty('right')) {
+        if (store.state.user.rights.indexOf(to.meta.right) !== -1) {
+          urlLog(to)
+          next()
+        }
+      } else if (to.hasOwnProperty('meta') && to.meta.hasOwnProperty('roles')) {
         if (to.meta.roles.indexOf(store.state.user.class) !== -1) {
           urlLog(to)
           // $('title').html(to.meta.hasOwnProperty('title') ? to.meta.title : 'Личный кабинет')

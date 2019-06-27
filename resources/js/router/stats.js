@@ -5,12 +5,18 @@ export default [
   {
     path: '/stats',
     name: 'StatIndex',
-    component: StatIndex
+    component: StatIndex,
+    meta: {
+      right: 101,
+    }
   },
 
   {
     path: '/stats/payments',
     name: 'StatPaymentIndex',
-    component: StatPaymentIndex
+    component: StatPaymentIndex,
+    meta: {
+      right: 101,
+    }
   },
 ]

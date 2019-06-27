@@ -52,7 +52,6 @@ class Admins extends TransferCommand
             $admin->nickname = $admin->login;
             $admin->old_id = $admin->id;
             unset($admin->salary);
-            unset($admin->rights);
             $newAdmin = Admin::create((array) $admin);
 
             // переносим email
