@@ -40,7 +40,7 @@ class PrintController extends Controller
     private function payment(array $params)
     {
         $payment = Payment::find($params['id']);
-        return view('print.payment')->with(compact('payment'));
+        return view('print.payment.' . $params['method'])->with(compact('payment'));
     }
 
     private function act(array $params)

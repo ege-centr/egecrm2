@@ -1,0 +1,30 @@
+.print {
+  &__payment {
+    &__bill {
+      & h1 {
+        text-align: center;
+        width: 100%;
+      }
+      &__blocks {
+        & > div {
+          margin-bottom: 10px;
+          & > div:first-child {
+            font-weight: bold;
+          }
+        }
+      }
+      &__sign {
+        margin-top: 35px;
+        & > div {
+          margin-bottom: 15px;
+        }
+      }
+    }
+  }
+
+  &__contract {
+    & h4 {
+      text-align: center;
+    }
+  }
+}

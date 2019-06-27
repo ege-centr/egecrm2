@@ -54,7 +54,7 @@ export default class PaymentsAutofill {
         default:
             if (this.todayIsBetween('04-01', '09-15')) {
               paymentDates = []
-              const date = moment(`${this.year + 1}-09-15`)
+              const date = moment(`${this.year}-09-15`)
               _.times(this.paymentCount - 1, () => {
                 paymentDates.push(date.add(1, 'month').format(dateFormat))
               })

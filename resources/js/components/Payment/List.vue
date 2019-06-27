@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Print ref='Print' :params="{type: 'payment'}" />
+    <Print ref='Print' :params="{type: 'payment', method: selectedMethod}" />
     <display-list 
       :dialog-component='Dialog'
       :items='items'
@@ -64,7 +64,7 @@
                       <v-list-tile-title>Редактировать</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile @click='$refs.Print.open({id: item.id})'>
+                <v-list-tile @click.native='print(item)'>
                     <v-list-tile-action>
                       <v-icon>print</v-icon>
                     </v-list-tile-action>
@@ -118,9 +118,17 @@ export default {
       defaultDisplayOptions: {
         entity: false,
         addBtn: true,
-      }
+      },
+      selectedMethod: null,
     }
   },
-  
+
+
+  methods: {
+    print(item) {
+      this.selectedMethod = item.method
+      this.$nextTick(() => this.$refs.Print.open({id: item.id}))
+    }
+  }
 }
 </script>
