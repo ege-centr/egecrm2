@@ -31,4 +31,9 @@ class MacrosController extends Controller
     {
         return file_get_contents(base_path() . '/resources/views/print/' . $filename . '.blade.php');
     }
+
+    public function update($id, Request $request)
+    {
+        file_put_contents(base_path() . '/resources/views/print/' . $id . '.blade.php', $request->text);
+    }
 }

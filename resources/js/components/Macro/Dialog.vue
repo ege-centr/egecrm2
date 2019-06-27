@@ -64,6 +64,15 @@ export default {
       this.loadData()
     },
 
+    save() {
+      this.saving = true
+      axios.put(apiUrl(API_URL, this.filename), {text: this.text}).then(r => {
+        this.text = r.data
+        this.dialog = false
+        this.saving = false
+      })
+    },
+
     loadData() {
       this.loading = true
       axios.get(apiUrl(API_URL, this.filename)).then(r => {

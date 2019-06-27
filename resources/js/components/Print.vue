@@ -65,6 +65,8 @@ export default {
       text: '',
       tinyMceInit: {
         inline: true,
+        plugins: "print",
+        toolbar: "print",
       },
       cmOptions: {
         tabSize: 4,
