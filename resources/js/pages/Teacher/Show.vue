@@ -38,6 +38,13 @@
               <div class='item-label'>Телефон</div>
               <PhoneList :items='item.phones' :block='true' />
             </div>
+            <v-switch class='ma-0 mt-2'
+              label="ограничение по начислению бонусов"
+              color='red'
+              hide-details
+              v-model='item.disable_bonuses'
+              @change='update'
+            ></v-switch>
           </v-flex>
           <v-spacer></v-spacer>
            <v-flex class='text-md-right' align-end d-flex>
@@ -154,13 +161,6 @@
 
         <!-- Отчёты -->
         <v-tab-item>
-          <v-switch class='ma-0 justify-end' style='position: absolute; right: 6px; padding-top: 9px'
-            label="ограничение по начислению бонусов"
-            color='red'
-            hide-details
-            v-model='item.disable_bonuses'
-            @change='update'
-          ></v-switch>
           <DisplayData 
             ref='ReportPage'
             :api-url='REPORT_API_URL' 
