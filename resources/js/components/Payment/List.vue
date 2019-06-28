@@ -51,7 +51,7 @@
             <span v-else class='red--text'>не подтвержден</span>
           </td>
           <td class='text-md-right'>
-            <v-menu left v-if='item.bill_number > 0'>
+            <v-menu left v-if="['bill', 'cash'].includes(item.method) && item.type === 'payment'">
               <v-btn slot='activator' flat icon color="black" class='ma-0'>
                 <v-icon>more_horiz</v-icon>
               </v-btn>
