@@ -38,7 +38,7 @@
               <div class='item-label'>Телефон</div>
               <PhoneList :items='item.phones' :block='true' />
             </div>
-            <v-switch class='ma-0 mt-2'
+            <v-switch class='ma-0 mt-4'
               label="ограничение по начислению бонусов"
               color='red'
               hide-details
