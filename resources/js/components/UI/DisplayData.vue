@@ -29,7 +29,7 @@
 
     <!-- <NoData v-if='items.length === 0' :class="{'invisible': loading}" /> -->
 
-    <v-container grid-list-md fluid :class="`px-0 ${containerClass} ${loading ? 'invisible' : ''}`">
+    <v-container grid-list-md fluid :class="`px-0 pb-0 ${containerClass} ${loading ? 'invisible' : ''}`">
       <v-layout row wrap class='relative'>
         <v-flex xs12>
           <!-- <div v-if='sort !== undefined' class='grey--text darken-3 mb-3 text-md-right caption flex-items justify-end'>

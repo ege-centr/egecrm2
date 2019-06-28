@@ -10,7 +10,7 @@
         <GroupList v-if='items.length > 0' :items='items' />
         <NoData 
           :add='() => $refs.GroupDialog.open(null)'
-          transparent 
+          fullscreen
           v-else />
       </template>
     </DisplayData>
