@@ -65,8 +65,6 @@ export default {
       text: '',
       tinyMceInit: {
         inline: true,
-        plugins: "print",
-        toolbar: "print",
       },
       cmOptions: {
         tabSize: 4,
@@ -89,7 +87,7 @@ export default {
     },
 
     print() {
-      printJS('print-block', 'html')
+      print()
       this.dialog = false
     },
   }
