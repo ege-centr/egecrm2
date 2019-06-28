@@ -18,7 +18,7 @@ export const FILTERS = [
   {label: 'Класс', field: 'grade_id', type: 'multiple', options: store.state.data.grades},
   {label: 'Ответственный', field: 'responsible_admin_id', type: 'admin', valueField: 'email_id'},
   {label: 'Пользователь', field: 'created_email_id', type: 'admin', valueField: 'email_id'},
-  {label: 'Период', field: 'created_at', type: 'interval'}
+  {label: 'Период', field: 'created_at_timestamp', type: 'interval'}
 ]
 
 export const RequestItem = require('./Item')
