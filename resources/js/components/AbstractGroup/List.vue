@@ -9,7 +9,7 @@
     >
       <template slot='items' slot-scope="{ item }">
         <td>
-          {{ getData('subjects', item.subject_id).three_letters }}
+          {{ getData('subjects', item.subject_id).three_letters }}–{{ getData('grades', item.grade_id).short }}
         </td>
         <td>
           <span v-if='item.year'>
@@ -22,6 +22,7 @@
         <td class='text-md-right'>
           <router-link :to="{name: 'AbstractGroupShow', params: {
             year: item.year,
+            grade_id: item.grade_id,
             subject_id: item.subject_id,
           }}">
             <v-btn flat icon color="black" class='ma-0'>
@@ -33,7 +34,8 @@
     </v-data-table>
     <NoData
       v-else
-      box
+      fullheight
+      label='нет болот'
     />
   </div>
 </template>

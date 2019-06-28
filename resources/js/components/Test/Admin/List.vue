@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class='flex-items'>
+    <div class='flex-items' v-show='items.length > 0'>
       <v-spacer></v-spacer>
       <AddBtn class='mr-2' @click.native='$refs.TestIntroTextDialog.open()' label='редактировать вступительный текст' icon='format_align_left' />
       <AddBtn @click.native='$refs.TestDialog.open()' animated label='добавить тест' />
@@ -33,9 +33,18 @@
       </v-data-table>
       <NoData 
         class='mt-3'
-        :add='() => $refs.TestDialog.open(null)'
-        box
-        v-else />
+        label='тестов нет'
+        fullheight
+        v-else>
+        <div class='flex-items'>
+          <v-btn class='mr-2' icon flat color='primary' @click='$refs.TestIntroTextDialog.open()'>
+            <v-icon>format_align_left</v-icon>
+          </v-btn>
+          <v-btn icon flat color='primary' @click='$refs.TestDialog.open(null)'>
+            <v-icon>add</v-icon>
+          </v-btn>
+        </div>
+      </NoData>
     </div>
   </div>
 </template>

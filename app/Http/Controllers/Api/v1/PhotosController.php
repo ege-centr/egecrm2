@@ -34,8 +34,8 @@ class PhotosController extends Controller
 
         $image = new \claviska\SimpleImage();
         $image->fromFile($request->file)
-            ->resize(240, null)
-            ->toFile(storage_path('app/public' . Photo::UPLOAD_PATH) . $photo->filename_cropped, 'image/jpeg', 60);
+            ->resize(300, null)
+            ->toFile(storage_path('app/public' . Photo::UPLOAD_PATH) . $photo->filename_cropped, 'image/jpeg', 70);
 
         return new PhotoResource($photo);
     }

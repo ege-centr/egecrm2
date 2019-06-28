@@ -13,7 +13,7 @@ class RequestsController extends Controller
 {
     protected $filters = [
         'multiple' => ['grade_id', 'responsible_admin_id', 'created_email_id'],
-        'timestamp' => ['date_timestamp'],
+        'timestamp' => ['created_at_timestamp'],
     ];
 
     public function index(Request $request)

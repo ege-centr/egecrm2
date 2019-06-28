@@ -5,15 +5,16 @@
     :class="{
       'no-data_transparent': transparent === '',
       'no-data_square': square === '',
-      'no-data_box': box,
+      'no-data_fullheight': fullheight,
     }"
   >
+    <div class='no-data__text'>
+      {{ label }}
+    </div>
     <v-btn icon flat color='primary' v-if='add' @click.native='add'>
       <v-icon>add</v-icon>
     </v-btn>
-    <div v-else class='no-data__text'>
-      нет данных
-    </div>
+    <slot></slot>
   </div>
 </template>
 
@@ -25,6 +26,12 @@ export default {
       type: Function,
       required: false,
     },
+
+    label: {
+      type: String,
+      default: 'нет данных',
+    },
+
     transparent: {
       type: String,
       required: false,
@@ -35,8 +42,9 @@ export default {
       required: false,
     },
 
-    box: {
+    fullheight: {
       type: Boolean,
+      default: false,
     },
 
     color: {
@@ -53,10 +61,7 @@ export default {
 
   computed: {
     heightValue() {
-      if (this.height !== null && this.box) {
-        return this.height + 'px';
-      } 
-      if (this.height === null && this.box) {
+      if (this.height === null && this.fullheight) {
         return '85vh';
       }
       return this.height === null ? '200px' : this.height + 'px';
@@ -73,7 +78,6 @@ export default {
   justify-content: center;
   text-align: center;
   flex-direction: column;
-  background: #f6f7f8;
   width: 100%;
   border-radius: 4px;
   height: 200px;
@@ -87,13 +91,7 @@ export default {
   }
   &__text {
     max-width: 400px;
-    font-weight: 500;
-  }
-  &_box {
-    background: #e0e0e0;
-    border-radius: 28px;
-    width: calc(100% - 8px);
-    margin: 0 auto;
+    margin: 14px 0;
   }
 }
 </style>

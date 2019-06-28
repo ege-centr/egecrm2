@@ -165,7 +165,7 @@
             <NoData 
               v-else 
               :height='500'
-              box
+              label='расписания нет'
               :add='isAdmin() ? addLesson : undefined' />
           </v-flex>
         </v-layout>

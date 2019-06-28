@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-btn icon flat color='primary' @click='dialog = true'>
-      <v-icon>
+      <v-icon class="material-icons-outlined">
         assessment
       </v-icon>
     </v-btn>
