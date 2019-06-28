@@ -46,6 +46,11 @@ function getCurrentTime()
     return now()->format('Y-m-d H:i:s');
 }
 
+function toDotDate($date)
+{
+    return date('d.m.Y', strtotime($date));
+}
+
 /**
  * old egecrm connections
  */

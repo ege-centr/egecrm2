@@ -87,6 +87,7 @@ class Clients extends TransferCommand
                     'first_name' => $representative->first_name,
                     'last_name' => $representative->last_name,
                     'middle_name' => $representative->middle_name,
+                    'fact_address' => $representative->address,
                     'client_id' => $id,
                 ]);
                 $passport = dbEgecrm('passports')->whereId($representative->id_passport)->first();

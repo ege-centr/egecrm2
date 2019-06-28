@@ -269,7 +269,7 @@
                     Выдан: {{ $representative->issued_by }}, {{ date('d.m.Y', strtotime($representative->issued_date)) }} <br>
                     Код подразделения: {{ $representative->code }}<br>
                     Зарегистрирован по адресу: {{ $representative->address }}<br>
-                    Факт. адрес: {{ $representative->address }}<br>
+                    Факт. адрес: {{ $representative->fact_address }}<br>
                     @if(count($representative->phones) > 0)
                     Тел.: @foreach($representative->phones as $phone) {{ $phone->phone }} {{ $loop->last ? '' : ', '}} @endforeach<br>
                     @endif

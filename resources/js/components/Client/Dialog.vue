@@ -128,6 +128,9 @@
                       <div class='vertical-inputs__input vertical-inputs__input_wide'>
                         <v-text-field v-model="item.representative.address" label="Адрес" hide-details></v-text-field>
                       </div>
+                      <div class='vertical-inputs__input vertical-inputs__input_wide'>
+                        <v-text-field v-model="item.representative.fact_address" label="Фактический адрес" hide-details></v-text-field>
+                      </div>
                        <div class='vertical-inputs__input'>
                         <v-text-field 
                           :hide-details="representativeErrorMessages.email === undefined"

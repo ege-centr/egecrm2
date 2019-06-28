@@ -13,6 +13,6 @@ class Representative extends Model
 
     protected $fillable = [
         'first_name', 'last_name', 'middle_name', 'series', 'number',
-        'birthday', 'issued_date', 'issued_by', 'address', 'code'
+        'birthday', 'issued_date', 'issued_by', 'address', 'code', 'fact_address'
     ];
 }
