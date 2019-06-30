@@ -20,6 +20,10 @@ class Request extends Model
 
     protected $commaSeparated = ['subjects', 'branches'];
 
+    protected $casts = ['grade_id' => 'integer'];
+
+    protected $attributes = ['status' => 'new'];
+
     public function responsibleAdmin()
     {
         return $this->belongsTo(Admin\Admin::class, 'responsible_admin_id');
