@@ -1,5 +1,6 @@
 php artisan transfer:truncate-tables
 php artisan transfer:admins
+php artisan transfer:teacher-emails
 php artisan transfer:clients
 php artisan transfer:cabinets
 php artisan transfer:requests
@@ -7,7 +8,6 @@ php artisan transfer:reports
 php artisan transfer:reviews
 php artisan transfer:groups
 php artisan transfer:teacher-payments
-php artisan transfer:teacher-emails
 php artisan transfer:tasks
 php artisan transfer:additional-payments
 php artisan transfer:anonymous-payments
