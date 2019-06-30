@@ -6,6 +6,8 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
     Route::post('login', 'LoginController@login');
     Route::get('logout', 'LoginController@logout');
 
+    Route::apiResource('requests', 'RequestsController');
+
     Route::prefix('reset-password')->group(function () {
         Route::post('send-code', 'ResetPasswordController@sendCode');
         Route::post('verify-code', 'ResetPasswordController@verifyCode');
@@ -72,7 +74,6 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
         Route::apiResources([
             'teacher/freetime' => 'TeacherFreetimeController',
             'admins' => 'AdminsController',
-            'requests' => 'RequestsController',
             'clients' => 'ClientsController',
             'groups' => 'GroupsController',
             'group-acts' => 'GroupActsController',
