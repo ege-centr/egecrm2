@@ -71,8 +71,8 @@ class Admin extends Model implements UserInterface
 
         static::addGlobalScope('defaultOrder', function(Builder $builder) {
             $builder
-                ->orderByRaw("IF(FIND_IN_SET(" . Rights::LK2_BANNED . ", rights) > 0, 0, 1) desc")
-                ->orderBy('id', 'asc');
+                ->orderByRaw("IF(FIND_IN_SET(" . Rights::LK2_BANNED . ", rights) > 0, 1, 0) asc")
+                ->orderByName();
         });
     }
 }
