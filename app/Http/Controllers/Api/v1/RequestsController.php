@@ -69,7 +69,7 @@ class RequestsController extends Controller
                 Phone::query()
                     ->where('entity_type', ClientRequest::class)
                     ->whereIn('entity_id', $newRequestIds)
-                    ->where('phone', $new_model->phones->first()->phone)
+                    ->where('phone', $new_model->phones->first()->phone_clean)
                     ->exists()
             ) {
                 $new_model->status = 'finished';
