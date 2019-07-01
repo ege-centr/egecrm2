@@ -36,7 +36,10 @@ class Admin extends Model implements UserInterface
 
     public function scopeOrderByName($query)
     {
-        return $query->orderByRaw("IF(first_name = '', 1, 0) asc, last_name asc, first_name asc, middle_name asc");
+        return $query->orderByRaw("
+            IF(first_name = '', 1, 0) asc,
+            IF(first_name = '', nickname, CONCAT(last_name, first_name, middle_name)) asc
+        ");
     }
 
     /**
