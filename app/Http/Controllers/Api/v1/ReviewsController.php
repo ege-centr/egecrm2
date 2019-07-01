@@ -13,7 +13,7 @@ use App\Http\Resources\AlgoliaResult;
 class ReviewsController extends Controller
 {
     protected $filters = [
-        'equals' => ['client_id', 'is_approved', 'is_published'],
+        'equals' => ['client_id', 'is_approved', 'is_published', 'exists'],
         'multiple' => ['teacher_id', 'year', 'subject_id', 'client_rating', 'admin_rating', 'final_rating'],
     ];
 

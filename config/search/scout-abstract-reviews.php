@@ -13,6 +13,7 @@ return [
         'reviewer_admin_id',
         'is_published',
         'is_approved',
+        'exists',
         'filterOnly(client_id)',
     ]
 ];

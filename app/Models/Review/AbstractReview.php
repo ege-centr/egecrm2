@@ -42,18 +42,19 @@ class AbstractReview extends Model
 
     public function toSearchableArray()
     {
-        $ratings = [];
+        $additional = [];
         foreach(['client', 'admin', 'final'] as $type) {
             $comment = $this->review === null ? null : $this->review->comments->where('type', $type)->first();
-            $ratings[$type . '_rating'] = $comment === null ? null : $comment->rating;
+            $additional[$type . '_rating'] = $comment === null ? null : $comment->rating;
         }
 
-        $ratings['reviewer_admin_id'] = Client::whereId($this->client_id)->value('reviewer_admin_id');
+        $additional['reviewer_admin_id'] = Client::whereId($this->client_id)->value('reviewer_admin_id');
+        $additional['exists'] = intval($this->review_id > 0);
 
         return extractFields($this, [
             'review_id', 'year', 'subject_id', 'teacher_id',
             'grade_id', 'client_id', 'lesson_count', 'is_published', 'is_approved'
-        ], $ratings);
+        ], $additional);
     }
 
     public function searchableAs()

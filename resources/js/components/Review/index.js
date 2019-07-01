@@ -25,6 +25,10 @@ export const FILTERS = [
     {id: 1, title: 'да'},
     {id: 0, title: 'нет'},
   ]},
+  {label: 'Тип', field: 'exists', type: 'select', options: [
+    {id: 0, title: 'не созданные'},
+    {id: 1, title: 'созданные'},
+  ]},
   {label: 'Оценка ученика', field: 'client_rating', type: 'multiple', options: [
     {id: -2, title: 'отсутствует'},
     {id: 1, title: '1'},
