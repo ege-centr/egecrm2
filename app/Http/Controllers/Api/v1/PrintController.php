@@ -44,7 +44,7 @@ class PrintController extends Controller
             ->lastInYear($payment->year)
             ->where('client_id', $payment->entity_id)
             ->first();
-        return view('print.payment.' . $params['method'])->with(compact('payment', 'contract'));
+        return view('print.payment-' . $params['method'])->with(compact('payment', 'contract'));
     }
 
     private function act(array $params)
