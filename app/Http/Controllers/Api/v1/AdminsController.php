@@ -16,7 +16,7 @@ class AdminsController extends Controller
 
     public function index(Request $request)
     {
-        $query = Admin::query();
+        $query = Admin::orderBy('id', 'asc');
         $this->filter($request, $query);
         if (isset($request->photos) && $request->photos) {
             $query->has('photo');
