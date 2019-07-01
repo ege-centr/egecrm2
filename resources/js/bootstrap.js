@@ -40,7 +40,16 @@ if (token) {
     console.error('CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token');
 }
 
-window.apiUrl = (...paths) => process.env.MIX_API_URL + paths.join('/')
+window.apiUrl = (...paths) => {
+  // хардкод для staging
+  let host
+  if (window.location.host.indexOf('staging.') === 0) {
+    host = 'https://staging.ege-centr.ru/api/v1/'
+  } else {
+    host = process.env.MIX_API_URL
+  }
+  return host + paths.join('/')
+}
 
 window.clone = (obj) => {
   return JSON.parse(JSON.stringify(obj))
