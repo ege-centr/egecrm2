@@ -87,7 +87,7 @@ class AbstractReview extends Model
                 })
                 ->selectRaw('
                     reviews.id as review_id, groups.year, groups.subject_id, lessons.teacher_id,
-                    client_lessons.grade_id, client_lessons.client_id
+                    client_lessons.grade_id, client_lessons.client_id, reviews.is_published, reviews.is_approved
                 ')
                 ->groupBy('reviews.id', 'client_lessons.client_id', 'lessons.teacher_id', 'groups.subject_id', 'groups.year');
         });
