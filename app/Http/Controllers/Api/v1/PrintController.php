@@ -9,7 +9,7 @@ use App\Models\{
     Group\Group,
     Group\GroupAct,
     Payment\Payment,
-    Lesson\Lesson,
+    Lesson\Lesson
 };
 
 class PrintController extends Controller
