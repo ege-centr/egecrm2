@@ -34,13 +34,13 @@ class Admin extends Model implements UserInterface
         return in_array($right, $this->rights);
     }
 
-    public function scopeOrderByName($query)
-    {
-        return $query->orderByRaw("
-            IF(first_name = '', 1, 0) asc,
-            IF(first_name = '', nickname, CONCAT(last_name, first_name, middle_name)) asc
-        ");
-    }
+    // public function scopeOrderByName($query)
+    // {
+    //     return $query->orderByRaw("
+    //         IF(first_name = '', 1, 0) asc,
+    //         IF(first_name = '', nickname, CONCAT(last_name, first_name, middle_name)) asc
+    //     ");
+    // }
 
     /**
      * Если данные изменились, должен перезалогиниться (решили в целях безопасности)
@@ -79,7 +79,8 @@ class Admin extends Model implements UserInterface
 
         static::addGlobalScope('defaultOrder', function(Builder $builder) {
             $builder
-                ->orderByRaw("IF(FIND_IN_SET(" . Rights::LK2_BANNED . ", rights) > 0, 1, 0) asc");
+                ->orderByRaw("IF(FIND_IN_SET(" . Rights::LK2_BANNED . ", rights) > 0, 1, 0) asc")
+                ->orderByName();
         });
     }
 }

@@ -31,7 +31,7 @@ class InitialDataController extends Controller
                 'subjects' => Subject::getCached(),
                 'grades' => Grade::getCached(),
                 'years' => Year::all(),
-                'admins' => AdminCollection::collection(Admin::with(['email', 'photo'])->orderByName()->get()),
+                'admins' => AdminCollection::collection(Admin::with(['email', 'photo'])->get()),
                 'teachers' => TeacherCollection::collection(Teacher::getCached()),
                 'academic_year' => academicYear(),
                 'cabinets' => Cabinet::getCached(),
