@@ -161,7 +161,7 @@ export default {
   methods: {
     print(item, printOption) {
       this.printOption = printOption
-      this.$refs.Print.open({id: item.id})
+      Vue.$nextTick(() => this.$refs.Print.open({id: item.id}))
     }
   },
 
