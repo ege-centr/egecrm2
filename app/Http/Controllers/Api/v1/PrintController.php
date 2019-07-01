@@ -8,7 +8,8 @@ use App\Models\{
     Contract\Contract,
     Group\Group,
     Group\GroupAct,
-    Payment\Payment
+    Payment\Payment,
+    Lesson\Lesson,
 };
 
 class PrintController extends Controller
@@ -23,11 +24,18 @@ class PrintController extends Controller
     {
         $contract = Contract::find($params['id']);
 
-        return view('print.contract')->with([
+        // $lastLessonDate = Lesson::query()
+        //     ->join('client_lessons', 'client_lessons.lesson_id', '=', 'lessons.id')
+        //     ->where('client_id', $contract->client->id)
+        //     ->orderBy('date', 'desc')
+        //     ->value('date');
+
+        return view('print.contract-' . $params['option'])->with([
             'contract' => $contract,
+            // 'lastLessonDate' => $lastLessonDate,
+            'firstVersion' => Contract::where('version', 1)->where('number', $contract->number)->first(),
             'representative' => $contract->client->representative,
             'oneSubjectPrice' => round($contract->discounted_sum / collect($contract->subjects)->sum('lessons')),
-            'contractDate' => date('d.m.Y', strtotime($contract->date)),
         ]);
     }
 

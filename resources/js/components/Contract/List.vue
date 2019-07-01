@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Print ref='Print' :params="{type: 'contract'}" />
+    <Print ref='Print' :params="{type: 'contract', option: printOption}" />
     <display-list
       :dialog-component='Dialog'
       :items='items'
@@ -78,12 +78,36 @@
                       <v-list-tile-title>Добавить версию</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile @click='$refs.Print.open({id: item.id})'>
+                <v-list-tile @click="print(item, 'contract')">
                     <v-list-tile-action>
                       <v-icon>print</v-icon>
                     </v-list-tile-action>
                     <v-list-tile-content>
-                      <v-list-tile-title>Печать</v-list-tile-title>
+                      <v-list-tile-title>Договор</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile @click="print(item, 'additional-agreement')">
+                    <v-list-tile-action>
+                      <v-icon>print</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                      <v-list-tile-title>Допсоглашение</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile @click="print(item, 'act')">
+                    <v-list-tile-action>
+                      <v-icon>print</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                      <v-list-tile-title>Акт оказанных услуг</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile @click="print(item, 'termination-agreement')">
+                    <v-list-tile-action>
+                      <v-icon>print</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                      <v-list-tile-title>Соглашение о расторжении</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
               </v-list>
@@ -122,6 +146,7 @@ export default {
 
   data() {
     return {
+      printOption: 'contract',
       SUBJECT_STATUS,
       Dialog,
       defaultDisplayOptions: {
@@ -130,6 +155,13 @@ export default {
         addBtn: true,
         payments: true,
       },
+    }
+  },
+
+  methods: {
+    print(item, printOption) {
+      this.printOption = printOption
+      this.$refs.Print.open({id: item.id})
     }
   },
 

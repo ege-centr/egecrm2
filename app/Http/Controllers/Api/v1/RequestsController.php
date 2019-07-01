@@ -64,7 +64,7 @@ class RequestsController extends Controller
         // и среди на текущий момент "новых" заявок есть телефон только что упавшей заявки,
         // то только что упавшая заявка должна иметь статус "выполненные"
         if (isset($request->google_id) && isset($request->phones)) {
-            $newRequestIds = ClientRequest::where('status', 'new')->pluck('id')->all();
+            $newRequestIds = ClientRequest::where('status', 'new')->where('id', '<>', $new_model->id)->pluck('id')->all();
             if (
                 Phone::query()
                     ->where('entity_type', ClientRequest::class)
