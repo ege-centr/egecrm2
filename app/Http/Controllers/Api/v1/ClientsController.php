@@ -99,6 +99,6 @@ class ClientsController extends Controller
 
     public function destroy(DestroyRequest $request, Client $client)
     {
-        // $client->delete();
+        $client->delete();
     }
 }
