@@ -11,6 +11,8 @@ return [
         'admin_rating',
         'final_rating',
         'reviewer_admin_id',
+        'is_published',
+        'is_approved',
         'filterOnly(client_id)',
     ]
 ];
