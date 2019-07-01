@@ -34,7 +34,7 @@ class Admin extends Model implements UserInterface
         return in_array($right, $this->rights);
     }
 
-    public function scopeOrderByName()
+    public function scopeOrderByName($query)
     {
         return $query->orderByRaw("IF(first_name = '', 1, 0) asc, last_name asc, first_name asc, middle_name asc");
     }
