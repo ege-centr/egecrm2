@@ -72,15 +72,13 @@ class Client extends Model implements UserInterface
 
     public function requests()
     {
-        $request_ids = [];
-        foreach($this->phones as $phone) {
-            $ids = Phone::where('entity_type', Request::class)->where('phone', $phone->phone_clean)->pluck('entity_id')->all();
-            if (count($ids)) {
-                $request_ids = array_merge($request_ids, $ids);
-            }
+        $phones = $this->phones->pluck('phone_clean')->all();
+        if ($this->representative) {
+            $phones = array_merge($phones, $this->representative->pluck('phone_clean')->all());
         }
+        $requestIds = Phone::where('entity_type', Request::class)->whereIn('phone', $phones)->pluck('entity_id')->unique()->all();
         return Request::with('responsibleAdmin')
-            ->whereIn('id', $request_ids)
+            ->whereIn('id', $requestIds)
             ->orderBy('id', 'desc');
     }
 
