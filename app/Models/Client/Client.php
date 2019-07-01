@@ -74,7 +74,7 @@ class Client extends Model implements UserInterface
     {
         $phones = $this->phones->pluck('phone_clean')->all();
         if ($this->representative) {
-            $phones = array_merge($phones, $this->representative->pluck('phone_clean')->all());
+            $phones = array_merge($phones, $this->representative->phones->pluck('phone_clean')->all());
         }
         $requestIds = Phone::where('entity_type', Request::class)->whereIn('phone', $phones)->pluck('entity_id')->unique()->all();
         return Request::with('responsibleAdmin')
