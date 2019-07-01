@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Shared\Model;
 use App\Traits\{Enumable, HasPhones, HasCreatedEmail, Commentable};
-use App\Models\Client\Client;
+use App\Models\Client\{Client, Representative};
 use Laravel\Scout\Searchable;
 
 class Request extends Model
@@ -45,6 +45,10 @@ class Request extends Model
             $ids = Phone::where('entity_type', Client::class)->where('phone', $phone->phone_clean)->pluck('entity_id')->all();
             if (count($ids)) {
                 $client_ids = array_merge($client_ids, $ids);
+            }
+            $ids = Phone::where('entity_type', Representative::class)->where('phone', $phone->phone_clean)->pluck('entity_id')->all();
+            if (count($ids)) {
+                $client_ids = array_merge($client_ids, Representative::whereIn('id', $ids)->pluck('client_id')->all());
             }
         }
 
