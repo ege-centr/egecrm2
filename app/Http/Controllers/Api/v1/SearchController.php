@@ -8,7 +8,9 @@ use App\Models\{
     Request as ClientRequest,
     Group\Group,
     Client\Client,
-    Teacher
+    Client\Representative,
+    Teacher,
+    Phone
 };
 use App\Http\Resources\{
     Client\ClientCollection,
@@ -35,15 +37,26 @@ class SearchController extends Controller
      */
     private function clients(string $text)
     {
+        $ids = [];
+
+        $ids = array_merge($ids, Client::searchByName($text)->pluck('id')->all());
+        $ids = array_merge($ids, Representative::searchByName($text)->pluck('client_id')->all());
+        $ids = array_merge($ids, Phone::search($text)->where('entity_type', Client::class)->pluck('entity_id')->all());
+
         return ClientCollection::collection(
-            Client::searchByName($text)->get()
+            Client::whereIn('id', $ids)->get()
         );
     }
 
     private function tutors(string $text)
     {
+        $ids = [];
+
+        $ids = array_merge($ids, Teacher::searchByName($text)->pluck('id')->all());
+        $ids = array_merge($ids, Phone::search($text)->where('entity_type', Teacher::class)->pluck('entity_id')->all());
+
         return TeacherCollection::collection(
-            Teacher::searchByName($text)->get()
+            Teacher::whereIn('id', $ids)->get()
         );
     }
 }

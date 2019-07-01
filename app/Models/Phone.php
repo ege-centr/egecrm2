@@ -19,6 +19,11 @@ class Phone extends Model
         return $this->attributes['phone'];
     }
 
+    public function scopeSearch($query, $phone)
+    {
+        return $query->where('phone', 'like', '%' . $phone . '%');
+    }
+
     public static function boot()
     {
         parent::boot();
