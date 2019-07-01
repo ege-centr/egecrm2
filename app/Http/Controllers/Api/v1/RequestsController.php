@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Api\v1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\{Client\Client, Request as ClientRequest};
+use App\Models\{Client\Client, Request as ClientRequest, Phone};
 use App\Http\Resources\Request\{RequestResource, RequestCollection};
 use App\Http\Resources\AlgoliaResult;
 use App\Http\Requests\Request\StoreOrUpdateRequest;
@@ -58,8 +58,25 @@ class RequestsController extends Controller
     public function store(StoreOrUpdateRequest $request)
     {
         $new_model = ClientRequest::create($request->input());
-        // dd($request->phones);
         $new_model->phones()->createMany($request->phones);
+
+        // если заявка падает с сайта
+        // и среди на текущий момент "новых" заявок есть телефон только что упавшей заявки,
+        // то только что упавшая заявка должна иметь статус "выполненные"
+        if (isset($request->google_id) && isset($request->phones)) {
+            $newRequestIds = Request::where('status', 'new')->pluck('id')->all();
+            if (
+                Phone::query()
+                    ->where('entity_type', ClientRequest::class)
+                    ->whereIn('entity_id', $newRequestIds)
+                    ->where('phone', $new_model->phones->first()->phone)
+                    ->exists()
+            ) {
+                $new_model->status = 'finished';
+                $new_model->save();
+            }
+        }
+
         return response(new RequestResource($new_model), 201);
     }
 

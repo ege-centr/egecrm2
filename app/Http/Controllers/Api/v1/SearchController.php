@@ -37,11 +37,11 @@ class SearchController extends Controller
      */
     private function clients(string $text)
     {
-        $ids = [];
-
-        $ids = array_merge($ids, Client::searchByName($text)->pluck('id')->all());
-        $ids = array_merge($ids, Representative::searchByName($text)->pluck('client_id')->all());
-        $ids = array_merge($ids, Phone::search($text)->where('entity_type', Client::class)->pluck('entity_id')->all());
+        $ids = array_merge(
+            Client::searchByName($text)->pluck('id')->all(),
+            Representative::searchByName($text)->pluck('client_id')->all(),
+            Phone::search($text)->where('entity_type', Client::class)->pluck('entity_id')->all()
+        );
 
         return ClientCollection::collection(
             Client::whereIn('id', $ids)->get()
@@ -50,10 +50,10 @@ class SearchController extends Controller
 
     private function tutors(string $text)
     {
-        $ids = [];
-
-        $ids = array_merge($ids, Teacher::searchByName($text)->pluck('id')->all());
-        $ids = array_merge($ids, Phone::search($text)->where('entity_type', Teacher::class)->pluck('entity_id')->all());
+        $ids = array_merge(
+            Teacher::searchByName($text)->pluck('id')->all(),
+            Phone::search($text)->where('entity_type', Teacher::class)->pluck('entity_id')->all()
+        );
 
         return TeacherCollection::collection(
             Teacher::whereIn('id', $ids)->get()
