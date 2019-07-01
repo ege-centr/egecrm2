@@ -52,7 +52,7 @@ class AbstractReview extends Model
 
         return extractFields($this, [
             'review_id', 'year', 'subject_id', 'teacher_id',
-            'grade_id', 'client_id', 'lesson_count'
+            'grade_id', 'client_id', 'lesson_count', 'is_published', 'is_approved'
         ], $ratings);
     }
 
