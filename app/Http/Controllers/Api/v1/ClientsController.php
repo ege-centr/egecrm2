@@ -84,6 +84,10 @@ class ClientsController extends Controller
             } else {
                 $model->representative->email->update(['email' => $request->representative['email']]);
             }
+        } else {
+            if ($model->representative->email) {
+                $model->representative->email->delete();
+            }
         }
 
         if (isset($request->email) && $request->email) {
