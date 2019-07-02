@@ -96,6 +96,10 @@ class ClientsController extends Controller
             } else {
                 $model->email->update(['email' => $request->email]);
             }
+        } else {
+            if ($model->email) {
+                $model->email->delete();
+            }
         }
 
         return new ClientResource($model);
