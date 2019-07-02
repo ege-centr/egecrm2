@@ -52,6 +52,6 @@ class Request extends Model
             }
         }
 
-        return $client_ids;
+        return array_unique($client_ids);
     }
 }
