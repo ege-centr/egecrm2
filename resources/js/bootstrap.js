@@ -26,6 +26,8 @@ window.axios = require('axios');
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
+window.isStaging = () => window.location.host.indexOf('staging.') === 0
+
 /**
  * Next we will register the CSRF Token as a common header with Axios so that
  * all outgoing HTTP requests automatically have it attached. This is just
@@ -43,7 +45,7 @@ if (token) {
 window.apiUrl = (...paths) => {
   // хардкод для staging
   let host
-  if (window.location.host.indexOf('staging.') === 0) {
+  if (window.isStaging()) {
     host = 'https://staging.ege-centr.ru/api/v1/'
   } else {
     host = process.env.MIX_API_URL

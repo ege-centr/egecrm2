@@ -8,6 +8,10 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
 
     Route::apiResource('requests', 'RequestsController');
 
+    Route::get('sync-staging', function () {
+        exec('/home/egecrm2-staging/sync.sh');
+    });
+
     Route::prefix('reset-password')->group(function () {
         Route::post('send-code', 'ResetPasswordController@sendCode');
         Route::post('verify-code', 'ResetPasswordController@verifyCode');

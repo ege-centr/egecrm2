@@ -19,7 +19,17 @@
         <v-list-tile-title>SMS</v-list-tile-title>
       </v-list-tile-content>
     </v-list-tile> 
-    
+
+    <v-list-tile @click="syncStaging" v-if='isStaging'>
+      <v-list-tile-action>
+        <v-progress-circular v-if='syncingStaging' :size="20" color="#fff" indeterminate></v-progress-circular>
+        <v-icon v-else>refresh</v-icon>
+      </v-list-tile-action>
+      <v-list-tile-content>
+        <v-list-tile-title>Синхронизировать</v-list-tile-title>
+      </v-list-tile-content>
+    </v-list-tile> 
+
     <v-list-tile @click="$store.dispatch('logout')">
       <v-list-tile-action>
         <v-icon>exit_to_app</v-icon>
@@ -46,6 +56,7 @@ export default {
 
   data: () => ({
     drawer: true,
+    syncingStaging: false,
     menu: [
       {
         icon: 'view_list',
@@ -166,6 +177,24 @@ export default {
     ],
   }),
 
+  methods: {
+    syncStaging() {
+      this.syncingStaging = true
+      axios.get(apiUrl('sync-staging')).then(r => {
+        this.$store.commit('message', {
+          text: 'Синхронизация завершена',
+          color: 'green'
+        })
+      })
+      .catch(e => {
+        this.$store.commit('message', {
+          text: 'Ошибка',
+        })
+      })
+      .then(() => this.syncingStaging = false)
+    }
+  },
+
   computed: {
     allowedAdminMenu() {
       return this.adminMenu.filter(e => {
@@ -179,6 +208,11 @@ export default {
     hasAccess() {
       return this.$store.state.user.rights.indexOf(101) !== -1
     },
+
+    isStaging() {
+      return true
+      return window.isStaging()
+    }
   }
 }
 </script>
