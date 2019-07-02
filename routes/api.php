@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use Symfony\Component\Process\Process;
 
 Route::namespace('Api\v1')->prefix('v1')->group(function() {
     Route::post('login', 'LoginController@login');
@@ -9,7 +10,10 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
     Route::apiResource('requests', 'RequestsController');
 
     Route::get('sync-staging', function () {
-        exec('/home/egecrm2-staging/sync.sh');
+        $process = new Process('sh /home/egecrm2-staging/sync.sh');
+        $process->setTimeout(0);
+		$process->run();
+		return $process->getOutput();
     });
 
     Route::prefix('reset-password')->group(function () {
