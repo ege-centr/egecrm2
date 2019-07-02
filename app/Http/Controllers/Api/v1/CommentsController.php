@@ -15,7 +15,7 @@ class CommentsController extends Controller
         return CommentResource::collection(Comment::where([
             'entity_type' => getModelClass($request->class, true),
             'entity_id' => $request->entity_id
-        ])->get());
+        ])->orderBy('created_at', 'desc')->get());
     }
 
     public function store(StoreOrUpdateRequest $request)
