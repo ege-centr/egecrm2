@@ -3,6 +3,8 @@
 namespace App\Http\Requests\Client;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Models\Client\{Client, Representative};
+use App\Models\Email;
 
 class StoreOrUpdateRequest extends FormRequest
 {
@@ -16,11 +18,11 @@ class StoreOrUpdateRequest extends FormRequest
         return [
             'first_name' => ['required'],
             'phones.*.phone' => ['required', 'phone'],
-            'email' => ['nullable', 'email', 'unique:emails,email'],
+            'email' => ['nullable', 'email'],
 
             'representative.first_name' => ['required'],
             'representative.phones.*.phone' => ['required', 'phone'],
-            'representative.email' => ['nullable', 'email', 'unique:emails,email'],
+            'representative.email' => ['nullable', 'email'],
 
             'grade_id' => ['required'],
             'year' => ['required'],
