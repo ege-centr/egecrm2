@@ -275,6 +275,11 @@ export default {
         this.$store.commit('loading', value)
       }
     },
+
+    updateItem(item) {
+      const index = this.data.findIndex(e => e.id === item.id)
+      this.data.splice(index, 1, item)
+    },
   },
 
   computed: {

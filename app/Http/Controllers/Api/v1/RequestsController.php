@@ -93,7 +93,7 @@ class RequestsController extends Controller
         $model->phones()->delete();
         $model->phones()->createMany($request->phones);
 
-        return response()->json(null, 204);
+        return new RequestCollection($model->fresh());
     }
 
     public function destroy($id)

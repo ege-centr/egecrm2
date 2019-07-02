@@ -17,7 +17,7 @@
         </v-layout>
       </template>
     </DisplayData>
-    <RequestDialog ref='RequestDialog' @updated='() => $refs.DisplayData.reloadData()' />
+    <RequestDialog ref='RequestDialog' @updated='(item) => $refs.DisplayData.updateItem(item)' />
     <ClientDialog ref='ClientDialog' />
   </div>
 </template>
