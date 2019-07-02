@@ -40,6 +40,7 @@ class ContractsController extends Controller
         $result->getCollection()->transform(function ($items, $key) {
             if ($key === 'hits') {
                 foreach($items as &$item) {
+                    $item['payment_count'] = ContractPayment::where('contract_id', $item['id'])->count();
                     $item['subjects'] = ContractSubject::where('contract_id', $item['id'])->get();
                     $item['client'] = new \PersonResource(Client::find($item['client_id']));
                 }

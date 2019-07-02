@@ -29,9 +29,20 @@
             {{ item.sum }} руб.
           </td>
           <td>
+            <span v-if='item.payment_count > 0'>
+              {{ item.payment_count }} платежей
+            </span>
+            <span class='grey--text' v-else>
+              платежей нет
+            </span>
+          </td>
+          <td>
             <span v-if='item.grade_id'>
               {{ getData('grades', item.grade_id).title }}
             </span>
+          </td>
+          <td v-if='show.year'>
+            {{ getData('years', item.year).title }}
           </td>
           <td>
             <span v-if='item.discount > 0'>
@@ -154,6 +165,7 @@ export default {
         year: false,
         addBtn: true,
         payments: true,
+        year: false,
       },
     }
   },

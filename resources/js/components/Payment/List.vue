@@ -26,6 +26,11 @@
             </span>
           </td>
           <td>
+            <span v-if='item.bill_number > 0'>
+              ПКО: {{ item.bill_number }}
+            </span>
+          </td>
+          <td>
             <span v-if='item.method'>
               {{ ENUMS.methods.find(e => e.id == item.method).title }}
             </span>
