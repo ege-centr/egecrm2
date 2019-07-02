@@ -36,7 +36,7 @@ class ResetPasswordController extends Controller
     public function changePassword(Request $request)
     {
         $this->validate($request, [
-            'new_password' => ['required', 'confirmed', 'size:8']
+            'new_password' => ['required', 'confirmed', 'min:8']
         ]);
 
         $email = Email::where('email', $request->email)->first();
