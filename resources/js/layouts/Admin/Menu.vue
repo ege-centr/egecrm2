@@ -210,7 +210,6 @@ export default {
     },
 
     isStaging() {
-      return true
       return window.isStaging()
     }
   }
