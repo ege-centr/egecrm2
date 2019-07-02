@@ -30,12 +30,18 @@ class PrintController extends Controller
         //     ->orderBy('date', 'desc')
         //     ->value('date');
 
+        try {
+            $oneSubjectPrice = round($contract->discounted_sum / collect($contract->subjects)->sum('lessons'));
+        } catch (\Exception $e) {
+            $oneSubjectPrice = null;
+        }
+
         return view('print.contract-' . $params['option'])->with([
             'contract' => $contract,
             // 'lastLessonDate' => $lastLessonDate,
             'firstVersion' => Contract::where('version', 1)->where('number', $contract->number)->first(),
             'representative' => $contract->client->representative,
-            'oneSubjectPrice' => round($contract->discounted_sum / collect($contract->subjects)->sum('lessons')),
+            'oneSubjectPrice' => $oneSubjectPrice,
         ]);
     }
 
