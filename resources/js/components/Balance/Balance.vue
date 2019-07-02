@@ -86,7 +86,7 @@ export default {
       _.each(this.currentYearItems, (items, d) => {
         if (d <= date) {
           sum += items.reduce(function(prev, item) {
-            return prev + item.sum + item.bonus
+            return prev + parseInt(item.sum) + parseInt(item.bonus)
           }, 0)
         }
       })
