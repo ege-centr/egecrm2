@@ -20,13 +20,13 @@ class Sms
 
 	public static function send($to, $message, $isSecret = false)
 	{
-        if (app()->environment('production')) {
-            return false;
-        }
 		if (is_string($to)) {
             $to = [$to];
         }
 		foreach ($to as $number) {
+            if (app()->environment('staging')) {
+                $number = '79268444666';
+            }
 			$number = \App\Utils\Phone::clean($number);
 			$number = trim($number);
 			if (!preg_match('/[0-9]{10}/', $number)) {
