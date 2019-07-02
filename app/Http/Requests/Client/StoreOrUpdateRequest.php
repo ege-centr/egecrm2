@@ -16,22 +16,26 @@ class StoreOrUpdateRequest extends FormRequest
         return [
             'first_name' => ['required'],
             'phones.*.phone' => ['required', 'phone'],
-            'email' => ['required', 'email', 'different:representative.email'],
+            'email' => ['nullable', 'email', 'unique:emails,email'],
 
             'representative.first_name' => ['required'],
             'representative.phones.*.phone' => ['required', 'phone'],
-            'representative.email' => ['required', 'email', 'different:email'],
+            'representative.email' => ['nullable', 'email', 'unique:emails,email'],
 
             'grade_id' => ['required'],
             'year' => ['required'],
         ];
     }
 
-    public function messages()
+    public function withValidator($validator)
     {
-        return [
-            'email.different' => 'Одинаковый email у ученика и представителя',
-            'representative.email.different' => 'Одинаковый email у ученика и представителя',
-        ];
+        $validator->after(function ($validator) {
+            if ($this->email && $this->representative['email']) {
+                if ($this->email === $this->representative['email']) {
+                    $validator->errors()->add('email', 'Одинаковый email у ученика и представителя');
+                    $validator->errors()->add('representative.email', 'Одинаковый email у ученика и представителя');
+                }
+            }
+        });
     }
 }
