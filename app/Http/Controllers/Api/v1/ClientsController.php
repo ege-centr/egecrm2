@@ -68,11 +68,17 @@ class ClientsController extends Controller
         $model = Client::find($id);
         $model->update($request->input());
 
-        $model->phones()->delete();
+        foreach($model->phones as $phone) {
+            $phone->delete();
+        }
+
         $model->phones()->createMany(Phone::filter($request->phones));
 
         $model->representative->update($request->representative);
-        $model->representative->phones()->delete();
+
+        foreach($model->representative->phones as $phone) {
+            $phone->delete();
+        }
         $model->representative->phones()->createMany(Phone::filter($request->representative['phones']));
 
         if (isset($request->representative['email']) && $request->representative['email']) {
