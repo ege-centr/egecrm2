@@ -6,7 +6,7 @@
     <v-content>
       <v-container fluid>
         <transition name="fade">
-          <router-view></router-view>
+          <router-view v-show='$store.state.search.results === null'></router-view>
         </transition>
         <v-fade-transition>
           <ContentOverlay v-show='$store.state.search.results !== null'>
