@@ -114,6 +114,21 @@ class ClientsController extends Controller
                 $query->where('has_cropped', $request->has_cropped);
             }
         });
+        if (isset($request->reviews)) {
+            if ($request->reviews) {
+                $query->whereHas('reviews', function ($query) {
+                    $query->whereHas('comments', function ($query) {
+                        $query->where('type', 'final');
+                    });
+                });
+            } else {
+                $query->whereDoesntHave('reviews', function ($query) {
+                    $query->whereHas('comments', function ($query) {
+                        $query->where('type', 'final');
+                    });
+                });
+            }
+        }
         return ClientForPhotoCollection::collection($this->showBy($request, $query));
     }
 }

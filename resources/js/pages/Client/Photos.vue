@@ -40,13 +40,15 @@
                 </span>
               </td>
               <td>
-                <div v-for='review in item.reviews'>
-                  <ScoreCircle 
-                    :class="{
-                      'grey': !review.is_published
-                    }" 
-                    :score='review.rating' 
-                  />
+                <div class='flex-items'>
+                  <div v-for='review in item.reviews' class='mr-1'>
+                    <ScoreCircle 
+                      :class="{
+                        'grey': !review.is_published
+                      }" 
+                      :score='review.rating' 
+                    />
+                  </div>
                 </div>
               </td>
               <td class='text-md-right'>
@@ -78,8 +80,12 @@ export default {
       CLASS_NAME,
       selectedItem: {},
       filters: [
+        {label: 'Отзывы', field:'reviews', type: 'select', options: [
+          {id: 0, title: 'без отзывов'},
+          {id: 1, title: 'с отзывами'},
+        ]},
         {label: 'Обрезка', field:'has_cropped', type: 'select', options: [
-          {id: 0, title: 'нет обрезанной'},
+          {id: 0, title: 'нет обрезанного'},
           {id: 1, title: 'есть обрезанное'},
         ]},
       ]
