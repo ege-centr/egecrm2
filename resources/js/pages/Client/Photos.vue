@@ -31,17 +31,9 @@
               <td width='120'>
                 {{ item.photo.filename_original }}
               </td>
-              <td width='120'>
-                {{ item.photo.original_size }}
-              </td>
                <td width='120'>
                 <span v-if='item.photo.has_cropped'>
                   {{ item.photo.filename_cropped }}
-                </span>
-              </td>
-              <td width='120'>
-                <span v-if='item.photo.has_cropped'>
-                  {{ item.photo.cropped_size }}
                 </span>
               </td>
               <td>
