@@ -46,7 +46,7 @@ class SearchController extends Controller
         );
 
         return ClientCollection::collection(
-            Client::whereIn('id', $ids)->get()
+            Client::whereIn('id', $ids)->take(100)->get()
         );
     }
 
@@ -67,7 +67,7 @@ class SearchController extends Controller
         $ids = Phone::search($text)->entity(ClientRequest::class)->pluck('entity_id')->all();
 
         return RequestCollection::collection(
-            ClientRequest::whereIn('id', $ids)->get()
+            ClientRequest::whereIn('id', $ids)->take(30)->get()
         );
     }
 }
