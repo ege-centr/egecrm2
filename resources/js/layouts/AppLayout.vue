@@ -6,9 +6,14 @@
     <v-content>
       <v-container fluid>
         <transition name="fade">
-          <router-view v-show='$store.state.search.results === null'></router-view>
+          <router-view></router-view>
         </transition>
-        <SearchResults v-show='$store.state.search.results !== null' />
+        <v-fade-transition>
+          <ContentOverlay v-show='$store.state.search.results !== null'>
+            <a @click="$store.commit('clearSearch')">закрыть</a>
+            <SearchResults></SearchResults>
+          </ContentOverlay>
+        </v-fade-transition>
       </v-container>
     </v-content>
     <v-dialog
@@ -52,6 +57,7 @@
   import { CLASS_NAME as ADMIN_CLASS_NAME } from '@/components/Admin'
   import { SearchResults } from '@/components/Search'
   import ListenToLogout from '@/components/ListenToLogout'
+  import ContentOverlay from '@/components/UI/ContentOverlay'
 
   export default {
     data() {
@@ -62,6 +68,6 @@
       }
     },
 
-    components: { AdminLayout, TeacherLayout, ClientLayout, SearchResults, ListenToLogout },
+    components: { AdminLayout, TeacherLayout, ClientLayout, SearchResults, ListenToLogout, ContentOverlay },
   }
 </script>

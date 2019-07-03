@@ -8,7 +8,8 @@ use App\Models\{
     Contract\Contract,
     Contract\SubjectStatus,
     Payment\Payment,
-    Payment\PaymentType
+    Payment\PaymentType,
+    Factory\Year
 };
 use Illuminate\Support\Carbon;
 use DateTime;
@@ -17,6 +18,8 @@ class StatsController extends Controller
 {
     public function index(Request $request)
     {
+	    $years = collect(Year::ALL);
+
         // TODO: поумнее с пагинацией. Конкретно с $lastPage
         switch($request->mode) {
             case 'week': {
@@ -30,7 +33,7 @@ class StatsController extends Controller
                 break;
             }
             case 'year': {
-                $paginate = 4;
+                $paginate = $years->count();
                 $lastPage = 1;
                 break;
             }
@@ -66,7 +69,7 @@ class StatsController extends Controller
                     $request,
                     $dateFormatted,
                     $dateStart,
-                    $request->mode === 'year' ? (academicYear() - $i + 1) : null
+                    $request->mode === 'year' ? ($years->last() - ($i - 1)) : null
                 ));
             } else {
                 $result[] = array_merge([
@@ -77,7 +80,7 @@ class StatsController extends Controller
                         $request,
                         $dateFormatted,
                         $dateStart,
-                        $request->mode === 'year' ? (academicYear() - $i + 1) : null
+                        $request->mode === 'year' ? ($years->last() - ($i - 1)) : null
                     )
                 );
             }
@@ -96,6 +99,11 @@ class StatsController extends Controller
     {
         $query = \App\Models\Request::query();
         if ($dateStart !== null) {
+	        // если по годам, то смотрим с 1 апреля
+	        if ($request->mode === 'year') {
+		        $dateStart = (new DateTime($dateStart))->modify('first day of April')->format(DATE_FORMAT);
+		        $date = (new DateTime($date))->modify('first day of April')->format(DATE_FORMAT);
+	        }
             $query->whereRaw("DATE(created_at) > '{$dateStart}' AND DATE(created_at) <= '{$date}'");
         } else {
             $query->whereRaw("DATE(created_at) = '{$date}'");

@@ -18,9 +18,6 @@ class AdminsController extends Controller
     {
         $query = Admin::orderBy('id', 'asc');
         $this->filter($request, $query);
-        if (isset($request->photos) && $request->photos) {
-            $query->has('photo');
-        }
         return AdminCollection::collection($this->showBy($request, $query));
     }
 
