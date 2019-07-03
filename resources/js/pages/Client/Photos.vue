@@ -2,7 +2,12 @@
   <div>
     
     <div class='tmp-avatar-loader'>
-      <AvatarLoader ref='AvatarLoader' :item='selectedItem' :entity-type='CLASS_NAME' />
+      <AvatarLoader 
+        ref='AvatarLoader' 
+        v-if='selectedItem !== null' 
+        :item='selectedItem' 
+        :entity-type='CLASS_NAME' 
+      />
     </div>
     <DisplayData 
       :api-url='API_URL' 
@@ -78,7 +83,7 @@ export default {
     return {
       API_URL: 'clients/photos',
       CLASS_NAME,
-      selectedItem: {},
+      selectedItem: null,
       filters: [
         {label: 'Отзывы', field:'reviews', type: 'select', options: [
           {id: 0, title: 'без отзывов'},
@@ -94,8 +99,11 @@ export default {
 
   methods: {
     crop(item) {
-      this.selectedItem = item
-      Vue.nextTick(() => this.$refs.AvatarLoader.dialog = true)
+      this.selectedItem = null
+      Vue.nextTick(() => {
+        this.selectedItem = item
+        Vue.nextTick(() => this.$refs.AvatarLoader.dialog = true)
+      })
     }
   }
 }
