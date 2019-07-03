@@ -6,7 +6,16 @@ use Shared\Model;
 use App\Interfaces\UserInterface;
 use App\Traits\{HasPhones, HasEmail, HasPhoto, HasName, HasCreatedEmail, Commentable};
 use App\Http\Resources\Teacher\TeacherCollection;
-use App\Models\{Request, Phone, Payment\Payment, Teacher, Contract\Contract, Group\Group, Group\GroupClient};
+use App\Models\{
+    Request,
+    Phone,
+    Teacher,
+    Payment\Payment,
+    Contract\Contract,
+    Group\Group,
+    Group\GroupClient,
+    Review\Review
+};
 
 class Client extends Model implements UserInterface
 {
@@ -52,6 +61,11 @@ class Client extends Model implements UserInterface
     public function tests()
     {
         return $this->hasMany(ClientTest::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 
     /**

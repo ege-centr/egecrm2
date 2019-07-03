@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\{Payment\Payment, Client\Client, Contract\Contract, Photo};
-use App\Http\Resources\Client\{ClientResource, ClientCollection};
+use App\Http\Resources\Client\{ClientResource, ClientCollection, ClientForPhotoCollection};
 use App\Utils\Phone;
 use App\Http\Requests\Client\{StoreOrUpdateRequest, DestroyRequest};
+
 
 class ClientsController extends Controller
 {
@@ -26,10 +27,6 @@ class ClientsController extends Controller
         }
 
         $this->filter($request, $query);
-
-        if (isset($request->photos) && $request->photos) {
-            $query->has('photo');
-        }
 
         if (isset($request->current_grade_id) && $request->current_grade_id) {
             $query->whereRaw("grade_id + (" . academicYear() .  " - `year`) IN ({$request->current_grade_id})");
@@ -108,5 +105,15 @@ class ClientsController extends Controller
     public function destroy(DestroyRequest $request, Client $client)
     {
         $client->delete();
+    }
+
+    public function photos(Request $request)
+    {
+        $query = Client::orderBy('id', 'desc')->whereHas('photo', function ($query) use ($request) {
+            if (isset($request->has_cropped)) {
+                $query->where('has_cropped', $request->has_cropped);
+            }
+        });
+        return ClientForPhotoCollection::collection($this->showBy($request, $query));
     }
 }

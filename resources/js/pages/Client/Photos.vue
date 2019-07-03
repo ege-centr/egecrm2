@@ -1,21 +1,62 @@
-<template lang="html">
+<template>
   <div>
+    
+    <div class='tmp-avatar-loader'>
+      <AvatarLoader ref='AvatarLoader' :item='selectedItem' :entity-type='CLASS_NAME' />
+    </div>
     <DisplayData 
-      :invisible-filters='{photos: 1}'
-      :api-url='API_URL' :paginate='30'>
+      :api-url='API_URL' 
+      :paginate='30'
+      :filters='filters'
+    >
       <template slot='items' slot-scope="{ items }">
-        <div v-for='item in items'>
-          <div class='flex-items align-center mb-5'>
-            <AvatarLoader 
-              :entity-type='CLASS_NAME' 
-              :item='item' 
-              class='mr-3'
-            />
-            <router-link :to="{ name: 'ClientShow', params: { id: item.id }}">
-              <PersonName :item='item' />
-            </router-link>
-          </div>
-        </div>
+        <v-data-table 
+          :items='items' 
+          hide-headers 
+          hide-actions
+          :class='config.elevationClass'
+        >
+          <template v-slot:items="{ item }">
+            <tr>
+              <td width='150'>
+                <router-link :to="{ name: 'ClientShow', params: { id: item.id }}">
+                  {{ item.default_name }}
+                </router-link>
+              </td>
+              <td width='120'>
+                {{ item.photo.filename_original }}
+              </td>
+              <td width='120'>
+                {{ item.photo.original_size }}
+              </td>
+               <td width='120'>
+                <span v-if='item.photo.has_cropped'>
+                  {{ item.photo.filename_cropped }}
+                </span>
+              </td>
+              <td width='120'>
+                <span v-if='item.photo.has_cropped'>
+                  {{ item.photo.cropped_size }}
+                </span>
+              </td>
+              <td>
+                <div v-for='review in item.reviews'>
+                  <ScoreCircle 
+                    :class="{
+                      'grey': !review.is_published
+                    }" 
+                    :score='review.rating' 
+                  />
+                </div>
+              </td>
+              <td class='text-md-right'>
+                <v-btn @click='crop(item)' slot='activator' flat icon color="black" class='ma-0'>
+                  <v-icon>more_horiz</v-icon>
+                </v-btn>
+              </td>
+            </tr>
+          </template>
+        </v-data-table>
       </template>
     </DisplayData>
   </div>
@@ -24,16 +65,38 @@
 <script>
 
 import { DisplayData } from '@/components/UI'
-import { CLASS_NAME, API_URL } from '@/components/Client'
 import AvatarLoader from '@/components/AvatarLoader'
+import ScoreCircle from '@/components/UI/ScoreCircle'
+import { CLASS_NAME } from '@/components/Client'
 
 export default {
-  components: { DisplayData, AvatarLoader },
+  components: { DisplayData, AvatarLoader, ScoreCircle },
 
   data() {
     return {
-      API_URL,
+      API_URL: 'clients/photos',
+      CLASS_NAME,
+      selectedItem: {},
+      filters: [
+        {label: 'Обрезка', field:'has_cropped', type: 'select', options: [
+          {id: 0, title: 'нет обрезанной'},
+          {id: 1, title: 'есть обрезанное'},
+        ]},
+      ]
     }
   },
+
+  methods: {
+    crop(item) {
+      this.selectedItem = item
+      Vue.nextTick(() => this.$refs.AvatarLoader.dialog = true)
+    }
+  }
 }
 </script>
+
+<style lang='scss'>
+  .tmp-avatar-loader .v-avatar {
+    display: none;
+  }
+</style>
