@@ -20,7 +20,7 @@ class RequestCollection extends JsonResource
             'client_ids' => $this->getClientIds(),
             'relative_ids' => $this->getRelativeIds(),
             'responsibleAdmin' => new PersonResource($this->responsibleAdmin),
-            'createdUser' => new PersonWithPhotoResource($this->createdUser),
+            'createdUser' => $this->createdUser === null ? SYSTEM_USER : new PersonWithPhotoResource($this->createdUser),
         ]);
     }
 }
