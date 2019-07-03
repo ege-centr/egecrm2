@@ -1,13 +1,12 @@
 <template>
-  <span>
+  <span class='d-inline-block'>
     <SmsMessageDialog ref='SmsMessageDialog' />
     <SmsMessageHistory ref='SmsMessageHistory' />
     <span v-for='(phone, index) in items' :key='index'>
       <v-menu :class="{'d-block': block}">
         <span slot='activator' class='flex-items align-center'>
           <a>{{ phone.phone }} {{  }}</a> 
-          <span class='grey--text caption ml-1'>{{ phone.comment }}</span>
-          <span v-if='!block' class='mr-1'>{{ index === items.length - 1 ? '' : ', ' }}</span>
+          <span class='grey--text caption ml-1'>{{ phone.comment }}</span><span v-if='!block' class='mr-1'>{{ index === items.length - 1 ? '' : ', ' }}</span>
         </span> 
         <v-list dense>
           <v-list-tile @click='call(phone)'>
