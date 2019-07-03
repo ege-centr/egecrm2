@@ -160,11 +160,6 @@ export default {
       },
       {
         icon: 'photo_camera',
-        route: 'AdminPhotos',
-        label: 'Фото админов',
-      },
-      {
-        icon: 'photo_camera',
         route: 'ClientPhotos',
         label: 'Фото клиентов',
       },
