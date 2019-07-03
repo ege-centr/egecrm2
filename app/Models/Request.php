@@ -5,6 +5,7 @@ namespace App\Models;
 use Shared\Model;
 use App\Traits\{Enumable, HasPhones, HasCreatedEmail, Commentable};
 use App\Models\Client\{Client, Representative};
+use App\Models\Phone;
 use Laravel\Scout\Searchable;
 
 class Request extends Model
@@ -42,16 +43,51 @@ class Request extends Model
     {
         $client_ids = [];
         foreach($this->phones as $phone) {
-            $ids = Phone::where('entity_type', Client::class)->where('phone', $phone->phone_clean)->pluck('entity_id')->all();
+            $ids = Phone::entity(Client::class)->where('phone', $phone->phone_clean)->pluck('entity_id')->all();
             if (count($ids)) {
                 $client_ids = array_merge($client_ids, $ids);
             }
-            $ids = Phone::where('entity_type', Representative::class)->where('phone', $phone->phone_clean)->pluck('entity_id')->all();
+            $ids = Phone::entity(Representative::class)->where('phone', $phone->phone_clean)->pluck('entity_id')->all();
             if (count($ids)) {
                 $client_ids = array_merge($client_ids, Representative::whereIn('id', $ids)->pluck('client_id')->all());
             }
         }
 
         return array_unique($client_ids);
+    }
+
+    /**
+     * Получить ассоциативные заявки
+     */
+    public function getRelativeIds()
+    {
+        $relativeIds = collect();
+
+        $requestPhones = $this->phones->pluck('phone_clean')->all();
+
+        // находим номера телефонов клиентов
+        $clientIds = Phone::entity(Client::class)
+            ->whereIn('phone', $requestPhones)
+            ->pluck('entity_id')
+            ->all();
+
+        // находим все заявки по номерам телефона клиентов
+        $clients = Client::whereIn('id', $clientIds)->get();
+        foreach($clients as $client) {
+            $relativeIds = $relativeIds->merge($client->requests(true));
+        }
+
+        // все заявки по телефонам самой заявки
+        $requestIds = Phone::entity(self::class)
+            ->whereIn('phone', $requestPhones)
+            ->pluck('entity_id')
+            ->all();
+
+        return $relativeIds
+            ->merge($requestIds)
+            ->diff($this->id)
+            ->values()
+            ->unique()
+            ->all();
     }
 }

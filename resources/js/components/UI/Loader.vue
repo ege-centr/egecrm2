@@ -34,7 +34,7 @@ export default {
     background: rgba(white, .8);
     border-radius: $border-radius;
     &_block {
-      height: 100px;
+      height: 140px;
       background: none;
       position: relative;
     }

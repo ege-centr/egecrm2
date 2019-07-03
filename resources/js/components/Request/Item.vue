@@ -55,9 +55,39 @@
                 <a @click="$emit('openClientDialog', null, {phones: item.phones})">добавить</a>
               </div>
             </div>
-             <v-btn flat icon color="black" class='ma-0 mt-5 edit-request-button' @click="$emit('openDialog', item.id)">
+            <div class='mb-3' v-if='item.relative_ids.length'>
+              <div class='item-label'>Заявки</div>
+              <div>
+                <div v-for='id in item.relative_ids' :key='id'>
+                  <router-link :to="{ name: 'RequestShow', params: { id }}">
+                    {{ id }}
+                  </router-link>
+                </div>
+              </div>
+            </div>
+            <v-menu>
+              <v-btn slot='activator' flat icon color="black" class='ma-0 mt-5 edit-request-button'>
                 <v-icon>more_horiz</v-icon>
               </v-btn>
+              <v-list dense>
+                <v-list-tile @click="$router.push({name: 'RequestShow', params: { id: item.id }})">
+                    <v-list-tile-action>
+                      <v-icon>open_in_new</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                      <v-list-tile-title>Открыть</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+                <v-list-tile @click="$emit('openDialog', item.id)">
+                    <v-list-tile-action>
+                      <v-icon>edit</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                      <v-list-tile-title>Редактировать</v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
           </v-flex>
         </v-layout>
       </v-card-text>

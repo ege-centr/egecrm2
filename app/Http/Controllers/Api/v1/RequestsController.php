@@ -12,7 +12,7 @@ use App\Http\Requests\Request\StoreOrUpdateRequest;
 class RequestsController extends Controller
 {
     protected $filters = [
-        'multiple' => ['grade_id', 'responsible_admin_id', 'created_email_id'],
+        'multiple' => ['id', 'grade_id', 'responsible_admin_id', 'created_email_id'],
         'timestamp' => ['created_at_timestamp'],
     ];
 
@@ -80,9 +80,12 @@ class RequestsController extends Controller
         return response(new RequestResource($new_model), 201);
     }
 
-    public function show($id)
+    public function show($id, Request $request)
     {
-        return new RequestResource(ClientRequest::find($id));
+        // потому что происходит небольшой разлом логики:
+        // на странице просмотра заявки отображается модель как в списке
+        $resourceClass = isset($request->resource) ? RequestCollection::class : RequestResource::class;
+        return new $resourceClass(ClientRequest::find($id));
     }
 
     public function update(StoreOrUpdateRequest $request, $id)

@@ -31,7 +31,7 @@ class StoreOrUpdateRequest extends FormRequest
             'year' => ['required'],
             'grade_id' => ['required'],
             'sum' => ['required', 'numeric'],
-            'date' => ['required', 'date'],
+            'date' => ['required', 'date_format:Y-m-d'],
             'payments.*.date' => ['required', 'date'],
         ];
     }

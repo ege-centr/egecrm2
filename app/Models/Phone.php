@@ -24,6 +24,11 @@ class Phone extends Model
         return $query->where('phone', 'like', '%' . $phone . '%');
     }
 
+    public function scopeEntity($query, $entityType)
+    {
+        return $query->where('entity_type', $entityType);
+    }
+
     public static function boot()
     {
         parent::boot();

@@ -27,9 +27,9 @@ class StoreOrUpdateRequest extends FormRequest
             'sum' => ['required', 'numeric'],
             'lesson_count' => ['required', 'numeric'],
             'teacher_id' => ['required'],
-            'date' => ['required', 'date'],
-            'date_from' => ['required', 'date'],
-            'date_to' => ['required', 'date'],
+            'date' => ['required', 'date_format:Y-m-d'],
+            'date_from' => ['required', 'date_format:Y-m-d'],
+            'date_to' => ['required', 'date_format:Y-m-d'],
         ];
     }
 }

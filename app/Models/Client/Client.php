@@ -70,13 +70,16 @@ class Client extends Model implements UserInterface
         return true;
     }
 
-    public function requests()
+    public function requests(bool $returnOnlyIds = false)
     {
         $phones = $this->phones->pluck('phone_clean')->all();
         if ($this->representative) {
             $phones = array_merge($phones, $this->representative->phones->pluck('phone_clean')->all());
         }
         $requestIds = Phone::where('entity_type', Request::class)->whereIn('phone', $phones)->pluck('entity_id')->unique()->all();
+        if ($returnOnlyIds) {
+            return $requestIds;
+        }
         return Request::with('responsibleAdmin')
             ->whereIn('id', $requestIds)
             ->orderBy('id', 'desc');

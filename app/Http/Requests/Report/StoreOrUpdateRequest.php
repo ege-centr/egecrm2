@@ -40,7 +40,7 @@ class StoreOrUpdateRequest extends FormRequest
             'knowledge_comment' => ['required'],
             'recommendation' => ['required'],
 
-            'date' => ['required', 'date'],
+            'date' => ['required', 'date_format:Y-m-d'],
         ];
     }
 }

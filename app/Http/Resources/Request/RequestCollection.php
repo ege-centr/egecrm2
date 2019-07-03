@@ -18,6 +18,7 @@ class RequestCollection extends JsonResource
             'comments' => CommentResource::collection($this->comments),
             'phones' => PhoneResource::collection($this->phones),
             'client_ids' => $this->getClientIds(),
+            'relative_ids' => $this->getRelativeIds(),
             'responsibleAdmin' => new PersonResource($this->responsibleAdmin),
             'createdUser' => new PersonWithPhotoResource($this->createdUser),
         ]);

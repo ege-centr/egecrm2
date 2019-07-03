@@ -14,7 +14,8 @@ use App\Models\{
 };
 use App\Http\Resources\{
     Client\ClientCollection,
-    Teacher\TeacherCollection
+    Teacher\TeacherCollection,
+    Request\RequestCollection
 };
 
 class SearchController extends Controller
@@ -25,6 +26,7 @@ class SearchController extends Controller
         foreach([
             Teacher::class,
             Client::class,
+            ClientRequest::class,
         ] as $class) {
             $table = (new $class)->getTable();
             $results[$table] = $this->{$table}($request->text);
@@ -40,7 +42,7 @@ class SearchController extends Controller
         $ids = array_merge(
             Client::searchByName($text)->pluck('id')->all(),
             Representative::searchByName($text)->pluck('client_id')->all(),
-            Phone::search($text)->where('entity_type', Client::class)->pluck('entity_id')->all()
+            Phone::search($text)->entity(Client::class)->pluck('entity_id')->all()
         );
 
         return ClientCollection::collection(
@@ -52,11 +54,20 @@ class SearchController extends Controller
     {
         $ids = array_merge(
             Teacher::searchByName($text)->pluck('id')->all(),
-            Phone::search($text)->where('entity_type', Teacher::class)->pluck('entity_id')->all()
+            Phone::search($text)->entity(Teacher::class)->pluck('entity_id')->all()
         );
 
         return TeacherCollection::collection(
             Teacher::whereIn('id', $ids)->get()
+        );
+    }
+
+    private function requests(string $text)
+    {
+        $ids = Phone::search($text)->entity(ClientRequest::class)->pluck('entity_id')->all();
+
+        return RequestCollection::collection(
+            ClientRequest::whereIn('id', $ids)->get()
         );
     }
 }

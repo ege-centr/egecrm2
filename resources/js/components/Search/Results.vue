@@ -21,13 +21,19 @@
 
 import { ClientList } from '@/components/Client'
 import { TeacherList } from '@/components/Teacher'
+import RequestList from '@/components/Request/List'
 
 export default {
-  components: { ClientList, TeacherList },
+  components: { ClientList, TeacherList, RequestList },
 
   data() {
     return {
       types: [
+        {
+          title: 'Заявки',
+          component: 'RequestList',
+          field: 'requests',
+        },
         {
           title: 'Клиенты',
           component: 'ClientList',

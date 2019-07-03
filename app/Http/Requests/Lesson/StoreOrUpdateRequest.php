@@ -24,7 +24,7 @@ class StoreOrUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'date' => ['required', 'date'],
+            'date' => ['required', 'date_format:Y-m-d'],
             'time' => ['required'],
             'cabinet_id' => ['required'],
             'teacher_id' => ['required'],

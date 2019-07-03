@@ -30,7 +30,7 @@ class StoreOrUpdateRequest extends FormRequest
             'type' => ['required'],
             'year' => ['required'],
             'sum' => ['required', 'numeric'],
-            'date' => ['required', 'date'],
+            'date' => ['required', 'date_format:Y-m-d'],
         ];
     }
 }

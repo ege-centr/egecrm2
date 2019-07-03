@@ -28,7 +28,7 @@ class StoreOrUpdateRequest extends FormRequest
             'grade_id' => ['required'],
             'subject_id' => ['required'],
             'year' => ['required'],
-            'date' => ['required', 'date'],
+            'date' => ['required', 'date_format:Y-m-d'],
         ];
     }
 }

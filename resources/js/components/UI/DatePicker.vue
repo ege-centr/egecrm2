@@ -8,14 +8,17 @@
     offset-y
     full-width
     min-width="290px"
+    v-model='menu'
   >
     <v-text-field 
       :error-messages='errorMessages'
       :hide-details='errorMessages === undefined'
       slot="activator"
       v-model='dateFormatted'
+      @keyup='handleManualInput'
       :readonly="readonly"
       :label="label"
+      v-mask="'##.##.####'"
     ></v-text-field>
     <v-date-picker no-title
       locale='ru'
@@ -44,6 +47,7 @@ export default {
 
   data() {
     return {
+      menu: false,
       date: null,
       dateFormatted: null,
     }
@@ -62,13 +66,21 @@ export default {
       return moment(this.date).format('DD.MM.YYYY')
     },
 
-    parseDate() {
-      if (!this.date) {
-        return null
-      }
-      const [month, day, year] = this.date.split('.')
-      // colorLog(`${date} => ` + moment([year, month, day].join('-')).format('YYYY-MM-DD'), 'DeepPink')
+    parseDateFormatted() {
+      const [day, month, year] = this.dateFormatted.split('.')
       return moment([year, month, day].join('-')).format('YYYY-MM-DD')
+    },
+
+    handleManualInput() {
+      if (this.dateFormatted.length > 0) {
+        this.menu = false
+        if (this.dateFormatted.length === 10) {
+          this.$emit('input', this.parseDateFormatted())
+        }
+      } else {
+        this.menu = true
+        this.$emit('input', null)
+      }
     }
   },
 
