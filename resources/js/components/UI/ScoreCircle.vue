@@ -6,7 +6,7 @@
     'orange': score === 4,
     'green': score === 5,
   }">
-    {{ score || '–' }}
+    {{ Number(score) || '–' }}
   </div>
 </template>
 
