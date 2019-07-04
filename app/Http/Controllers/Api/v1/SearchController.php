@@ -67,7 +67,7 @@ class SearchController extends Controller
         $ids = Phone::search($text)->entity(ClientRequest::class)->pluck('entity_id')->all();
 
         return RequestCollection::collection(
-            ClientRequest::whereIn('id', $ids)->take(30)->get()
+            ClientRequest::whereIn('id', $ids)->orderBy('created_at', 'desc')->take(30)->get()
         );
     }
 }
