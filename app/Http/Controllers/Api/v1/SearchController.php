@@ -66,8 +66,37 @@ class SearchController extends Controller
     {
         $ids = Phone::search($text)->entity(ClientRequest::class)->pluck('entity_id')->all();
 
+        $items = ClientRequest::query()
+            ->withCount('comments')
+            ->whereIn('id', $ids)
+            ->take(30)
+            ->orderByRaw("
+                if(comments_count > 0, 1, 0) desc,
+                created_at desc
+            ")
+            ->get();
+
+        $filteredItems = [];
+        foreach($items as $item) {
+            if ($item->isGrouped) {
+                continue;
+            }
+            $relativeIds = $item->getRelativeIds();
+            if (count($relativeIds) > 0) {
+                $items->transform(function ($i) use ($relativeIds) {
+                    if (in_array($i->id, $relativeIds)) {
+                        $i->isGrouped = true;
+                    }
+                });
+            }
+            $filteredItems[] = $item->id;
+        }
+
+
+        // return $filteredItems;
+
         return RequestCollection::collection(
-            ClientRequest::whereIn('id', $ids)->orderBy('created_at', 'desc')->take(30)->get()
+            ClientRequest::whereIn('id', $filteredItems)->orderBy('created_at', 'desc')->get()
         );
     }
 }

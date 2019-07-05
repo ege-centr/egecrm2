@@ -1,6 +1,9 @@
 <template>
-    <v-card class="mb-3" :class='config.elevationClass'>
-      <v-card-text>
+    <v-card class="mb-3" :class="{
+      [config.elevationClass]: true,
+      'request_is-current': isCurrent
+    }">
+      <v-card-text class='relative' style='z-index: 1; background: white'>
         <v-layout row>
           <v-flex style='width: 80%; border-right: 1px solid #9e9e9e'>
             <div class='mb-3'>
@@ -65,29 +68,16 @@
                 </div>
               </div>
             </div>
-            <v-menu>
-              <v-btn slot='activator' flat icon color="black" class='ma-0 mt-5 edit-request-button'>
-                <v-icon>more_horiz</v-icon>
-              </v-btn>
-              <v-list dense>
-                <v-list-tile @click="$router.push({name: 'RequestShow', params: { id: item.id }})">
-                    <v-list-tile-action>
-                      <v-icon>open_in_new</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                      <v-list-tile-title>Открыть</v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
-                <v-list-tile @click="$emit('openDialog', item.id)">
-                    <v-list-tile-action>
-                      <v-icon>edit</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                      <v-list-tile-title>Редактировать</v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
-              </v-list>
-            </v-menu>
+            <v-btn flat icon 
+              @click="$router.push({name: 'RequestShow', params: { id: item.id }})"
+              color="black" class='ma-0 request-button request-button_open'>
+              <v-icon>open_in_new</v-icon>
+            </v-btn>
+            <v-btn flat icon 
+              @click="$emit('openDialog', item.id)"
+              color="black" class='ma-0 request-button request-button_edit'>
+              <v-icon>more_horiz</v-icon>
+            </v-btn>
           </v-flex>
         </v-layout>
       </v-card-text>
@@ -109,7 +99,10 @@ export default {
       REQUEST_STATUSES
     }
   },
-  props: ['item'],
+  props: {
+    item: {},
+    isCurrent: Boolean,
+  }
 }
 </script>
 
@@ -121,9 +114,31 @@ export default {
     }
   }
 
-  .edit-request-button {
+  .request {
+    &_is-current {
+      &:before {
+        content: '';
+        position: absolute;
+        left: -10px;
+        top: 20px;
+        height: 120px;
+        width: 50px;
+        border-radius: 10px;
+        display: block;
+        background: #e06f4a;
+        z-index: 1;
+      }
+    }
+  }
+
+  .request-button {
     position: absolute; 
-    bottom: 5px; 
     right: 10px;
+    &_edit {
+      bottom: 5px; 
+    }
+    &_open {
+      top: 5px;
+    }
   }
 </style>

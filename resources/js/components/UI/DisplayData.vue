@@ -73,6 +73,7 @@
 import { AllFilter } from '@/components/Filter'
 import { tabsWithData } from '@/other/functions'
 import InfiniteLoading from 'vue-infinite-loading'
+import EVENT_TYPE from '@/other/event-types'
 
 export default {
   props: {
@@ -276,9 +277,25 @@ export default {
       }
     },
 
-    updateItem(item) {
+    updateItem({ event, item }) {
+      console.log("HERE", event, item)
       const index = this.data.findIndex(e => e.id === item.id)
-      this.data.splice(index, 1, item)
+      switch(event) {
+        case EVENT_TYPE.updated: {
+          this.data.splice(index, 1, item)
+          break
+        }
+
+        case EVENT_TYPE.created: {
+          this.data.splice(0, 0, item)
+          break
+        }
+
+        case EVENT_TYPE.destroyed: {
+          this.data.splice(index, 1)
+          break
+        }
+      }
     },
   },
 

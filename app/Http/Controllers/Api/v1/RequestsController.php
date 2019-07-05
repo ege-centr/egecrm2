@@ -77,15 +77,26 @@ class RequestsController extends Controller
             }
         }
 
-        return response(new RequestResource($new_model), 201);
+        return response(new RequestCollection($new_model), 201);
     }
 
     public function show($id, Request $request)
     {
         // потому что происходит небольшой разлом логики:
         // на странице просмотра заявки отображается модель как в списке
-        $resourceClass = isset($request->resource) ? RequestCollection::class : RequestResource::class;
-        return new $resourceClass(ClientRequest::find($id));
+        if (isset($request->resource)) {
+            $item = ClientRequest::find($id);
+            return RequestCollection::collection(
+                ClientRequest::query()
+                    ->whereIn('id', array_merge([$id], $item->getRelativeIds()))
+                    ->orderBy('created_at', 'desc')
+                    ->get()
+            );
+        } else {
+            return new RequestResource(
+                ClientRequest::find($id)
+            );
+        }
     }
 
     public function update(StoreOrUpdateRequest $request, $id)
@@ -101,6 +112,12 @@ class RequestsController extends Controller
 
     public function destroy($id)
     {
-        ClientRequest::find($id)->delete();
+        // TODO: может как-нибудь поумнее можно вынести?
+        $item = ClientRequest::find($id);
+        $item->phones->each(function ($phone) {
+            $phone->delete();
+        });
+        $item->delete();
+        return new RequestCollection($item);
     }
 }

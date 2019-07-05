@@ -1,3 +1,5 @@
+import EVENT_TYPE from '@/other/event-types'
+
 export default {
   data() {
     return {
@@ -82,7 +84,7 @@ export default {
         if (this.redirectAfterDestroy !== null) {
           this.$router.push({ name: this.redirectAfterDestroy })
         } else {
-          this.emitUpdated()
+          this.emitUpdated(EVENT_TYPE.destroyed, this.item)
           this.dialog = false
           this.waitForDialogClose(() => this.destroying = false)
         }
@@ -96,7 +98,10 @@ export default {
       this.errorMessages = {}
       if (this.item.id) {
         await axios.put(apiUrl(this.API_URL, this.item.id), this.item)
-          .then(r => this.item = r.data)
+          .then(r => {
+            this.item = r.data
+            this.emitUpdated(EVENT_TYPE.updated, this.item)
+          })
           .catch(e => this.errorMessages = e.response.data.errors)
       } else {
         await axios.post(apiUrl(this.API_URL), this.item)
@@ -105,11 +110,11 @@ export default {
               return this.$router.push({ name: this.redirectAfterStore, params: { id: r.data.id }})
             }
             this.item = r.data
+            this.emitUpdated(EVENT_TYPE.created, this.item)
           })
           .catch(e => this.errorMessages = e.response.data.errors)
       }
       if (this.noErrors) {
-        this.emitUpdated(this.item)
         this.dialog = false
         this.waitForDialogClose(() => this.saving = false)
       } else {
@@ -117,11 +122,8 @@ export default {
       }
     },
 
-    // надо передавать с небольшой задержкой, 
-    // потому что иногда подтягиваются старые данные
-    // (наблюдается диссинхрон: обновление сущносить -> reload -> отдаются старые данные)
-    emitUpdated(item = null) {
-      this.$emit('updated', item)
+    emitUpdated(event, item = null) {
+      this.$emit('updated', { event, item })
     },
   },
 

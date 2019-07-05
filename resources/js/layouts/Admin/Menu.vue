@@ -68,13 +68,13 @@ export default {
         icon: 'person',
         route: 'ClientIndex',
         label: 'Клиенты',
-        counter: 'clients',
+        // counter: 'clients',
       },
       {
         icon: 'calendar_today',
         route: 'GroupIndex',
         label: 'Группы',
-        counter: 'groups',
+        // counter: 'groups',
       },
       {
         icon: 'calendar_today',

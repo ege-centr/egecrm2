@@ -21,7 +21,7 @@ class CountersUpdated implements ShouldBroadcast
      */
     public function __construct()
     {
-        //
+        logger('counters updated');
     }
 
     /**

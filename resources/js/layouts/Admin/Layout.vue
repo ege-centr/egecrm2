@@ -30,7 +30,7 @@ export default {
 
   created() {
     this.updateCounters()
-    this.initPusher()
+    this.pusher.on('CountersUpdated', this.updateCounters)
   },
 
   methods: {
@@ -39,14 +39,6 @@ export default {
         this.$store.commit('setCounters', r.data)
       })
     },
-
-    initPusher() {
-      const pusher = new Pusher(process.env.MIX_PUSHER_APP_KEY, {
-        cluster: 'eu'
-      })
-      const channel = pusher.subscribe('app')
-      channel.bind("App\\Events\\CountersUpdated", () => this.updateCounters())
-    }
   }
 }
 </script>

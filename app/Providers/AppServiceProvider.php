@@ -4,8 +4,13 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Http\Resources\Json\Resource;
-use App\Models\{Report\Report, Payment\Payment};
-use App\Observers\{LogsObserver, ReportsObserver, PaymentsObserver};
+use App\Models\{Report\Report, Payment\Payment, Request};
+use App\Observers\{
+    LogsObserver,
+    ReportsObserver,
+    PaymentsObserver,
+    RequestObserver
+};
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use Illuminate\Support\Carbon;
@@ -29,6 +34,7 @@ class AppServiceProvider extends ServiceProvider
 
         Report::observe(ReportsObserver::class);
         Payment::observe(PaymentsObserver::class);
+        Request::observe(RequestObserver::class);
 
         Validator::extend('phone', function($attribute, $value, $parameters, $validator) {
             $phone = Phone::clean($value);

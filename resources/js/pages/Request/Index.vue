@@ -1,5 +1,6 @@
 <template lang="html">
   <div>
+    <!-- <div class='new-requests'>новые заявки</div> -->
     <DisplayData :api-url='API_URL' :filters='FILTERS' :paginate='15' ref='DisplayData'>
       <template slot='buttons'>
         <AddBtn animated label='добавить заявку' @click.native='$refs.RequestDialog.open(null)' />
@@ -17,7 +18,9 @@
         </v-layout>
       </template>
     </DisplayData>
-    <RequestDialog ref='RequestDialog' @updated='(item) => $refs.DisplayData.updateItem(item)' />
+    <RequestDialog ref='RequestDialog' 
+      @updated='(payload) => $refs.DisplayData.updateItem(payload)'
+    />
     <ClientDialog ref='ClientDialog' />
   </div>
 </template>
@@ -47,3 +50,11 @@ export default {
   }
 }
 </script>
+
+<style>
+  .new-requests {
+    position: fixed;
+    background: #e06f4a;
+    color: white;
+  }
+</style>

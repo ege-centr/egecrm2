@@ -5,22 +5,16 @@
     </div>
     <Loader v-if='loading' transparent />
     <div v-else>
-      <RequestItem :item='item' @openDialog='$refs.RequestDialog.open' @openClientDialog='$refs.ClientDialog.open' />
-
-      <Loader block v-if='relativeRequestsLoading' />
-      <div v-else-if='relativeRequests !== null'>
-        <div class='my-4 text-sm-center'>
-          <v-icon style='transform: rotate(90deg)'>link</v-icon>
-        </div>
-        <RequestItem v-for='request in relativeRequests' 
-          @openDialog='$refs.RequestDialog.open' 
-          @openClientDialog='$refs.ClientDialog.open' 
-          :item='request' 
-          :key='request.id' 
-        />
-      </div>
+      <RequestItem 
+        v-for='item in items'
+        :key='item.id'
+        :item='item' 
+        :is-current='item.id == $route.params.id'
+        @openDialog='$refs.RequestDialog.open' 
+        @openClientDialog='$refs.ClientDialog.open' 
+      />
     </div>
-    <RequestDialog ref='RequestDialog' @updated='(i) => item = i' />
+    <RequestDialog ref='RequestDialog' @updated='(payload) => item = payload.item' />
     <ClientDialog ref='ClientDialog' />
   </div>
 </template>
@@ -41,9 +35,7 @@ export default {
   data() {
     return {
       loading: true,
-      relativeRequestsLoading: false,
-      item: null,
-      relativeRequests: null,
+      items: null,
     }
   },
 
@@ -58,7 +50,7 @@ export default {
 
   methods: {
     loadData() {
-      this.item = null
+      this.items = null
       this.loading = true
       Vue.nextTick(() => {
         axios.get(apiUrl(API_URL, this.$route.params.id), {
@@ -66,26 +58,11 @@ export default {
             resource: 1
           }
         }).then(r => {
-          this.item = r.data
+          this.items = r.data
           this.loading = false
-          this.loadRelativeRequests()
         })
       })
     },
-
-    loadRelativeRequests() {
-      if (this.item.relative_ids.length > 0) {
-        this.relativeRequestsLoading = true
-        axios.get(apiUrl(API_URL), {
-          params: {
-            id: this.item.relative_ids.join(',')
-          }
-        }).then(r => {
-          this.relativeRequests = r.data.data
-          this.relativeRequestsLoading = false
-        })
-      }
-    }
   }
 }
 </script>

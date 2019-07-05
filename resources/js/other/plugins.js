@@ -41,6 +41,16 @@ export const GlobalPlugin = {
       return this.$store.state.user.entity_type === USER_TYPES.admin  
     }
 
+    const pusher = new Pusher(process.env.MIX_PUSHER_APP_KEY, {
+      cluster: 'eu'
+    })
+
+    Vue.prototype.pusher = pusher.subscribe('app')
+
+    Vue.prototype.pusher.on = (event, callback) => {
+      Vue.prototype.pusher.bind("App\\Events\\" + event, callback)
+    }
+
     // Vue.prototype.toggleEnum = function(obj, field, statuses) {
     //   let status = statuses.indexOf(obj[field])
     //   console.log('from', statuses[status], status)

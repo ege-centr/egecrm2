@@ -19,8 +19,8 @@ class CountersController extends Controller
         $counters = [];
         foreach([
             ClientRequest::class,
-            Group::class,
-            Client::class,
+            // Group::class,
+            // Client::class,
             Lesson::class,
         ] as $class) {
             $table = (new $class)->getTable();
