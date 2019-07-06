@@ -87,6 +87,7 @@ class SearchController extends Controller
                     if (in_array($i->id, $relativeIds)) {
                         $i->isGrouped = true;
                     }
+                    return $i;
                 });
             }
             $filteredItems[] = $item->id;
