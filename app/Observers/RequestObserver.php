@@ -12,11 +12,4 @@ class RequestObserver
             event(new CountersUpdated);
         }
     }
-
-    public function creating($model)
-    {
-        if (User::loggedIn()) {
-            $model->created_email_id = User::emailId();
-        }
-    }
 }
