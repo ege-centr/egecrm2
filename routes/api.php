@@ -9,7 +9,9 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
 
     Route::apiResource('requests', 'RequestsController');
 
-    Route::post('mango', 'MangoController@index');
+    Route::prefix('mango')->group(function () {
+        Route::post('events/call', 'MangoController@call');
+    });
 
     Route::get('sync-staging', function () {
         $process = new Process('sh /home/egecrm2-staging/sync.sh');
