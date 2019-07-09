@@ -62,9 +62,10 @@
               <div class='item-label'>Заявки</div>
               <div>
                 <div v-for='id in item.relative_ids' :key='id'>
-                  <router-link :to="{ name: 'RequestShow', params: { id }}">
+                  {{ id }}
+                  <!-- <router-link :to="{ name: 'RequestShow', params: { id }}">
                     {{ id }}
-                  </router-link>
+                  </router-link> -->
                 </div>
               </div>
             </div>

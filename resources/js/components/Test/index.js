@@ -6,11 +6,12 @@ export const SETTINGS_KEY = 'test-intro-text'
 
 export const PROBLEM_DEFAULTS = {
   text: '',
-  answers: [{text: ''}]
+  answers: [{text: ''}],
 }
 
 export const MODEL_DEFAULTS = {
-  problems: [PROBLEM_DEFAULTS]
+  problems: [PROBLEM_DEFAULTS],
+  minutes: 30,
 }
 
 export const ANSWER_DEFAULTS = {}

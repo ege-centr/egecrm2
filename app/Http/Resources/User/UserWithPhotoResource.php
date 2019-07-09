@@ -13,7 +13,8 @@ class UserWithPhotoResource extends JsonResource
     public function toArray($request)
     {
         return array_merge(parent::toArray($request), [
-            'photo' => new PhotoResource($this->photo)
+            'photo' => new PhotoResource($this->photo),
+            'email_id' => optional($this->email)->id,
         ]);
     }
 }

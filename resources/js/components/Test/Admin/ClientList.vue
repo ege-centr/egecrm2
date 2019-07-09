@@ -31,25 +31,37 @@
           <td width='200'>
             {{ item.problems_count  }} вопросов
           </td>
+          <td width='200'>
+            <span v-if='getClientTest(item) !== undefined && getClientTest(item).started_at !== null'>
+              {{ getClientTest(item).started_at | date-time }}
+            </span>
+          </td>
           <td width='300'>
+            <span v-if='getClientTest(item) !== undefined'>
               <a 
-                v-if='getClientTest(item) !== undefined && getClientTest(item).results !== null'
+                v-if='getClientTest(item).is_finished'
                 @click='testPageOptions = {clientId: client.id, testId: item.id}'
               >
                 результат: <b>{{ getClientTest(item).results.score }}</b> из {{ getClientTest(item).results.max_score }}
               </a>
+              <span v-else>в процессе</span>
+            </span>
           </td>
           <td class='pa-0' width='100'>
             <v-btn small color='primary' class='btn-td' flat
               @click='addTest(item)' 
               :loading='adding_test_id === item.id' 
               v-if='getClientTest(item) === undefined'>добавить</v-btn>
-            <div v-else class='full-height'>
+            <div v-else>
               <span v-if='getClientTest(item) && getClientTest(item).is_in_progress' >
                 <v-progress-circular v-if='reloading_test_id === item.id' :size="20" color='primary' indeterminate></v-progress-circular>
-                <span v-else class='grey--text flex-items align-center justify-end'>
+                <span v-else class='grey--text flex-items align-center justify-end pr-3'>
                   <v-icon class='mr-1'>access_time</v-icon>
-                  <TestCountDown style='width: 30px' :from='getClientTest(item).started_at' @end='reloadClientTest(item)' />
+                  <TestCountDown
+                    :minutes='item.minutes'
+                    :from='getClientTest(item).started_at' 
+                    @end='reloadClientTest(item)' 
+                  />
                 </span>
               </span>
               <v-btn v-else flat
@@ -63,7 +75,7 @@
       <NoData v-else square :class='config.elevationClass' />
     </div>
 
-    <ResultsDialog :item='testPageOptions' />
+    <ResultsDialog :item='testPageOptions' :show-all-answers='true' />
   </div>
 </template>
 

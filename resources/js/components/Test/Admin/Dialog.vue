@@ -31,6 +31,15 @@
                   <div class='vertical-inputs__input'>
                     <DataSelect v-model='item.grade_id' type='grades' />
                   </div>
+                  <div class='vertical-inputs__input'>
+                    <v-text-field 
+                      :error-messages="errorMessages.minutes"
+                      :hide-details="errorMessages.minutes === undefined"
+                      v-model='item.minutes' 
+                      v-mask="'###'"
+                      label='Минут на выполнение' 
+                    />
+                  </div>
                 </div>
               </v-flex>
               
@@ -67,8 +76,8 @@
                 </v-stepper>
               </v-flex>
 
-              <v-flex md12 v-if='step > 0 && show_answers' class='mt-5'>
-                <v-stepper v-model="answer_step" non-linear>
+              <v-flex md12 v-if='step > 0 && showAnswers' class='mt-5'>
+                <v-stepper v-model="answerStep" non-linear>
                   <v-stepper-header>
                     <div class='headline mb-1'>
                       Ответы
@@ -90,7 +99,7 @@
                           <div
                             class='pointer'
                             @click='removeAnswer'
-                            v-show='!(answer_step === 1 && currentProblem.answers.length <= 1)'>
+                            v-show='!(answerStep === 1 && currentProblem.answers.length <= 1)'>
                             <v-icon color='red'>remove_circle_outline</v-icon>
                           </div>
                         </div>
@@ -128,19 +137,20 @@
 
 import { DataSelect, TextEditor } from '@/components/UI'
 import { MODEL_DEFAULTS, PROBLEM_DEFAULTS, ANSWER_DEFAULTS, API_URL } from '@/components/Test'
+import { DialogMixin } from '@/mixins'
 
 export default {
   components: { DataSelect, TextEditor },
+
+  mixins: [ DialogMixin ],
   
   data() {
     return {
-      dialog: false,
-      loading: false,
-      saving: false,
-      item: MODEL_DEFAULTS,
+      API_URL,
+      MODEL_DEFAULTS,
       step: 1,
-      answer_step: 1,
-      show_answers: true,
+      answerStep: 1,
+      showAnswers: true,
     }
   },
 
@@ -153,38 +163,27 @@ export default {
       this.relodAnswers()
     },
 
-    answer_step(newVal, oldVal) {
+    answerStep(newVal, oldVal) {
       if (newVal === 999) {
-        this.answer_step = oldVal
+        this.answerStep = oldVal
         this.addAnswer(this.currentProblem)
       }
     },
   },
 
   methods: {
-    open(id = null) {
-      this.dialog = true
+    beforeOpen() {
       this.step = null
-      if (id !== null) {
-        this.edit_mode = true
-        this.loadData(id)
-      } else {
-        this.edit_mode = false
-        this.item = MODEL_DEFAULTS
+    },
+
+    afterOpen(itemId) {
+      if (itemId === null) {
         this.step = 1
-        this.loading = false
       }
     },
 
-    loadData(id) {
-      this.loading = true
-      axios.get(apiUrl(API_URL, id)).then(r => {
-        this.item = r.data
-        if (this.item.problems.length) {
-          this.step = 1
-        }
-        this.loading = false
-      })
+    afterLoad() {
+      this.step = 1
     },
 
     addProblem() {
@@ -194,23 +193,7 @@ export default {
 
     addAnswer(problem) {
       problem.answers.push(clone(ANSWER_DEFAULTS))
-      Vue.nextTick(() => this.answer_step = this.currentProblem.answers.length)
-    },
-
-    async storeOrUpdate() {
-      this.saving = true
-      if (this.item.id) {
-        await axios.put(apiUrl(`${API_URL}/${this.item.id}`), this.item).then(r => {
-          // this.item = r.data
-        })
-      } else {
-        await axios.post(apiUrl(API_URL), this.item).then(r => {
-          // this.item = r.data
-        })
-      }
-      this.$emit('updated')
-      this.dialog = false
-      setTimeout(() => this.saving = false, 300)
+      Vue.nextTick(() => this.answerStep = this.currentProblem.answers.length)
     },
 
     removeProblem() {
@@ -220,15 +203,15 @@ export default {
     },
 
     removeAnswer() {
-      const removeIndex = this.answer_step - 1
-      this.answer_step = 1
+      const removeIndex = this.answerStep - 1
+      this.answerStep = 1
       this.currentProblem.answers.splice(removeIndex, 1)
       this.relodAnswers()
     },
 
     relodAnswers() {
-      this.show_answers = false
-      Vue.nextTick(() => this.show_answers = true)
+      this.showAnswers = false
+      Vue.nextTick(() => this.showAnswers = true)
     }
   },
 

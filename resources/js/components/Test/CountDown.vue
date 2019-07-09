@@ -14,8 +14,7 @@ export default {
     },
     minutes: {
       type: Number,
-      required: false,
-      default: 30,
+      required: true,
     }
   },
 

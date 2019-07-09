@@ -7,7 +7,7 @@ use App\Models\Client\{Client, ClientTest};
 
 class Test extends Model
 {
-    protected $fillable = ['title', 'subject_id', 'grade_id'];
+    protected $fillable = ['title', 'subject_id', 'grade_id', 'minutes'];
 
     public function problems()
     {

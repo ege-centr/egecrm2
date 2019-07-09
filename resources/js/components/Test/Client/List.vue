@@ -18,15 +18,20 @@
           </span>
         </td>
         <td>
+          {{ item.started_at | date-time }}
+        </td>
+        <td>
           {{ item.test.problems_count  }} вопросов
         </td>
         <td class='text-md-right'>
-          <router-link v-if='item.results === null' :to="{ name: 'TestClientStart', params: { id: item.test.id} }">
-            <v-btn small color='primary'>начать</v-btn>
-          </router-link>
-          <a @click='testPageOptions = {clientId: clientId, testId: item.test.id}' v-else>
+          <a v-if='item.is_finished' @click='testPageOptions = {clientId: clientId, testId: item.test.id}'>
             результат: <b>{{ item.results.score }}</b> из {{ item.results.max_score }}
           </a>
+          <router-link v-else :to="{ name: 'TestClientStart', params: { id: item.test.id} }">
+            <v-btn small color='primary'>
+              {{ item.is_in_progress ? 'продолжить' : 'начать' }}
+            </v-btn>
+          </router-link>
         </td>
       </tr>
     </DataTable>

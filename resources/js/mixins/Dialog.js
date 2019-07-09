@@ -43,16 +43,16 @@ export default {
   },
   
   methods: {
-    open(item_id = null, defaults = {}, options = {}) {
+    open(itemId = null, defaults = {}, options = {}) {
       this.options = options
       if (_.isFunction(this.beforeOpen)) {
-        this.beforeOpen(item_id, defaults, options)
+        this.beforeOpen(itemId, defaults, options)
       }
       this.item = null
       this.dialog = true
-      if (item_id !== null) {
+      if (itemId !== null) {
         this.edit_mode = true
-        this.loadData(item_id)
+        this.loadData(itemId)
       } else {
         this.edit_mode = false
         this.item = {...this.MODEL_DEFAULTS, ...defaults }
@@ -62,13 +62,13 @@ export default {
         }
       }
       if (_.isFunction(this.afterOpen)) {
-        this.afterOpen(item_id, defaults, options)
+        this.afterOpen(itemId, defaults, options)
       }
     },
 
-    async loadData(item_id) {
+    async loadData(itemId) {
       this.loading = true
-      await axios.get(apiUrl(this.API_URL, item_id)).then(r => {
+      await axios.get(apiUrl(this.API_URL, itemId)).then(r => {
         this.item = r.data
         this.loading = false
         if (_.isFunction(this.afterLoad)) {

@@ -31,12 +31,6 @@
                   <v-flex md12>
                     <div class='vertical-inputs'>
                       <div class='vertical-inputs__input'>
-                        <AvatarLoader 
-                          :entity-type='CLASS_NAME' 
-                          :item='item' 
-                        />
-                      </div>
-                      <div class='vertical-inputs__input'>
                         <v-text-field v-model="item.first_name" label="Имя" 
                           :error-messages="errorMessages.first_name"
                           :hide-details="errorMessages.first_name === undefined"
@@ -161,11 +155,12 @@ import ClientMap from '@/components/Client/Map'
 import PhoneEdit from '@/components/Phone/Edit'
 import { MODEL_DEFAULTS, CLASS_NAME, API_URL } from '@/components/Client'
 import GradeAndYear from '@/components/GradeAndYear'
-import AvatarLoader from '@/components/AvatarLoader'
 import DatePicker from '@/components/UI/DatePicker'
 import { DialogMixin } from '@/mixins'
 
 export default {
+  components: { PhoneEdit, GradeAndYear, DatePicker },
+
   mixins: [ DialogMixin ],
 
   data() {
@@ -189,7 +184,5 @@ export default {
       return representativeErrorMessages
     }
   },
-
-  components: {  AvatarLoader, PhoneEdit, GradeAndYear, DatePicker },
 }
 </script>

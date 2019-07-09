@@ -8,7 +8,7 @@ use App\Models\Test\Test;
 class ClientTest extends Model
 {
     public $timestamps = false;
-    protected $fillable = ['client_id', 'test_id'];
+    protected $fillable = ['client_id', 'test_id', 'started_at', 'is_finished_manually'];
     protected $appends = ['results'];
 
     public function test()
@@ -29,7 +29,8 @@ class ClientTest extends Model
      */
     public function getIsFinishedAttribute()
     {
-        return $this->started_at !== null && time() - strtotime($this->started_at) >= (60 * 30);
+        return $this->is_finished_manually ||
+            ($this->started_at !== null && time() - strtotime($this->started_at) >= (60 * $this->test->minutes));
     }
 
     /**

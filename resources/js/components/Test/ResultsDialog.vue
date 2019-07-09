@@ -3,13 +3,14 @@
     <v-dialog :value="item !== null" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card>
         <v-toolbar dark color="primary">
+          <v-toolbar-title>Результаты теста</v-toolbar-title>
+          <v-spacer></v-spacer>
           <v-btn icon dark @click.native="item = null">
             <v-icon>close</v-icon>
           </v-btn>
-          <v-toolbar-title>Результаты теста</v-toolbar-title>
         </v-toolbar>
         <v-card-text class='test-results-dialog'>
-          <TestClientStartPage v-if='item !== null' :options='item' :key='JSON.stringify(item)' />
+          <TestClientStartPage v-if='item !== null' :options='item' :show-all-answers='showAllAnswers' :key='JSON.stringify(item)' />
         </v-card-text>
       </v-card>
     </v-dialog>
@@ -26,6 +27,11 @@ export default {
       default() {
         return null
       }
+    },
+
+    showAllAnswers: {
+      type: Boolean,
+      default: false,
     }
   },
 

@@ -44,9 +44,11 @@ class ClientTestsController extends Controller
         $model = ClientTest::where([
             ['client_id', User::id()],
             ['test_id', $id]
-        ])->firstOrFail();
-        $model->started_at = $request->started_at;
-        $model->save();
+        ])
+        ->firstOrFail();
+
+        $model->update($request->all());
+
         return $model;
     }
 

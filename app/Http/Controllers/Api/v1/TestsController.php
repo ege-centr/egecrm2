@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Test\{Test, TestProblem};
 use App\Http\Resources\Test\{Collection, Resource};
+use App\Http\Requests\Test\StoreOrUpdateRequest;
 
 class TestsController extends Controller
 {
@@ -28,7 +29,7 @@ class TestsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreOrUpdateRequest $request)
     {
         $new_model = Test::create($request->input());
         $this->handleTestProblems($new_model, $request->problems);
@@ -54,7 +55,7 @@ class TestsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreOrUpdateRequest $request, $id)
     {
         $model = Test::find($id);
         $model->update($request->all());

@@ -18,7 +18,11 @@
         <v-layout wrap v-if='client !== null'>
           <v-flex style='width: 400px'>
             <div class='flex-items'>
-              <Avatar :size='100' class='mr-4' :photo='client.photo' />
+              <AvatarLoader 
+                class='mr-4'
+                :entity-type='CLASS_NAME' 
+                :item='client' 
+              />
               <div>
                 <div class='grey--text text--darken-2 font-weight-medium caption'>Ученик</div>
                 <div class='font-weight-bold'>
@@ -323,6 +327,7 @@
 <script>
 
 import Comments from '@/components/Comments'
+import AvatarLoader from '@/components/AvatarLoader'
 import { 
   API_URL as PAYMENT_API_URL, 
   SORT as PAYMENT_SORT,
@@ -398,7 +403,7 @@ export default {
     RequestDialog, RequestItem, Comments, ContractList, GroupList, 
     PaymentList, ClientDialog, PhoneList, BranchList, EmailShow, TestAdminClientList,
     DisplayData, PaymentDialog, ClientSchedule, Balance, ReportList, LogList,
-    ReviewAdminList, PaymentAdditionalList, PaymentAdditionalDialog,
+    ReviewAdminList, PaymentAdditionalList, PaymentAdditionalDialog, AvatarLoader
   },
 
   watch: {

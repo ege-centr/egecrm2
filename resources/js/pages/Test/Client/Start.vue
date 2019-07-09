@@ -3,53 +3,53 @@
     <div v-if='started'>
       <Loader v-if='finishing' />
       <div v-else>
-        <!-- <div v-if='client_test.results === null'> -->
-        <div>
-          <div class='mb-4'>
-            <span class='headline' v-if='finished'>
-              Результаты теста: {{ client_test.results.score }} из {{ client_test.results.max_score }}
-            </span>
-            <h2 v-else class='text-md-center'>
-              <v-icon>access_time</v-icon>
-              <TestCountDown :from='client_test.started_at' @end='end()' />
-            </h2>
-          </div>
-          <v-stepper v-model="step" non-linear class='test-process' :class="{'box-shadow-none': finished}">
-            <v-stepper-header>
-              <template v-for='(problem, index) in test.problems'>
-                <v-stepper-step editable :step="(index + 1)"></v-stepper-step>
-                <v-divider v-if="index + 1 < test.problems.length"></v-divider>
-              </template>
-            </v-stepper-header>
-            <v-stepper-items>
-              <v-stepper-content v-for='(problem, index) in test.problems' :step="(index + 1)" :key='index'>
-                <div class='headline mb-3'>Вопрос {{ index + 1 }}</div>
-                <div v-html='problem.text' class='client-problem'></div>
-
-                <div class='headline mb-3 mt-5'>Варианты ответа</div>
-                <div class='font-weight-medium caption'>максимальный балл: {{ getProblemMaxScore(problem) }}</div>
-                <v-radio-group v-model='answers[problem.id]' hide-details>
-                  <div class='flex-items mb-3' v-for='(answer, index) in problem.answers' :key='index'>
-                    <v-radio class='ma-0' hide-details color="primary" :value='answer.id' :disabled='finished'></v-radio>
-                    <div v-html='answer.text' class='client-answer'></div>
-                    <div class='ml-3' v-if='finished'
-                      :class="{
-                        'green--text': answer.score === getProblemMaxScore(problem),
-                        'orange--text': answer.score !== getProblemMaxScore(problem) && answer.score > 0,
-                        'red--text': answer.score === 0,
-                      }">{{ answer.score }} баллов</div>
-                  </div>
-                </v-radio-group>
-                <div class='text-md-center' v-if='!finished'>
-                  <v-btn color='primary' :disabled="!answers.hasOwnProperty(problem.id)" :loading='submittingAnswer'
-                    @click='submitAnswer(problem.id, index === test.problems.length - 1)'>
-                    {{ index === test.problems.length - 1 ? 'завершить тест' : 'ответить' }}
-                  </v-btn>
-                </div>
-              </v-stepper-content>
-            </v-stepper-items>
-          </v-stepper>
+        <div class='mb-4'>
+          <span class='headline' v-if='client_test.is_finished'>
+            Результаты теста: {{ client_test.results.score }} из {{ client_test.results.max_score }}
+          </span>
+          <h2 v-else class='text-md-center'>
+            <v-icon>access_time</v-icon>
+            <TestCountDown 
+              :minutes='test.minutes'
+              :from='client_test.started_at' 
+              @end='end()' />
+          </h2>
         </div>
+        <v-stepper v-model="step" non-linear class='test-process' :class="{'box-shadow-none': client_test.is_finished}">
+          <v-stepper-header>
+            <template v-for='(problem, index) in test.problems'>
+              <v-stepper-step editable :step="(index + 1)"></v-stepper-step>
+              <v-divider v-if="index + 1 < test.problems.length"></v-divider>
+            </template>
+          </v-stepper-header>
+          <v-stepper-items>
+            <v-stepper-content v-for='(problem, index) in test.problems' :step="(index + 1)" :key='index'>
+              <div class='headline mb-3'>Вопрос {{ index + 1 }}</div>
+              <div v-html='problem.text' class='client-problem'></div>
+
+              <div class='headline mb-3 mt-5'>Варианты ответа</div>
+              <div class='font-weight-medium caption'>максимальный балл: {{ getProblemMaxScore(problem) }}</div>
+              <v-radio-group v-model='answers[problem.id]' hide-details>
+                <div class='flex-items mb-3' v-for='(answer, index) in problem.answers' :key='index'>
+                  <v-radio class='ma-0' hide-details color="primary" :value='answer.id' :disabled='client_test.is_finished'></v-radio>
+                  <div v-html='answer.text' class='client-answer'></div>
+                  <div class='ml-3' v-if='client_test.is_finished && (showAllAnswers || answers[problem.id] === answer.id)'
+                    :class="{
+                      'green--text': answer.score === getProblemMaxScore(problem),
+                      'orange--text': answer.score !== getProblemMaxScore(problem) && answer.score > 0,
+                      'red--text': answer.score === 0,
+                    }">{{ answer.score }} баллов</div>
+                </div>
+              </v-radio-group>
+              <div class='text-md-center' v-if='!client_test.is_finished'>
+                <v-btn color='primary' :disabled="!answers.hasOwnProperty(problem.id)" :loading='submittingAnswer'
+                  @click='submitAnswer(problem.id, index === test.problems.length - 1)'>
+                  {{ index === test.problems.length - 1 ? 'завершить тест' : 'ответить' }}
+                </v-btn>
+              </div>
+            </v-stepper-content>
+          </v-stepper-items>
+        </v-stepper>
       </div>
     </div>
     <div v-else>
@@ -83,6 +83,11 @@ export default {
       default() {
         return {}
       }
+    },
+
+    showAllAnswers: {
+      type: Boolean,
+      default: false,
     }
   },
 
@@ -131,9 +136,9 @@ export default {
       this.starting = true
       await this.loadTest()
       await axios.put(apiUrl(CLIENT_TESTS_API_URL, this.testId), {
-        // started_at: moment().format('YYYY-MM-DD HH:mm:ss')
+        started_at: moment().format('YYYY-MM-DD HH:mm:ss')
         // debug
-        started_at: moment().subtract(29, 'minutes').subtract(40, 'seconds').format('YYYY-MM-DD HH:mm:ss')
+        // started_at: moment().subtract(29, 'minutes').subtract(40, 'seconds').format('YYYY-MM-DD HH:mm:ss')
       })
         .then(r => this.client_test = r.data)
         .catch(e => this.$router.push({name: 'TestIndex'}))
@@ -159,7 +164,7 @@ export default {
 
     start() {
       this.step = Cookies.get(stepCookieKey(this.testId)) || 0
-      if (this.finished) {
+      if (this.client_test.is_finished) {
         this.step = 0
       }
       Vue.nextTick(() => this.started = true)
@@ -167,7 +172,10 @@ export default {
 
     end() {
       this.finishing = true
-      axios.put(apiUrl(CLIENT_TESTS_API_URL, this.testId), {started_at: '0000-00-00 00:00:00'}).then(r => {
+      axios.put(apiUrl(CLIENT_TESTS_API_URL, this.testId), {
+        is_finished_manually: true
+      })
+      .then(r => {
         this.client_test = r.data
         this.finishing = false
         this.step = 0
@@ -203,17 +211,13 @@ export default {
   },
 
   computed: {
-    finished() {
-      return this.client_test.results !== null
-    },
-
     clientId() {
       return this.options.clientId || this.$store.state.user.id
     },
 
     testId() {
       return this.options.testId || this.$route.params.id
-    }
+    },
   }
 }
 </script>
