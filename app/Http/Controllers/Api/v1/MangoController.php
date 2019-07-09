@@ -13,8 +13,8 @@ class MangoController extends Controller
 {
     public function call(Request $request)
     {
-        // $data = json_decode($request->json);
-        $data = jsonRedecode($request->data);
+        $data = json_decode($request->json);
+        // $data = jsonRedecode($request->data);
         logger(json_encode($data));
         // logger(json_encode($request->input('data')));
 
