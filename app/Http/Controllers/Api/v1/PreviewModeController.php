@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Http\Resources\User\UserWithPhotoResource;
 
 class PreviewModeController extends Controller
 {
@@ -23,6 +24,6 @@ class PreviewModeController extends Controller
     {
         $_SESSION['user'] = $_SESSION['real_user'];
         unset($_SESSION['real_user']);
-        return User::fromSession();
+        return new UserWithPhotoResource(User::fromSession());
     }
 }

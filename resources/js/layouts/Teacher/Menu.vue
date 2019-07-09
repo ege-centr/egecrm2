@@ -1,5 +1,5 @@
 <template>
-  <v-list dense>
+  <v-list class='main-menu' dense>
     <MenuItem v-for='m in menu' :key='m.route' :item='m' />
 
     <div class='menu-separator'></div>

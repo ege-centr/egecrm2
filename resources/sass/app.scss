@@ -402,6 +402,15 @@ nav {
   background: rgba(255, 255, 255, 0.08);
 }
 
+// эта штука перезатирает стандартный синий стиль активных ссылок
+.main-menu {
+  & .active {
+    & a {
+      color: white !important;
+    }
+  }
+}
+
 .v-datatable--small {
   & tr {
     & td {

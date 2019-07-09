@@ -32,7 +32,7 @@ class Teacher extends Model
 
     public function getDefaultNameAttribute()
     {
-        return $this->names->abbreviation;
+        return $this->names->full;
     }
 
     public function getGroupsAttribute()

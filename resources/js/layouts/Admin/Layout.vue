@@ -15,7 +15,7 @@
     </v-navigation-drawer>
 
     <ToggleDrawer show v-if='!$store.state.drawer' />
-      
+    <Mango v-if='$store.state.user.rights.includes(41)' />
   </div>
 </template>
 
@@ -24,9 +24,10 @@
 import Menu from './Menu'
 import SearchBar from '@/components/Search/Bar'
 import ToggleDrawer from '@/components/UI/ToggleDrawer'
+import Mango from '@/components/Mango/Mango'
 
 export default {
-  components: { Menu, SearchBar, ToggleDrawer },
+  components: { Menu, SearchBar, ToggleDrawer, Mango },
 
   created() {
     this.updateCounters()

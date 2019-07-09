@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Events;
+namespace App\Events\Mango;
 
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;

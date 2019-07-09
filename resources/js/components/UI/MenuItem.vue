@@ -1,5 +1,5 @@
 <template>
-  <v-list-tile @click="$router.push({name: item.route})" :class="{'active': isActive()}">
+  <v-list-tile :to="{name: item.route}" :class="{'active': isActive()}">
       <v-list-tile-action>
           <v-icon>{{ item.icon }}</v-icon>
       </v-list-tile-action>

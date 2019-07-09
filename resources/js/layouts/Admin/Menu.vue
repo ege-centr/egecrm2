@@ -1,5 +1,5 @@
 <template>
-  <v-list dense>
+  <v-list class='main-menu' dense>
     
     <ToggleDrawer />
     <SearchBar />

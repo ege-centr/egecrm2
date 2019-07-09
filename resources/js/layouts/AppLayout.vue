@@ -43,7 +43,9 @@
     >
       <span v-html='$store.state.snackBar.text'></span>
     </v-snackbar>
+
     <ListenToLogout />
+
   </v-app>
 </template>
 
@@ -68,6 +70,9 @@
       }
     },
 
-    components: { AdminLayout, TeacherLayout, ClientLayout, SearchResults, ListenToLogout, ContentOverlay },
+    components: { 
+      AdminLayout, TeacherLayout, ClientLayout, SearchResults, 
+      ListenToLogout, ContentOverlay
+    },
   }
 </script>
