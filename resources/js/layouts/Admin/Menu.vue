@@ -185,18 +185,7 @@ export default {
   methods: {
     syncStaging() {
       this.syncingStaging = true
-      axios.get(apiUrl('sync-staging')).then(r => {
-        this.$store.commit('message', {
-          text: 'Синхронизация завершена',
-          color: 'green'
-        })
-      })
-      .catch(e => {
-        this.$store.commit('message', {
-          text: 'Ошибка',
-        })
-      })
-      .then(() => this.syncingStaging = false)
+      axios.get(apiUrl('sync-staging'))
     }
   },
 
