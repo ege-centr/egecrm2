@@ -28,21 +28,21 @@
         </td>
         <td>
           <span v-if='item.review !== null'>
-            <v-tooltip bottom v-if='item.client_rating !== null'>
+            <v-tooltip bottom v-if='item.client_rating !== -2'>
               <ScoreCircle slot='activator' :score='item.client_rating' />
               <span>
                 <h4>оценка ученика</h4>
                 {{ getComment(item, 'client').text }}
               </span>
             </v-tooltip>
-            <v-tooltip bottom v-if='item.admin_rating !== null'>
+            <v-tooltip bottom v-if='item.admin_rating !== -2'>
               <ScoreCircle slot='activator' :score='item.admin_rating' />
               <span>
                 <h4>предварительная оценка</h4>
                 {{ getComment(item, 'admin').text }}
               </span>
             </v-tooltip>
-            <v-tooltip bottom v-if='item.final_rating !== null'>
+            <v-tooltip bottom v-if='item.final_rating !== -2'>
               <ScoreCircle slot='activator' :score='item.final_rating' />
               <span>
                 <h4>финальная оценка</h4>
