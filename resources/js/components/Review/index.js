@@ -39,7 +39,7 @@ export const FILTERS = [
   ]},
   {label: 'Оценка админа предварительная', field: 'admin_rating', type: 'multiple', options: [
     {id: -2, title: 'отсутствует'},
-    {id: -1, title: '0'},
+    {id: -1, title: 'не собирать'},
     {id: 1, title: '1'},
     {id: 2, title: '2'},
     {id: 3, title: '3'},
@@ -48,7 +48,7 @@ export const FILTERS = [
   ]},
   {label: 'Оценка админа финал', field: 'final_rating', type: 'multiple', options: [
     {id: -2, title: 'отсутствует'},
-    {id: -1, title: '0'},
+    {id: -1, title: 'не собирать'},
     {id: 1, title: '1'},
     {id: 2, title: '2'},
     {id: 3, title: '3'},

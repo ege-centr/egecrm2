@@ -6,25 +6,25 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class StoreOrUpdateRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     *
-     * @return bool
-     */
     public function authorize()
     {
         return true;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array
-     */
     public function rules()
     {
         return [
             'minutes' => ['required', 'numeric'],
         ];
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $test = $this->route('test');
+            if ($test !== null && $test->clientTests()->exists()) {
+                $validator->errors()->add('alert', 'Нельзя менять тест, который уже присвоен ученикам');
+            }
+        });
     }
 }

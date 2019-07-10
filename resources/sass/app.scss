@@ -404,10 +404,8 @@ nav {
 
 // эта штука перезатирает стандартный синий стиль активных ссылок
 .main-menu {
-  & .active {
-    & a {
-      color: white !important;
-    }
+  & .primary--text {
+    color: white !important;
   }
 }
 

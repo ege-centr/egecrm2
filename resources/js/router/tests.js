@@ -1,4 +1,5 @@
 import TestIndex from '@/pages/Test/Index'
+import TestAdminClients from '@/pages/Test/Admin/Clients'
 import TestClientStart from '@/pages/Test/Client/Start'
 import { ROLES } from '@/config'
 // import TestShow from '@/pages/Test/Show'
@@ -11,6 +12,14 @@ export default [
     component: TestIndex,
     meta: {
       roles: [ROLES.ADMIN, ROLES.CLIENT]
+    }
+  },
+  {
+    path: '/tests/clients',
+    name: 'TestAdminClients',
+    component: TestAdminClients,
+    meta: {
+      roles: [ROLES.ADMIN]
     }
   },
   {

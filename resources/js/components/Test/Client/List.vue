@@ -67,8 +67,13 @@ export default {
   methods: {
     loadData() {
       this.loading = true
-      axios.get(apiUrl(CLIENT_TESTS_API_URL) + queryString({client_id: this.clientId, includeTest: true})).then(r => {
-        this.items = r.data
+      axios.get(apiUrl(CLIENT_TESTS_API_URL), {
+        params: {
+          client_id: this.clientId,
+          includeTest: true
+        }
+      }).then(r => {
+        this.items = r.data.data
         this.loading = false
       })
     },

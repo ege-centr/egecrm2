@@ -16,10 +16,11 @@ class ClientTest extends JsonResource
             'is_finished' => $this->is_finished,
             'is_in_progress' => $this->is_in_progress,
             'started_at' => $this->started_at,
+            'client' => new \PersonResource($this->client),
         ];
 
         if (isset($request->includeTest)) {
-            $fields['test'] = new Collection($this->test);
+            $fields['test'] = new TestCollection($this->test);
         }
 
         return $fields;

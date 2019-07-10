@@ -6,10 +6,10 @@
           <v-toolbar-title>{{ true ? 'Редактирование' : 'Добавление' }} теста</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-toolbar-items>
-            <v-btn dark icon v-if='edit_mode' @click.native="destroy" :loading='destroying' class='mr-5' v-show='item.has_clients !== true'>
+            <v-btn dark icon v-if='edit_mode' @click.native="destroy" :loading='destroying' class='mr-5'>
               <v-icon>delete</v-icon>
             </v-btn>
-            <v-btn dark icon @click.native="storeOrUpdate" :loading='saving' v-show='item.has_clients !== true'>
+            <v-btn dark icon @click.native="storeOrUpdate" :loading='saving'>
               <v-icon>save_alt</v-icon>
             </v-btn>
             <v-btn icon dark @click.native="dialog = false">

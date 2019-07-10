@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Api\v1;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Test\{Test, TestProblem};
-use App\Http\Resources\Test\{Collection, Resource};
-use App\Http\Requests\Test\StoreOrUpdateRequest;
+use App\Http\Resources\Test\{TestCollection, TestResource};
+use App\Http\Requests\Test\{StoreOrUpdateRequest, DestroyRequest};
 
 class TestsController extends Controller
 {
@@ -20,7 +20,7 @@ class TestsController extends Controller
             });
         }
         // TODO: ID теста затирается из-за join client_tests
-        return Collection::collection(Test::whereIn('id', $query->pluck('tests.id'))->get());
+        return TestCollection::collection(Test::whereIn('id', $query->pluck('tests.id'))->get());
     }
 
     /**
@@ -45,7 +45,7 @@ class TestsController extends Controller
      */
     public function show($id)
     {
-        return new Resource(Test::find($id));
+        return new TestResource(Test::find($id));
     }
 
     /**
@@ -55,11 +55,11 @@ class TestsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StoreOrUpdateRequest $request, $id)
+    public function update(StoreOrUpdateRequest $request, Test $test)
     {
-        $model = Test::find($id);
-        $model->update($request->all());
-        $this->handleTestProblems($model, $request->problems);
+        $test->update($request->all());
+        $this->handleTestProblems($test, $request->problems);
+        return new TestResource($test);
     }
 
     /**
@@ -68,9 +68,9 @@ class TestsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Test $test, DestroyRequest $request)
     {
-        //
+        $test->delete();
     }
 
     private function handleTestProblems(Test $model, $problems)

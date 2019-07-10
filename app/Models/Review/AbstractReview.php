@@ -45,7 +45,7 @@ class AbstractReview extends Model
         $additional = [];
         foreach(['client', 'admin', 'final'] as $type) {
             $comment = $this->review === null ? null : $this->review->comments->where('type', $type)->first();
-            $additional[$type . '_rating'] = $comment === null ? null : $comment->rating;
+            $additional[$type . '_rating'] = $comment === null ? -2 : $comment->rating;
         }
 
         $additional['reviewer_admin_id'] = Client::whereId($this->client_id)->value('reviewer_admin_id');

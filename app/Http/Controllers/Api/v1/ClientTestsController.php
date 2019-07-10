@@ -12,7 +12,7 @@ class ClientTestsController extends Controller
 {
     public function index(Request $request)
     {
-        $query = ClientTest::query();
+        $query = ClientTest::orderBy('id', 'desc');
 
         if (isset($request->client_id)) {
             $query->where('client_id', $request->client_id);
@@ -30,8 +30,24 @@ class ClientTestsController extends Controller
             $query->with(['test']);
         }
 
-        // return $query->get();
-        return ClientTestResource::collection($query->get());
+        if (isset($request->status)) {
+            // не начинал
+            if ($request->status === 'is_not_started') {
+                $query->whereNull('started_at');
+            }
+
+             // в процессе
+             if ($request->status == 'is_in_progress') {
+                $query->inProgress();
+            }
+
+            // закончил
+            if ($request->status == 'is_finished') {
+                $query->finished();
+            }
+        }
+
+        return ClientTestResource::collection($this->showBy($request, $query));
     }
 
     public function store(Request $request)

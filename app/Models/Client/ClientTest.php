@@ -3,7 +3,10 @@
 namespace App\Models\Client;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Test\Test;
+use App\Models\{
+    Test\Test,
+    Client\Client
+};
 
 class ClientTest extends Model
 {
@@ -14,6 +17,11 @@ class ClientTest extends Model
     public function test()
     {
         return $this->belongsTo(Test::class);
+    }
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
     }
 
     public function answers()
@@ -31,6 +39,22 @@ class ClientTest extends Model
     {
         return $this->is_finished_manually ||
             ($this->started_at !== null && time() - strtotime($this->started_at) >= (60 * $this->test->minutes));
+    }
+
+    public function scopeFinished($query, $negate = false)
+    {
+        return $query->whereRaw(($negate ? 'NOT' : '') . "
+        (
+            is_finished_manually = 1 OR
+            MINUTE(TIMEDIFF(NOW(), started_at)) >= (select minutes from tests where tests.id = client_tests.test_id)
+        )");
+    }
+
+    public function scopeInProgress($query)
+    {
+        return $query
+            ->whereNotNull("started_at")
+            ->finished(true);
     }
 
     /**

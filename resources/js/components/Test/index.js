@@ -14,6 +14,14 @@ export const MODEL_DEFAULTS = {
   minutes: 30,
 }
 
+export const FILTERS = [
+  {label: 'Статус', field: 'status', type: 'select', options: [
+    {id: 'is_not_started', title: 'не начинал'},
+    {id: 'is_in_progress', title: 'в процессе'},
+    {id: 'is_finished', title: 'закончил'},
+  ]},
+]
+
 export const ANSWER_DEFAULTS = {}
 
 export const TestAdminClientList = require('./Admin/ClientList')
