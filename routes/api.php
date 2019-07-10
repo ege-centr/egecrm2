@@ -17,8 +17,7 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
     Route::get('sync-staging', function () {
         Settings::set('is_syncing_staging', 1);
         $process = new Process('nohup sh /home/egecrm2-staging/sync.sh');
-		$process->run();
-		return $process->getOutput();
+		$process->start();
     });
 
     Route::prefix('reset-password')->group(function () {
