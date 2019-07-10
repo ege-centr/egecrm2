@@ -2,6 +2,8 @@
 
 use Illuminate\Foundation\Inspiring;
 use App\Models\Lesson\Lesson;
+use App\Models\Settings;
+use App\Events\StagingSyncFinished;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,4 +34,12 @@ Artisan::command('calculate-bonus', function () {
         $bar->advance();
     }
     $bar->finish();
+});
+
+/**
+ * Завершить синхронизацию staging
+ */
+Artisan::command('staging-sync:finish', function () {
+    Settings::set('is_syncing_staging', 0);
+    event(new StagingSyncFinished);
 });
