@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Symfony\Component\Process\Process;
+use App\Models\Settings;
 
 Route::namespace('Api\v1')->prefix('v1')->group(function() {
     Route::post('login', 'LoginController@login');
@@ -14,8 +15,8 @@ Route::namespace('Api\v1')->prefix('v1')->group(function() {
     });
 
     Route::get('sync-staging', function () {
-        $process = new Process('sh /home/egecrm2-staging/sync.sh');
-        $process->setTimeout(0);
+        Settings::set('is_syncing_staging', 1);
+        $process = new Process('nohup sh /home/egecrm2-staging/sync.sh');
 		$process->run();
 		return $process->getOutput();
     });

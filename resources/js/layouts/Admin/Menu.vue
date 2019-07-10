@@ -50,6 +50,7 @@ import SearchBar from '@/components/Search/Bar'
 import MenuItem from '@/components/UI/MenuItem'
 import SmsMessageDialog from '@/components/Sms/Message/Dialog'
 import ToggleDrawer from '@/components/UI/ToggleDrawer'
+import Settings from '@/other/settings'
 
 export default {
   components: { SearchBar, MenuItem, SmsMessageDialog, ToggleDrawer },
@@ -172,6 +173,15 @@ export default {
     ],
   }),
 
+  created() {
+    if (this.isStaging) {
+      Settings.get('is_syncing_staging').then(r => {
+        this.syncingStaging = Number(r.data)
+      })
+      this.pusher.on('StagingSyncFinished', () => this.syncingStaging = false)
+    }
+  },
+
   methods: {
     syncStaging() {
       this.syncingStaging = true
@@ -205,7 +215,8 @@ export default {
     },
 
     isStaging() {
-      return window.isStaging()
+      return isStaging()
+      // return true
     }
   }
 }
