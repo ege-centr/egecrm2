@@ -58,7 +58,7 @@
                       <v-icon color='red' style='font-size: 28px'>add_circle</v-icon>
                     </v-stepper-step>
                   </v-stepper-header>
-                  <v-stepper-items>
+                  <v-stepper-items :key='problemsKey'>
                     <v-stepper-content v-for='(problem, index) in item.problems' :step="(index + 1)" :key='index'>
                       <div class='relative'>
                         <TextEditor v-model='problem.text' />
@@ -76,7 +76,7 @@
                 </v-stepper>
               </v-flex>
 
-              <v-flex md12 v-if='step > 0 && showAnswers' class='mt-5'>
+              <v-flex md12 v-if='step > 0' class='mt-5'>
                 <v-stepper v-model="answerStep" non-linear>
                   <v-stepper-header>
                     <div class='headline mb-1'>
@@ -91,7 +91,7 @@
                       <v-icon color='red' style='font-size: 28px'>add_circle</v-icon>
                     </v-stepper-step>
                   </v-stepper-header>
-                  <v-stepper-items>
+                  <v-stepper-items :key='answersKey'>
                     <v-stepper-content v-for='(answer, index) in currentProblem.answers' :step="(index + 1)" :key='index'>
                       <div class='relative'>
                         <TextEditor v-model='answer.text' />
@@ -150,7 +150,8 @@ export default {
       MODEL_DEFAULTS,
       step: 1,
       answerStep: 1,
-      showAnswers: true,
+      problemsKey: 0,
+      answersKey: 0,
     }
   },
 
@@ -160,7 +161,7 @@ export default {
         this.step = oldVal
         this.addProblem()
       }
-      this.relodAnswers()
+      this.answerStep = 1
     },
 
     answerStep(newVal, oldVal) {
@@ -199,20 +200,17 @@ export default {
     removeProblem() {
       const removeIndex = this.step - 1
       this.step = 1
-      this.item.problems.splice(removeIndex, 1)
+      const removedItem = this.item.problems.splice(removeIndex, 1)
+      // нужно для того, чтобы все четко обновлялось
+      this.problemsKey++
     },
 
     removeAnswer() {
       const removeIndex = this.answerStep - 1
       this.answerStep = 1
       this.currentProblem.answers.splice(removeIndex, 1)
-      this.relodAnswers()
+      this.answersKey++
     },
-
-    relodAnswers() {
-      this.showAnswers = false
-      Vue.nextTick(() => this.showAnswers = true)
-    }
   },
 
   computed: {
