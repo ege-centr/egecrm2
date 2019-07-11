@@ -13,7 +13,7 @@ class RequestCollection extends JsonResource
     public function toArray($request)
     {
         return extractFields($this, [
-            'id', 'status', 'created_at', 'subjects', 'grade_id', 'branches', 'comment'
+            'id', 'status', 'created_at', 'subjects', 'grade_id', 'branches', 'comment', 'get_back_at'
         ], [
             'comments' => CommentResource::collection($this->comments),
             'phones' => PhoneResource::collection($this->phones),
