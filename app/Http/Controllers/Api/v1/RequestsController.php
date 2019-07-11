@@ -47,7 +47,12 @@ class RequestsController extends Controller
         $result = jsonRedecode($result);
         $ids = collect($result->data)->pluck('id');
 
-        $items = ClientRequest::whereIn('id', $ids)->with(['responsibleAdmin', 'createdEmail'])->orderBy('id', 'desc')->get();
+        $items = ClientRequest::query()
+            ->with(['responsibleAdmin', 'createdEmail'])
+            ->whereIn('id', $ids)
+            ->orderBy('get_back_at', 'asc')
+            ->orderBy('id', 'desc')
+            ->get();
         $result->data = RequestCollection::collection($items);
         if (is_array($result->facets) && empty($result->facets)) {
             $result->facets = (object) [];
@@ -59,6 +64,7 @@ class RequestsController extends Controller
     {
         $new_model = ClientRequest::create($request->input());
         $new_model->phones()->createMany($request->phones);
+        $new_model->get_back_at = $this->getBackAt($request);
 
         // если заявка падает с сайта
         // и среди на текущий момент "новых" заявок есть телефон только что упавшей заявки,
@@ -102,7 +108,10 @@ class RequestsController extends Controller
     public function update(StoreOrUpdateRequest $request, $id)
     {
         $model = ClientRequest::find($id);
-        $model->update($request->input());
+        $request->merge([
+            'get_back_at' => $this->getBackAt($request)
+        ]);
+        $model->update($request->all());
 
         $model->phones()->delete();
         $model->phones()->createMany($request->phones);
@@ -119,5 +128,13 @@ class RequestsController extends Controller
         });
         $item->delete();
         return new RequestCollection($item);
+    }
+
+    private function getBackAt(Request $request)
+    {
+        if (isset($request->get_back_date) && isset($request->get_back_time)) {
+            return $request->get_back_date . ' ' . $request->get_back_time;
+        }
+        return null;
     }
 }

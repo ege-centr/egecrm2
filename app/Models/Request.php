@@ -14,7 +14,7 @@ class Request extends Model
 
     protected $fillable = [
         'name', 'grade_id', 'comment', 'responsible_admin_id',
-        'subjects', 'google_id', 'status', 'branches',
+        'subjects', 'google_id', 'status', 'branches', 'get_back_at'
     ];
 
     protected $hidden = ['updated_at'];

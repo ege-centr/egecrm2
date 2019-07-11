@@ -19,7 +19,7 @@ class MangoController extends Controller
         // logger(json_encode($request->input('data')));
 
         // Обрабатываем ЕГЭ-Центр
-        if (@$data->to->line_number === '74956468592') {
+        if (in_array(@$data->to->line_number, ['74956468592', '74956629520', '74956468574'])) {
             if ($data->call_state === 'Appeared' && $data->location === 'ivr') {
                 event(new IncomingCall($data));
             }
