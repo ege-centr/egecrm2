@@ -76,7 +76,7 @@
                 </v-stepper>
               </v-flex>
 
-              <v-flex md12 v-if='step > 0' class='mt-5'>
+              <v-flex md12 v-if='step > 0 && showAnswers' class='mt-5'>
                 <v-stepper v-model="answerStep" non-linear>
                   <v-stepper-header>
                     <div class='headline mb-1'>
@@ -111,21 +111,6 @@
                   </v-stepper-items>
                 </v-stepper>
               </v-flex>
-
-              <!-- <v-card class='grey lighten-4 mb-2' v-for='(answer, index) in problem.answers' :key='index' :class='config.elevationClass'>
-                <v-card-text>
-                  <v-layout wrap>
-                    <v-flex md12>
-                      <div class="vertical-inputs">
-                        <div class='vertical-inputs__input'>
-                          <v-text-field v-mask="'###'" hide-details v-model='answer.score' label='Балл'></v-text-field>
-                        </div>
-                      </div>
-                    </v-flex>
-                  </v-layout>
-                  <TextEditor style='height: 400px !important' class='mb-5' v-model='answer.text' />
-                </v-card-text>
-              </v-card> -->
           </v-container>
         </v-card-text>
       </v-card>
@@ -152,6 +137,7 @@ export default {
       answerStep: 1,
       problemsKey: 0,
       answersKey: 0,
+      showAnswers: true,
     }
   },
 
@@ -162,6 +148,7 @@ export default {
         this.addProblem()
       }
       this.answerStep = 1
+      this.relodAnswers()
     },
 
     answerStep(newVal, oldVal) {
@@ -210,7 +197,13 @@ export default {
       this.answerStep = 1
       this.currentProblem.answers.splice(removeIndex, 1)
       this.answersKey++
+      this.relodAnswers()
     },
+
+    relodAnswers() {
+      this.showAnswers = false
+      Vue.nextTick(() => this.showAnswers = true)
+    }
   },
 
   computed: {

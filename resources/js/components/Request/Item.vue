@@ -15,6 +15,9 @@
                     <span class='d-inline-block ml-1 grey--text'>
                       {{ item.created_at | date-time }}
                     </span>
+                    <span class='orange--text  ml-1' v-if='item.get_back_at !== null'>
+                      вернуться {{ item.get_back_at | date-time }}
+                    </span>
                   </div>
                   <div>
                     <div>{{ item.comment }}</div>

@@ -50,7 +50,6 @@ class RequestsController extends Controller
         $items = ClientRequest::query()
             ->with(['responsibleAdmin', 'createdEmail'])
             ->whereIn('id', $ids)
-            ->orderBy('get_back_at', 'asc')
             ->orderBy('id', 'desc')
             ->get();
         $result->data = RequestCollection::collection($items);
