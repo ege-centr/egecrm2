@@ -25,7 +25,6 @@ class ClientResource extends JsonResource
             'tests' => ClientTest::collection($this->tests),
             'email' => $this->email_string,
             'photo' => new PhotoResource($this->photo),
-            'headTeacher' => $this->getHeadTeacher(),
             'createdUser' => new \PersonResource($this->createdUser),
             'is_banned' => $this->isBanned(),
         ]);
