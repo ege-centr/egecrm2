@@ -44,9 +44,6 @@
                         <v-text-field v-model="item.middle_name" label="Отчество" hide-details></v-text-field>
                       </div>
                       <div class='vertical-inputs__input'>
-                        <v-text-field v-model="item.school" label="Школа" hide-details></v-text-field>
-                      </div>
-                      <div class='vertical-inputs__input'>
                         <GradeAndYear :item='item' :error-messages='errorMessages' />
                       </div>
                       <div class='vertical-inputs__input'>

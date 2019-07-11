@@ -10,6 +10,8 @@ class Review extends Model
 {
     use HasAbstract;
 
+    public $timestamps = false;
+
     protected $fillable = [
         'teacher_id', 'client_id', 'subject_id', 'grade_id',
         'signature', 'expressive_title', 'score', 'max_score',

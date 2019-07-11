@@ -15,8 +15,10 @@ class Group extends Model
 {
     use Commentable, Searchable;
 
+    public $timestamps = false;
+
     protected $fillable = [
-        'teacher_id', 'head_teacher_id', 'subject_id', 'grade_id', 'teacher_price',
+        'teacher_id', 'subject_id', 'grade_id', 'teacher_price',
         'year', 'is_archived', 'is_ready_to_start', 'level',
         'latest_start_lesson_id', 'is_contract_signed'
     ];

@@ -53,12 +53,6 @@
             </div>
           </v-flex>
           <v-flex style='width: 400px'>
-            <div>
-              Место обучения в данный момент: {{ client.school || 'не указано' }}
-            </div>
-            <div>
-              Классный руководитель: {{ client.headTeacher ? client.headTeacher.default_name : 'не назначен' }}
-            </div>
             <div v-if='client.branches.length'>
               Удобные филиалы: <BranchList :items='client.branches' />
             </div>

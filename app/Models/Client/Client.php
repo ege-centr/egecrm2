@@ -23,7 +23,7 @@ class Client extends Model implements UserInterface
 
     protected $fillable = [
         'first_name', 'last_name', 'middle_name',
-        'grade_id', 'year', 'branches', 'school',
+        'grade_id', 'year', 'branches',
         'reviewer_admin_id', 'birthdate'
     ];
 
@@ -97,14 +97,6 @@ class Client extends Model implements UserInterface
         return Request::with('responsibleAdmin')
             ->whereIn('id', $requestIds)
             ->orderBy('id', 'desc');
-    }
-
-    public function getHeadTeacher()
-    {
-        if ($this->head_teacher_id) {
-            return new TeacherCollection(Teacher::find($this->head_teacher_id));
-        }
-        return null;
     }
 
     /**

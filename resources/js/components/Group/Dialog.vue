@@ -28,9 +28,6 @@
                     <TeacherSelect v-model='item.teacher_id' only-active />
                   </div>
                   <div class='vertical-inputs__input'>
-                    <TeacherSelect v-model='item.head_teacher_id' label="Классный руководитель" only-active />
-                  </div>
-                  <div class='vertical-inputs__input'>
                     <DataSelect type='years' v-model="item.year" :error-messages='errorMessages.year' />
                   </div>
                   <div class='vertical-inputs__input'>

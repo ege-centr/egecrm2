@@ -62,7 +62,6 @@ class Clients extends TransferCommand
                 'first_name' => $item->first_name,
                 'last_name' => $item->last_name,
                 'middle_name' => $item->middle_name,
-                'head_teacher_id' => $item->id_head_teacher ?: null,
                 'grade_id' => $item->grade,
                 'year' => $item->year,
                 'school' => $item->school ?: '',

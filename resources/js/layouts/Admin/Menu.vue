@@ -98,6 +98,11 @@ export default {
         label: 'Тесты'
       },
       {
+        icon: 'edit',
+        route: 'TestAdminClients',
+        label: 'Назначенные тесты'
+      },
+      {
         icon: 'import_contacts',
         route: 'ContractIndex',
         label: 'Договоры'

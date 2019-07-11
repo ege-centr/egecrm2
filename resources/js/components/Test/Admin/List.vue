@@ -1,10 +1,6 @@
 <template>
   <div>
     <div class='flex-items' v-show='items.length > 0'>
-      <v-chip class='primary white--text'>тесты</v-chip>
-      <router-link :to="{name: 'TestAdminClients'}">
-        <v-chip class='pointer'>ученики</v-chip>
-      </router-link>
       <v-spacer></v-spacer>
       <AddBtn class='mr-2' @click.native='$refs.TestIntroTextDialog.open()' label='редактировать вступительный текст' icon='format_align_left' />
       <AddBtn @click.native='$refs.TestDialog.open()' animated label='добавить тест' />
