@@ -103,7 +103,7 @@ export default {
   
   methods: {
     loadData(text) {
-      this.closeDialogTimeout(99999)
+      this.closeDialogTimeout(20)
       this.result = null
       this.answered = false
       axios.get(apiUrl(API_URL), {
