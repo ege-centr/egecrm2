@@ -87,8 +87,6 @@ export default {
   },
 
   created() {
-    this.loadData()
-
     this.pusher.on('Mango\\IncomingCall', (data) => {
       this.mango = data.data
       this.loadData()
