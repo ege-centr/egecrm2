@@ -10,7 +10,7 @@
         </transition>
         <v-fade-transition>
           <ContentOverlay v-show='$store.state.search.results !== null'>
-            <a @click="$store.commit('clearSearch')">закрыть</a>
+            <a class='mb-2' @click="$store.commit('clearSearch')">закрыть</a>
             <SearchResults></SearchResults>
           </ContentOverlay>
         </v-fade-transition>
