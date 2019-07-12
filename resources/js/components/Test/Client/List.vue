@@ -23,6 +23,9 @@
         <td>
           {{ item.test.problems_count  }} вопросов
         </td>
+        <td>
+          {{ item.test.minutes  }} минут
+        </td>
         <td class='text-md-right'>
           <a v-if='item.is_finished' @click='testPageOptions = {clientId: clientId, testId: item.test.id}'>
             результат: <b>{{ item.results.score }}</b> из {{ item.results.max_score }}

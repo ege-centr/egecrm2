@@ -11,11 +11,6 @@ class PhotoResource extends JsonResource
         return extractFields($this, [
             'id', 'url', 'url_version', 'url_original', 'url_cropped', 'has_cropped',
             'entity_type', 'entity_id'
-        ],
-        // временные поля на время обрезки фоток клиента
-        [
-            'filename_original' => $this->filename_original,
-            'filename_cropped' => $this->filename_cropped,
         ]);
     }
 }

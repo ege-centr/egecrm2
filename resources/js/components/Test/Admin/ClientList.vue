@@ -32,6 +32,9 @@
             {{ item.problems_count  }} вопросов
           </td>
           <td width='200'>
+            {{ item.minutes  }} минут
+          </td>
+          <td width='200'>
             <span v-if='getClientTest(item) !== undefined && getClientTest(item).started_at !== null'>
               {{ getClientTest(item).started_at | date-time }}
             </span>

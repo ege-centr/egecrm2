@@ -29,6 +29,9 @@
           <td>
             {{ item.problems_count  }} вопросов
           </td>
+          <td>
+            {{ item.minutes }} минут
+          </td>
         </template>
       </v-data-table>
       <NoData 

@@ -65,7 +65,7 @@ class ClientTestsController extends Controller
 
         $model->update($request->all());
 
-        return $model;
+        return new ClientTestResource($model);
     }
 
     // $id – test id
