@@ -56,18 +56,7 @@
               :loading='adding_test_id === item.id' 
               v-if='getClientTest(item) === undefined'>добавить</v-btn>
             <div v-else>
-              <span v-if='getClientTest(item) && getClientTest(item).is_in_progress' >
-                <v-progress-circular v-if='reloading_test_id === item.id' :size="20" color='primary' indeterminate></v-progress-circular>
-                <span v-else class='grey--text flex-items align-center justify-end pr-3'>
-                  <v-icon class='mr-1'>access_time</v-icon>
-                  <TestCountDown
-                    :minutes='item.minutes'
-                    :from='getClientTest(item).started_at' 
-                    @end='reloadClientTest(item)' 
-                  />
-                </span>
-              </span>
-              <v-btn v-else flat
+              <v-btn flat
                 :loading='destroying_test_id === item.id' small @click='destroyTest(item)' class='btn-td'>
                 сбросить
               </v-btn>

@@ -110,6 +110,11 @@ export default {
   },
 
   async created() {
+    this.pusher.on('ClientTestDestroyed', (data) => {
+      if (data.client_id === this.$store.state.user.id) {
+        this.$router.push({name: 'TestIndex'})
+      }
+    })
     await Settings.get(SETTINGS_KEY).then(r => {
       this.intro_text = r.data
     })

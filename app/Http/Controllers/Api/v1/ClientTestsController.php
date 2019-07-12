@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Client\ClientTest;
 use App\Http\Resources\Test\ClientTest as ClientTestResource;
+use App\Events\ClientTestDestroyed;
 use User;
 
 class ClientTestsController extends Controller
@@ -88,7 +89,7 @@ class ClientTestsController extends Controller
     {
         $client_test = ClientTest::find($id);
         if ($client_test->is_in_progress) {
-            return response(new ClientTestResource($client_test), 403);
+            event(new ClientTestDestroyed($client_test));
         }
         $client_test->answers()->delete();
         $client_test->delete();
