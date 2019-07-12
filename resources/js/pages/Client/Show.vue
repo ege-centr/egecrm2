@@ -16,7 +16,7 @@
       <v-card-text class='relative card-with-loader'>
         <Loader v-if='loading'></Loader>
         <v-layout wrap v-if='client !== null'>
-          <v-flex style='width: 400px'>
+          <v-flex style='width: 650px'>
             <div class='flex-items'>
               <AvatarLoader 
                 class='mr-4'
