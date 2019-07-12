@@ -6,12 +6,12 @@
           <div class='flex-items'>
             <div class='mango__header-item'>
               <div class='font-weight-medium mb-1'>абонент</div>
-              <div class='title'>+{{ mango.from.number }}</div>
+              <div class='title'>{{ mango.from.number.slice(1) }}</div>
             </div>
             <v-icon color='white' class='mx-3 pt-4'>trending_flat</v-icon>
             <div class='mango__header-item'>
               <div class='font-weight-medium mb-1'>шлюз</div>
-              <div class='title'>+{{ mango.to.number }}</div>
+              <div class='title'>{{ mango.to.number.slice(1) }}</div>
             </div>
             <v-slide-x-transition>
               <div class='flex-items' v-if='answered'>
@@ -29,8 +29,8 @@
           </v-btn>
         </div>
         <div class='mango__content'>
-          <Loader v-if='result === null' />
-          <div v-else>
+          <div class='no-data grey--text' v-if='noData'>нет данных</div>
+          <div v-if='result !== null'>
             <!-- Заявки -->
             <div class='mango__result' v-if='result.requests.length > 0'>
               <div class='body-2'>Заявки:</div>
@@ -65,7 +65,6 @@
                 </router-link>
               </div>
             </div>
-            
           </div>
         </div>
       </div>
@@ -88,6 +87,8 @@ export default {
   },
 
   created() {
+    this.loadData()
+
     this.pusher.on('Mango\\IncomingCall', (data) => {
       this.mango = data.data
       this.loadData()
@@ -102,7 +103,7 @@ export default {
   
   methods: {
     loadData(text) {
-      this.closeDialogTimeout(20)
+      this.closeDialogTimeout(99999)
       this.result = null
       this.answered = false
       axios.get(apiUrl(API_URL), {
@@ -118,6 +119,15 @@ export default {
       clearTimeout(this.timeoutId)
       this.timeoutId = setTimeout(() => this.dialog = false, seconds * 1000)
     }
+  },
+
+  computed: {
+    noData() {
+      if (this.result !== null) {
+        return this.result.clients.length === 0 && this.result.tutors.length === 0 && this.result.requests.length === 0
+      }
+      return false
+    }
   }
 }
 </script>
@@ -128,7 +138,7 @@ export default {
     bottom: 20px;
     right: 20px;
     z-index: 1500;
-    width: 650px;
+    width: 562px;
     &__title {
       padding: 20px 25px;
       display: flex;
@@ -153,6 +163,17 @@ export default {
 
     &__result {
 
+    }
+
+    & .no-data {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      width: 100%;
+      left: 0;
+      top: 0;
     }
   }
 </style>
