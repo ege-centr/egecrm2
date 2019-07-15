@@ -148,6 +148,7 @@ export default {
         .then(r => this.client_test = r.data)
         .catch(e => this.$router.push({name: 'TestIndex'}))
       this.starting = false
+      Cookies.remove(stepCookieKey(this.testId))
       this.step = 0
       this.start()
     },

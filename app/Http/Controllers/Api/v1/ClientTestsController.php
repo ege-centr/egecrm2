@@ -53,7 +53,9 @@ class ClientTestsController extends Controller
 
     public function store(Request $request)
     {
-        return ClientTest::create($request->all());
+        return new ClientTestResource(
+            ClientTest::create($request->all())
+        );
     }
 
     public function update($id, Request $request)

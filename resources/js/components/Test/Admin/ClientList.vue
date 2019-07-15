@@ -47,7 +47,7 @@
               >
                 результат: <b>{{ getClientTest(item).results.score }}</b> из {{ getClientTest(item).results.max_score }}
               </a>
-              <span v-else>в процессе</span>
+              <span v-else-if='getClientTest(item).is_in_progress'>в процессе</span>
             </span>
           </td>
           <td class='pa-0' width='100'>
