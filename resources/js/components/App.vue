@@ -21,8 +21,8 @@
           switch(error.response.status) {
             case 401: return this.$store.commit('setUser', null)
             case 500: return this.$store.commit('message', {text: 'ошибка сервера'})
-            default: return error
           }
+          return Promise.reject(error)
         }
       )
 
