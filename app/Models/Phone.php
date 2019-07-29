@@ -34,7 +34,7 @@ class Phone extends Model
         parent::boot();
 
         static::saving(function($model) {
-            $model->phone = \App\Utils\Phone::clean($model->phone);
+            $model->phone = \App\Utils\Phone::clean($model->phone_clean);
         });
     }
 }
