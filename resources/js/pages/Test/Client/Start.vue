@@ -148,8 +148,11 @@
           </v-tooltip>
           <img class='test-intro__screen' src='/img/test-intro-screen.png' />
         </div>
-        <div class='text-md-center mt-5'>
-          <v-btn color='primary' :loading='starting' @click='beginTest'>Начать тестирование</v-btn>
+        <div class='test-intro__text mt-3'>
+          <div>Всё понятно? Теперь можете перейти к тестированию. Удачи!</div>
+        </div>
+        <div class='mt-4'>
+          <v-btn class='ma-0' color='primary' :loading='starting' @click='beginTest'>Начать тестирование</v-btn>
         </div>
       </div>
     </div>
