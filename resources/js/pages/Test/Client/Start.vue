@@ -3,32 +3,39 @@
     <div v-if='started'>
       <Loader v-if='finishing' />
       <div v-else>
-        <div class='mb-4'>
-          <span class='headline' v-if='client_test.is_finished'>
+        <div class='mb-2'>
+          <span class='title' v-if='client_test.is_finished'>
             Результаты теста: {{ client_test.results.score }} из {{ client_test.results.max_score }}
           </span>
-          <h2 v-else class='text-md-center'>
-            <v-icon>access_time</v-icon>
-            <TestCountDown 
-              :minutes='test.minutes'
-              :from='client_test.started_at' 
-              @end='end()' />
-          </h2>
+          <div class='flex-items align-center' v-else>
+            <div class='flex-items align-center'>
+              <v-icon class='grey--text mr-1'>access_time</v-icon>
+              <span class='grey--text mr-1'>Времени осталось:</span>
+              <TestCountDown 
+                :minutes='test.minutes'
+                :from='client_test.started_at' 
+                @end='end()' />
+            </div>
+            <v-spacer></v-spacer>
+            <v-btn small color='primary' @click='end()'>Завершить тестирование</v-btn>
+          </div>
         </div>
         <v-stepper v-model="step" non-linear class='test-process' :class="{'box-shadow-none': client_test.is_finished}">
           <v-stepper-header>
             <template v-for='(problem, index) in test.problems'>
-              <v-stepper-step editable :step="(index + 1)"></v-stepper-step>
+              <v-stepper-step editable :step="(index + 1)" :class="{
+                unanswered: !submittedAnswers.hasOwnProperty(problem.id)
+              }"></v-stepper-step>
               <v-divider v-if="index + 1 < test.problems.length"></v-divider>
             </template>
           </v-stepper-header>
           <v-stepper-items>
             <v-stepper-content v-for='(problem, index) in test.problems' :step="(index + 1)" :key='index'>
-              <div class='headline mb-3'>Вопрос {{ index + 1 }}</div>
+              <div class='mb-2' style="font-size: 16px">Вопрос {{ index + 1 }}</div>
               <div v-html='problem.text' class='client-problem'></div>
 
-              <div class='headline mb-3 mt-5'>Варианты ответа</div>
-              <div class='font-weight-medium caption'>максимальный балл: {{ getProblemMaxScore(problem) }}</div>
+              <div class='mt-5' style="font-size: 16px">Варианты ответа</div>
+              <div class='font-weight-medium caption mb-2'>Кол-во баллов за верный ответ: {{ getProblemMaxScore(problem) }}</div>
               <v-radio-group v-model='answers[problem.id]' hide-details>
                 <div class='flex-items mb-3' v-for='(answer, index) in problem.answers' :key='index'>
                   <v-radio class='ma-0' hide-details color="primary" :value='answer.id' :disabled='client_test.is_finished'></v-radio>
@@ -41,10 +48,15 @@
                     }">{{ answer.score }} баллов</div>
                 </div>
               </v-radio-group>
-              <div class='text-md-center' v-if='!client_test.is_finished'>
-                <v-btn color='primary' :disabled="!answers.hasOwnProperty(problem.id)" :loading='submittingAnswer'
+              <div v-if='!client_test.is_finished'>
+                <v-btn 
+                  small 
+                  color='primary' 
+                  class='ma-0 mt-3' 
+                  :disabled="isSubmitAnswerDisabled(problem.id)" 
+                  :loading='submittingAnswer' 
                   @click='submitAnswer(problem.id, index === test.problems.length - 1)'>
-                  {{ index === test.problems.length - 1 ? 'завершить тест' : 'ответить' }}
+                  {{ (problem.id in submittedAnswers) ? 'Изменить ответ' : 'Подтвердить ответ' }}
                 </v-btn>
               </div>
             </v-stepper-content>
@@ -57,7 +69,7 @@
       <div v-else>
         <div class='intro-text' v-html="intro_text"></div>
         <div class='text-md-center mt-5'>
-          <v-btn color='primary' :loading='starting' @click='beginTest'>начать</v-btn>
+          <v-btn color='primary' :loading='starting' @click='beginTest'>Начать тестирование</v-btn>
         </div>
       </div>
     </div>
@@ -104,6 +116,7 @@ export default {
       submittingAnswer: false,
       started: false,
       answers: {},
+      submittedAnswers: {},
       step: 0,
       client_test: null,
     }
@@ -164,7 +177,8 @@ export default {
       await axios.get(apiUrl(CLIENT_TEST_ANSWERS_API_URL) + queryString({
         client_id: this.clientId,
       })).then(r => {
-        this.answers = r.data
+        this.answers = (r.data === [] ? {} : r.data)
+        this.submittedAnswers = _.clone(this.answers)
       })
     },
 
@@ -207,13 +221,19 @@ export default {
         test_problem_answer_id: this.answers[problem_id],
       }).then(r => {
         this.submittingAnswer = false
+        this.submittedAnswers[problem_id] = r.data.test_problem_answer_id
         if (is_last_answer) {
-          this.end()
+          // this.end()
         } else {
           this.step++
         }
       }).catch(e => this.submittingAnswer = false)
     },
+
+    isSubmitAnswerDisabled(problemId) {
+      return !this.answers.hasOwnProperty(problemId)
+        || ((problemId in this.submittedAnswers) && this.submittedAnswers[problemId] === this.answers[problemId])
+    }
   },
 
   computed: {
@@ -259,6 +279,13 @@ export default {
     }
     & .v-stepper__step__step {
       margin-right: 0;
+    }
+    & .unanswered:not(.v-stepper__step--active) {
+      & > .v-stepper__step__step {
+        background: white !important;
+        color: #9e9e9e;
+        border: 1px solid #9e9e9e;
+      }
     }
     & .v-stepper__step--editable:hover {
       background: none !important;
