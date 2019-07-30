@@ -67,7 +67,87 @@
     <div v-else>
       <Loader v-if='loading' />
       <div v-else>
-        <div class='intro-text' v-html="intro_text"></div>
+        <!-- <div class='intro-text' v-html="intro_text"></div>  -->
+        <div class='test-intro__text'>
+          <div>Добро пожаловать на пробное тестирование!</div>
+          <p>На этом вводном этапе мы расскажем вам о том, какие задачи вас ждут, и дадим рекомендации по прохождению теста.</p>
+
+          <div>Цель подобного тестирования</div>
+          <p>Определение приблизительного уровня зананий для дальнейшего распределения ученика в гурппу соответствующего уровня.</p>
+
+          <div>Пояснения к тестированию</div>
+          <p>Тест возможно пройти всего один раз. Пожалуйста, выполняйте тестирование самостоятельно, не прибегая к помощи других.</p>
+
+          <div>Описание процесса тестирования</div>
+          <p>Нажимайте на вопросительные знаки около интересующих вас элементов</p>
+        </div>
+        <div class='test-intro'>
+          <v-tooltip bottom>
+            <div slot='activator' 
+              style='top: 13px; left: 26px'
+              class='test-intro__hint'>?</div>
+            <span>
+              <h4>Время</h4>
+              какой-то текст
+            </span>
+          </v-tooltip>
+           <v-tooltip bottom>
+            <div slot='activator' 
+              style='top: 13px; left: 264px'
+              class='test-intro__hint'>?</div>
+            <span>
+              <h4>Таймер</h4>
+              <p>– Тест расчитан на 30 минут (45 минут). Нажав кнопку «НАЧАТЬ», вы запустите таймер и начнете тестирование</p>
+              <p>– Начав тест, таймер будет отсчитывать время. При выходе из тестирвания таймер не отключается</p>
+            </span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <div slot='activator' 
+              style='top: 13px; left: 686px'
+              class='test-intro__hint'>?</div>
+            <span>
+              <h4>Завершить тест</h4>
+              какой-то текст
+            </span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <div slot='activator' 
+              style='top: 108px; left: 288px'
+              class='test-intro__hint'>?</div>
+            <span>
+              <h4>Какой-то tooltip</h4>
+              какой-то текст
+            </span>
+          </v-tooltip>
+           <v-tooltip bottom>
+            <div slot='activator' 
+              style='top: 165px; left: 26px'
+              class='test-intro__hint'>?</div>
+            <span>
+              <h4>Какой-то tooltip</h4>
+              какой-то текст
+            </span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <div slot='activator' 
+              style='top: 325px; left: 26px'
+              class='test-intro__hint'>?</div>
+            <span>
+              <h4>Какой-то tooltip</h4>
+              какой-то текст
+            </span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <div slot='activator' 
+              style='top: 265px; left: 26px'
+              class='test-intro__hint'>?</div>
+            <span>
+              <h4>Какой-то tooltip</h4>
+              какой-то текст
+            </span>
+          </v-tooltip>
+          <img class='test-intro__screen' src='/img/test-intro-screen.png' />
+        </div>
         <div class='text-md-center mt-5'>
           <v-btn color='primary' :loading='starting' @click='beginTest'>Начать тестирование</v-btn>
         </div>
@@ -289,6 +369,40 @@ export default {
     }
     & .v-stepper__step--editable:hover {
       background: none !important;
+    }
+  }
+
+  .test-intro {
+    position: relative;
+    &__screen {
+      width: 900px;
+      margin-left: 50px;
+    }
+    &__hint {
+      background: #213846;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 24px;
+      width: 24px;
+      border-radius: 50%;
+      position: absolute;
+      &:hover {
+        background: #1976d1;
+      }
+    }
+    &__text {
+      width: 500px;
+      & div {
+        font-size: 16px;
+        font-weight: 500;
+        margin-bottom: 5px;
+      }
+      & p {
+        margin-bottom: 25px;
+      }
     }
   }
 </style>
