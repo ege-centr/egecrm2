@@ -1,7 +1,13 @@
 <template>
   <div>
     <TaskDialog ref='TaskDialog' @updated="$emit('updated')" />
-    <TaskItem v-for='item in items' :item='item' :key='item.id' @edit='(id) => $refs.TaskDialog.open(id)' class='mb-4' />
+    <TaskItem 
+      v-for='item in items' 
+      :item='item' 
+      :key='item.id'
+      @edit='(id) => $refs.TaskDialog.open(id)' 
+      class='mb-4' 
+    />
   </div>
 </template>
 <script>

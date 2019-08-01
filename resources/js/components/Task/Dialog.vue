@@ -39,7 +39,7 @@
                     ></v-select>
                   </div>
                 </div>
-                <TextEditor v-model='item.text' class='task-text-editor' />
+                <TextEditor v-if='dialog' v-model='item.text' class='task-text-editor' />
               </v-flex>
             </v-layout>
           </v-container>

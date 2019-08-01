@@ -34,7 +34,7 @@ class TasksController extends Controller
             $item->files()->create($file);
         }
         $item->save();
-        return $item;
+        return new Collection($item->fresh());
     }
 
     public function show($id)
@@ -50,7 +50,7 @@ class TasksController extends Controller
             $item->files()->create($file);
         }
         $item->update($request->all());
-        return $item;
+        return new Collection($item);
     }
 
     public function destroy($id)

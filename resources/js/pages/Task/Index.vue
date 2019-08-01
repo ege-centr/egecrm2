@@ -1,17 +1,20 @@
 <template>
   <div>
-    <TaskDialog ref='TaskDialog' @updated="$refs.DisplayData.reloadData()" />
     <DisplayData ref='DisplayData' :api-url='API_URL' :filters='FILTERS' :paginate='15'>
       <template slot='buttons'>
         <AddBtn animated label='добавить задачу' @click.native='$refs.TaskDialog.open(null)' />
       </template>
       
       <template slot='items' slot-scope='{ items }'>
-        <TaskList 
-          v-if='items.length > 0'
-          :items='items' 
-          @updated="$refs.DisplayData.reloadData()"
-        />
+        <div v-if='items.length > 0'>
+          <TaskItem 
+            v-for='item in items' 
+            :item='item' 
+            :key='item.id'
+            @edit='$refs.TaskDialog.open' 
+            class='mb-4' 
+          />
+        </div>
         <NoData 
           v-else
           box
@@ -19,16 +22,19 @@
         />
       </template>
     </DisplayData>
+    <TaskDialog ref='TaskDialog' 
+      @updated='(payload) => $refs.DisplayData.updateItem(payload)'
+    />
   </div>
 </template>
 
 <script>
 
 import { DisplayData } from '@/components/UI'
-import { API_URL, FILTERS, TaskList, TaskDialog } from '@/components/Task'
+import { API_URL, FILTERS, TaskItem, TaskDialog } from '@/components/Task'
 
 export default {
-  components: { DisplayData, TaskList, TaskDialog },
+  components: { DisplayData, TaskItem, TaskDialog },
 
   data() {
     return {
