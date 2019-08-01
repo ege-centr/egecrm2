@@ -102,6 +102,12 @@ class ClientsController extends Controller
 
     public function destroy(DestroyRequest $request, Client $client)
     {
+        foreach([$item, $item->representative] as $entity) {
+            $entity->phones->each(function ($phone) {
+                $phone->delete();
+            });
+            $entity->email->delete();
+        }
         $client->delete();
     }
 
