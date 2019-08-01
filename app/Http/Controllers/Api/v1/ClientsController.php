@@ -45,10 +45,14 @@ class ClientsController extends Controller
 
         if (isset($request->representative['email']) && $request->representative['email']) {
             $new_model->representative->email()->create(['email' => $request->representative['email']]);
+        } else {
+            $new_model->representative->email()->create(['email' => null]);
         }
 
         if (isset($request->email) && $request->email) {
             $new_model->email()->create(['email' => $request->email]);
+        } else {
+            $new_model->email()->create(['email' => null]);
         }
 
         if ($request->photo !== null) {
@@ -82,27 +86,15 @@ class ClientsController extends Controller
         $model->representative->phones()->createMany(Phone::filter($request->representative['phones']));
 
         if (isset($request->representative['email']) && $request->representative['email']) {
-            if ($model->representative->email === null) {
-                $model->representative->email()->create(['email' => $request->representative['email']]);
-            } else {
-                $model->representative->email->update(['email' => $request->representative['email']]);
-            }
+            $model->representative->email->update(['email' => $request->representative['email']]);
         } else {
-            if ($model->representative->email) {
-                $model->representative->email->delete();
-            }
+            $model->representative->email->update(['email' => null]);
         }
 
         if (isset($request->email) && $request->email) {
-            if ($model->email === null) {
-                $model->email()->create(['email' => $request->email]);
-            } else {
-                $model->email->update(['email' => $request->email]);
-            }
+            $model->email->update(['email' => $request->email]);
         } else {
-            if ($model->email) {
-                $model->email->delete();
-            }
+            $model->email->update(['email' => null]);
         }
 
         return new ClientResource($model);

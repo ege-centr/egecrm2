@@ -19,7 +19,7 @@ export const MODEL_DEFAULTS = {
 export const FILTERS = [
   {label: 'Статус', field: 'status', type: 'multiple', options: STATUSES},
   {label: 'Создатель', field: 'created_email_id', type: 'admin', valueField: 'email_id'},
-  {label: 'Ответственный', field: 'responsible_admin_id', type: 'admin'},
+  {label: 'Ответственный', field: 'responsible_admin_id', type: 'admin', valueField: 'id'},
 ]
 
 export const TaskDialog = require('./Dialog')

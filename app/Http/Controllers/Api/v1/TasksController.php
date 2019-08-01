@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Task;
 use App\Http\Resources\Task\{Resource, Collection};
+use User;
 
 class TasksController extends Controller
 {
@@ -18,6 +19,11 @@ class TasksController extends Controller
     {
         $query = Task::orderBy('id', 'desc');
         $this->filter($request, $query);
+        $query->whereRaw(sprintf(
+            "(created_email_id = %s OR responsible_admin_id = %s)",
+            User::emailId(),
+            User::id()
+        ));
         return Collection::collection($this->showBy($request, $query));
     }
 
