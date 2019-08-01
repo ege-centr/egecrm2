@@ -33,7 +33,7 @@ class Background extends Model
     public function toArray()
     {
         $src = config('app.egerep-url') . 'img/wallpaper/' . $this->image;
-        $admin = Admin::where('old_id', $this->user_id)->first();
+        $admin = Admin::find($this->user_id)->first();
         return [
             'src' => $src,
             'url' => "url('" . $src . "')",
