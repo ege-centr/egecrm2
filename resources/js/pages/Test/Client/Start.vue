@@ -36,7 +36,7 @@
 
               <div class='mt-5 font-weight-bold flex-items' style="font-size: 28px; align-items: flex-end">
                 <span class='mr-2'>Варианты ответа</span>
-                <div class='font-weight-medium mb-2 grey--text' style='font-size: 14px; font-weight: normal !important; top: -6px; position: relative;'>
+                <div class='font-weight-medium grey--text' style='font-size: 14px; font-weight: normal !important; top: -7px; position: relative;'>
                   Кол-во баллов за верный ответ: {{ getProblemMaxScore(problem) }}
                 </div>
               </div>
@@ -44,7 +44,7 @@
                 <div class='flex-items mb-3' v-for='(answer, index) in problem.answers' :key='index'>
                   <v-radio class='ma-0' hide-details color="primary" :value='answer.id' :disabled='client_test.is_finished'></v-radio>
                   <div v-html='answer.text' class='client-answer'></div>
-                  <div class='ml-3' v-if='client_test.is_finished && (showAllAnswers || answers[problem.id] === answer.id)'
+                  <div class='ml-3 font-weight-bold' style='font-size: 14px; position: relative; top: 2px' v-if='client_test.is_finished && (showAllAnswers || answers[problem.id] === answer.id)'
                     :class="{
                       'green--text': answer.score === getProblemMaxScore(problem),
                       'orange--text': answer.score !== getProblemMaxScore(problem) && answer.score > 0,
