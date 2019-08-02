@@ -36,7 +36,7 @@
 
               <div class='mt-5 font-weight-bold flex-items' style="font-size: 28px; align-items: flex-end">
                 <span class='mr-2'>Варианты ответа</span>
-                <div class='font-weight-medium mb-2 grey--text' style='font-size: 14px; font-weight: normal !important'>
+                <div class='font-weight-medium mb-2 grey--text' style='font-size: 14px; font-weight: normal !important; top: -6px; position: relative;'>
                   Кол-во баллов за верный ответ: {{ getProblemMaxScore(problem) }}
                 </div>
               </div>
