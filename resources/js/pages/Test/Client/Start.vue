@@ -81,77 +81,77 @@
           <p>На этом вводном этапе мы расскажем вам о том, какие задачи вас ждут, и дадим рекомендации по прохождению теста.</p>
 
           <div>Цель подобного тестирования</div>
-          <p>Определение приблизительного уровня зананий для дальнейшего распределения ученика в гурппу соответствующего уровня.</p>
+          <p>Определение приблизительного уровня знаний для дальнейшего распределения ученика в группу соответствующего уровня.</p>
 
           <div>Пояснения к тестированию</div>
           <p>Тест возможно пройти всего один раз. Пожалуйста, выполняйте тестирование самостоятельно, не прибегая к помощи других.</p>
 
-          <div>Описание процесса тестирования</div>
-          <p>Нажимайте на вопросительные знаки около интересующих вас элементов</p>
+          <div>Время тестирования</div>
+          <p>Для прохождения этого теста вам потребуется <span class='green font-weight-medium darken-4 white--text' style='padding: 2px 4px; border-radius: 2px' v-if='test'>{{ test.minutes }} минут</span>. Во время прохождения теста вас никто не должен отвлекать. Тест можно пройти только 1 раз.</p>
         </div>
         <div class='test-intro'>
-          <v-tooltip bottom class="egonetu">
-            <div slot='activator' 
-              style='top: 18px; left: 26px'
-              class='test-intro__hint'></div>
-            <span>
-              <h4>Время</h4>
-              какой-то текст
-            </span>
-          </v-tooltip>
            <v-tooltip bottom>
             <div slot='activator' 
-              style='top: 18px; left: 264px'
+              style='top: 32px; left: 258px'
               class='test-intro__hint'></div>
             <span>
-              <h4>Таймер</h4>
-              <p>– Тест расчитан на 30 минут (45 минут). Нажав кнопку «НАЧАТЬ», вы запустите таймер и начнете тестирование</p>
-              <p>– Начав тест, таймер будет отсчитывать время. При выходе из тестирвания таймер не отключается</p>
+              Это количество времени, которое у вас осталось. Тест нельзя поставить на паузу. Когда время закончится, тест будет завершен автоматически
             </span>
           </v-tooltip>
           <v-tooltip bottom>
             <div slot='activator' 
-              style='top: 18px; left: 686px'
+              style='top: 25px; left:820px'
               class='test-intro__hint'></div>
             <span>
-              <h4>Завершить тест</h4>
-              какой-то текст
+              Тест можно пройти всего 1 раз. Если у вас осталось время - используйте его для дополнительной проверки ответов
             </span>
           </v-tooltip>
           <v-tooltip bottom>
             <div slot='activator' 
-              style='top: 108px; left: 288px'
+              style='top: 240px; left:486px'
               class='test-intro__hint'></div>
             <span>
-              <h4>Какой-то tooltip</h4>
-              какой-то текст
-            </span>
-          </v-tooltip>
-           <v-tooltip bottom>
-            <div slot='activator' 
-              style='top: 165px; left: 26px'
-              class='test-intro__hint'></div>
-            <span>
-              <h4>Какой-то tooltip</h4>
-              какой-то текст
+              Начисленное количество баллов за верный ответ. Кстати, верных вариантов ответа может быть несколько
             </span>
           </v-tooltip>
           <v-tooltip bottom>
             <div slot='activator' 
-              style='top: 325px; left: 26px'
+              style='top: 352px; left:104px'
               class='test-intro__hint'></div>
             <span>
-              <h4>Какой-то tooltip</h4>
-              какой-то текст
+              Выбрать можно только 1 вариант ответа. После выбора варианта нажмите "Подтвердить ответ"
             </span>
           </v-tooltip>
           <v-tooltip bottom>
             <div slot='activator' 
-              style='top: 265px; left: 26px'
+              style='top: 460px; left:248px'
               class='test-intro__hint'></div>
             <span>
-              <h4>Какой-то tooltip</h4>
-              какой-то текст
+              После выбора ответа нажмите "подтвердить ответ". Позже вы сможете вернуться к вопросу и изменить ответ
+            </span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <div slot='activator' 
+              style='top: 460px; left:686px'
+              class='test-intro__hint'></div>
+            <span>
+              Если вы не знаете или не уверены как ответить правильно, нажмите на эту кнопку и вернитесь к вопросу позже. Это позволит вам выиграть время и проходить тест более эффективно
+            </span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <div slot='activator' 
+              style='top: 70px; left:303px'
+              class='test-intro__hint'></div>
+            <span>
+              Так отмечаются вопросы с установленным вариантом ответа
+            </span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <div slot='activator' 
+              style='top: 70px; left:364px'
+              class='test-intro__hint'></div>
+            <span>
+              Так отмечаются вопросы с пропущенными ответами
             </span>
           </v-tooltip>
           <img class='test-intro__screen' src='/img/test-intro-screen.png' />
@@ -215,6 +215,7 @@ export default {
 
   async created() {
     $('body').addClass('test-page')
+    await this.loadTest()
     this.pusher.on('ClientTestDestroyed', (data) => {
       if (data.client_id === this.$store.state.user.id) {
         this.$router.push({name: 'TestIndex'})
@@ -228,7 +229,6 @@ export default {
       // started: 1,
     })).then(r => this.client_test = r.data)
     if (this.client_test.started_at !== null) {
-      await this.loadTest()
       await this.loadAnswers()
       this.start()
     }
@@ -402,7 +402,7 @@ export default {
   .test-intro {
     position: relative;
     &__screen {
-      width: 900px;
+      width: 1000px;
       margin-left: 50px;
     }
     &__hint {
@@ -412,8 +412,8 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 12px;
-      width: 12px;
+      height: 10px;
+      width: 10px;
       border-radius: 50%;
       position: absolute;
       &:hover {
