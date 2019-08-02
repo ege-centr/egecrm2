@@ -82,10 +82,10 @@
           <p>Нажимайте на вопросительные знаки около интересующих вас элементов</p>
         </div>
         <div class='test-intro'>
-          <v-tooltip bottom>
+          <v-tooltip bottom class="egonetu">
             <div slot='activator' 
-              style='top: 13px; left: 26px'
-              class='test-intro__hint'>?</div>
+              style='top: 18px; left: 26px'
+              class='test-intro__hint'></div>
             <span>
               <h4>Время</h4>
               какой-то текст
@@ -93,8 +93,8 @@
           </v-tooltip>
            <v-tooltip bottom>
             <div slot='activator' 
-              style='top: 13px; left: 264px'
-              class='test-intro__hint'>?</div>
+              style='top: 18px; left: 264px'
+              class='test-intro__hint'></div>
             <span>
               <h4>Таймер</h4>
               <p>– Тест расчитан на 30 минут (45 минут). Нажав кнопку «НАЧАТЬ», вы запустите таймер и начнете тестирование</p>
@@ -103,8 +103,8 @@
           </v-tooltip>
           <v-tooltip bottom>
             <div slot='activator' 
-              style='top: 13px; left: 686px'
-              class='test-intro__hint'>?</div>
+              style='top: 18px; left: 686px'
+              class='test-intro__hint'></div>
             <span>
               <h4>Завершить тест</h4>
               какой-то текст
@@ -113,7 +113,7 @@
           <v-tooltip bottom>
             <div slot='activator' 
               style='top: 108px; left: 288px'
-              class='test-intro__hint'>?</div>
+              class='test-intro__hint'></div>
             <span>
               <h4>Какой-то tooltip</h4>
               какой-то текст
@@ -122,7 +122,7 @@
            <v-tooltip bottom>
             <div slot='activator' 
               style='top: 165px; left: 26px'
-              class='test-intro__hint'>?</div>
+              class='test-intro__hint'></div>
             <span>
               <h4>Какой-то tooltip</h4>
               какой-то текст
@@ -131,7 +131,7 @@
           <v-tooltip bottom>
             <div slot='activator' 
               style='top: 325px; left: 26px'
-              class='test-intro__hint'>?</div>
+              class='test-intro__hint'></div>
             <span>
               <h4>Какой-то tooltip</h4>
               какой-то текст
@@ -140,7 +140,7 @@
           <v-tooltip bottom>
             <div slot='activator' 
               style='top: 265px; left: 26px'
-              class='test-intro__hint'>?</div>
+              class='test-intro__hint'></div>
             <span>
               <h4>Какой-то tooltip</h4>
               какой-то текст
@@ -206,6 +206,7 @@ export default {
   },
 
   async created() {
+    $('body').addClass('test-page')
     this.pusher.on('ClientTestDestroyed', (data) => {
       if (data.client_id === this.$store.state.user.id) {
         this.$router.push({name: 'TestIndex'})
@@ -230,6 +231,10 @@ export default {
     step(newVal) {
       Cookies.set(stepCookieKey(this.testId), newVal)
     },
+  },
+
+  destroyed() {
+    $('body').removeClass('test-page')
   },
 
   methods: {
@@ -332,6 +337,14 @@ export default {
 </script>
 
 <style lang="scss"> 
+
+  .test-page {
+    & .v-tooltip__content {
+      background: #1B5E20 !important;
+      color: white !important;
+    }
+  }
+
   .client-problem, .client-answer {
     & img {
       max-width: 100%;
@@ -382,18 +395,18 @@ export default {
       margin-left: 50px;
     }
     &__hint {
-      background: #213846;
+      background: #1B5E20;
       color: white;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 24px;
-      width: 24px;
+      height: 12px;
+      width: 12px;
       border-radius: 50%;
       position: absolute;
       &:hover {
-        background: #1976d1;
+        background: #43A047;
       }
     }
     &__text {
