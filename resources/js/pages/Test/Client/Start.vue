@@ -52,16 +52,20 @@
                     }">{{ answer.score }} баллов</div>
                 </div>
               </v-radio-group>
-              <div v-if='!client_test.is_finished'>
+              <div v-if='!client_test.is_finished' class='mt-2 flex-items align-center justify-space-between'>
                 <v-btn 
                   small 
                   color='primary' 
-                  class='ma-0 mt-3' 
+                  class='mx-0' 
                   :disabled="isSubmitAnswerDisabled(problem.id)" 
                   :loading='submittingAnswer' 
                   @click='submitAnswer(problem.id, index === test.problems.length - 1)'>
                   {{ (problem.id in submittedAnswers) ? 'Изменить ответ' : 'Подтвердить ответ' }}
                 </v-btn>
+                <v-btn class='mx-0' 
+                  :disabled="index === test.problems.length - 1"
+                  @click='step++'
+                  small color='gray'>пропустить вопрос и вернуться к нему позже</v-btn>
               </div>
             </v-stepper-content>
           </v-stepper-items>
