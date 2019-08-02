@@ -9,8 +9,8 @@
           </span>
           <div class='flex-items align-center' v-else>
             <div class='flex-items align-center'>
-              <v-icon class='grey--text mr-1'>access_time</v-icon>
-              <span class='grey--text mr-1'>Времени осталось:</span>
+              <v-icon class='mr-1'>access_time</v-icon>
+              <span class='mr-1'>Времени осталось:</span>
               <TestCountDown 
                 :minutes='test.minutes'
                 :from='client_test.started_at' 
@@ -31,11 +31,15 @@
           </v-stepper-header>
           <v-stepper-items>
             <v-stepper-content v-for='(problem, index) in test.problems' :step="(index + 1)" :key='index'>
-              <div class='mb-2' style="font-size: 16px">Вопрос {{ index + 1 }}</div>
+              <div class='mb-2 font-weight-bold' style="font-size: 28px">Вопрос {{ index + 1 }}</div>
               <div v-html='problem.text' class='client-problem'></div>
 
-              <div class='mt-5' style="font-size: 16px">Варианты ответа</div>
-              <div class='font-weight-medium caption mb-2'>Кол-во баллов за верный ответ: {{ getProblemMaxScore(problem) }}</div>
+              <div class='mt-5 font-weight-bold flex-items' style="font-size: 28px; align-items: flex-end">
+                <span class='mr-2'>Варианты ответа</span>
+                <div class='font-weight-medium mb-2 grey--text' style='font-size: 14px; font-weight: normal !important'>
+                  Кол-во баллов за верный ответ: {{ getProblemMaxScore(problem) }}
+                </div>
+              </div>
               <v-radio-group v-model='answers[problem.id]' hide-details>
                 <div class='flex-items mb-3' v-for='(answer, index) in problem.answers' :key='index'>
                   <v-radio class='ma-0' hide-details color="primary" :value='answer.id' :disabled='client_test.is_finished'></v-radio>
@@ -69,7 +73,7 @@
       <div v-else>
         <!-- <div class='intro-text' v-html="intro_text"></div>  -->
         <div class='test-intro__text'>
-          <div>Добро пожаловать на пробное тестирование!</div>
+          <div style='font-size: 36px'>Добро пожаловать на тестирование!</div>
           <p>На этом вводном этапе мы расскажем вам о том, какие задачи вас ждут, и дадим рекомендации по прохождению теста.</p>
 
           <div>Цель подобного тестирования</div>
@@ -360,6 +364,9 @@ export default {
   .client-answer {
     & p {
       margin-bottom: 0;
+      font-size: 14px !important;
+      top: 2px;
+      position: relative;
     }
   }
 
@@ -410,10 +417,9 @@ export default {
       }
     }
     &__text {
-      width: 500px;
       & div {
         font-size: 16px;
-        font-weight: 500;
+        font-weight: 800;
         margin-bottom: 5px;
       }
       & p {
