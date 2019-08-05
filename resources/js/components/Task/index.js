@@ -10,10 +10,17 @@ export const STATUSES = [
   {title: 'Закрыто', id: 'closed', class: 'red--text'},
 ]
 
+export const PRIORITY = [
+  {title: 'Низкий', id: 'low', class: 'grey--text'},
+  {title: 'Средний', id: 'medium', class: 'orange--text'},
+  {title: 'Высокий', id: 'high', class: 'red--text'},
+]
+
 export const MODEL_DEFAULTS = {
   text: '',
   files: [],
-  status: STATUSES[0].value
+  status: STATUSES[0].value,
+  priority: PRIORITY[1].value,
 }
 
 export const FILTERS = [

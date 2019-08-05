@@ -38,6 +38,17 @@
                       class='hide-bottom-border'
                     ></v-select>
                   </div>
+                  <div>
+                    <v-select
+                      hide-details
+                      v-model="item.priority"
+                      :items="PRIORITY"
+                      item-text='title'
+                      item-value='id'
+                      label="Приоритет"
+                      class='hide-bottom-border'
+                    ></v-select>
+                  </div>
                 </div>
                 <TextEditor v-if='dialog' v-model='item.text' class='task-text-editor' />
               </v-flex>
@@ -55,7 +66,7 @@
 
 <script>
 
-import { API_URL, STATUSES, MODEL_DEFAULTS } from './'
+import { API_URL, STATUSES, PRIORITY, MODEL_DEFAULTS } from './'
 import { DialogMixin } from '@/mixins'
 import { AdminSelect, TextEditor } from '@/components/UI'
 import FileUploader from '@/components/FileUploader'
@@ -71,6 +82,7 @@ export default {
       API_URL,
       MODEL_DEFAULTS,
       STATUSES,
+      PRIORITY,
       uploading_file_name: null,
       uploading_error: false,
       maxFiles: 30,

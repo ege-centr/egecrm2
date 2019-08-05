@@ -2,6 +2,10 @@
   <div>
     <v-card :class='config.elevationClass'>
       <v-card-text class='pb-2 task'>
+        <div class='mb-2 flex-items align-center'>
+          <b class='mr-1'>Задача {{ item.id }}</b>
+          <span class='caption' style='text-transform: lowercase' :class='priority.class'>{{ priority.title }} приоритет</span>
+        </div>
         <div v-html='item.text'></div>
         <div class='flex-items align-center mt-2'>
           <div class='caption mr-3' :class="status.class">
@@ -33,7 +37,7 @@
 
 <script>
 
-import { STATUSES, CLASS_NAME } from './'
+import { STATUSES, PRIORITY, CLASS_NAME } from './'
 import Comments from '@/components/Comments'
 
 export default {
@@ -50,7 +54,11 @@ export default {
   computed: {
     status() {
       return STATUSES.find(e => e.id == this.item.status)
-    }
+    },
+
+    priority() {
+      return PRIORITY.find(e => e.id == this.item.priority)
+    },
   }
 }
 </script>

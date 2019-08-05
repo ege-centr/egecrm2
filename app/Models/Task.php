@@ -10,6 +10,6 @@ class Task extends Model
     use Commentable, HasCreatedEmail, HasFiles;
 
     protected $fillable = [
-        'text', 'status', 'responsible_admin_id'
+        'text', 'status', 'responsible_admin_id', 'priority'
     ];
 }
