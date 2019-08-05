@@ -6,7 +6,7 @@
           <b class='mr-1'>Задача {{ item.id }}</b>
           <span class='caption' style='text-transform: lowercase' :class='priority.class'>{{ priority.title }} приоритет</span>
         </div>
-        <div v-html='item.text'></div>
+        <div class='task__text' v-html='item.text'></div>
         <div class='flex-items align-center mt-2'>
           <div class='caption mr-3' :class="status.class">
             {{ status.title }}
@@ -65,7 +65,7 @@ export default {
 
 <style lang='scss'>
   .task {
-    &.v-card__text > div:first-of-type {
+    &__text {
       & img {
         max-width: 100%;
         zoom: 50%;
