@@ -31,4 +31,9 @@ class Representative extends Model implements UserInterface
     {
         return true;
     }
+
+    public function photo()
+    {
+        return $this->client->photo();
+    }
 }
