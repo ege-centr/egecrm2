@@ -1,6 +1,6 @@
 <template>
   <v-app id="inspire">
-    <ClientLayout v-if='[userTypes.client, userTypes.representative].includes($store.state.user.entity_type)' />
+    <ClientLayout v-if='$store.state.user.entity_type === userTypes.client' />
     <TeacherLayout v-if='$store.state.user.entity_type === userTypes.teacher' />
     <AdminLayout v-if='$store.state.user.entity_type === userTypes.admin' />
     <v-content>

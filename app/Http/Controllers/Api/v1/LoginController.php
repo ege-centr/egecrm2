@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use ReCaptcha\ReCaptcha;
 use App\Models\{User, Email};
 use App\Models\Log\{Log, LogType};
+use App\Models\Client\{Client, Representative};
 use App\Http\Resources\Admin\AdminResource;
 use App\Utils\{SessionService, Sms};
 use Illuminate\Support\Facades\Redis;
@@ -42,6 +43,11 @@ class LoginController extends Controller
         $entity_id = $query->value('entity_id');
         $class = $query->value('entity_type');
         $user = $class::find($entity_id);
+
+        # представитель – это клиент
+        if ($class === Representative::class) {
+            $user = $user->client;
+        }
 
         # забанен ли?
         if ($user->isBanned()) {

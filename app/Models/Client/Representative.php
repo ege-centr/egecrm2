@@ -4,9 +4,8 @@ namespace App\Models\Client;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Traits\{HasName, HasPhones, HasEmail};
-use App\Interfaces\UserInterface;
 
-class Representative extends Model implements UserInterface
+class Representative extends Model
 {
     use HasName, HasPhones, HasEmail;
 
@@ -20,20 +19,5 @@ class Representative extends Model implements UserInterface
     public function client()
     {
         return $this->belongsTo(Client::class);
-    }
-
-    public function isBanned()
-    {
-        return $this->client->isBanned();
-    }
-
-    public function allowedToLogin()
-    {
-        return true;
-    }
-
-    public function photo()
-    {
-        return $this->client->photo();
     }
 }
