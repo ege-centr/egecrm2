@@ -47,6 +47,8 @@ class LoginController extends Controller
         # представитель – это клиент
         if ($class === Representative::class) {
             $user = $user->client;
+            $entity_id = $user->id;
+            $class = Client::class;
         }
 
         # забанен ли?

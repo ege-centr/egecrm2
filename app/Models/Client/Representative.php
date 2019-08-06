@@ -20,9 +20,4 @@ class Representative extends Model
     {
         return $this->belongsTo(Client::class);
     }
-
-    public function photo()
-    {
-        return $this->client->photo();
-    }
 }
