@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-dialog persistent v-model="dialog" width="500" persistent>
+    <v-dialog persistent v-model="dialog" width="500">
       <v-card>
         <v-card-title class='justify-center'>
           <span class="headline">Сессия завершится через {{ secondsUntilLogout }}...</span>
