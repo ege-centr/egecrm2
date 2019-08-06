@@ -1,7 +1,7 @@
 <template>
   <v-layout row justify-center>
     <AddClientDialog ref='AddClientDialog' @added='handleClientAdded' />
-    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay content-class='conduct-dialog'>
+    <v-dialog persistent v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay content-class='conduct-dialog'>
       <v-card>
         <v-toolbar dark color="primary">
           <v-toolbar-title>

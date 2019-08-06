@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay content-class='overflow-hidden'>
+    <v-dialog persistent v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay content-class='overflow-hidden'>
       <v-card>
         <v-toolbar dark color="primary">
           <v-toolbar-title>Редактировать макрос «{{ filename }}»</v-toolbar-title>

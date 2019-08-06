@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
+    <v-dialog persistent v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card v-if='clientId !== null' class='grey-background'>
         <v-toolbar dark color="primary">
           <v-toolbar-title>Перенос клиента в другую группу</v-toolbar-title>

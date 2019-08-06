@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" max-width="300px">
+    <v-dialog persistent v-model="dialog" max-width="300px">
       <v-card>
         <v-card-text>
           <v-container grid-list-xl class="pa-0 ma-0" fluid>

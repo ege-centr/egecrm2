@@ -46,7 +46,7 @@
     </div> -->
 
     <v-layout row justify-center>
-      <v-dialog v-model="dialog" persistent max-width="1000px">
+      <v-dialog persistent v-model="dialog" persistent max-width="1000px">
         <v-card>
           <v-card-text>
               <vue-cropper v-if='item.photo'

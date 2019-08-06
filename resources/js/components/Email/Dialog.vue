@@ -1,7 +1,7 @@
 <template>
   <v-layout row justify-center>
     <AddDialog ref='AddDialog' @added='(email) => emails.push(email)' />
-    <v-dialog v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay content-class='email-dialog'>
+    <v-dialog persistent v-model="dialog" transition="dialog-bottom-transition" fullscreen hide-overlay content-class='email-dialog'>
       <v-card>
         <v-toolbar dark color="primary">
           <v-toolbar-title>Отправка email</v-toolbar-title>

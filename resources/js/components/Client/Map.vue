@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" max-width="1200px">
+    <v-dialog persistent v-model="dialog" max-width="1200px">
       <v-card>
         <v-card-text class='pa-0'>
           <GmapMap ref='map' @click='mapClick'

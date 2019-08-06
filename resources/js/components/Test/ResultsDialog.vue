@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog :value="item !== null" transition="dialog-bottom-transition" fullscreen hide-overlay>
+    <v-dialog persistent :value="item !== null" transition="dialog-bottom-transition" fullscreen hide-overlay>
       <v-card>
         <v-toolbar dark color="primary">
           <v-toolbar-title>Результаты теста</v-toolbar-title>

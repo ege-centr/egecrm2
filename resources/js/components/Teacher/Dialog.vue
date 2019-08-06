@@ -1,6 +1,6 @@
 <template>
   <v-layout row justify-center>
-    <v-dialog v-model="dialog" persistent max-width="1200px">
+    <v-dialog persistent v-model="dialog" persistent max-width="1200px">
       <v-card v-if='item !== null'>
         <v-card-title>
           <span class="headline">{{ item.id ? 'Редактирование' : 'Добавление' }}</span>

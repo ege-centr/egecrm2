@@ -8,7 +8,7 @@
     <div v-if='items !== null && recommendedPrices !== null'>
       <!-- Праздники и экзамены -->
       <v-layout row justify-center>
-        <v-dialog v-model="dialog" persistent max-width="330px" v-if="dialog_item !== null">
+        <v-dialog persistent v-model="dialog" persistent max-width="330px" v-if="dialog_item !== null">
           <v-card>
             <v-card-text>
               <v-container class="pa-0 ma-0" fluid>
@@ -50,7 +50,7 @@
 
       <!-- Праздники и экзамены -->
       <v-layout row justify-center>
-        <v-dialog v-model="recommendedPricesDialog" persistent max-width="330px" v-if="recommendedPriceDialogItem !== null">
+        <v-dialog persistent v-model="recommendedPricesDialog" persistent max-width="330px" v-if="recommendedPriceDialogItem !== null">
           <v-card>
             <v-card-text>
               <v-container class="pa-0 ma-0" fluid>
