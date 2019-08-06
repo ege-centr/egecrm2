@@ -1,8 +1,8 @@
 <template>
   <v-app id="inspire">
-    <ClientLayout v-if='$store.state.user.class === CLIENT_CLASS_NAME' />
-    <TeacherLayout v-if='$store.state.user.class === TEACHER_CLASS_NAME' />
-    <AdminLayout v-if='$store.state.user.class === ADMIN_CLASS_NAME' />
+    <ClientLayout v-if='[userTypes.client, userTypes.representative].includes($store.state.user.entity_type)' />
+    <TeacherLayout v-if='$store.state.user.entity_type === userTypes.teacher' />
+    <AdminLayout v-if='$store.state.user.entity_type === userTypes.admin' />
     <v-content>
       <v-container fluid>
         <transition name="fade">
@@ -56,22 +56,11 @@
   import AdminLayout from '@/layouts/Admin/Layout'
   import ClientLayout from '@/layouts/Client/Layout'
   import TeacherLayout from '@/layouts/Teacher/Layout'
-  import { CLASS_NAME as CLIENT_CLASS_NAME } from '@/components/Client'
-  import { CLASS_NAME as TEACHER_CLASS_NAME } from '@/components/Teacher'
-  import { CLASS_NAME as ADMIN_CLASS_NAME } from '@/components/Admin'
   import { SearchResults } from '@/components/Search'
   import ListenToLogout from '@/components/ListenToLogout'
   import ContentOverlay from '@/components/UI/ContentOverlay'
 
   export default {
-    data() {
-      return {
-        CLIENT_CLASS_NAME,
-        TEACHER_CLASS_NAME,
-        ADMIN_CLASS_NAME,
-      }
-    },
-
     components: { 
       AdminLayout, TeacherLayout, ClientLayout, SearchResults, 
       ListenToLogout, ContentOverlay
