@@ -55,6 +55,8 @@ return [
     */
 
     'url' => env('APP_URL', 'http://localhost'),
+    'host' => env('APP_HOST'),
+
     'egerep-url' => env('EGEREP_URL'),
     'spaces-url' => env('DO_SPACES_URL'),
 

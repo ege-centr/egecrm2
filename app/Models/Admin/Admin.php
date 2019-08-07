@@ -26,7 +26,8 @@ class Admin extends Model implements UserInterface
 
     public function isBanned()
     {
-        return $this->allowed(Rights::LK2_BANNED);
+        // проверяем бан только для EC
+        return $_SERVER['HTTP_HOST'] === config('app.host') && $this->allowed(Rights::LK2_BANNED);
     }
 
     public function allowed($right)

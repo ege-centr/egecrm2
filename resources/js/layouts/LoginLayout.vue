@@ -65,6 +65,7 @@
 
     data() {
       return {
+        url: null,
         credentials: {},
         loading: false,
         backgroundLoading: false,
@@ -77,6 +78,12 @@
     },
 
     created() {
+      if (window.location.search.indexOf('access_denied') !== -1) {
+        this.setMessage('в доступе отказано')
+      }
+      try {
+        this.url = (new URLSearchParams(window.location.search.substring(-1))).get('url')
+      } catch (err) {}
       if (LAST_LOGGED_USER_KEY in localStorage) {
         this.lastLoggedUser = JSON.parse(localStorage.getItem(LAST_LOGGED_USER_KEY))
         this.credentials.login = this.lastLoggedUser.email
@@ -118,6 +125,7 @@
         this.message = null
         axios.post(apiUrl(API_URL), {
           credentials: this.credentials,
+          url: this.url,
           token
         }).then(response => {
           switch(response.status) {
@@ -130,7 +138,7 @@
               break
             default:
               Cookies.remove(TMP_CREDENTIALS_KEY)
-              if (window.location.search.substr(1).indexOf('url=') === 0) {
+              if (this.url !== null) {
                 // логин с другого сайта
                 // отработает Sso middleware и редеректнет куда надо
                 location.reload()
@@ -147,7 +155,6 @@
           }
         }).catch(e => {
           // this.setMessage(e.response.data)
-          colorLog("HIA");
           this.setMessage('в доступе отказано')
           this.loading = false
         })

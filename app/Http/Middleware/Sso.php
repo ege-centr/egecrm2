@@ -15,12 +15,12 @@ class Sso
      */
     public function handle($request, Closure $next)
     {
-        if (isset($request->url) && User::loggedIn()) {
+        if (isset($request->url) && isset($_SESSION['user']) && !$request->has('access_denied')) {
             $parsed = parse_url($request->url);
 
             $url = $parsed['scheme'] . '://' . $parsed['host'] . "/auth?key=" . base64_encode(implode('|', [
                 date('Y-m-d H:i'),
-                User::id()
+                $_SESSION['user']['entity_id']
             ])) . "&redirect=" . $request->url;
 
             return redirect($url);

@@ -49,7 +49,10 @@ Object.entries(filters).forEach(entry => Vue.filter(entry[0], entry[1]))
 
 axios.get(apiUrl('initial-data')).then(r => {
   store.commit('setData', r.data.data)
-  store.commit('setUser', r.data.user)
+  // устанавливаем пользователя только если не access_denied
+  if (window.location.search.indexOf('access_denied') === -1) {
+    store.commit('setUser', r.data.user)
+  }
   new Vue({
     el: '#app',
     components: { 

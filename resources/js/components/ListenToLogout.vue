@@ -43,9 +43,10 @@ export default {
         switch (data.action) {
           case 'notify':
             return this.logoutCountdown()
-          case 'destroy':
-            location.reload()
-            break
+          // не выбрасываеися так, теперь вкладки выкидываются на onfocus
+          // case 'destroy':
+          //   location.reload()
+          //   break
         }
       })
     },

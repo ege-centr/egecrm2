@@ -72,8 +72,13 @@ class SessionService
 	public static function clearCache()
 	{
         self::init();
-		$key = config('sso.cache-key') . ":session:exists:" . User::id();
-		self::$redis->del($key);
+        $keys = [
+            config('sso.cache-key') . ":session:exists:" . User::id(),
+            config('sso.cache-key') . ":session:action:" . User::id()
+        ];
+        foreach($keys as $key) {
+            self::$redis->del($key);
+        }
 	}
 
 	public static function destroy()

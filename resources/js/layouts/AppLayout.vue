@@ -61,6 +61,16 @@
   import ContentOverlay from '@/components/UI/ContentOverlay'
 
   export default {
+    created() {
+      // это пинганёт сессию, и если вылетело, вернется 401
+      // согласно interceptors выкенет на форму логина
+      window.addEventListener('focus', () => axios.get(apiUrl('continue-session')))
+    },
+
+    destroyed() {
+      window.removeEventListener('focus')
+    },
+    
     components: { 
       AdminLayout, TeacherLayout, ClientLayout, SearchResults, 
       ListenToLogout, ContentOverlay

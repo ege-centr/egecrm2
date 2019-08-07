@@ -52,7 +52,7 @@ class LoginController extends Controller
         }
 
         # забанен ли?
-        if ($user->isBanned()) {
+        if (! isset($request->url) && $user->isBanned()) {
             self::authLog('пользователь заблокирован');
             return self::errorResponse('пользователь заблокирован');
         } else {
@@ -79,6 +79,8 @@ class LoginController extends Controller
                     }
                 }
                 $_SESSION['user'] = compact('entity_id', 'class');
+                // обязательно. иначе может закешироваться от действия и не установиться
+                SessionService::clearCache();
                 SessionService::action();
                 self::authLog('', [], 'success');
                 // возвращаем пользователя для lastLoggedUser
